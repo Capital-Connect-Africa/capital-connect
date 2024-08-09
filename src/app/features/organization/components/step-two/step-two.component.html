@@ -9,7 +9,8 @@
       }
     </select>
   </div>
-  <div class="input__wrapper">
+
+  <div class="input__wrapper" *ngIf="yearsOfOperation$ | async as yearsOfOperation">
     <label class="input__label">How many years has the business been in active operation?<sup>*</sup></label>
     <select formControlName="yearsOfOperation" class="input__field">
       @for (year of yearsOfOperation; track $index) {
@@ -26,7 +27,7 @@
 
     </select>
   </div>
-  <div class="input__wrapper">
+  <div class="input__wrapper" *ngIf="numberOfEmployees$ | async as numberOfEmployees">
     <label class="input__label">How many employees do you currently have?<sup>*</sup></label>
     <select formControlName="numberOfEmployees" class="input__field">
       @for (employee of numberOfEmployees; track $index) {
