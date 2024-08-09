@@ -32,6 +32,10 @@ export class AuthStateService {
     this.currentToken.set(token);
   }
 
+  initInvestorProfile(profileId:string){
+    sessionStorage.setItem('profileId', profileId);
+  }
+
   get authToken() {
     return this.currentToken();
   }

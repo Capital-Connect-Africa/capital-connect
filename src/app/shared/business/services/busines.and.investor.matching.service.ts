@@ -45,4 +45,67 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res;
     }))) as unknown as Observable<GeneralSummary>
   }
+
+  //Matched companies
+  getMatchedCompanies(): Observable<MatchedBusiness[]> {
+    return this.read(`${BASE_URL}/matchmaking/companies`).pipe(
+      map(res => res as MatchedBusiness[])
+    );
+  }
+
+  //Mark company as interesting
+  markCompanyAsInteresting(companyId: number): Observable<void> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.create(`${BASE_URL}/matchmaking/interesting/${investorProfileId}/${companyId}`, {}).pipe(
+      map(() => void 0)  
+    );
+  }
+  
+  //Connect with a company
+  connectWithCompany(companyId: number): Observable<void> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.create(`${BASE_URL}/matchmaking/connect/${investorProfileId}/${companyId}`, {}).pipe(
+      map(() => void 0)  // Transform response to void
+    );
+  }
+
+  //Interesting companies
+  getInterestingCompanies(): Observable<MatchedBusiness[]> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}`).pipe(
+      map(res => res as MatchedBusiness[])
+    );
+  }
+
+  //connected companies
+  getConnectedCompanies(): Observable<MatchedBusiness[]> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}`).pipe(
+      map(res => res as MatchedBusiness[])
+    );
+  }
+
+  //Interested Investors
+  getInterestedInvestors(companyId: number): Observable<any[]> { // Replace any with a proper interface if available
+    return this.read(`${BASE_URL}/matchmaking/investors/interested/${companyId}`).pipe(
+      map(res => res as any[]) 
+    );
+  }
+
+  getConnectedInvestors(companyId: number): Observable<any[]> { // Replace any with a proper interface if available
+    return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(
+      map(res => res as any[]) // Replace any[] with the correct type
+    );
+  }
+
+    
+  //Matched Investor Profiles
+  getMatchedInvestorProfiles(): Observable<MatchedInvestor[]> {
+    return this.read(`${BASE_URL}/matchmaking/investor-profiles`).pipe(
+      map(res => res as MatchedInvestor[])
+    );
+  }
+
+
+  
 }

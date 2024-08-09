@@ -16,6 +16,7 @@ import { LoadingService } from "../../core";
 import { GrowthStage } from "../../features/organization/interfaces";
 import { InvestorProfile } from "../interfaces/Investor";
 import { InvestorScreensService } from "../../features/investor/services/investor.screens.service";
+import { AuthStateService } from "../../features/auth/services/auth-state.service";
 
 
 
@@ -35,6 +36,7 @@ export class DynamicRoutingService {
 
 
   private _screenService = inject(InvestorScreensService)
+  private _authStateService = inject(AuthStateService)
 
   /**
    * Returns an array of unique numbers from the given array.
@@ -300,6 +302,7 @@ export class DynamicRoutingService {
         this.investorProfile = investorProfile;
 
         if (this.investorProfile) {
+          this._authStateService.initInvestorProfile(this.investorProfile.id)
           this._route.navigateByUrl('/investor');
           return true;
         } else {
