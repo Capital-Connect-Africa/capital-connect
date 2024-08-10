@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BASE_URL, BaseHttpService } from '../../../core';
-import { Observable } from 'rxjs';
+import { catchError, EMPTY, map, Observable } from 'rxjs';
 import { Company, CompanyInput, CompanyResponse } from '../interfaces';
 
 @Injectable({providedIn: 'root'})
@@ -32,6 +32,22 @@ export class CompanyHttpService extends BaseHttpService {
 
   deleteCompany(companyId: number) {
     return this.delete(`${BASE_URL}/company`, companyId) as Observable<unknown>
+  }
+
+  fetchCompanyYearsOfOperation(){
+    return this.read(`${BASE_URL}/company/list/years-of-operation`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
+  }
+
+  fetchCompanyNumberOfEmployees(){
+    return this.read(`${BASE_URL}/company/list/no-of-employees`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
   }
 
 }
