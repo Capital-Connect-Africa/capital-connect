@@ -97,6 +97,6 @@ export class InvestorScreensService extends BaseHttpService{
     const userId = sessionStorage.getItem('userId')
     const id = Number(userId)
 
-    return this.read(`${BASE_URL}/investor-profiles/by-user/7487`,this.headers) as unknown as Observable<InvestorProfile>;
+    return this.read(`${BASE_URL}/investor-profiles/by-user/${id}`,this.headers) as unknown as Observable<InvestorProfile>;
   }
 }

@@ -19,14 +19,14 @@
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', value: '0', featured: false}"
+  <app-card [detail]="{title: 'Impact element assessment', value: '', featured: false}"
   (click)="setDialog('impactAssesment')"
   >
     <p class="helper__text text__red">Check your eligibility</p>
   </app-card>
 
   <app-card 
-    [detail]="{title: 'Business Fact Sheet', value: '0', featured: false, period: '0 Past Months'}"
+    [detail]="{title: 'Business Fact Sheet', value: '', featured: false}"
     (click)="setDialog('factSheet')">
     <app-photo-collage></app-photo-collage>
   </app-card>
@@ -70,7 +70,11 @@
 
       <div
         *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > add submissions</a>
+        </p>
       </div>
 
 
@@ -198,7 +202,11 @@
 
       <div
         *ngIf="(factSheetAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > add submissions</a>
+        </p>
       </div>
 
 
@@ -271,7 +279,11 @@
 
       <div
         *ngIf="(impactElementAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > add submissions</a>
+        </p>
       </div>
 
 
