@@ -1,10 +1,10 @@
 <div class="flex items-center justify-between alert__container relative" [ngClass]="{'bg__warning': alertTypes.WARNING}" *ngIf="signalsService.showInAppAlert()">
     <div class="flex flex-col gap-4 w-max">
         <div class="flex flex-col">
-            <strong class="block text-lg">{{title}}</strong>
-            <span>{{message}}</span>
+            <strong class="block text-lg">{{signalsService.actionBody().title}}</strong>
+            <span>{{signalsService.actionBody().message}}</span>
         </div>
-        <button class="cta" *ngIf="action" (click) ="action()">{{actionName}}</button>
+        <button class="cta" *ngIf="action" (click) ="action()">{{signalsService.actionBody().command}}</button>
     </div>
     <button class="btn__close" (click) ="close()">
         <mat-icon>x</mat-icon>

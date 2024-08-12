@@ -15,9 +15,6 @@ export class AlertComponent {
   alertTypes =AlertTypes;
   @Input() type:AlertTypes =AlertTypes.WARNING;
   @Input() action!:any;
-  @Input() actionName:string ='Add';
-  @Input() title:string ='Action required';
-  @Input() message:string ='Please add your mobile phone number';
   signalsService =inject(SignalsService);
 
   close(){
