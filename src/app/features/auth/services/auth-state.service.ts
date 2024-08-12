@@ -81,7 +81,14 @@ export class AuthStateService {
         this._router.navigateByUrl('/', { state: { mode: FORM_TYPE.SIGNIN } });
       }
     }))
+  }
 
+  saveUserPhoneNumberAddedStatus(phoneNumberWasAdded: boolean){
+    sessionStorage.setItem('phone_number_added', JSON.stringify(phoneNumberWasAdded));
+  }
+
+  isPhoneNumberAdded(){
+    return !!JSON.parse(sessionStorage.getItem('phone_number_added') || 'false');
   }
 
 }
