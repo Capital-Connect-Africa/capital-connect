@@ -1,5 +1,8 @@
 <ng-container *ngIf="submit$ | async"></ng-container>
 <ng-container *ngIf="investorProfile$ | async"></ng-container>
+<ng-container *ngIf="countries$ | async"></ng-container>
+
+
 <app-layout>
 
 
@@ -36,10 +39,27 @@
                     <input class="input__field" formControlName="emailAddress" type="email" placeholder="Enter email address" />
                   </div>
         
-                  <div class="input__wrapper">
+                  <!-- <div class="input__wrapper">
                     <label class="input__label">Phone Number<sup>*</sup></label>
                     <a [title]="">Why do we ask this?</a>
                     <input class="input__field" formControlName="phoneNumber" type="number" placeholder="Enter phone number" />
+                  </div> -->
+
+                  <div class="input__wrapper">
+                    <label class="input__label">Phone Number<sup>*</sup></label>
+                    <a [title]="">Why do we ask this?</a>
+                    <div class="flex items-center">
+                      <input class="country-code-input input__field" formControlName="countryCode" type="text" placeholder="+1" />
+
+                      <!-- <select class="country-code-select input__field" formControlName="countryCode">
+                        <option *ngFor="let country of countryOptions" [value]="country.code">
+                          {{ country.name }} ({{ country.code }})
+                        </option>
+                      </select> -->
+
+
+                      <input class="input__field ml-2" formControlName="phoneNumber" type="number" placeholder="Enter phone number" />
+                    </div>
                   </div>
         
                   <div class="input__wrapper">

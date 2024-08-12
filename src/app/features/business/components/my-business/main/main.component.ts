@@ -31,19 +31,19 @@ import {TaskActionComponent} from "../../../../../shared/components/task-action/
 export class MainComponent {
 
   task_one =[
-    {name: 'Get Expert Document Prep', action: ''},
+    {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
   ]
   task_two =[
-    {name: 'Get Expert Document Prep', action: ''},
+    {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
   ]
   task_three =[
-    {name: 'Get Expert Document Prep', action: ''},
+    {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
   ]
   task_four =[
-    {name: 'Get Expert Document Prep', action: ''},
+    {name: 'Get Expert Document Prep', action:'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
   ]
 }

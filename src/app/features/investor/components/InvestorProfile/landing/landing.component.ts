@@ -156,6 +156,7 @@ export class LandingComponent implements OnInit {
     this.formGroup.value.minimumFunding = parseFloat(this.formGroup.value.minimumFunding.replace(/,/g, ''))
     this.formGroup.value.maximumFunding = parseFloat(this.formGroup.value.maximumFunding.replace(/,/g, ''))
     this.formGroup.value.availableFunding = parseFloat(this.formGroup.value.availableFunding.replace(/,/g, ''))
+    this.formGroup.value.registrationStructures = [this.formGroup.value.registrationStructures]
 
 
 

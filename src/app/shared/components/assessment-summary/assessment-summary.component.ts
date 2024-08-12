@@ -1,7 +1,6 @@
 import {Component, Input,inject} from '@angular/core';
 import {SharedModule} from "../../index";
 import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
@@ -41,17 +40,11 @@ export class AssessmentSummaryComponent {
   transactionStatus$ = new Observable<unknown>() ;
 
   message$ = new Observable<{ title: string, message: string, type: 'info' | 'success' | 'warning' | 'error' } | null>;
-  constructor(private router: Router) {}
-  showLink: boolean = false;
-
-  ngOnInit(): void {
-    this.showLink = this.router.url === '/business/my-business';
-    this.message$ = this._feedbackService.message$;
-  }
 
   @Input() title!:string;
   @Input() body!:string;
   @Input() linkLabel!:string;
+  @Input() component!:string
 
 
   checkPaymentStatus() {

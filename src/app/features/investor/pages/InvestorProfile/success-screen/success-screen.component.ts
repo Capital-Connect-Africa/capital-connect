@@ -11,6 +11,8 @@ import { InvestorScreensService } from '../../../services/investor.screens.servi
 import { FeedbackService } from '../../../../../core';
 import { of } from 'rxjs';
 import { InvestorProfile } from '../../../../../shared/interfaces/Investor';
+import { Country } from '../../../../../shared/interfaces/countries';
+import { CountriesService } from '../../../../../shared/services/countries.service';
 
 
 @Component({
@@ -30,6 +32,8 @@ export class SuccessScreenComponent implements OnInit {
   private _screenService = inject(InvestorScreensService)
   private _feedbackService = inject(FeedbackService)
   investorProfile: InvestorProfile = {} as InvestorProfile;
+  countryOptions: Country[] = []
+  private _countries = inject(CountriesService)
 
 
 
@@ -49,19 +53,31 @@ export class SuccessScreenComponent implements OnInit {
       emailAddress: ['', [Validators.required, Validators.email]],
       phoneNumber: ['', Validators.required],
       primaryContact: [false],
+      countryCode: '',
       investorProfileId:this.investorProfile.id
     });
   }
 
   investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile =>{
     this.investorProfile = investorProfile
+
   }))
 
 
   // Submit the form
   onSubmit(): void {
+    console.log("The investor profile is", this.investorProfile)
+
     this.formGroup.value.investorProfileId = this.investorProfile.id
-    this.formGroup.value.phoneNumber = "+254771114712"
+    
+    const countryCode = this.formGroup.value.countryCode;
+    const phoneNumber = this.formGroup.value.phoneNumber;
+
+    this.formGroup.patchValue({
+      phoneNumber: `${countryCode}${phoneNumber}`,
+      investorProfileId:  this.investorProfile.id   
+
+    });
 
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
@@ -77,6 +93,10 @@ export class SuccessScreenComponent implements OnInit {
       )
     }
   }
+
+  countries$ = this._countries.getCountries().pipe(tap(countries => {
+    this.countryOptions = countries
+  }))
 
 
   // Navigate to the dashboard
