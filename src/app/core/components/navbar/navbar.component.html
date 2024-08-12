@@ -1,4 +1,6 @@
 <ng-container *ngIf="logOut$ | async"></ng-container>
+<ng-container *ngIf="phoneNumberPull$ | async"></ng-container>
+<ng-container *ngIf="savephoneNumber$ | async"></ng-container>
 
 <header class="header" [ngClass]="{ on__dashboard: onDashboard}">
   <img src="assets/img/logo.png" alt="logo" class="logo" />
@@ -58,7 +60,7 @@
   </div>
 </header>
 <div>
-  <app-alert />
+  <app-alert [action] ="showDialog"/>
 
 </div>
 
@@ -68,3 +70,11 @@
     <span>Log out</span>
   </button>
 </mat-menu>
+
+<p-dialog header="Update" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+      <label for="phone" class="font-semibold w-6rem">Phone number</label>
+      <input type="tel" formControlName="phone" class="border" placeholder="E.g +254xxxxxxxxx"/>
+      <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">Add</button>
+  </form>
+</p-dialog>
