@@ -71,10 +71,10 @@
   </button>
 </mat-menu>
 
-<p-dialog header="Update" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
   <form class="dialog-input" [formGroup]="phoneUpdateForm">
-      <label for="phone" class="font-semibold w-6rem">Phone number</label>
-      <input type="tel" formControlName="phone" class="border" placeholder="E.g +254xxxxxxxxx"/>
-      <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">Add</button>
+      <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Phone number': 'Verification' }}</label>
+      <input formControlName="field" class="border" [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'"/>
+      <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
   </form>
 </p-dialog>

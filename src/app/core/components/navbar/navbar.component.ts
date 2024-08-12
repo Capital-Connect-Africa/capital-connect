@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, Component, inject, Input, SimpleChanges } from '@angular/core';
+import { booleanAttribute, Component, inject, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { SharedModule } from "../../../shared";
@@ -9,6 +9,7 @@ import { SignalsService } from '../../services/signals/signals.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  private _fb =inject(FormBuilder)
+  private _fb =inject(FormBuilder);
+  issue =UserMobileNumbersIssues;
   signalsService =inject(SignalsService);
   private _authStateService = inject(AuthStateService);
   private _companyStateService = inject(CompanyStateService);
@@ -34,7 +36,7 @@ export class NavbarComponent {
   @Input() isAdmin = false;
 
   phoneUpdateForm =this._fb.group({
-    phone: ['', [
+    field: ['', [
       Validators.required,
     ]]
   })
@@ -54,18 +56,24 @@ export class NavbarComponent {
   }
 
   savePhoneNumber(){
-    const phone =(this.phoneUpdateForm.value?.phone)??'';
-    this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(phone).pipe(tap(res =>{
-      debugger
-      return res
-    }))
+    const field =(this.phoneUpdateForm.value?.field)??'';
+    if(this.signalsService.actionBody().issue ==this.issue.EMPTY){
+      this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res =>{
+        return res
+      }))
+      
+    } else if(this.signalsService.actionBody().issue ==this.issue.UNVERIFIED){
+      this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res =>{
+        return res
+      }))
+    }
   }
 
   ngOnChanges(): void {
-    this.phoneNumberPull$ =this._authStateService.isPhoneNumberAdded().pipe(tap(res =>{
-
-    }))
-    
-    this.signalsService.showInAppAlert.set(true);
+    this.phoneNumberPull$ =this._authStateService.checkPhoneNumberStatus().pipe(tap((res: UserMobileNumbersIssues) =>{
+      this.signalsService.showInAppAlert.set(res !==UserMobileNumbersIssues.VERIFIED);
+      if(res ===UserMobileNumbersIssues.UNVERIFIED)
+        this.signalsService.actionBody.set({issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required'})
+    }));
   }
 }
