@@ -19,21 +19,20 @@
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', value: '', featured: false}"
-  (click)="setDialog('impactAssesment')"
-  >
+  <app-card [detail]="{title: 'Impact element assessment', value: '', featured: true}"
+  (click)="setDialog('impactAssesment')">
     <p class="helper__text text__red">Check your eligibility</p>
   </app-card>
 
   <app-card 
-    [detail]="{title: 'Business Fact Sheet', value: '', featured: false}"
+    [detail]="{title: 'Business Fact Sheet', value: '', featured: true}"
     (click)="setDialog('factSheet')">
     <app-photo-collage></app-photo-collage>
   </app-card>
 
 
   <app-card (click)="showMatchedInvestors()"
-    [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: false, period: '0 Past Months'}"><app-photo-collage /></app-card>
+    [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: true, period: '0 Past Months'}"><app-photo-collage /></app-card>
 </app-overview-section>
 
 <app-modal [visible]="visible">
@@ -73,7 +72,7 @@
         <p>No submissions found.  
           <a [routerLink]="['/business/investor-eligibility']"
           class="text-blue-500 hover:text-blue-700 underline"
-          > add submissions</a>
+          > <strong>submissions</strong></a>
         </p>
       </div>
 
@@ -205,7 +204,7 @@
         <p>No submissions found.  
           <a [routerLink]="['/business/investor-eligibility']"
           class="text-blue-500 hover:text-blue-700 underline"
-          > add submissions</a>
+          > <strong>add submissions</strong></a>
         </p>
       </div>
 
@@ -282,7 +281,7 @@
         <p>No submissions found.  
           <a [routerLink]="['/business/investor-eligibility']"
           class="text-blue-500 hover:text-blue-700 underline"
-          > add submissions</a>
+          ><strong>add submissions</strong></a>
         </p>
       </div>
 
