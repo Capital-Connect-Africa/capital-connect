@@ -5,4 +5,5 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 })
 export class SignalsService {
   showInAppAlert: WritableSignal<boolean> =signal(false);
+  showDialog: WritableSignal<boolean> =signal(false);
 }
