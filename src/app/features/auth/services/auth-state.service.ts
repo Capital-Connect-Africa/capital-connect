@@ -1,12 +1,14 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { ConfirmationService, FeedbackService } from '../../../core';
+import { BASE_URL, BaseHttpService, ConfirmationService, FeedbackService } from '../../../core';
 import { Router } from '@angular/router';
 import { FORM_TYPE, Profile } from '../interfaces/auth.interface';
-import { tap } from 'rxjs';
+import { catchError, EMPTY, map, of, tap } from 'rxjs';
+import { SignalsService } from '../../../core/services/signals/signals.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
-
+  private _signalsService =inject(SignalsService);
+  private _httpService =inject(BaseHttpService);
   private _confirmationService = inject(ConfirmationService);
   private _feedBackService = inject(FeedbackService);
   private _router = inject(Router);
@@ -83,12 +85,26 @@ export class AuthStateService {
     }))
   }
 
-  saveUserPhoneNumberAddedStatus(phoneNumberWasAdded: boolean){
-    sessionStorage.setItem('phone_number_added', JSON.stringify(phoneNumberWasAdded));
+  saveUserPhoneNumberAddedStatus(phoneNo: string){
+    const userId =this.currentUserId();
+    return this._httpService.create(BASE_URL+'/mobile-numbers', {phoneNo, userId}).pipe(map(res =>{
+      this._feedBackService.success('Number saved successfully', 'Phone number update')
+      this._signalsService.showDialog.set(false);
+      this._signalsService.showInAppAlert.set(false);
+      sessionStorage.setItem('phone_number_added', JSON.stringify(true))
+      return res
+    }), catchError(err =>{
+      sessionStorage.setItem('phone_number_added', JSON.stringify(false))
+      return EMPTY
+    }));
   }
 
   isPhoneNumberAdded(){
-    return !!JSON.parse(sessionStorage.getItem('phone_number_added') || 'false');
+    const phoneIsSet =JSON.parse(sessionStorage.getItem('phone_number_added') || 'false')
+    if(phoneIsSet) return of(phoneIsSet);
+    return this._httpService.read(BASE_URL+'/mobile-numbers/1').pipe(map(res =>{
+      return res
+    }))
   }
 
 }
