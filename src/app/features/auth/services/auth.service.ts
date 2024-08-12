@@ -33,6 +33,8 @@ export class AuthService extends BaseHttpService {
       return this.getUserProfile();
     }), tap(userProfile => {
       this._authStateService.initUser(userProfile)
+      sessionStorage.setItem('mobile_numbers', JSON.stringify(userProfile.mobileNumbers));
+      sessionStorage.setItem('mobile_numbers_added', JSON.stringify((userProfile.mobileNumbers??[]).length >0));
     })) as Observable<Profile>
   }
 
