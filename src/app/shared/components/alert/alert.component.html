@@ -4,7 +4,7 @@
             <strong class="block text-lg">{{title}}</strong>
             <span>{{message}}</span>
         </div>
-        <button class="cta">{{actionName}}</button>
+        <button class="cta" *ngIf="action" (click) ="action()">{{actionName}}</button>
     </div>
     <button class="btn__close" (click) ="close()">
         <mat-icon>x</mat-icon>
