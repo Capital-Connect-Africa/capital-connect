@@ -9,7 +9,7 @@ import { SignalsService } from '../../services/signals/signals.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
+import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -64,9 +64,13 @@ export class NavbarComponent {
       }))
       
     } else if(this.signalsService.actionBody().issue ==this.issue.UNVERIFIED){
-      this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res =>{
-        return res
-      }))
+      const mobileNumbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers')??JSON.stringify([]))
+      if(mobileNumbers.length){
+        this.savephoneNumber$ =this._authStateService.verifyPhoneNumber(field, mobileNumbers.at(0)?.phoneNo??'').pipe(tap(res =>{
+          return res
+        }))
+
+      }
     }
   }
 
