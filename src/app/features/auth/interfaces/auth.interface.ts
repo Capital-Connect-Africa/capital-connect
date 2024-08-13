@@ -19,13 +19,18 @@ export enum FORM_TYPE {
   FORGOT_PASSWORD
 }
 
+export interface MobileNumber{
+  phoneNo: string,
+  isVerified: boolean
+}
+
 export interface Profile{
   id: number;
   username: string;
   firstName: string;
   lastName: string;
   roles: string;
-  mobileNumbers: {isVerified: boolean}[]
+  mobileNumbers: MobileNumber[]
 }
 
 export enum UserMobileNumbersIssues{
@@ -40,3 +45,4 @@ export interface ActionBody{
   message: string,
   issue: UserMobileNumbersIssues,
 }
+

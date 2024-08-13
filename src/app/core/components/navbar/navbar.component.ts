@@ -9,7 +9,7 @@ import { SignalsService } from '../../services/signals/signals.service';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { DialogModule } from 'primeng/dialog';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
+import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
 
 @Component({
   selector: 'app-navbar',
@@ -24,7 +24,7 @@ export class NavbarComponent {
   signalsService =inject(SignalsService);
   private _authStateService = inject(AuthStateService);
   private _companyStateService = inject(CompanyStateService);
-
+  
   businessName = this._companyStateService.currentCompany?.name
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
 
@@ -35,6 +35,7 @@ export class NavbarComponent {
   @Input({ transform: booleanAttribute }) onDashboard: boolean = false;
   @Input() isAdmin = false;
 
+  userFirstName =this._authStateService.currentUserProfile().firstName;
   phoneUpdateForm =this._fb.group({
     field: ['', [
       Validators.required,
@@ -63,9 +64,13 @@ export class NavbarComponent {
       }))
       
     } else if(this.signalsService.actionBody().issue ==this.issue.UNVERIFIED){
-      this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res =>{
-        return res
-      }))
+      const mobileNumbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers')??JSON.stringify([]))
+      if(mobileNumbers.length){
+        this.savephoneNumber$ =this._authStateService.verifyPhoneNumber(field, mobileNumbers.at(0)?.phoneNo??'').pipe(tap(res =>{
+          return res
+        }))
+
+      }
     }
   }
 

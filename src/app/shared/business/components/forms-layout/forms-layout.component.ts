@@ -10,33 +10,34 @@ import { ProgressBarComponent } from '../../../../core/components/progress-bar/p
   styleUrl: './forms-layout.component.scss'
 })
 export class FormsLayoutComponent {
-  current_step =1;
-  current_page =2;
+  current_step = 1;
+  current_page = 2;
 
-  @Input() progress_steps =[
-    {name: 'Business Information',},
-    {name: 'Investor Eligibility'},
-    {name: 'Investor Preparedness'},
-];
+  @Input() progress_steps = [
+    { name: 'Business Information', },
+    { name: 'Investor Eligibility' },
+    { name: 'Investor Preparedness' },
+    { name: 'Impact Assessment' },
+  ];
 
-  constructor(private businessPageService: BusinessPageService) {}
+  constructor(private businessPageService: BusinessPageService) { }
 
-  @Input() steps: number =3;
-  @Input() title: string ='';
-  @Input() progress =0;
+  @Input() steps: number = 4;
+  @Input() title: string = '';
+  @Input() progress = 0;
   setNextScreen(step: number) {
     this.setNextStep(step);
-    if (this.current_step >this.steps || (this.current_step <1 && step <0)){
-      this.current_step =1;
-      this.current_page +=step;
+    if (this.current_step > this.steps || (this.current_step < 1 && step < 0)) {
+      this.current_step = 1;
+      this.current_page += step;
       this.businessPageService.setCurrentStep(this.current_step);
       this.businessPageService.setCurrentPage(this.current_page);
     }
   }
 
-  setNextStep(step =1){
-    if ((step <0 && this.current_step <1) || (step >0 && this.current_step >this.steps)) return;
-    this.current_step +=step;
+  setNextStep(step = 1) {
+    if ((step < 0 && this.current_step < 1) || (step > 0 && this.current_step > this.steps)) return;
+    this.current_step += step;
     this.businessPageService.setCurrentStep(this.current_step);
   }
 }

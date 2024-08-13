@@ -1,5 +1,6 @@
 <ng-container *ngIf="currentStep$ | async as current_step">
-    <app-step-one *ngIf="current_step ==1" />
-    <app-step-two *ngIf="current_step ==2" />
-    <app-step-three *ngIf="current_step ==3" />
+  <app-step-one *ngIf="current_step == 1" />
+  <app-step-two *ngIf="current_step == 2" />
+  <app-step-three *ngIf="current_step == 3" />
+  <app-step-four *ngIf="current_step == 4" />
 </ng-container>

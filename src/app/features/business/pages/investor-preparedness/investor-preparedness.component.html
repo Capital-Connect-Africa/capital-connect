@@ -1,7 +1,7 @@
 <ng-container *ngIf="usersSubmission$ | async"></ng-container>
 <app-layout *ngIf="currentPage$ | async as current_screen">
   <app-index-layout *ngIf="current_screen ==1"><app-index /></app-index-layout>
-  <app-forms-layout [progress]="2" *ngIf="current_screen ==2" [steps]="2"
+  <app-forms-layout [progress]="2" *ngIf="current_screen ==2" [steps]="4"
     [title]="'Investor/Funder Preparedness'"><app-steps /></app-forms-layout>
   <app-index-layout *ngIf="current_screen ==3"><app-success-screen /></app-index-layout>
 </app-layout>

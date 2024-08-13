@@ -209,25 +209,26 @@
                         align-items: center;
                         .avatar{
                             display: block;
-                            width: 2.25rem;
-                            height: 2.25rem;
+                            width: 2rem;
+                            height: 2rem;
                             object-fit: cover;
                             border-radius: 50%;
                         }
                         .selection{
                             display: flex;
                             font-weight: 500;
+                            gap: .3rem;
                             flex-direction: column;
                             font-family: $font-family-sans-serif;
                             .title{
-                                font-size: .8rem;
-                                line-height: 17.09px;
+                                font-size: 12px;
+                                line-height: 12px;
                                 color: #000000;
                             }
                             .plan{
                                 font-size: .7rem;
                                 color: #FF5151;
-                                line-height: 17.09px;
+                                line-height: .7rem;
                             }
                         }
                     }
@@ -244,6 +245,7 @@
         .navbar {
           ul {
             .profile {
+              min-width: 120px;
               .selection {
                 display: flex;
               }
@@ -276,6 +278,9 @@
         .nav__content {
           padding: 0 2rem;
           .navbar {
+            .profile{
+              min-width: 150px;
+            }
             .search__box{
               display: flex;
             }

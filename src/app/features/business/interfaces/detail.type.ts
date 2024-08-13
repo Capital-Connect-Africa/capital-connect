@@ -2,6 +2,7 @@ export type DETAIL_TYPE ={
   title: string,
   value: string,
   period?: string,
+  icon?:string,
   featured: boolean,
 }
 

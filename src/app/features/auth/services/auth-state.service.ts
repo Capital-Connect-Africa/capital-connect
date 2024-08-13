@@ -1,7 +1,7 @@
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { BASE_URL, BaseHttpService, ConfirmationService, FeedbackService } from '../../../core';
 import { Router } from '@angular/router';
-import { FORM_TYPE, Profile, UserMobileNumbersIssues } from '../interfaces/auth.interface';
+import { FORM_TYPE, MobileNumber, Profile, UserMobileNumbersIssues } from '../interfaces/auth.interface';
 import { catchError, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
 import { SignalsService } from '../../../core/services/signals/signals.service';
 
@@ -92,7 +92,8 @@ export class AuthStateService {
       this._signalsService.showDialog.set(false);
       this._signalsService.actionOnMobileNumbers.set(true);
       this._signalsService.actionBody.set({issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required'})
-      sessionStorage.setItem('mobile_numbers_added', JSON.stringify(true))
+      const mobile_numbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]))
+      sessionStorage.setItem('mobile_numbers', JSON.stringify(mobile_numbers.push({phoneNo, isVerified: false})))
       return res
     }), catchError(err =>{
       return EMPTY
@@ -100,13 +101,17 @@ export class AuthStateService {
   }
 
   // TODO: verify phone number once brevo issue is sorted
-  verifyPhoneNumber(otp: number, phoneNo:string){
+  verifyPhoneNumber(otp: string, phoneNo:string){
     return this._httpService.create(BASE_URL+'/mobile-numbers/verify', {otp, phoneNo}).pipe(map(res =>{
       this._feedBackService.success('Phone Number verified successfully', 'Phone number verification')
       this._signalsService.showDialog.set(false);
       this._signalsService.showInAppAlert.set(false);
       this._signalsService.actionOnMobileNumbers.set(false);
-      sessionStorage.setItem('mobile_numbers_added', JSON.stringify(true))
+      const mobile_numbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers')??JSON.stringify([]))
+      if(mobile_numbers.length){
+        mobile_numbers[0].isVerified =true;
+        sessionStorage.setItem('mobile_number', JSON.stringify(mobile_numbers))
+      }
       return res
     }), catchError(err =>{
       return EMPTY
@@ -119,22 +124,18 @@ export class AuthStateService {
       return of(result);
     }
     return this._httpService.read(BASE_URL + '/users/profile').pipe(
-      switchMap((userProfile: any) => {
-        const mobileNumbers = userProfile.mobileNumbers;
-        sessionStorage.setItem('mobile_numbers', JSON.stringify(mobileNumbers));
-        sessionStorage.setItem('mobile_numbers_added', JSON.stringify(mobileNumbers.length > 0));
+      switchMap((userProfile: Profile | any) => {
+        const mobileNumbers:MobileNumber[] = userProfile.mobileNumbers;
+        sessionStorage.setItem('mobile_numbers', JSON.stringify(mobileNumbers??[]));
         return of(this._checkPhoneNumberStatus());
       })
     );
   }
 
 private _checkPhoneNumberStatus(){
-  const numbersAdded = JSON.parse(sessionStorage.getItem('mobile_numbers_added') ?? 'false');
-  if (!numbersAdded) return  UserMobileNumbersIssues.EMPTY;
-
-  const mobile_numbers: { isVerified: boolean | null }[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? '[]');
+  const mobile_numbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]));
+  if (!mobile_numbers.length) return  UserMobileNumbersIssues.EMPTY;
   const numbersVerified = mobile_numbers.some(mobile_number => mobile_number.isVerified);
-
   if (!numbersVerified) return UserMobileNumbersIssues.UNVERIFIED;
   return UserMobileNumbersIssues.VERIFIED;
 }
