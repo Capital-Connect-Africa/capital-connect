@@ -2,6 +2,7 @@
 
 .card{
   gap: .5rem;
+  flex: 1;
   display: flex;
   padding: 1rem;
   overflow: hidden;
@@ -17,7 +18,7 @@
     h3 {
       font-weight: 400;
       line-height: 1.5rem;
-      font-size: 1.125rem;
+      font-size: 1rem;
     }
     span{
       >*{
@@ -27,6 +28,7 @@
   }
   .card__body{
     gap: 1rem;
+    padding: .75rem 0;
     display: flex;
     align-items: center;
     h2{
@@ -34,8 +36,10 @@
       line-height: 1.5rem;
       font-size: 2.125rem;
       color: $primary-color;
+      margin: 0;
     }
     p{
+      margin: 0;
       font-size: 12px;
       padding: 0 10px;
       border-radius: 4px;

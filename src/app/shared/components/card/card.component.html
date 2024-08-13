@@ -4,7 +4,8 @@
     <span><mat-icon>more_horiz</mat-icon></span>
   </div>
   <div class="card__body">
-    <h2>{{detail?.value}}</h2>
+    <h2 *ngIf="!detail?.icon">{{detail?.value}}</h2>
+    <h2 *ngIf="detail?.icon"><mat-icon>{{detail?.icon}}</mat-icon></h2>
     <p *ngIf="detail?.period">{{detail?.period}}</p>
   </div>
   <div class="hr"></div>
