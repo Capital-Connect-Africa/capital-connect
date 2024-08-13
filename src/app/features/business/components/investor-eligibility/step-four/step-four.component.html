@@ -1,17 +1,18 @@
-<ng-container *ngIf="submission$ | async"/>
+<ng-container *ngIf="submission$ | async"> </ng-container>
+
 <ng-container *ngIf="questions$ | async">
   <form [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
     <div class="form_content__container">
       <div class="header">
         <div class="steps__bar">
-          <p>Step 1 of 3</p>
+          <p>Step 4 of 4</p>
           <ul class="indicators">
-            @for (step of [].constructor(3); track $index){
-              <li [class.active] ="($index +1) <= 1"></li>
+            @for (step of [].constructor(4); track $index){
+              <li [class.active] ="($index +1) <= 4"></li>
             }
           </ul>
         </div>
-        <strong>Impact assessment</strong>
+        <strong>Business Information</strong>
       </div>
       <div *ngFor="let question of questions; let i = index" class="input__wrapper">
         <label class="input__label">{{question.text}}<sup>*</sup></label>
