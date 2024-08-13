@@ -7,6 +7,7 @@ import { OrganizationInfoContainerComponent } from "../organization-info-contain
 import { SubmissionService, UserSubmissionResponse } from '../../../../shared';
 import { BUSINESS_INFORMATION_SUBSECTION_IDS, getInvestorEligibilitySubsectionIds, IMPACT_ASSESMENT_SUBSECTION_IDS, INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { CompanyResponse } from '../../interfaces';
+import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
 
 @Component({
   selector: 'app-organization-submissions-info',
@@ -18,13 +19,18 @@ import { CompanyResponse } from '../../interfaces';
 
 })
 export class OrganizationSubmissionsInfoComponent implements OnChanges {
+  private _scoringService = inject(BusinessOnboardingScoringService);
+
   owner!: User;
   investorPreparednessResponses: UserSubmissionResponse[] = [];
-  businessResponses: UserSubmissionResponse[]= [];
-  investorEligibilityResponses: UserSubmissionResponse[]= [];
-  impactAssessmentResponses: UserSubmissionResponse[] =[];
+  businessResponses: UserSubmissionResponse[] = [];
+  investorEligibilityResponses: UserSubmissionResponse[] = [];
+  impactAssessmentResponses: UserSubmissionResponse[] = [];
 
   activeTab: string = 'investorEligibility';
+  investorEligibilityScore: string = '0';
+  investorPreparednessScore: string = '0';
+  impactAssessmentScore: string = '0';
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
@@ -48,8 +54,14 @@ export class OrganizationSubmissionsInfoComponent implements OnChanges {
       }))
 
       this.impactAssessmentResponses$ = this._userSubmissionsService.fetchSubmissionsByUserPerSection(this.owner.id, IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(res => {
-        
         this.impactAssessmentResponses = res
+      }))
+
+
+      this.scoring$ = this._scoringService.getOnboardingScores(this.company.growthStage, this.company.user.id).pipe(tap(scores => {
+        this.investorEligibilityScore = scores.investorEligibility;
+        this.investorPreparednessScore = scores.investorPreparedness;
+        this.impactAssessmentScore = scores.impactAssessment;
       }))
     }
   }
@@ -64,5 +76,6 @@ export class OrganizationSubmissionsInfoComponent implements OnChanges {
   businessResponses$: Observable<UserSubmissionResponse[]> = new Observable();
   investorPreparednessResponses$: Observable<UserSubmissionResponse[]> = new Observable();
   impactAssessmentResponses$: Observable<UserSubmissionResponse[]> = new Observable();
+  scoring$ = new Observable();
 
 }
