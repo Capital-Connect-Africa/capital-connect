@@ -43,6 +43,7 @@ export class OverviewComponent {
   matchedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
+  impactAssessmentScore: string = '0';
   answers: UserSubmissionResponse[] = [];
   generalSummary!: GeneralSummary;
 
@@ -73,6 +74,7 @@ export class OverviewComponent {
   }))
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
+    this.impactAssessmentScore =scores.impactAssessment;
     this.investorEligibilityScore = scores.investorEligibility;
     this.investorPreparednessScore = scores.investorPreparedness;
   }))
