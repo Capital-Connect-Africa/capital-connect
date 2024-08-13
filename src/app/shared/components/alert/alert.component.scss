@@ -1,0 +1,37 @@
+@import '../../../styles/main.scss';
+
+*{
+    font-family: $font-family-sans-serif;
+}
+
+.alert__container{
+    padding: 2rem;
+}
+.bg__warning{
+    color: $yellow-900;
+    background-color: $yellow-500
+}
+
+.cta{
+    border: 0;
+    outline: none;
+    padding: .5rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: $yellow-500;
+    border-radius: .5rem;
+    cursor: pointer!important;
+    background-color: $yellow-900;
+}
+
+.btn__close{
+    height: 32px;
+    width: 32px;
+    display: flex;
+    align-items: center;
+    border-radius: 50%;
+    justify-content: center;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}

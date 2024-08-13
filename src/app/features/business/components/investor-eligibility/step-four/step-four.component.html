@@ -1,0 +1,65 @@
+<ng-container *ngIf="submission$ | async"> </ng-container>
+
+<ng-container *ngIf="questions$ | async">
+  <form [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
+    <div class="form_content__container">
+      <div class="header">
+        <div class="steps__bar">
+          <p>Step 4 of 4</p>
+          <ul class="indicators">
+            @for (step of [].constructor(4); track $index){
+              <li [class.active] ="($index +1) <= 4"></li>
+            }
+          </ul>
+        </div>
+        <strong>Business Information</strong>
+      </div>
+      <div *ngFor="let question of questions; let i = index" class="input__wrapper">
+        <label class="input__label">{{question.text}}<sup>*</sup></label>
+        <a [title]="question.tooltip || ''">Why do we ask this?</a>
+        @if(question.type === fieldType.SINGLE_CHOICE){
+          <div class="form__col">
+            <p-dropdown
+              [options]="question.answers"
+              optionLabel="text"
+              optionValue="id"
+              class ="input__field"
+              styleClass ="w-full gap-4"
+              [formControlName]="'question_' + question.id"
+              placeholder="Select option" />
+          </div>
+        }
+        @else if(question.type === fieldType.MULTIPLE_CHOICE){
+          <div class="form__col">
+            <p-multiSelect
+              class ="input__field"
+              styleClass ="w-full gap-4"
+              [options]="question.answers"
+              optionLabel="text"
+              optionValue="id"
+              [formControlName]="'question_' + question.id"
+              [placeholder]="'Select option'" />
+          </div>
+        } @else if (question.type === fieldType.TRUE_FALSE){
+          <div class="radio__form">
+            <div *ngFor="let answer of question.answers">
+              <input type="radio" [formControlName]="'question_' + question.id" [value]="answer.id">
+              <label>{{ answer.text }}</label>
+            </div>
+          </div>
+        }
+        @else if(question.type === fieldType.SHORT_ANSWER){
+          <div  class="form__col">
+            <input class="input__field" [formControlName]="'question_' + question.id" type="text" placeholder="" />
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="cta__group">
+      <a routerLink="/business">Skip and go to dashboard</a>
+      <button class="btn btn-primary outline" type="button" (click)="goBack()">Back</button>
+      <button class="btn btn-primary" [disabled]="!formGroup.valid" [ngClass]="{'disabled-btn': !formGroup.valid }">Next</button>
+    </div>
+  </form>
+</ng-container>

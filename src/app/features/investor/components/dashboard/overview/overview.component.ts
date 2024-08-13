@@ -48,7 +48,7 @@ export class OverviewComponent {
 
 
   showDialog(current_modal: string) {
-    this.visible = !this.visible
+    this.visible = true
     this.currentModal = current_modal;
   }
 
