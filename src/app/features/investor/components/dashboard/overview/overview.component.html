@@ -1,4 +1,3 @@
-<ng-container *ngIf="stats$ | async"></ng-container>
 <ng-container *ngIf="connectedCompanies$ | async"></ng-container>
 <ng-container *ngIf="interestingCompanies$ | async"></ng-container>
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
@@ -29,14 +28,14 @@
   </app-card>
 </app-overview-section>
 
-<app-modal [(visible)]="visible" [title]="modalTitle" [value]="modalData.length" [helperText]="modalHelperText">
+<app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length" [helperText]="getModalHelperText()">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!modalData.length">
-    No {{ modalTitle.toLowerCase() }} found. <br /> Check again later.
+    No {{ getModalTitle().toLowerCase() }} found. <br /> Check again later.
   </div>
 
-  <div class="business-details" *ngIf="modalData.length > 0">
+  <div class="business-details">
     <div class="flex flex-col">
-      <div class="flex justify-start font-bold border-b-2 border-gray-300 py-2 business-details">
+      <div *ngIf="modalData.length" class="flex justify-start font-bold border-b-2 border-gray-300 py-2 business-details">
         <span class="w-1/12">#</span>
         <span class="w-2/12">Country</span>
         <span class="w-2/12">Sector</span>
@@ -44,18 +43,57 @@
         <span *ngIf="currentModal !== 'rejected_businesses'" class="w-3/12">Actions</span>
       </div>
 
-      <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
-        *ngFor="let business of modalData; let i = index; trackBy: trackByIndex">
-        <span class="w-1/12">{{ i + 1 }}</span>
-        <span class="w-2/12">{{ business.country }}</span>
-        <span class="w-2/12">{{ business.businessSector }}</span>
-        <span class="w-2/12">{{ business.growthStage }}</span>
-        <div class="w-3/12 flex space-x-2">
-          <button *ngIf="currentModal === 'matched_businesses'" class="btn" (click)="showInterest(business.id)">Interested</button>
-          <button *ngIf="currentModal === 'interesting_businesses'" class="btn" (click)="connect(business.id)">Connect</button>
-          <button *ngIf="currentModal === 'connected_businesses'" class="btn btn-danger" (click)="cancelConnection('1')">Remove</button>
+      <div *ngIf="currentModal === 'matched_businesses'; else showInterestingBusinesses">
+        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
+          *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex">
+          <span class="w-1/12">{{ i + 1 }}</span>
+          <span class="w-2/12">{{ business.country }}</span>
+          <span class="w-2/12">{{ business.businessSector }}</span>
+          <span class="w-2/12">{{ business.growthStage }}</span>
+          <div class="w-3/12 flex space-x-2">
+            <button class="btn" (click)="showInterest(business.id)">Interested</button>
+          </div>
         </div>
       </div>
+
+      <ng-template #showInterestingBusinesses>
+        <div *ngIf="currentModal === 'interesting_businesses'">
+          <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
+            *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex">
+            <span class="w-1/12">{{ i + 1 }}</span>
+            <span class="w-2/12">{{ business.company.country }}</span>
+            <span class="w-2/12">{{ business.company.businessSector }}</span>
+            <span class="w-2/12">{{ business.company.growthStage }}</span>
+            <div class="w-3/12 flex space-x-2">
+              <button class="btn" (click)="connect(business.company.id)">Connect</button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+
+      <div *ngIf="currentModal === 'connected_businesses'">
+        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
+          *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex">
+          <span class="w-1/12">{{ i + 1 }}</span>
+          <span class="w-2/12">{{ business.company.country}}</span>
+          <span class="w-2/12">{{ business.company.businessSector }}</span>
+          <span class="w-2/12">{{ business.company.growthStage }}</span>
+          <div class="w-3/12 flex space-x-2">
+            <button class="btn" (click)="cancelConnection('1')">Cancel Connection</button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="currentModal === 'rejected_businesses'">
+        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
+          *ngFor="let business of rejectedBusinesses; let i = index; trackBy: trackByIndex">
+          <span class="w-1/12">{{ i + 1 }}</span>
+          <span class="w-2/12">{{ business.country }}</span>
+          <span class="w-2/12">{{ business.businessSector }}</span>
+          <span class="w-2/12">{{ business.growthStage }}</span>
+        </div>
+      </div>
+
     </div>
   </div>
 </app-modal>

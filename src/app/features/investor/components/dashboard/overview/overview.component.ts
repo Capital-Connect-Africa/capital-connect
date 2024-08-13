@@ -6,7 +6,7 @@ import { CardComponent } from "../../../../../shared/components/card/card.compon
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../../shared/business/services/busines.and.investor.matching.service";
 import { AuthStateService } from "../../../../auth/services/auth-state.service";
-import { MatchedBusiness } from '../../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../../shared/interfaces';
 
 @Component({
   selector: 'app-overview',
@@ -27,18 +27,13 @@ export class OverviewComponent {
   currentModal = '';
 
   matchedBusinesses: MatchedBusiness[] = [];
-  connectedBusinesses: MatchedBusiness[] = [];
-  interestingBusinesses: MatchedBusiness[] = [];
+  connectedBusinesses: ConnectedBusiness[] = [];
+  interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: MatchedBusiness[] = [];
 
   markAsInteresting$ = new Observable<unknown>()
   connectWithCompany$ = new Observable<unknown>()
   
-
-  stats$ = this._businessMatchingService.getMatchedBusinesses(this._authService.currentUserId() && this._authService.currentUserId() > 0 ? this._authService.currentUserId() : Number(sessionStorage.getItem('userId'))).pipe(tap(res => {
-    this.matchedBusinesses = res
-  }))
-
 
   matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
 
@@ -52,34 +47,6 @@ export class OverviewComponent {
 
 
 
-
-  ngOnInit() {
-    this.matchedBusinesses = [
-      {country: 'Kenya', businessSector: 'Agriculture', growthStage: 'Seed',id: 1},
-      {country: 'Nigeria', businessSector: 'Technology', growthStage: 'Growth',id: 2},
-      {country: 'South Africa', businessSector: 'Finance', growthStage: 'Mature',id: 3},
-      {country: 'Ghana', businessSector: 'Healthcare', growthStage: 'Startup', id: 4},
-      {country: 'Uganda', businessSector: 'Education', growthStage: 'Expansion',id: 5
-      }
-    ];
-
-    this.connectedBusinesses = [
-      {country: 'Tanzania', businessSector: 'Retail', growthStage: 'Growth',id: 1},
-      {country: 'Rwanda', businessSector: 'Manufacturing', growthStage: 'Expansion',id: 2}
-    ];
-
-    this.interestingBusinesses = [
-      {country: 'Ethiopia', businessSector: 'Energy', growthStage: 'Seed',id: 1},
-      {country: 'Botswana', businessSector: 'Tourism', growthStage: 'Startup',id: 2}
-    ];
-
-    this.rejectedBusinesses = [
-      {country: 'Ethiopia', businessSector: 'Energy', growthStage: 'Seed',id: 2},
-      {country: 'Botswana', businessSector: 'Tourism', growthStage: 'Startup', id: 2}
-    ];
-  }
-
-
   showDialog(current_modal: string) {
     this.visible = !this.visible
     this.currentModal = current_modal;
@@ -87,7 +54,7 @@ export class OverviewComponent {
 
 
 
-  get modalTitle(): string {
+  getModalTitle(): string {
     switch (this.currentModal) {
       case 'connected_businesses':
         return 'Connected Businesses';
@@ -102,7 +69,7 @@ export class OverviewComponent {
     }
   }
 
-  get modalHelperText(): string {
+  getModalHelperText(): string {
     switch (this.currentModal) {
       case 'connected_businesses':
         return 'You have connected with these businesses';

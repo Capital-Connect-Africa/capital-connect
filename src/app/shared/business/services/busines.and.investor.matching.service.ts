@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor} from "../../interfaces";
+import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness} from "../../interfaces";
 import { GeneralSummary } from "../../interfaces/submission.interface";
 
 @Injectable({
@@ -18,12 +18,6 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   getMatchedInvestors(userId: number) {
     return this.readById(`${BASE_URL}/company/business-matches`, userId).pipe(map(res => {
       return res as MatchedInvestor[]
-    }))
-  }
-
-  getMatchedBusinesses(investorId: number) {
-    return this.readById(`${BASE_URL}/company/invesetor-matches`, investorId).pipe(map(res => {
-      return res as  MatchedBusiness[]
     }))
   }
 
@@ -70,18 +64,18 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
 
   //Interesting companies
-  getInterestingCompanies(): Observable<MatchedBusiness[]> {
+  getInterestingCompanies(): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}`).pipe(
-      map(res => res as MatchedBusiness[])
+      map(res => res as InterestingBusinesses[])
     );
   }
 
   //connected companies
-  getConnectedCompanies(): Observable<MatchedBusiness[]> {
+  getConnectedCompanies(): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}`).pipe(
-      map(res => res as MatchedBusiness[])
+      map(res => res as ConnectedBusiness[])
     );
   }
 
