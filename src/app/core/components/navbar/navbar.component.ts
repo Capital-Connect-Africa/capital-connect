@@ -24,7 +24,7 @@ export class NavbarComponent {
   signalsService =inject(SignalsService);
   private _authStateService = inject(AuthStateService);
   private _companyStateService = inject(CompanyStateService);
-
+  
   businessName = this._companyStateService.currentCompany?.name
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
 
@@ -35,6 +35,7 @@ export class NavbarComponent {
   @Input({ transform: booleanAttribute }) onDashboard: boolean = false;
   @Input() isAdmin = false;
 
+  userFirstName =this._authStateService.currentUserProfile().firstName;
   phoneUpdateForm =this._fb.group({
     field: ['', [
       Validators.required,
