@@ -3,25 +3,36 @@
 <ng-container *ngIf="investorPreparednessResponses$ | async"></ng-container>
 <ng-container *ngIf="businessResponses$ | async"></ng-container>
 <ng-container *ngIf="impactAssessmentResponses$ | async"></ng-container>
+<ng-container *ngIf="scoring$ | async"></ng-container>
 
 <div details class="tab-view">
   <div class="tab-headers">
-    <div class="tab-header" [class.active]="activeTab === 'investorEligibility'" (click)="setActiveTab('investorEligibility')">
+    <div class="tab-header" [class.active]="activeTab === 'investorEligibility'"
+      (click)="setActiveTab('investorEligibility')">
       Investor Eligibility Responses
     </div>
-    <div class="tab-header" [class.active]="activeTab === 'businessResponses'" (click)="setActiveTab('businessResponses')">
+    <div class="tab-header" [class.active]="activeTab === 'businessResponses'"
+      (click)="setActiveTab('businessResponses')">
       Business Responses
     </div>
-    <div class="tab-header" [class.active]="activeTab === 'investorPreparedness'" (click)="setActiveTab('investorPreparedness')">
+    <div class="tab-header" [class.active]="activeTab === 'investorPreparedness'"
+      (click)="setActiveTab('investorPreparedness')">
       Investor Preparedness Responses
     </div>
-    <div class="tab-header" [class.active]="activeTab === 'impactAssessment'" (click)="setActiveTab('impactAssessment')">
+    <div class="tab-header" [class.active]="activeTab === 'impactAssessment'"
+      (click)="setActiveTab('impactAssessment')">
       Impact Assessment Responses
     </div>
   </div>
 
   <div class="tab-content">
-    <div *ngIf="activeTab === 'investorEligibility'">
+    <div class="answer-container" *ngIf="activeTab === 'investorEligibility'">
+      <div class="score-card"> 
+        Company Score: &nbsp;&nbsp;
+        <span>
+          {{investorEligibilityScore}} %
+        </span>
+      </div>
       <ng-container *ngIf="investorEligibilityResponses && investorEligibilityResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of investorEligibilityResponses">
@@ -40,7 +51,7 @@
       </ng-container>
     </div>
 
-    <div *ngIf="activeTab === 'businessResponses'">
+    <div class="answer-container" *ngIf="activeTab === 'businessResponses'">
       <ng-container *ngIf="businessResponses && businessResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of businessResponses">
@@ -59,7 +70,12 @@
       </ng-container>
     </div>
 
-    <div *ngIf="activeTab === 'investorPreparedness'">
+    <div class="answer-container" *ngIf="activeTab === 'investorPreparedness'">
+      <div class="score-card">    Company Score:  &nbsp;&nbsp;
+        <span>
+          {{investorPreparednessScore}} %
+        </span>
+      </div>
       <ng-container *ngIf="investorPreparednessResponses && investorPreparednessResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of investorPreparednessResponses">
@@ -77,7 +93,13 @@
         </ul>
       </ng-container>
     </div>
-    <div *ngIf="activeTab === 'impactAssessment'">
+    <div class="answer-container" *ngIf="activeTab === 'impactAssessment'">
+      <div class="score-card">
+        Company Score:  &nbsp;&nbsp;
+        <span>
+          {{impactAssessmentScore}} %
+        </span>
+        </div>
       <ng-container *ngIf="impactAssessmentResponses && impactAssessmentResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of impactAssessmentResponses">

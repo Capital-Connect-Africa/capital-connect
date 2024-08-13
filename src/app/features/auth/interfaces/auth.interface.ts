@@ -25,4 +25,18 @@ export interface Profile{
   firstName: string;
   lastName: string;
   roles: string;
+  mobileNumbers: {isVerified: boolean}[]
+}
+
+export enum UserMobileNumbersIssues{
+  EMPTY,
+  UNVERIFIED,
+  VERIFIED
+}
+
+export interface ActionBody{
+  title: string,
+  command: string
+  message: string,
+  issue: UserMobileNumbersIssues,
 }

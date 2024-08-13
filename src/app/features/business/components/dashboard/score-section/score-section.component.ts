@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {SharedModule} from "../../../../../shared";
-import {Chart, registerables} from "chart.js";
-import {SCORE_TYPE} from "../../../interfaces/score.type";
+import { CommonModule } from "@angular/common";
+import { SharedModule } from "../../../../../shared";
+import { Chart, registerables } from "chart.js";
+import { SCORE_TYPE } from "../../../interfaces/score.type";
 
 @Component({
   selector: 'app-score-section',
@@ -12,10 +12,10 @@ import {SCORE_TYPE} from "../../../interfaces/score.type";
   styleUrl: './score-section.component.scss'
 })
 export class ScoreSectionComponent {
-  processes: SCORE_TYPE[] =[
-    {process: 'Business Information', completed: false},
-    {process: 'Investor Eligibility', completed: false},
-    {process: 'Investor Preparedness', completed: false},
+  processes: SCORE_TYPE[] = [
+    { process: 'Business Information', completed: false },
+    { process: 'Investor Eligibility', completed: false },
+    { process: 'Investor Preparedness', completed: false },
   ]
   constructor() {
     Chart.register(...registerables)
@@ -38,7 +38,7 @@ export class ScoreSectionComponent {
         responsive: true,
         plugins: {
           legend: {
-           display: false
+            display: false
           },
         },
         cutout: '60%',
