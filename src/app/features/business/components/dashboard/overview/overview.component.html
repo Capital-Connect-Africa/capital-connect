@@ -19,21 +19,22 @@
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', value: '0', featured: false}"
-  (click)="setDialog('impactAssesment')"
-  >
-    <p class="helper__text text__red">Check your eligibility</p>
+  <app-card [detail]="{title: 'Impact element assessment', value: impactAssessmentScore+'%', featured: true}"
+  (click)="setDialog('impactAssesment')">
+    <p class="helper__text text__red">See suggested actions</p>
   </app-card>
 
   <app-card 
-    [detail]="{title: 'Business Fact Sheet', value: '0', featured: false, period: '0 Past Months'}"
+    [detail]="{title: 'Business Fact Sheet', icon: 'description', value: '', featured: true}"
     (click)="setDialog('factSheet')">
-    <app-photo-collage></app-photo-collage>
+    <p class="helper__text text__red">View</p>
   </app-card>
 
 
   <app-card (click)="showMatchedInvestors()"
-    [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: false, period: '0 Past Months'}"><app-photo-collage /></app-card>
+    [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: true, period: '0 Past Months'}">
+    <p class="helper__text text__red">View</p>
+  </app-card>
 </app-overview-section>
 
 <app-modal [visible]="visible">
@@ -70,7 +71,11 @@
 
       <div
         *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > <strong>submissions</strong></a>
+        </p>
       </div>
 
 
@@ -135,7 +140,7 @@
       <li>Learn to speak investor and break down barriers</li>
       <li>Match with investors and organizations that are a good fit for you</li>
     </ul>
-    <div class="call-to-action flex gap-8 items-center">
+    <div class="call-to-action flex gap-6 items-center">
       <a href="mailto: services@capitalconnect.africa">Contact your account manager</a>
       <a href="javascript:void(0);" (click)="generatePDF()">Download Report</a>
       <a href="mailto:?subject=Investor%20Ready%20Report&body=Attached%20is%20the%20Investor%20Ready%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
@@ -198,7 +203,11 @@
 
       <div
         *ngIf="(factSheetAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > <strong>add submissions</strong></a>
+        </p>
       </div>
 
 
@@ -271,7 +280,11 @@
 
       <div
         *ngIf="(impactElementAnswers.length === 0)">
-        <p>No submissions found.</p>
+        <p>No submissions found.  
+          <a [routerLink]="['/business/investor-eligibility']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          ><strong>add submissions</strong></a>
+        </p>
       </div>
 
 

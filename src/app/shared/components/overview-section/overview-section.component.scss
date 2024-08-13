@@ -21,7 +21,7 @@
     }
   }
   .cards__grid{
-    gap: 1rem;
+    gap: 1.5rem;
     display: grid;
     padding: .5rem 0;
 
@@ -47,15 +47,16 @@
       }
     }
     .cards__grid{
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
 
-.overview__section{
-  .title__bar {
-    h2 {
-      font-size: 2rem;
+@include when-screen-is-atleast(xlarge){
+  .overview__section{
+    
+    .cards__grid{
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 }

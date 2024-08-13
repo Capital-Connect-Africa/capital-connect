@@ -153,17 +153,10 @@ export class LandingComponent implements OnInit {
     this.formGroup.value.sectors = this.selectedSectors
     this.formGroup.value.subSectors = this.selectedSubSectors
 
-    if (this.formGroup.value.minimumFunding) {
-      this.formGroup.value.minimumFunding = parseFloat(this.formGroup.value.minimumFunding.replace(/,/g, ''));
-    }
-    
-    if (this.formGroup.value.maximumFunding) {
-      this.formGroup.value.maximumFunding = parseFloat(this.formGroup.value.maximumFunding.replace(/,/g, ''));
-    }
-    
-    if (this.formGroup.value.availableFunding) {
-      this.formGroup.value.availableFunding = parseFloat(this.formGroup.value.availableFunding.toString().replace(/,/g, ''));
-    }
+    this.formGroup.value.minimumFunding = parseFloat(this.formGroup.value.minimumFunding.replace(/,/g, ''))
+    this.formGroup.value.maximumFunding = parseFloat(this.formGroup.value.maximumFunding.replace(/,/g, ''))
+    this.formGroup.value.availableFunding = parseFloat(this.formGroup.value.availableFunding.replace(/,/g, ''))
+    this.formGroup.value.registrationStructures = [this.formGroup.value.registrationStructures]
 
 
 

@@ -7,7 +7,6 @@ import { PaymentService } from '../../../shared/services/payment.service';
 import { switchMap ,take, takeWhile } from 'rxjs/operators';
 import { BookingService } from '../../../shared/services/booking.service';
 import { FeedbackService } from '../../services/feedback/feedback.service';
-import { ChangeDetectorRef } from '@angular/core';
 import { TransactionStatus } from '../../../shared/interfaces/payment';
 import { tap, catchError,mergeMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -40,7 +39,6 @@ export class ProBadgeComponent {
 
   transactionStatus$ = new Observable<unknown>() ;
 
-  private cd =  inject(ChangeDetectorRef)
   message$ = new Observable<{ title: string, message: string, type: 'info' | 'success' | 'warning' | 'error' } | null>;
 
   constructor(){} 

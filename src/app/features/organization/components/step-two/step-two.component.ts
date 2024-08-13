@@ -5,6 +5,7 @@ import { tap } from 'rxjs';
 import { SharedModule } from '../../../../shared';
 import { OrganizationOnboardService } from '../../services/organization-onboard.service';
 import { CompanyInput, CompanyResponse, GrowthStage, NumberOfEmployees, RegistrationStructure, YearsOfOperation } from '../../interfaces';
+import { CompanyHttpService } from '../../services/company.service';
 
 @Component({
   selector: 'app-step-two',
@@ -17,6 +18,7 @@ import { CompanyInput, CompanyResponse, GrowthStage, NumberOfEmployees, Registra
 export class StepTwoComponent {
 
   private _fb = inject(FormBuilder)
+  private _companyHttpService =inject(CompanyHttpService)
   private _orgStateService = inject(OrganizationOnboardService);
 
   @Input() companyToBeEdited!: CompanyResponse
@@ -26,26 +28,13 @@ export class StepTwoComponent {
   registrationStructures = Object.values(RegistrationStructure);
   growthStages = Object.values(GrowthStage);
 
+  yearsOfOperation$ =this._companyHttpService.fetchCompanyYearsOfOperation().pipe(tap(res =>{
+    return res
+  }))
 
-  yearsOfOperation: YearsOfOperation[] = [
-    YearsOfOperation.ZeroYears,
-    YearsOfOperation.ZeroToOneYears,
-    YearsOfOperation.TwoToThreeYears,
-    YearsOfOperation.ThreeToFiveYears,
-    YearsOfOperation.FiveToEightYears,
-    YearsOfOperation.MoreThanEightYears
-  ];
-  numberOfEmployees: NumberOfEmployees[] = [
-    NumberOfEmployees.OneToTen,
-    NumberOfEmployees.ElevenToFifty,
-    NumberOfEmployees.FiftyOneToTwoHundred,
-    NumberOfEmployees.TwoHundredOneToFiveHundred,
-    NumberOfEmployees.FiveHundredOneToThousand,
-    NumberOfEmployees.ThousandOneToFiveThousand,
-    NumberOfEmployees.FiveThousandOneToTenThousand,
-    NumberOfEmployees.TenThousandPlus
-  ];
-
+  numberOfEmployees$ =this._companyHttpService.fetchCompanyNumberOfEmployees().pipe(tap(res =>{
+    return res
+  }))
 
   stepTwoForm: FormGroup = this._fb.group({
     registrationStructure: [this._currentCompanyData.registrationStructure ?? '', Validators.required],

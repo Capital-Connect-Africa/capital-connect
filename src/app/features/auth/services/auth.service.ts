@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CreateUserInput, Profile } from '../interfaces/auth.interface';
+import { CreateUserInput, MobileNumber, Profile } from '../interfaces/auth.interface';
 import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators'
@@ -32,7 +32,14 @@ export class AuthService extends BaseHttpService {
       this._authStateService.initToken((res as { access_token: string }).access_token)
       return this.getUserProfile();
     }), tap(userProfile => {
-      this._authStateService.initUser(userProfile)
+      this._authStateService.initUser(userProfile);
+      const mobileNumbers: MobileNumber[] =((userProfile.mobileNumbers)??[]).map(phoneNo =>{
+        return {
+          phoneNo: phoneNo.phoneNo,
+          isVerified: phoneNo.isVerified,
+        }
+      });
+      sessionStorage.setItem('mobile_numbers', JSON.stringify(mobileNumbers)??[]);
     })) as Observable<Profile>
   }
 

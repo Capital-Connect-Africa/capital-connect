@@ -18,14 +18,9 @@ import { InvestorProfile } from "../interfaces/Investor";
 import { InvestorScreensService } from "../../features/investor/services/investor.screens.service";
 import { AuthStateService } from "../../features/auth/services/auth-state.service";
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class DynamicRoutingService {
   private _submissionStateService = inject(SubMissionStateService);
   private _questionService = inject(QuestionsService);
@@ -33,8 +28,7 @@ export class DynamicRoutingService {
   private _route = inject(Router)
   private _loadingService = inject(LoadingService)
   investorProfile: InvestorProfile = {} as InvestorProfile;
-
-
+  
   private _screenService = inject(InvestorScreensService)
   private _authStateService = inject(AuthStateService)
 
@@ -49,7 +43,6 @@ export class DynamicRoutingService {
     const uniqueNumbersArray = Array.from(uniqueNumbersSet);
     return uniqueNumbersArray;
   }
-
 
   getUserSubmissions() {
     //Get the company growth stage to know type of questions we check in the investor eligibility
@@ -235,11 +228,9 @@ export class DynamicRoutingService {
   }
 
 
-
-
-
-
   getInvestorSubmissions() {
+    this._route.navigateByUrl('/investor/onboarding')
+    return;
     this._loadingService.setLoading(true)
     const questionsOfInvestorOnboarding$ = this._questionService.getSectionQuestions(INVESTOR_ONBOARDING_SUBSECTION_IDS.ID);
     const userSubmissions$ = this._submissionStateService.getUserSubmissions()
@@ -296,11 +287,11 @@ export class DynamicRoutingService {
 
   getInvestorProfile() {
     this._loadingService.setLoading(true);
-
+  
     const investorProfile$ = this._screenService.getInvestorProfileById().pipe(
       map((investorProfile: InvestorProfile) => {
         this.investorProfile = investorProfile;
-
+  
         if (this.investorProfile) {
           this._authStateService.initInvestorProfile(this.investorProfile.id)
           this._route.navigateByUrl('/investor');
@@ -317,10 +308,10 @@ export class DynamicRoutingService {
       }),
       finalize(() => this._loadingService.setLoading(false))
     );
-
+  
     return investorProfile$;
   }
-
+  
 }
 
 

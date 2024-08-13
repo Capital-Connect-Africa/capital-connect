@@ -5,3 +5,30 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+.input__wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.country-code-select,
+.country-code-input {
+  width: 70px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.input__field {
+  flex-grow: 1;
+}

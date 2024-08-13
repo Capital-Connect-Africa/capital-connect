@@ -13,6 +13,7 @@ import { SubMissionStateService } from '../../../../../shared';
 import { UserSubmissionResponse } from '../../../../../shared';
 import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-overview',
@@ -23,7 +24,8 @@ import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe
     PhotoCollageComponent,
     CommonModule,
     ModalComponent,
-    RemoveQuotesPipe
+    RemoveQuotesPipe,
+    RouterModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -41,6 +43,7 @@ export class OverviewComponent {
   matchedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
+  impactAssessmentScore: string = '0';
   answers: UserSubmissionResponse[] = [];
   generalSummary!: GeneralSummary;
 
@@ -71,6 +74,7 @@ export class OverviewComponent {
   }))
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
+    this.impactAssessmentScore =scores.impactAssessment;
     this.investorEligibilityScore = scores.investorEligibility;
     this.investorPreparednessScore = scores.investorPreparedness;
   }))
