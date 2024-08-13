@@ -73,7 +73,7 @@
 
 <p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
   <form class="dialog-input" [formGroup]="phoneUpdateForm">
-      <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Phone number': 'Verification' }}</label>
+      <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone number': 'Verify your phone number' }}</label>
       <input formControlName="field" class="border" [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'"/>
       <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
   </form>
