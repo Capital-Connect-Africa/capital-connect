@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import {
@@ -22,6 +22,7 @@ import { TooltipDirective } from '../../../../../shared/directives/tooltip.direc
 import { NumberFormatDirective } from '../../../../../shared/directives/number-format.directive';
 
 
+
 @Component({
   selector: 'app-landing',
   standalone: true,
@@ -37,6 +38,8 @@ export class LandingComponent implements OnInit {
   private _countries = inject(CountriesService)
   private _sectorService = inject(SectorsService)
   private _router = inject(Router)
+  noMaxFunding$: Observable<boolean> | undefined;
+  noMaxFund = false;
 
   current_details: number = 1
   cur_det: number[] = [1, 2, 3]
@@ -80,11 +83,7 @@ export class LandingComponent implements OnInit {
       const id = Number(userId)
       this.userId = id
     }
-
-
     this.message$ = this._feedbackService.message$;
-
-
     this.formGroup = this._formBuilder.group({
       userId: this.userId,
       headOfficeLocation: ['', Validators.required],
@@ -106,6 +105,25 @@ export class LandingComponent implements OnInit {
       registrationStructures: [[], Validators.required],
     });
 
+
+
+    this.noMaxFunding$ = this.formGroup.get('noMaximumFunding')!.valueChanges.pipe(
+      tap((noMaxFunding: boolean) => {
+        const maxFundingControl = this.formGroup.get('maximumFunding');
+        if (noMaxFunding) {
+          this.noMaxFund = true
+          maxFundingControl?.disable();
+          maxFundingControl?.setValue(0);
+        } else {
+          maxFundingControl?.enable();
+          maxFundingControl?.setValue(this.investorProfile?.maximumFunding);
+        }
+      })
+    );
+  
+
+    
+
     this.investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
       this.investorProfile = investorProfile ;
       this.patchForm(investorProfile);
@@ -114,8 +132,6 @@ export class LandingComponent implements OnInit {
 
 
   }
-
-
 
   patchForm(investorProfile: InvestorProfile): void {
     this.selectedSubSectors = investorProfile.subSectors.map(sector => sector.id)
@@ -153,12 +169,31 @@ export class LandingComponent implements OnInit {
     this.formGroup.value.sectors = this.selectedSectors
     this.formGroup.value.subSectors = this.selectedSubSectors
 
-    this.formGroup.value.minimumFunding = parseFloat(this.formGroup.value.minimumFunding.replace(/,/g, ''))
-    this.formGroup.value.maximumFunding = parseFloat(this.formGroup.value.maximumFunding.replace(/,/g, ''))
-    this.formGroup.value.availableFunding = parseFloat(this.formGroup.value.availableFunding.replace(/,/g, ''))
-    this.formGroup.value.registrationStructures = [this.formGroup.value.registrationStructures]
 
+    if (this.formGroup.value.minimumFunding) {
+      const minimumFundingStr = String(this.formGroup.value.minimumFunding);
+      if (minimumFundingStr.includes(',')) {
+        this.formGroup.value.minimumFunding = parseFloat(minimumFundingStr.replace(/,/g, ''));
+      }
+    }
+    
+    if (this.formGroup.value.maximumFunding) {
+      const maximumFundingStr = String(this.formGroup.value.maximumFunding);
+      if (maximumFundingStr.includes(',')) {
+        this.formGroup.value.maximumFunding = parseFloat(maximumFundingStr.replace(/,/g, ''));
+      }
+    }
+    
+    if (this.formGroup.value.availableFunding) {
+      const availableFundingStr = String(this.formGroup.value.availableFunding);
+      if (availableFundingStr.includes(',')) {
+        this.formGroup.value.availableFunding = parseFloat(availableFundingStr.replace(/,/g, ''));
+      }
+    }
 
+  
+    
+    
 
 
     if (this.investorProfile) {
@@ -166,6 +201,9 @@ export class LandingComponent implements OnInit {
       this.formGroup.value.maximumFunding =  Number(this.formGroup.value.maximumFunding)
       if (this.formGroup.valid) {
         const formData = this.formGroup.value;
+        if(this.noMaxFund){
+          formData.maximumFunding = 0
+        }
         this.submit$ = this._screenService.updateInvestorProfile(formData,this.investorProfile.id).pipe(
           tap(res => {
             this._router.navigate(['/investor/contact-person']);

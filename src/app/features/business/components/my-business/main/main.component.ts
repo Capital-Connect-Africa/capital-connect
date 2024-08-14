@@ -12,6 +12,7 @@ import {
     SchedulesSectionComponent
 } from "../../../../../shared/components/schedules-section/schedules-section.component";
 import {TaskActionComponent} from "../../../../../shared/components/task-action/task-action.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -23,7 +24,8 @@ import {TaskActionComponent} from "../../../../../shared/components/task-action/
     NavbarComponent,
     OverviewComponent,
     SchedulesSectionComponent,
-    TaskActionComponent
+    TaskActionComponent,
+    RouterModule
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
