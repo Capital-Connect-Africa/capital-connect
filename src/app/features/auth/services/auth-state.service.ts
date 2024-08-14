@@ -96,7 +96,7 @@ export class AuthStateService {
       this._signalsService.showDialog.set(false);
       this._signalsService.actionOnMobileNumbers.set(true);
       this._signalsService.actionBody.set({issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required'})
-      const mobile_numbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers')??JSON.stringify([]))
+      const mobile_numbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]))
       sessionStorage.setItem('mobile_numbers', JSON.stringify(mobile_numbers.push({phoneNo, isVerified: false})))
       return res
     }), catchError(err =>{
@@ -137,8 +137,6 @@ export class AuthStateService {
   }
 
 private _checkPhoneNumberStatus(){
-  
-
   const mobile_numbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]));
   if (!mobile_numbers.length) return  UserMobileNumbersIssues.EMPTY;
   const numbersVerified = mobile_numbers.some(mobile_number => mobile_number.isVerified);

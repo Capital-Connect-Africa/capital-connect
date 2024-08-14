@@ -19,7 +19,7 @@ export class CompanyHttpService extends BaseHttpService {
   }
 
   getAllCompanies() {
-    return this.read(`${BASE_URL}/company`) as Observable<CompanyResponse[]>
+    return this.read(`${BASE_URL}/company?page=1&limit=300`) as Observable<CompanyResponse[]>
   }
 
   getSingleCompany(companyId: number) {
