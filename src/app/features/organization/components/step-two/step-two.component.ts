@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { tap } from 'rxjs';
 import { SharedModule } from '../../../../shared';
 import { OrganizationOnboardService } from '../../services/organization-onboard.service';
-import { CompanyInput, CompanyResponse, GrowthStage, NumberOfEmployees, RegistrationStructure, YearsOfOperation } from '../../interfaces';
+import { CompanyInput, CompanyResponse } from '../../interfaces';
 import { CompanyHttpService } from '../../services/company.service';
 
 @Component({
@@ -25,8 +25,13 @@ export class StepTwoComponent {
 
   private _currentCompanyData: CompanyInput = this._orgStateService.companyInput;
 
-  registrationStructures = Object.values(RegistrationStructure);
-  growthStages = Object.values(GrowthStage);
+  growthStages$ =this._companyHttpService.fetchGrowthStages().pipe(tap((res: any) =>{
+    return res
+  }))
+
+  registrationStructures$ =this._companyHttpService.fetchRegistrationStructure().pipe(tap((res: any) =>{
+    return res
+  }))
 
   yearsOfOperation$ =this._companyHttpService.fetchCompanyYearsOfOperation().pipe(tap(res =>{
     return res
