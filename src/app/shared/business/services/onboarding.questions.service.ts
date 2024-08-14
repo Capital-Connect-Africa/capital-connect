@@ -160,7 +160,7 @@ export const getInvestorEligibilitySubsectionIds = (companyStage: GrowthStage) =
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.STARTUP_PRE_REVENUE
     case GrowthStage.StartUpPostRevenue:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.STARTUP_POST_REVENUE
-    case GrowthStage.InitialPublicOffereing:
+    case GrowthStage.InitialPublicOffering:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.INITIAL_PUBLIC_OFFERING
     case GrowthStage.Idea:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.IDEA
@@ -173,6 +173,3 @@ export const loadInvestorEligibilityQuestions = () => {
   const stage = company.currentCompany.growthStage;
   return getInvestorEligibilitySubsectionIds(stage);
 }
-
-
-
