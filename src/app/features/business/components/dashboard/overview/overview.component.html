@@ -42,15 +42,16 @@
   <div #content>
     <img src="../../../../../../assets/img/logo.png" alt="logo" />
     <section class="brand-details">
-      <h2>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility Report" 
-         :currentModal==="preparedness"?"your Investor/Funder Preparedness Report":""}}</h2>
+      <h2>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility Report"
+        :currentModal==="preparedness"?"your Investor/Funder Preparedness Report":""}}</h2>
       <h3>{{ currentCompany.name }}</h3>
       <p>Country - {{ currentCompany.country }}</p>
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
       <section class="score-section">
-        <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
+        <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your
+          Investor/Funder Preparedness":""}}</h3>
         <h2>{{currentModal==="eligibility"? investorEligibilityScore
           :currentModal==="preparedness"?investorPreparednessScore:""}}%</h2>
       </section>
@@ -66,9 +67,6 @@
           </li>
         </ul>
       </div>
-
-
-
       <div
         *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
         <p>No submissions found.  
@@ -77,9 +75,6 @@
           > <strong>submissions</strong></a>
         </p>
       </div>
-
-
-
     </div>
 
 
@@ -188,8 +183,7 @@
     <div class="content">
       <h2 class="title">Feedback and recommendations</h2>
 
-      <div
-        *ngIf="(factSheetAnswers.length > 0)">
+      <div *ngIf="(factSheetAnswers.length > 0)">
         <ul class="responses">
           <li *ngFor="let submission of  factSheetAnswers ">
             <h3>{{ submission.question.text | removeQuotes }}</h3>
@@ -198,9 +192,6 @@
           </li>
         </ul>
       </div>
-
-
-
       <div
         *ngIf="(factSheetAnswers.length === 0)">
         <p>No submissions found.  
@@ -209,9 +200,6 @@
           > <strong>add submissions</strong></a>
         </p>
       </div>
-
-
-
     </div>
 
 
@@ -244,7 +232,6 @@
       <a href="javascript:void(0);" (click)="generateBusinessInformationReport()">Download Report</a>
       <a href="mailto:?subject=Business%20Information%20Report&body=Attached%20is%20the%20Business%20Information%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
         target="_blank">Email Report</a>
-
     </div>
   </div>
 </app-modal>
@@ -265,8 +252,7 @@
     <div class="content">
       <h2 class="title">Feedback and recommendations</h2>
 
-      <div
-        *ngIf="(impactElementAnswers.length > 0)">
+      <div *ngIf="(impactElementAnswers.length > 0)">
         <ul class="responses">
           <li *ngFor="let submission of  impactElementAnswers ">
             <h3>{{ submission.question.text | removeQuotes }}</h3>
@@ -275,9 +261,6 @@
           </li>
         </ul>
       </div>
-
-
-
       <div
         *ngIf="(impactElementAnswers.length === 0)">
         <p>No submissions found.  
@@ -286,9 +269,6 @@
           ><strong>add submissions</strong></a>
         </p>
       </div>
-
-
-
     </div>
 
 
@@ -321,7 +301,6 @@
       <a href="javascript:void(0);" (click)="generateImpactElementReport()">Download Report</a>
       <a href="mailto:?subject=Impact%20Element%20Assesment%20Report&body=Attached%20is%20the%20Impact%20Element%20Assement%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
         target="_blank">Email Report</a>
-
     </div>
   </div>
 </app-modal>

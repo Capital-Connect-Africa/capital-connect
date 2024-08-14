@@ -10,6 +10,8 @@ import { Booking } from '../../../../../shared/interfaces/booking';
 import { PaymentService } from '../../../../../shared/services/payment.service';
 import { TransactionStatus } from '../../../../../shared/interfaces/payment';
 import { FeedbackService, NavbarComponent } from '../../../../../core';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-bookings',
@@ -18,6 +20,7 @@ import { FeedbackService, NavbarComponent } from '../../../../../core';
     MatIcon,
     NavbarComponent,
     CommonModule,
+    RouterModule,
     NgxPaginationModule
   ],
   templateUrl: './booking.component.html',

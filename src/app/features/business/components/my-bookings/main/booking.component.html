@@ -46,11 +46,32 @@
         <pagination-controls (pageChange)="pageChange($event)"></pagination-controls>
       </div>
     </div>
-    <!-- <div class="right__col hidden">
-      <button (click)="toggleNewBookingForm()" class="btn">Add New Booking</button>
+
+
+    <div class="right__col hidden">
+      <div class="wrapper">
+        <h2>Assessment Summary</h2>
+        <div class="body">
+          <p>You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy</p>                
+          <a  [routerLink]="['/business']"><span>Unlock the whole summary</span><mat-icon>chevron_right</mat-icon></a> 
+        </div>
+      </div>
+
+
+
+      <section class="main__section">
+        <div class="overlay">
+          <h2>Advertise Here</h2>
+          <p>This space is available for your advertising needs. Contact us to learn more</p>
+          <a href="mailto:services@capitalconnect.africa" class="button"><span>Book Space</span> <mat-icon>chevron_right</mat-icon></a>
+        </div>
+      </section>
+      <!-- <button (click)="toggleNewBookingForm()" class="btn">Add New Booking</button>
       <div *ngIf="showNewBookingForm">
         <app-new-booking (bookingCreated)="onBookingCreated($event)"></app-new-booking>
-      </div>
-    </div> -->
+      </div> -->
+    </div>
+
+
   </main>
 </div>

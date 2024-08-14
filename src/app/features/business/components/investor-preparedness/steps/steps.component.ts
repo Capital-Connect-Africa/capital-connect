@@ -5,7 +5,7 @@ import { StepTwoComponent } from '../step-two/step-two.component';
 import { BusinessPageService } from '../../../services/business-page/business.page.service';
 import { ProgressBarComponent } from '../../../../../core/components/progress-bar/progress-bar.component';
 import { tap } from 'rxjs';
-import {StepThreeComponent} from "../step-three/step-three.component";
+import { StepThreeComponent } from "../step-three/step-three.component";
 
 @Component({
   selector: 'app-steps',
@@ -15,8 +15,8 @@ import {StepThreeComponent} from "../step-three/step-three.component";
   imports: [CommonModule, ProgressBarComponent, StepOneComponent, StepTwoComponent, StepThreeComponent],
 })
 export class StepsComponent {
-  current_step =1;
-  constructor(private businessPageService: BusinessPageService) {}
+  current_step = 1;
+  constructor(private businessPageService: BusinessPageService) { }
 
   currentStep$ = this.businessPageService.current_step$.pipe(tap(step => {
     this.current_step = step;

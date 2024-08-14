@@ -20,6 +20,7 @@ import { inject } from '@angular/core';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
 import { AuthStateService } from '../../../../auth/services/auth-state.service';
 import { tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -33,7 +34,8 @@ import { tap } from 'rxjs';
     OverviewSectionComponent,
     SchedulesSectionComponent,
     OverviewComponent,
-    CardComponent
+    CardComponent,
+    CommonModule
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
@@ -44,9 +46,9 @@ export class MainComponent {
   visible = false;
   matchedBusinesses: MatchedBusiness[] = []
 
-  stats$ = this._businessMatchingService.getMatchedBusinesses(this._authService.currentUserId()  && this._authService.currentUserId() > 0 ? this._authService.currentUserId()  : Number(sessionStorage.getItem('userId'))).pipe(tap((res: MatchedBusiness[]) => {
-    this.matchedBusinesses = res
-  }))
+  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
+
+
 
   showDialog() {
     this.visible = true;

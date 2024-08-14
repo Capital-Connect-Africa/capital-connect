@@ -37,7 +37,7 @@ export class IndexComponent {
   fieldType = QuestionType
 
   formGroup: FormGroup = this._formBuilder.group({});
-  questions$ = this._questionService.getQuestionsOfSubSection(IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(
+  questions$ = this._questionService.getQuestionsOfSubSection(IMPACT_ASSESMENT_SUBSECTION_IDS.LANDING).pipe(
     tap(questions => {
       this.questions = questions;
       this._createFormControls();
