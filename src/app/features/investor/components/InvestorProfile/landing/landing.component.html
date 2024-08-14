@@ -250,14 +250,14 @@
               <div class="input__wrapper">
                 <label class="input__label">Registration Structures<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <p-dropdown class="input__field" styleClass="w-full gap-4" formControlName="registrationStructures"
+                <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="registrationStructures"
                   [options]="registrationStructureOptions" optionLabel="title"
                   optionValue="title"
                   placeholder="Select registration structures">
                 
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
                 
-                </p-dropdown>
+                </p-multiSelect>
               </div>
             </div>
           </div>
