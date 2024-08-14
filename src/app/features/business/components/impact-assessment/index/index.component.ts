@@ -91,7 +91,7 @@ export class IndexComponent {
       }
     });
 
-    const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.SeedStartUpIdea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenues
+    const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.Idea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenue
 
     //We update company growth stage first based on this answer
     const isPreRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 45)
@@ -99,8 +99,8 @@ export class IndexComponent {
 
     const companyToEdit = {
       ...this._companyStateService.currentCompany,
-      growthStage: isPreRevenue ? GrowthStage.SeedStartUpIdea : isPostRevenue ?
-        GrowthStage.StartUpPostRevenues
+      growthStage: isPreRevenue ? GrowthStage.Idea : isPostRevenue ?
+        GrowthStage.StartUpPostRevenue
         : this._companyStateService.currentCompany.growthStage
     }
 
