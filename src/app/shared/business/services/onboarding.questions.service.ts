@@ -28,7 +28,7 @@ export const INVESTOR_ONBOARDING_SUBSECTION_IDS = {
 
 export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
 
-  ESTABLISHED_EXPANSION: {
+  MATURE: {
     ID: 10,
     LANDING: 199,
     STEP_ONE: 67,
@@ -36,7 +36,31 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
     STEP_THREE: 69,
   },
 
-  LIQUIDATION_TURNAROUND: {
+  INITIAL_PUBLIC_OFFERING: {
+    ID: 10,
+    LANDING: 199,
+    STEP_ONE: 67,
+    STEP_TWO: 68,
+    STEP_THREE: 69,
+  },
+
+  LIQUIDATION: {
+    ID: 11,
+    LANDING: null as unknown as number,
+    STEP_ONE: 133,
+    STEP_TWO: 136,
+    STEP_THREE: 137,
+  },
+
+  TURNAROUND: {
+    ID: 11,
+    LANDING: null as unknown as number,
+    STEP_ONE: 133,
+    STEP_TWO: 136,
+    STEP_THREE: 137,
+  },
+
+  DISTRESS: {
     ID: 11,
     LANDING: null as unknown as number,
     STEP_ONE: 133,
@@ -66,6 +90,23 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
     STEP_ONE: 3,
     STEP_TWO: 1,
     STEP_THREE: 9,
+  },
+
+  IDEA: {
+    ID: 265,
+    LANDING: 331,
+    STEP_ONE: 332,
+    STEP_TWO: 333,
+    STEP_THREE: 334,
+  },
+
+
+  EARLY_STAGE: {
+    ID: 9,
+    LANDING: 34,
+    STEP_ONE: 35,
+    STEP_TWO: 37,
+    STEP_THREE: 36,
   },
 
   GROWTH_STAGE: {
@@ -103,17 +144,26 @@ export const IMPACT_ASSESMENT_SUBSECTION_IDS = {
 
 export const getInvestorEligibilitySubsectionIds = (companyStage: GrowthStage) => {
   switch (companyStage) {
-    case GrowthStage.Established:
-    case GrowthStage.Expansion:
-      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.ESTABLISHED_EXPANSION
-    case GrowthStage.Growth:
+    case GrowthStage.Mature:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.MATURE
+    case GrowthStage.EarlyStage:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.EARLY_STAGE
+    case GrowthStage.GrowthStage:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.GROWTH_STAGE
-    case GrowthStage.LiquidationTurnAround:
-      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.LIQUIDATION_TURNAROUND
-    case GrowthStage.SeedStartUpIdea:
+    case GrowthStage.Turnaround:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.TURNAROUND
+    case GrowthStage.Distress:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.DISTRESS
+    case GrowthStage.Liquidation:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.LIQUIDATION
+    case GrowthStage.StartUpPreRevenue:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.STARTUP_PRE_REVENUE
-    case GrowthStage.StartUpPostRevenues:
+    case GrowthStage.StartUpPostRevenue:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.STARTUP_POST_REVENUE
+    case GrowthStage.InitialPublicOffereing:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.INITIAL_PUBLIC_OFFERING
+    case GrowthStage.Idea:
+      return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.IDEA
     default:
       return INVESTOR_ELIGIBILITY_SUBSECTION_IDS.STARTUP_DEFAULT
   }
