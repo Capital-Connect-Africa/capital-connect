@@ -9,6 +9,8 @@
 <ng-container *ngIf="subSectors$ | async"></ng-container>
 <ng-container *ngIf="investorProfile$ | async"></ng-container>
 <ng-container *ngIf="investorTypeOptions$ | async"></ng-container>
+<ng-container *ngIf="noMaxFunding$ | async as noMaxFunding"></ng-container>
+
 
 
 
@@ -34,7 +36,6 @@
               <div class="input__wrapper w-full">
                 <label class="input__label">Head Office Location<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-
                 <p-dropdown [options]="countryOptions" optionLabel="name" optionValue="name" class="input__field"
                   styleClass="w-full gap-4" formControlName="headOfficeLocation" placeholder="Select option" />
               </div>
@@ -73,24 +74,18 @@
                 <label class="input__label">Email Address<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="emailAddress" type="email" placeholder="Enter Email Addres" />
-              </div>
-
-
-         
+              </div>         
             </div>
 
 
 
             <div *ngIf="current_details==2" class="section2">
-
               <div class="input__wrapper">
                 <label class="input__label">Different Funding Vehicles<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="differentFundingVehicles" type="text"
                   placeholder="Enter a funding vehicle" />
               </div>
-
-
 
               <div class="input__wrapper">
                 <label class="input__label">Available Funding USD$<sup>*</sup></label>
@@ -110,7 +105,8 @@
                 <label class="input__label">Maximum Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="maximumFunding" type="text"
-                  placeholder="Enter maximum funding"  appNumberFormat/>
+                  placeholder="Enter maximum funding" 
+                  appNumberFormat/>
               </div>
 
 
@@ -119,7 +115,6 @@
                 <label class="input__label">No Maximum Funding<sup>*</sup></label>
                 <input class="input__field" formControlName="noMaximumFunding" type="checkbox" />
                 </p>
-
                 <a [title]="">Why do we ask this?</a>
               </div>
 
@@ -168,8 +163,7 @@
 
 
               <div class="input__wrapper" *ngIf="selectedSubSectors.length >=1">
-                <label class="input__label">Selected Sub Sectors</label>
-                             
+                <label class="input__label">Selected Sub Sectors</label>                             
                 <div class="pills-container">
                   <ng-container *ngFor="let id of selectedSubSectors">
                     <ng-container *ngIf="getSubSectorNameById(id)">
@@ -179,10 +173,8 @@
                       </div>
                     </ng-container>
                   </ng-container>
-                </div>
-                
+                </div>                
               </div>
-
             </div>
 
 
@@ -193,10 +185,8 @@
                 <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="useOfFunds"
                   [options]="useOfFundsOptions" optionLabel="title" 
                   optionValue="title"
-                  placeholder="Select use of funds">
-                
-                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
-                
+                  placeholder="Select use of funds">                
+                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
               </div>
 
@@ -206,10 +196,8 @@
                 <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="businessGrowthStages"
                   [options]="businessGrowthStageOptions"  optionLabel="title"
                   optionValue="title"
-                  placeholder="Select business growth stages">
-                
-                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
-                
+                  placeholder="Select business growth stages">               
+                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
               </div>
 
@@ -218,7 +206,6 @@
                 <a [title]="">Why do we ask this?</a>
                 <p-dropdown   [options]="investorTypeOptions" optionLabel="title" optionValue="title" class="input__field"
                   styleClass="w-full gap-4"  formControlName="investorType" placeholder="Select option" >
-                  <!-- <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template> -->
                 </p-dropdown>
               </div>
 
@@ -229,8 +216,7 @@
                   [options]="investmentStructureOptions"  optionLabel="title"
                   optionValue="title"
                   placeholder="Select investment structures">
-                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
-                
+                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
               </div>
 
@@ -241,9 +227,7 @@
                   [options]="esgFocusAreaOptions" optionLabel="title" 
                   optionValue="title"
                   placeholder="Select ESG focus areas">
-
-                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
-                
+                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>     
                 </p-multiSelect>
               </div>
 
@@ -253,10 +237,8 @@
                 <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="registrationStructures"
                   [options]="registrationStructureOptions" optionLabel="title"
                   optionValue="title"
-                  placeholder="Select registration structures">
-                
-                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>
-                
+                  placeholder="Select registration structures">                
+                  <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
               </div>
             </div>
