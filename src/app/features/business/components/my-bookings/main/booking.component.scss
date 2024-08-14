@@ -39,3 +39,128 @@ tbody tr{
   border: 1px solid rgb(211, 211, 211);
   border-radius: 10px;
 }
+
+
+
+
+.wrapper{
+  gap: 1rem;
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+  line-height: 1.5rem;
+  flex-direction: column;
+  background-color: $green-50;
+  font-family: $font-family-sans-serif;
+  h2{
+    color: $white;
+    font-weight: 700;
+    font-size: 1.125rem;
+    background-color: $green-800;
+    padding: 10px 10px 10px 24px;
+  }
+  .body{
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    .button{
+      gap: 10px;
+      color: $white;
+      display: flex;
+      cursor: pointer;
+      font-weight: 500;
+      width: max-content;
+      text-align: center;
+      border-radius: 6px;
+      align-items: center;
+      justify-content: center;
+      background: $primary-color;
+      padding: .75rem 1rem;
+      font-family: $font-family-sans-serif;
+      text-decoration: none;
+      *{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      span{
+        font-size: 14px;
+      }
+    }
+    p{
+      opacity: .8;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+    a{
+      display: flex;
+      font-weight: 500;
+      font-size: .875rem;
+      padding: 11px 14px 11px 0;
+      text-decoration: none;
+      color: $secondary-color;
+      font-family: $font-family-sans-serif;
+      *{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+
+
+.main__section{
+  height: 350px;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("../../../../../../assets/img/adverts-bg.jpeg");
+  box-shadow: 0 11px 20px 0 #0510371A;
+  .overlay{
+    gap: .5rem;
+    height: 100%;
+    display: flex;
+    color: $white;
+    padding: 2rem;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-family: $font-family-sans-serif;
+    background-image: linear-gradient(to top, #040506, #1E202C00);
+    h2{
+
+    }
+    .button{
+      gap: 10px;
+      color: $white;
+      display: flex;
+      cursor: pointer;
+      font-weight: 500;
+      width: max-content;
+      text-align: center;
+      border-radius: 6px;
+      align-items: center;
+      justify-content: center;
+      background: $primary-color;
+      padding: .75rem 1rem;
+      font-family: $font-family-sans-serif;
+      text-decoration: none;
+      *{
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      span{
+        font-size: 14px;
+      }
+    }
+  }
+}

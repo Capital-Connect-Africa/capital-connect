@@ -48,8 +48,40 @@
 
     </div>
     <div class="right__col">
-      <app-assessment-summary [title]="'Assessment Summary'" component="assessment" [body]="'You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy.'" [linkLabel]="'Unlock the whole summary'"/>
-      <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" />
+      <!-- <app-assessment-summary [title]="'Assessment Summary'" component="assessment" [body]="'You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy.'" [linkLabel]="'Unlock the whole summary'"/> -->
+
+
+      <div class="wrapper">
+        <h2>Assessment Summary</h2>
+        <div class="body">
+          <p>You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy</p>                
+          <a  [routerLink]="['/business']"><span>Unlock the whole summary</span><mat-icon *ngIf="component=='assessment'">chevron_right</mat-icon></a> 
+        </div>
+      </div>
+
+
+
+      <section class="main__section">
+        <div class="overlay">
+          <h2>Advertise Here</h2>
+          <p>This space is available for your advertising needs. Contact us to learn more</p>
+          <a href="mailto:services@capitalconnect.africa" class="button"><span>Book Space</span> <mat-icon>chevron_right</mat-icon></a>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" /> -->
     </div>
   </main>
 </div>
