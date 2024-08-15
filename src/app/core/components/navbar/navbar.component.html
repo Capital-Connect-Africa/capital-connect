@@ -24,7 +24,14 @@
       <ul>
 
         @if(!isAdmin) {
-        <li>
+        <li *ngIf="investorProfileExists">
+          <a mat-button [routerLink]="['/investor/onboarding']">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </a>
+        </li>
+
+        <li *ngIf="!investorProfileExists">
           <a mat-button [routerLink]="['/business']">
             <mat-icon>business</mat-icon>
             <span>Business</span>
@@ -33,7 +40,7 @@
         <li class="search"><mat-icon>search</mat-icon></li>
 
 
-        <li><svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- <li><svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M16.0001 5.33366C10.116 5.33366 5.33341 10.1323 5.33341 16.0674C5.33341 17.7505 5.71744 19.3394 6.40066 20.7537C6.72098 21.4167 6.44314 22.2139 5.78008 22.5342C5.11702 22.8546 4.31983 22.5767 3.99951 21.9137C3.14515 20.1452 2.66675 18.1605 2.66675 16.0674C2.66675 8.67359 8.62928 2.66699 16.0001 2.66699C23.3709 2.66699 29.3334 8.67359 29.3334 16.0674C29.3334 18.1605 28.855 20.1452 28.0007 21.9137C27.6803 22.5767 26.8831 22.8546 26.2201 22.5342C25.557 22.2139 25.2792 21.4167 25.5995 20.7537C26.2827 19.3394 26.6667 17.7505 26.6667 16.0674C26.6667 10.1323 21.8841 5.33366 16.0001 5.33366Z"
               fill="#8C8C8C" />
@@ -42,7 +49,7 @@
               fill="#8C8C8C" />
           </svg><span>Account</span></li>
         <li><mat-icon>inbox</mat-icon> <span>Inbox</span></li>
-        <li><mat-icon>notifications</mat-icon><span>Notifications</span></li>
+        <li><mat-icon>notifications</mat-icon><span>Notifications</span></li> -->
         }
         <li class="profile" [matMenuTriggerFor]="menu">
           <img

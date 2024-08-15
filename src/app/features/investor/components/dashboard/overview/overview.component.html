@@ -3,6 +3,10 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="connectWithCompany$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+<ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
+<ng-container *ngIf="rejectedCompanies$ | async"></ng-container>
+
 
 
 
@@ -22,9 +26,9 @@
     <p class="helper__text text__yellow">{{ connectedBusinesses.length }} Connected Businesses</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Rejected Businesses', value: '0', featured: true}"
+  <app-card [detail]="{title: 'Rejected Businesses', value: rejectedBusinesses.length.toString(), featured: true}"
     (click)="showDialog('rejected_businesses')">
-    <p class="helper__text text__yellow">0 Rejected Businesses</p>
+    <p class="helper__text text__yellow">{{ rejectedBusinesses.length }} Rejected Businesses</p>
   </app-card>
 </app-overview-section>
 
@@ -52,7 +56,7 @@
           <span class="w-2/12">{{ business.growthStage }}</span>
           <div class="w-3/12 flex space-x-2">
             <button class="btn" (click)="showInterest(business.id)">Interested</button>
-          </div>
+          </div>        
         </div>
       </div>
 
@@ -66,6 +70,7 @@
             <span class="w-2/12">{{ business.company.growthStage }}</span>
             <div class="w-3/12 flex space-x-2">
               <button class="btn" (click)="connect(business.company.id)">Connect</button>
+              <button class="btn btn-danger" (click)="cancelInterest(business.id)">Reject</button>
             </div>
           </div>
         </div>
@@ -79,7 +84,7 @@
           <span class="w-2/12">{{ business.company.businessSector }}</span>
           <span class="w-2/12">{{ business.company.growthStage }}</span>
           <div class="w-3/12 flex space-x-2">
-            <button class="btn" (click)="cancelConnection('1')">Cancel Connection</button>
+            <button class="btn btn-danger" (click)="cancelConnection(business.company.id)">Reject</button>
           </div>
         </div>
       </div>
@@ -88,9 +93,9 @@
         <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
           *ngFor="let business of rejectedBusinesses; let i = index; trackBy: trackByIndex">
           <span class="w-1/12">{{ i + 1 }}</span>
-          <span class="w-2/12">{{ business.country }}</span>
-          <span class="w-2/12">{{ business.businessSector }}</span>
-          <span class="w-2/12">{{ business.growthStage }}</span>
+          <span class="w-2/12">{{ business.company.country }}</span>
+          <span class="w-2/12">{{ business.company.businessSector }}</span>
+          <span class="w-2/12">{{ business.company.growthStage }}</span>
         </div>
       </div>
 
