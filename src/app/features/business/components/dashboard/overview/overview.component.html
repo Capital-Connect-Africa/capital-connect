@@ -20,7 +20,7 @@
 
 
   <app-card [detail]="{title: 'Impact element assessment', value: impactAssessmentScore+'%', featured: true}"
-    (click)="setDialog('impactAssesment')">
+  (click)="setDialog('impactAssesment')">
     <p class="helper__text text__red">See suggested actions</p>
   </app-card>
 
@@ -69,9 +69,10 @@
       </div>
       <div
         *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
-        <p>No submissions found.
-          <a [routerLink]="['/business/investor-eligibility']" class="text-blue-500 hover:text-blue-700 underline">
-            <strong>add submissions</strong></a>
+        <p>No submissions found.  
+          <a [routerLink]="currentModal === 'eligibility'? '/business/investor-eligibility': currentModal === 'preparedness'? '/business/investor-eligibility': ''"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > <strong>submissions</strong></a>
         </p>
       </div>
     </div>
@@ -191,10 +192,12 @@
           </li>
         </ul>
       </div>
-      <div *ngIf="(factSheetAnswers.length === 0)">
-        <p>No submissions found.
-          <a [routerLink]="['/business/financials']" class="text-blue-500 hover:text-blue-700 underline"> <strong>add
-              submissions</strong></a>
+      <div
+        *ngIf="(factSheetAnswers.length === 0)">
+        <p>No submissions found.  
+          <a [routerLink]="['/business/financials']"
+          class="text-blue-500 hover:text-blue-700 underline"
+          > <strong>add submissions</strong></a>
         </p>
       </div>
     </div>
@@ -258,13 +261,12 @@
           </li>
         </ul>
       </div>
-
-
-
-      <div *ngIf="(impactElementAnswers.length === 0)">
-        <p>No submissions found.
+      <div
+        *ngIf="(impactElementAnswers.length === 0)">
+        <p>No submissions found.  
           <a [routerLink]="['/business/impact-assessment']"
-            class="text-blue-500 hover:text-blue-700 underline"><strong>add submissions</strong></a>
+          class="text-blue-500 hover:text-blue-700 underline"
+          ><strong>add submissions</strong></a>
         </p>
       </div>
     </div>

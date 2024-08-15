@@ -50,4 +50,20 @@ export class CompanyHttpService extends BaseHttpService {
     }));
   }
 
+  fetchRegistrationStructure(){
+    return this.read(`${BASE_URL}/registration-structures`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
+  }
+
+  fetchGrowthStages(){
+    return this.read(`${BASE_URL}/stages`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
+  }
+
 }

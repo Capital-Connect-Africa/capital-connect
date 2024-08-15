@@ -90,27 +90,35 @@ export class IndexComponent {
         });
       }
     });
+    
+    /** 
+     * @pchesa I commented out the company growth stage logic because I was getting an error
+     * I would like to know why we were updating the organization's growth stage 
+    */
 
-    const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.SeedStartUpIdea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenues 
+    // @TODO: uncomment me
 
-    //We update company growth stage first based on this answer
-    const isPreRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 45)
-    const isPostRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 46)
+    // const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.Idea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenue
+    // We update company growth stage first based on this answer
+    // Why when the company stage
+    // const isPreRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 45)
+    // const isPostRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 46)
 
-    const companyToEdit = {
-      ...this._companyStateService.currentCompany,
-      growthStage: isPreRevenue ? GrowthStage.SeedStartUpIdea : isPostRevenue ? 
-      GrowthStage.StartUpPostRevenues
-        : this._companyStateService.currentCompany.growthStage
-    }
+    // const companyToEdit = {
+    //   ...this._companyStateService.currentCompany,
+    //   growthStage: isPreRevenue ? GrowthStage.Idea : isPostRevenue ? 
+    //   GrowthStage.StartUpPostRevenue
+    //     : this._companyStateService.currentCompany.growthStage
+    // }
 
-    this._orgOnboardService.updateCompanyInput(companyToEdit)
-
-    const updateCompany$ =  shouldUpdateCompany ? this._orgOnboardService.submitCompanyInfo(true, companyToEdit.id) : of(true)
+    // this._orgOnboardService.updateCompanyInput(companyToEdit)
+    // const updateCompany$ =  shouldUpdateCompany ? this._orgOnboardService.submitCompanyInfo(true, companyToEdit.id) : of(true)
+    
+    
     const submission$ = this._submissionService.createMultipleSubmissions(submissionData)
 
     this.submit$ =
-      updateCompany$.pipe(switchMap(() => submission$), tap(res => {
+    submission$.pipe(tap(res => {
         this.setNextScreen();
       }))
   }

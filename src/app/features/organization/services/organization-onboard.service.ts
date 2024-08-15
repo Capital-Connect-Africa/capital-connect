@@ -39,7 +39,7 @@ export class OrganizationOnboardService {
     productsAndServices: '',
     registrationStructure: RegistrationStructure.CoOperative,
     yearsOfOperation: "0 - 10",
-    growthStage: GrowthStage.SeedStartUpIdea,
+    growthStage: GrowthStage.Idea,
     numberOfEmployees: '1-10 employees',
     fullTimeBusiness: false
   });
@@ -66,7 +66,7 @@ export class OrganizationOnboardService {
       productsAndServices: '',
       registrationStructure: RegistrationStructure.CoOperative,
       yearsOfOperation: '0 - 10',
-      growthStage: GrowthStage.SeedStartUpIdea,
+      growthStage: GrowthStage.Idea,
       numberOfEmployees: '1-10 employees',
       fullTimeBusiness: false
     });
