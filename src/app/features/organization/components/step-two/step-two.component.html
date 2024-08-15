@@ -1,11 +1,11 @@
 <ng-container *ngIf="stepTwoForm$ | async"></ng-container>
 
 <form [formGroup]="stepTwoForm" class="form__grid">
-  <div class="input__wrapper">
+  <div class="input__wrapper" *ngIf="registrationStructures$ | async as registrationStructures">
     <label class="input__label">What is the registration structure of your business?<sup>*</sup></label>
     <select formControlName="registrationStructure" class="input__field">
       @for (structure of registrationStructures; track $index) {
-      <option [value]="structure">{{ structure }}</option>
+      <option [value]="structure.title">{{ structure.title }}</option>
       }
     </select>
   </div>
@@ -18,11 +18,11 @@
       }
     </select>
   </div>
-  <div class="input__wrapper">
+  <div class="input__wrapper" *ngIf="growthStages$ | async as growthStages">
     <label class="input__label">What is the stage of growth of your business?<sup>*</sup></label>
     <select formControlName="growthStage" class="input__field">
       @for (stage of growthStages; track $index) {
-      <option [value]="stage">{{ stage }}</option>
+      <option [value]="stage.title">{{ stage.title }}</option>
       }
 
     </select>
