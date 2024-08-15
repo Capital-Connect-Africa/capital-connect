@@ -34,3 +34,14 @@ button.mat-button:hover {
   display: block;
   padding: 20px;
 }
+
+.mat-dialog-backdrop {
+  z-index: 900; /* Ensure it's lower than the modal and confirmation dialog */
+}
+
+
+.confirmation-dialog-container {
+  z-index: 1100; /* Ensure this is higher than the modal */
+  position: relative; /* Ensure z-index is applied */
+}
+

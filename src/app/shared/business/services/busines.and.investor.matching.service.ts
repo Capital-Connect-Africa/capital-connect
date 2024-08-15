@@ -1,16 +1,18 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
 import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness} from "../../interfaces";
 import { GeneralSummary } from "../../interfaces/submission.interface";
+// import { ConfirmationService } from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class BusinessAndInvestorMatchingService extends BaseHttpService {
+  // private _confirmationService = inject(ConfirmationService);
   constructor(private _httpClient: HttpClient) {
     super(_httpClient);
   }
@@ -59,9 +61,28 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   connectWithCompany(companyId: number): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/connect/${investorProfileId}/${companyId}`, {}).pipe(
-      map(() => void 0)  // Transform response to void
+      map(() => void 0) 
     );
   }
+
+
+  //Cancel Connection with a company
+  cancelConnectWithCompany(companyId: number): Observable<void> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, {}).pipe(
+      map(() => void 0)  
+    );
+  }
+
+   //Cancel Connection with a company
+   cancelInterestWithCompany(companyId: number): Observable<void> {
+    
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, {}).pipe(
+      map(() => void 0)  
+    );
+  }
+
 
   //Interesting companies
   getInterestingCompanies(): Observable<InterestingBusinesses[]> {
@@ -79,16 +100,11 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     );
   }
 
-  //Interested Investors
-  getInterestedInvestors(companyId: number): Observable<any[]> { // Replace any with a proper interface if available
-    return this.read(`${BASE_URL}/matchmaking/investors/interested/${companyId}`).pipe(
-      map(res => res as any[]) 
-    );
-  }
-
-  getConnectedInvestors(companyId: number): Observable<any[]> { // Replace any with a proper interface if available
-    return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(
-      map(res => res as any[]) // Replace any[] with the correct type
+  //Rejected companies
+  getRejectedCompanies(): Observable<ConnectedBusiness[]> {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}`).pipe(
+      map(res => res as ConnectedBusiness[])
     );
   }
 

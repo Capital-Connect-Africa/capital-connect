@@ -16,3 +16,19 @@
   line-height: 1.5rem;
   font-family: $font-family-sans-serif;
 }
+
+.modal{
+  z-index: 900;
+}
+
+p-dialog {
+  z-index: 1000; /* Lower than the confirmation dialog */
+}
+
+p-dialog .ui-dialog {
+  z-index: 1000; /* Lower than the confirmation dialog */
+}
+
+p-dialog .ui-dialog-mask {
+  z-index: 900; /* Lower than the modal and confirmation dialog */
+}

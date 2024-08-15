@@ -28,9 +28,17 @@ export class NavbarComponent {
   businessName = this._companyStateService.currentCompany?.name
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
 
+
   logOut$ = new Observable<boolean>();
   savephoneNumber$ =new Observable<any>();
   phoneNumberPull$ =new Observable<any>();
+
+
+  investorProfileExists: boolean = false;
+
+  ngOnInit() {
+    this.investorProfileExists = !!sessionStorage.getItem('profileId');
+  }
 
   @Input({ transform: booleanAttribute }) onDashboard: boolean = false;
   @Input() isAdmin = false;
