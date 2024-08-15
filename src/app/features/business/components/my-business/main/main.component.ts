@@ -13,6 +13,7 @@ import {
 } from "../../../../../shared/components/schedules-section/schedules-section.component";
 import {TaskActionComponent} from "../../../../../shared/components/task-action/task-action.component";
 import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-main',
@@ -25,7 +26,8 @@ import { RouterModule } from '@angular/router';
     OverviewComponent,
     SchedulesSectionComponent,
     TaskActionComponent,
-    RouterModule
+    RouterModule,
+    CommonModule
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
