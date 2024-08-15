@@ -9,26 +9,26 @@
   <div class="tab-headers">
     <div class="tab-header" [class.active]="activeTab === 'investorEligibility'"
       (click)="setActiveTab('investorEligibility')">
-      Investor Eligibility Responses
+      Investor Eligibility
     </div>
     <div class="tab-header" [class.active]="activeTab === 'businessResponses'"
       (click)="setActiveTab('businessResponses')">
-      Business Responses
+      Business financials
     </div>
     <div class="tab-header" [class.active]="activeTab === 'investorPreparedness'"
       (click)="setActiveTab('investorPreparedness')">
-      Investor Preparedness Responses
+      Investor Preparedness
     </div>
     <div class="tab-header" [class.active]="activeTab === 'impactAssessment'"
       (click)="setActiveTab('impactAssessment')">
-      Impact Assessment Responses
+      Impact Assessment
     </div>
   </div>
 
   <div class="tab-content">
     <div class="answer-container" *ngIf="activeTab === 'investorEligibility'">
       <div class="score-card"> 
-        Company Score: &nbsp;&nbsp;
+        Score: &nbsp;&nbsp;
         <span>
           {{investorEligibilityScore}} %
         </span>
@@ -71,7 +71,7 @@
     </div>
 
     <div class="answer-container" *ngIf="activeTab === 'investorPreparedness'">
-      <div class="score-card">    Company Score:  &nbsp;&nbsp;
+      <div class="score-card">Score:  &nbsp;&nbsp;
         <span>
           {{investorPreparednessScore}} %
         </span>
@@ -95,7 +95,7 @@
     </div>
     <div class="answer-container" *ngIf="activeTab === 'impactAssessment'">
       <div class="score-card">
-        Company Score:  &nbsp;&nbsp;
+        Score:  &nbsp;&nbsp;
         <span>
           {{impactAssessmentScore}} %
         </span>

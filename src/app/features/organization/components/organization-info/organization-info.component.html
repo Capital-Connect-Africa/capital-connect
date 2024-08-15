@@ -8,41 +8,55 @@
   </div>
 
   <div class="card__item__details" details>
-    <div>
-      <label>Country:</label>
-      <p>{{ company.country }}</p>
+    <div class="card__item__detail">
+      <div>
+        <label>Country:</label>
+        <p>{{ company.country }}</p>
+      </div>
+      <div>
+        <label>Sector:</label>
+        <p>{{ company.businessSector }}</p>
+      </div>
     </div>
-    <div>
-      <label>Sector:</label>
-      <p>{{ company.businessSector }}</p>
+    
+    <div class="card__item__detail">
+      <div>
+        <label>Subsector:</label>
+        <p>{{ company.businessSubsector }}</p>
+      </div>
+      <div>
+        <label>Products & Services:</label>
+        <p>{{ company.productsAndServices }}</p>
+      </div>
     </div>
-    <div>
-      <label>Subsector:</label>
-      <p>{{ company.businessSubsector }}</p>
+    
+    <div class="card__item__detail">
+      <div>
+        <label>Structure:</label>
+        <p>{{ company.registrationStructure }}</p>
+      </div>
+      <div>
+        <label>Years of Operation:</label>
+        <p>{{ company.yearsOfOperation }}</p>
+      </div>
     </div>
-    <div>
-      <label>Products & Services:</label>
-      <p>{{ company.productsAndServices }}</p>
+
+    <div class="card__item__detail">
+      <div>
+        <label>Growth Stage:</label>
+        <p>{{ company.growthStage }}</p>
+      </div>
+      <div>
+        <label>Employees:</label>
+        <p>{{ company.numberOfEmployees }}</p>
+      </div>
     </div>
-    <div>
-      <label>Structure:</label>
-      <p>{{ company.registrationStructure }}</p>
-    </div>
-    <div>
-      <label>Years of Operation:</label>
-      <p>{{ company.yearsOfOperation }}</p>
-    </div>
-    <div>
-      <label>Growth Stage:</label>
-      <p>{{ company.growthStage }}</p>
-    </div>
-    <div>
-      <label>Employees:</label>
-      <p>{{ company.numberOfEmployees }}</p>
-    </div>
+    
+    <div class="card__item__detail">
     <div>
       <label>Full-time Business:</label>
       <p>{{ company.fullTimeBusiness ? 'Yes' : 'No' }}</p>
+    </div>
     </div>
   </div>
 
