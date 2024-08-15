@@ -19,7 +19,7 @@ export class CompanyHttpService extends BaseHttpService {
   }
 
   getAllCompanies() {
-    return this.read(`${BASE_URL}/company`) as Observable<CompanyResponse[]>
+    return this.read(`${BASE_URL}/company?page=1&limit=300`) as Observable<CompanyResponse[]>
   }
 
   getSingleCompany(companyId: number) {
@@ -44,6 +44,22 @@ export class CompanyHttpService extends BaseHttpService {
 
   fetchCompanyNumberOfEmployees(){
     return this.read(`${BASE_URL}/company/list/no-of-employees`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
+  }
+
+  fetchRegistrationStructure(){
+    return this.read(`${BASE_URL}/registration-structures`).pipe(map(res =>{
+      return res
+    }), catchError(err =>{
+      return EMPTY
+    }));
+  }
+
+  fetchGrowthStages(){
+    return this.read(`${BASE_URL}/stages`).pipe(map(res =>{
       return res
     }), catchError(err =>{
       return EMPTY

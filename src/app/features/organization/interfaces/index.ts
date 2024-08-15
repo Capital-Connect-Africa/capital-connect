@@ -13,12 +13,16 @@ export enum RegistrationStructure {
 
 
 export enum GrowthStage {
-  SeedStartUpIdea = "Seed/Start Up/Idea",
-  StartUpPostRevenues = "Start Up - Post Revenues",
-  Growth = "Growth",
-  Established = "Established",
-  Expansion = "Expansion",
-  LiquidationTurnAround = "Liquidation/Turn Around"
+  Idea = "Idea",
+  StartUpPreRevenue ="Start up- Pre Revenue",
+  StartUpPostRevenue ="Start up- Post Revenue",
+  EarlyStage ="Early Stage",
+  GrowthStage ="Growth Stage",
+  Mature = "Mature",
+  Turnaround ="Turnaround",
+  Distress ="Distress",
+  Liquidation ="Liquidation",
+  InitialPublicOffering ='Initial Public Offering'
 }
 
 
@@ -45,24 +49,5 @@ export interface Company extends CompanyInput {
 }
 
 
-export enum YearsOfOperation {
-  ZeroYears = "0 Years",
-  ZeroToOneYears = "0 - 1 years",
-  TwoToThreeYears = "2 - 3 years",
-  ThreeToFiveYears = "3 - 5 years",
-  FiveToEightYears = "5 - 8 years",
-  MoreThanEightYears = "More than 8 years"
-}
-
-export enum NumberOfEmployees {
-  OneToTen = "1-10 employees",
-  ElevenToFifty = "11-50 employees",
-  FiftyOneToTwoHundred = "51-200 employees",
-  TwoHundredOneToFiveHundred = "201-500 employees",
-  FiveHundredOneToThousand = "501-1000 employees",
-  ThousandOneToFiveThousand = "1001-5000 employees",
-  FiveThousandOneToTenThousand = "5001-10,000 employees",
-  TenThousandPlus = "10,001+ employees"
-}
 
 export type CompanyDashBoardData  = 'ownerInfo' | 'companyInfo'  | 'submissionInfo'
