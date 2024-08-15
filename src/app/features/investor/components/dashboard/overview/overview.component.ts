@@ -9,6 +9,8 @@ import { AuthStateService } from "../../../../auth/services/auth-state.service";
 import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../../shared/interfaces';
 import { FeedbackService , ConfirmationService} from '../../../../../core';
 import {  switchMap } from 'rxjs/operators';
+import { AngularMaterialModule } from '../../../../../shared';
+
 
 @Component({
   selector: 'app-overview',
@@ -17,7 +19,8 @@ import {  switchMap } from 'rxjs/operators';
     CommonModule,
     OverviewSectionComponent,
     CardComponent,
-    ModalComponent
+    ModalComponent,
+    AngularMaterialModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -28,6 +31,7 @@ export class OverviewComponent {
   private _confirmationService = inject(ConfirmationService);
   visible = false;
   currentModal = '';
+  selectedBusiness: InterestingBusinesses | null = null;
 
   matchedBusinesses: MatchedBusiness[] = [];
   connectedBusinesses: ConnectedBusiness[] = [];
@@ -38,6 +42,7 @@ export class OverviewComponent {
   connectWithCompany$ = new Observable<unknown>()
   cancelConnectWithCompany$ = new Observable<unknown>()
   cancelInterestWithCompany$ = new Observable<unknown>()
+  table:boolean = true
   
 
   matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
@@ -61,6 +66,16 @@ export class OverviewComponent {
   showDialog(current_modal: string) {
     this.visible = true
     this.currentModal = current_modal;
+  }
+
+  showDetails(business: InterestingBusinesses): void {
+    this.table = !this.table
+    this.selectedBusiness = business;
+  }
+
+  hideDetails(): void {
+    this.table = !this.table
+    this.selectedBusiness = null;
   }
 
 
@@ -137,30 +152,6 @@ export class OverviewComponent {
       })
     );
   }
-
-
-
-  // cancelConnection(businessId: number): Observable<void> {
-  //   return this._confirmationService.confirm('Are you sure you want to cancel this connection?').pipe(
-  //     switchMap(confirmation => confirmation 
-  //       ? this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
-  //           tap(() => this._feedBackService.success('Connection cancelled successfully.'))
-  //         )
-  //       : EMPTY
-  //     )
-  //   );
-  // }
-
-  // cancelInterest(businessId: number): Observable<void> {
-  //   return this._confirmationService.confirm('Are you sure you want to cancel this interest?').pipe(
-  //     switchMap(confirmation => confirmation 
-  //       ? this._businessMatchingService.cancelInterestWithCompany(businessId).pipe(
-  //           tap(() => this._feedBackService.success('Interest cancelled successfully.'))
-  //         )
-  //       : EMPTY
-  //     )
-  //   );
-  // }
 
 
 

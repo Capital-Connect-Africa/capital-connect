@@ -9,6 +9,38 @@
   color: #1C1C1E;
 }
 
+.eye {
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon */
+  padding: 0.5rem; /* Adjust padding as needed */
+}
+
+.small-icon {
+  font-size: 1.2rem; /* Adjust the size of the icon */
+}
+
+.btn{
+  padding: 12px 40px;
+  font-family: $font-family-sans-serif;
+}
+
+tbody tr{
+  text-align: center;
+  font-family: $font-family-sans-serif;
+}
+
+th{
+  text-align: start;
+}
+
+.table-parent{
+  margin: 20px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+}
+
 
 .business-details{
   padding-bottom: 1rem;
