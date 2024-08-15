@@ -15,7 +15,7 @@
 .button-group {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 2rem 0;
 
   button {
     margin: 5px;
