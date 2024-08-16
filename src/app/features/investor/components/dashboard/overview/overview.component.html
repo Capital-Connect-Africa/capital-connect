@@ -42,7 +42,7 @@
 
   <div class="table-parent">
     <div *ngIf="currentModal === 'matched_businesses'; else showInterestingBusinesses" class="">
-      <table class="table">
+      <table class="table" *ngIf="table">
         <tbody>
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
@@ -63,10 +63,51 @@
             <td class="">{{ business.growthStage }}</td>
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+
+              <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                <mat-icon class="small-icon">visibility</mat-icon>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
+
+
+       <!-- Matched Business Extra Details -->
+       <div *ngIf="selectedMatchedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>MATCHED COMPANY INFORMATION</strong></h5>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedMatchedBusiness.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedMatchedBusiness.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedMatchedBusiness.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedMatchedBusiness.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedMatchedBusiness.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedMatchedBusiness.numberOfEmployees }}</span></p>
+            </div>
+          </div>
+        </div>
+          
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
+        </div>
+      </div>
+      
 
     </div>
 
@@ -104,13 +145,11 @@
         </table>
 
 
-
-     
-
+        <!-- Intersting Business Extra Details -->
         <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
           <!-- Company Details -->
-          <div class="mb-6">
-            <h5 class="text-xl font-semibold mb-2 text-center"><strong>COMPANY INFORMATION</strong></h5>
+          <div class="mb-6 details">
+            <h5 class="text-xl font-semibold mb-2 text-center"><strong>INTERESTING COMPANY INFORMATION</strong></h5>
             <hr/>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -124,9 +163,6 @@
               </div>
               <div>
                 <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
-              </div>
-              <div>
-                <p class="font-bold">Products and Services: <span class="font-light">{{ selectedBusiness.company.productsAndServices }}</span></p>
               </div>
               <div>
                 <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
@@ -147,7 +183,7 @@
           </div>
         
           <!-- Investor Profile Details -->
-          <div class="m-6 mb-6">
+          <!-- <div class="m-6 mb-6">
             <h5 class="text-xl font-semibold mb-2 text-center"><strong>INVESTOR PROFILE</strong></h5>
             <hr/>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -233,10 +269,10 @@
                 </p>
               </div>
             </div>
-          </div>
+          </div> -->
           
           <!-- Back Button -->
-          <div class="flex justify-end">
+          <div class="flex justify-end details">
             <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
               Back to List
             </button>
@@ -248,22 +284,12 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
   
       </div>
     </ng-template>
 
     <div *ngIf="currentModal === 'connected_businesses'">
-      <table class="table">
+      <table class="table" *ngIf="table">
         <tbody>
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
@@ -285,14 +311,73 @@
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-danger btn-sm text-xs px-3 py-1"
                 (click)="cancelConnection(business.company.id)">Reject</button>
+
+                <div class="py-auto eye" (click)="showDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
             </td>
           </tr>
         </tbody>
       </table>
+
+
+
+
+
+
+       <!-- Connected Business Extra Details -->
+       <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>CONNECTED COMPANY INFORMATION</strong></h5>
+          <hr/>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Products and Services: <span class="font-light">{{ selectedBusiness.company.productsAndServices }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Years of Operation: <span class="font-light">{{ selectedBusiness.company.yearsOfOperation }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedBusiness.company.numberOfEmployees }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+            </div>
+          </div>
+        </div>
+      
+            
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
+        </div>
+      </div>
+      
     </div>
 
     <div *ngIf="currentModal === 'rejected_businesses'">
-      <table class="table">
+      <table class="table" *ngIf="table">
         <tbody>
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
@@ -311,9 +396,57 @@
             <td class="">{{ business.company.businessSector }}</td>
             <td class="">{{ business.company.businessSubsector }}</td>
             <td class="">{{ business.company.growthStage }}</td>
+
+            <td>
+              <div class="py-auto eye" (click)="showDetails(business)">           
+                <mat-icon class="small-icon">visibility</mat-icon>
+              </div>
+            </td>
+        
           </tr>
         </tbody>
       </table>
-    </div>
+
+
+      <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>REJECTED COMPANY INFORMATION</strong></h5>
+          <hr/>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+            </div>    
+          </div>
+        </div>
+      
+            
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
+        </div>
+      </div>
+
+
+
+
+    </div>  
   </div>
 </app-modal>

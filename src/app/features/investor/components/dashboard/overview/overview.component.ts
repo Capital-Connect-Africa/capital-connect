@@ -32,6 +32,8 @@ export class OverviewComponent {
   visible = false;
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
+  selectedMatchedBusiness: MatchedBusiness | null = null;
+
 
   matchedBusinesses: MatchedBusiness[] = [];
   connectedBusinesses: ConnectedBusiness[] = [];
@@ -65,7 +67,10 @@ export class OverviewComponent {
 
   showDialog(current_modal: string) {
     this.visible = true
+    this.table =true
     this.currentModal = current_modal;
+    this.selectedBusiness = null;
+    this.selectedMatchedBusiness = null;
   }
 
   showDetails(business: InterestingBusinesses): void {
@@ -73,9 +78,15 @@ export class OverviewComponent {
     this.selectedBusiness = business;
   }
 
-  hideDetails(): void {
+  showMatchedBusinessDetails(business: MatchedBusiness): void {
     this.table = !this.table
+    this.selectedMatchedBusiness = business;
+  }
+
+  hideDetails(): void {
+    this.table = true
     this.selectedBusiness = null;
+    this.selectedMatchedBusiness = null;
   }
 
 
