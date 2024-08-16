@@ -1,6 +1,5 @@
 <app-admin-ui-container [title]="'Sections'">
   <div class="btn-grp">
-    <a routerLink="/dashboard" class="btn btn-success"><mat-icon>arrow_left</mat-icon> Back</a>
     <a routerLink ="/questions/section" class="btn btn-primary">Add Section <mat-icon>add</mat-icon></a>
   </div>
   <div class="cards__grid" *ngIf="sections$ | async as sections">

@@ -11,7 +11,7 @@ import { AdminUiContainerComponent } from "../admin-ui-container/admin-ui-contai
   standalone: true,
   imports: [
     SharedModule, CommonModule, ButtonModule,
-    AdminUiContainerComponent
+    AdminUiContainerComponent 
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

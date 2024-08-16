@@ -8,25 +8,32 @@
   </div>
 
   <div class="card__item__details" details>
-    <div>
-      <label>Username:</label>
-      <p>{{ owner.username }}</p>
+    <div class="card__item__detail">
+      <div>
+        <label>First Name:</label>
+        <p>{{ owner.firstName }}</p>
+      </div>
+      <div>
+        <label>Last Name:</label>
+        <p>{{ owner.lastName }}</p>
+      </div>
     </div>
-    <div>
-      <label>First Name:</label>
-      <p>{{ owner.firstName }}</p>
+    <div class="card__item__detail">
+      <div>
+        <label>Username:</label>
+        <p>{{ owner.username }}</p>
+      </div>
+      
+      <div>
+        <label>Role:</label>
+        <p>{{ owner.roles }}</p>
+      </div>
     </div>
-    <div>
-      <label>Last Name:</label>
-      <p>{{ owner.lastName }}</p>
-    </div>
-    <div>
-      <label>Role:</label>
-      <p>{{ owner.roles }}</p>
-    </div>
-    <div>
-      <label>Email Verified:</label>
-      <p>{{ owner.isEmailVerified ? 'Yes' : 'No' }}</p>
+    <div class="card__item__detail">
+      <div>
+        <label>Email Verified:</label>
+        <p>{{ owner.isEmailVerified ? 'Yes' : 'No' }}</p>
+      </div>
     </div>
   </div>
 

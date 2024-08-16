@@ -25,7 +25,7 @@ export class NavbarComponent {
   private _authStateService = inject(AuthStateService);
   private _companyStateService = inject(CompanyStateService);
   
-  businessName = this._companyStateService.currentCompany?.name
+  @Input() title =this._companyStateService.currentCompany?.name;
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
 
 

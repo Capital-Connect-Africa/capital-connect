@@ -1,10 +1,9 @@
 @import "../../../../styles/main.scss";
 
 .organization-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .search-container {
@@ -13,7 +12,6 @@
 
 .search-form {
   display: flex;
-  justify-content: center;
   align-items: center;
   span {
     margin-left: 5px;
@@ -31,8 +29,9 @@
 .search-input {
   width: 500px;
   padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 24px 0 0 24px;
+  border: 1px solid #ccccccde;
+  border-radius: .5rem 0 0 .5rem;
+  border-right: none;
   outline: none;
   font-size: 16px;
   transition: all 0.3s ease;
@@ -40,13 +39,14 @@
 
 .search-input:focus {
   border-color: $success-color-alt;
-  box-shadow: 0 0 8px rgba(66, 133, 244, 0.6);
+  box-shadow: 0 0 4px rgba(66, 133, 244, 0.6);
 }
 
 .search-button {
-  padding: 10px 20px;
-  border: 1px solid $success-color-alt;
-  border-radius: 0 24px 24px 0;
+  padding: 9px 20px;
+  border: 1px solid transparent;
+  border-radius: 0 .5rem .5rem 0;
+  border-left: 0;
   background-color: $success-color-alt;
   color: #fff;
   font-size: 16px;
