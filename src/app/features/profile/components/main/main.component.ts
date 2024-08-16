@@ -6,6 +6,8 @@ import { OverviewComponent } from "../../../business/components/dashboard/overvi
 import { SchedulesSectionComponent } from "../../../../shared/components/schedules-section/schedules-section.component";
 
 import { CommonModule } from "@angular/common";
+import { SignalsService } from '../../../../core/services/signals/signals.service';
+import { AlertComponent } from "../../../../shared/components/alert/alert.component";
 
 @Component({
   selector: 'app-main',
@@ -15,14 +17,17 @@ import { CommonModule } from "@angular/common";
     NavbarComponent,
     OverviewComponent,
     SchedulesSectionComponent,
-    CommonModule
-  ],
+    CommonModule,
+    AlertComponent
+],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
 @Input() showBanner =false;
 
-
-
+  signalsService =inject(SignalsService);
+  showDialog(){
+    this.signalsService.showDialog.set(true)
+  }
 }
