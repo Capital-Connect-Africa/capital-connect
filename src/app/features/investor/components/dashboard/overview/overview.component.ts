@@ -157,6 +157,11 @@ export class OverviewComponent {
     .cancelInterestWithCompany(businessId).pipe(
       tap(() => {
         this._feedBackService.success('Interest cancelled successfully.');
+
+
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
+          tap(res => {this.interestingBusinesses = res;})
+        );        
         this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(
           tap(res => {this.rejectedBusinesses = res;})
         );

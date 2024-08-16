@@ -134,7 +134,7 @@
               <td class="flex space-x-2 justify-center p-2">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
                 <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                  (click)="cancelInterest(business.id)">Reject</button>
+                  (click)="cancelInterest(business.company.id)">Reject</button>
 
                   <div class="py-auto eye" (click)="showDetails(business)">
                     <mat-icon class="small-icon">visibility</mat-icon>
@@ -438,6 +438,8 @@
             
         <!-- Back Button -->
         <div class="flex justify-end details">
+          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedBusiness.company.id)">Interested</button>
+
           <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
             Back to List
           </button>
