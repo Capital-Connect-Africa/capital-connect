@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { booleanAttribute, Component, inject, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { SharedModule } from "../../../shared";
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
@@ -20,16 +20,16 @@ import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/in
 })
 export class NavbarComponent {
   private _fb =inject(FormBuilder);
+  private _router =inject(Router)
   issue =UserMobileNumbersIssues;
   signalsService =inject(SignalsService);
   private _authStateService = inject(AuthStateService);
   private _companyStateService = inject(CompanyStateService);
-  
+  @Input() showBanner =true;
   @Input() title =this._companyStateService.currentCompany?.name;
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
 
 
-  logOut$ = new Observable<boolean>();
   savephoneNumber$ =new Observable<any>();
   phoneNumberPull$ =new Observable<any>();
 
@@ -55,13 +55,12 @@ export class NavbarComponent {
     this.drawerShowing = !this.drawerShowing;
   }
 
-  logOut() {
-    this.logOut$ = this._authStateService.logout()
+  goToProfile(){
+    this._router.navigateByUrl('/user-profile')
   }
 
   showDialog(){
     this.signalsService.showDialog.set(true)
-    
   }
 
   savePhoneNumber(){
