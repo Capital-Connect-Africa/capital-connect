@@ -15,8 +15,8 @@ import { MainComponent } from "../../components/main/main.component";
 export class DashboardComponent {
   hidden = true;
   links = [
-    // {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
-    // {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
+    {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
+    {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
     // {label: 'My business', href: '/business/my-business', exact: false, icon: 'business_center'}
   ]
   toggle_hidden() {
