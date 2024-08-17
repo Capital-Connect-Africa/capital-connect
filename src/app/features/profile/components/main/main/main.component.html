@@ -32,6 +32,11 @@
       <section class="col__right">
         <h2><mat-icon>notifications_active</mat-icon><span>Reminder</span></h2>
         <app-alert [action] ="showDialog" className="rounded-[.5rem]"/>
+        <ng-container *ngIf="submissionActions$ | async as submissionActions">
+          <div *ngFor="let action of submissionActions">
+             <app-alert-card [heading]="action.title??''" className="rounded-[.5rem]" [link]="action.url" body="Please provide information for this section" command="Provide"/>
+          </div>
+        </ng-container>
       </section>
     </div>
   <main>
