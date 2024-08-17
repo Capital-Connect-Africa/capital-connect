@@ -28,7 +28,6 @@ import { AngularMaterialModule } from '../../../../../shared';
 export class OverviewComponent {
   private _feedBackService = inject(FeedbackService)
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
-  private _confirmationService = inject(ConfirmationService);
   visible = false;
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
@@ -100,7 +99,7 @@ export class OverviewComponent {
       case 'interesting_businesses':
         return 'Interesting Businesses';
       case 'rejected_businesses':
-        return 'Rejected Businesess'
+        return 'Declined Businesess'
       default:
         return '';
     }
@@ -115,7 +114,7 @@ export class OverviewComponent {
       case 'interesting_businesses':
         return 'These businesses have piqued your interest';
       case 'rejected_businesses':
-        return 'You have rejected these businesses';
+        return 'You have declined these businesses';
       default:
         return '';
     }
