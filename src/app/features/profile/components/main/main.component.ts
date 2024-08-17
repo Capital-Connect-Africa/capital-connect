@@ -8,6 +8,8 @@ import { SchedulesSectionComponent } from "../../../../shared/components/schedul
 import { CommonModule } from "@angular/common";
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { AlertComponent } from "../../../../shared/components/alert/alert.component";
+import { ProfileService } from '../../services/profile.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-main',
@@ -25,7 +27,10 @@ import { AlertComponent } from "../../../../shared/components/alert/alert.compon
 })
 export class MainComponent {
 @Input() showBanner =false;
-
+  private _profileService =inject(ProfileService);
+  userProfile$ =this._profileService.get().pipe(tap(res =>{
+    return res;
+  }))
   signalsService =inject(SignalsService);
   showDialog(){
     this.signalsService.showDialog.set(true)
