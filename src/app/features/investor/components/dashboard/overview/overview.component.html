@@ -32,73 +32,423 @@
   </app-card>
 </app-overview-section>
 
-<app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length" [helperText]="getModalHelperText()">
+<app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length"
+  [helperText]="getModalHelperText()">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!modalData.length">
     No {{ getModalTitle().toLowerCase() }} found. <br /> Check again later.
   </div>
 
-  <div class="business-details">
-    <div class="flex flex-col">
-      <div *ngIf="modalData.length" class="flex justify-start font-bold border-b-2 border-gray-300 py-2 business-details">
-        <span class="w-1/12">#</span>
-        <span class="w-2/12">Country</span>
-        <span class="w-2/12">Sector</span>
-        <span class="w-2/12">Growth Stage</span>
-        <span *ngIf="currentModal !== 'rejected_businesses'" class="w-3/12">Actions</span>
-      </div>
 
-      <div *ngIf="currentModal === 'matched_businesses'; else showInterestingBusinesses">
-        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
-          *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex">
-          <span class="w-1/12">{{ i + 1 }}</span>
-          <span class="w-2/12">{{ business.country }}</span>
-          <span class="w-2/12">{{ business.businessSector }}</span>
-          <span class="w-2/12">{{ business.growthStage }}</span>
-          <div class="w-3/12 flex space-x-2">
-            <button class="btn" (click)="showInterest(business.id)">Interested</button>
-          </div>        
-        </div>
-      </div>
 
-      <ng-template #showInterestingBusinesses>
-        <div *ngIf="currentModal === 'interesting_businesses'">
-          <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
-            *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex">
-            <span class="w-1/12">{{ i + 1 }}</span>
-            <span class="w-2/12">{{ business.company.country }}</span>
-            <span class="w-2/12">{{ business.company.businessSector }}</span>
-            <span class="w-2/12">{{ business.company.growthStage }}</span>
-            <div class="w-3/12 flex space-x-2">
-              <button class="btn" (click)="connect(business.company.id)">Connect</button>
-              <button class="btn btn-danger" (click)="cancelInterest(business.id)">Reject</button>
+  <div class="table-parent">
+    <div *ngIf="currentModal === 'matched_businesses'; else showInterestingBusinesses" class="">
+      <table class="table" *ngIf="table">
+        <tbody>
+          <tr class="border-b border-gray-200">
+            <td class="font-bold">#</td>
+            <td class="font-bold">Country</td>
+            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Business Sub Sector</td>
+            <td class="font-bold">Growth Stage</td>
+            <td class="flex font-bold space-x-2">Actions</td>
+          </tr>
+
+
+          <tr *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex"
+            class="border-b border-gray-200">
+            <td class="font-bold">{{ i + 1 }}</td>
+            <td class="">{{ business.country }}</td>
+            <td class="">{{ business.businessSector }}</td>
+            <td class="">{{ business.businessSubsector }}</td>
+            <td class="">{{ business.growthStage }}</td>
+            <td class="flex space-x-2 justify-center p-2">
+              <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+
+              <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                <mat-icon class="small-icon">visibility</mat-icon>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+       <!-- Matched Business Extra Details -->
+       <div *ngIf="selectedMatchedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>MATCHED COMPANY INFORMATION</strong></h5>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedMatchedBusiness.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedMatchedBusiness.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedMatchedBusiness.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedMatchedBusiness.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedMatchedBusiness.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedMatchedBusiness.numberOfEmployees }}</span></p>
             </div>
           </div>
         </div>
-      </ng-template>
-
-      <div *ngIf="currentModal === 'connected_businesses'">
-        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
-          *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex">
-          <span class="w-1/12">{{ i + 1 }}</span>
-          <span class="w-2/12">{{ business.company.country}}</span>
-          <span class="w-2/12">{{ business.company.businessSector }}</span>
-          <span class="w-2/12">{{ business.company.growthStage }}</span>
-          <div class="w-3/12 flex space-x-2">
-            <button class="btn btn-danger" (click)="cancelConnection(business.company.id)">Reject</button>
-          </div>
+          
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
         </div>
       </div>
-
-      <div *ngIf="currentModal === 'rejected_businesses'">
-        <div class="flex justify-start items-center border-b border-gray-200 py-2 business-details"
-          *ngFor="let business of rejectedBusinesses; let i = index; trackBy: trackByIndex">
-          <span class="w-1/12">{{ i + 1 }}</span>
-          <span class="w-2/12">{{ business.company.country }}</span>
-          <span class="w-2/12">{{ business.company.businessSector }}</span>
-          <span class="w-2/12">{{ business.company.growthStage }}</span>
-        </div>
-      </div>
+      
 
     </div>
+
+    <ng-template #showInterestingBusinesses>
+      <div *ngIf="currentModal === 'interesting_businesses'">
+        <table class="table" *ngIf="table">
+          <tbody>
+            <tr class="border-b border-gray-200">
+              <td class="font-bold">#</td>
+              <td class="font-bold">Country</td>
+              <td class="font-bold">Business Sector</td>
+              <td class="font-bold">Business Sub Sector</td>
+              <td class="font-bold">Growth Stage</td>
+              <td class="flex font-bold space-x-2">Actions</td>
+            </tr>
+
+            <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
+              class="border-b border-gray-200">
+              <td class="font-bold">{{ i + 1 }}</td>
+              <td class="">{{ business.company.country }}</td>
+              <td class="">{{ business.company.businessSector }}</td>
+              <td class="">{{ business.company.businessSubsector }}</td>
+              <td class="">{{ business.company.growthStage }}</td>
+              <td class="flex space-x-2 justify-center p-2">
+                <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="cancelInterest(business.company.id)">Reject</button>
+
+                  <div class="py-auto eye" (click)="showDetails(business)">
+                    <mat-icon class="small-icon">visibility</mat-icon>
+                  </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <!-- Intersting Business Extra Details -->
+        <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+          <!-- Company Details -->
+          <div class="mb-6 details">
+            <h5 class="text-xl font-semibold mb-2 text-center"><strong>INTERESTING COMPANY INFORMATION</strong></h5>
+            <hr/>
+            <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Years of Operation: <span class="font-light">{{ selectedBusiness.company.yearsOfOperation }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedBusiness.company.numberOfEmployees }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+              </div>
+            </div>
+          </div>
+        
+          <!-- Investor Profile Details -->
+          <!-- <div class="m-6 mb-6">
+            <h5 class="text-xl font-semibold mb-2 text-center"><strong>INVESTOR PROFILE</strong></h5>
+            <hr/>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p class="font-bold">Head Office Location:  <span class="font-light">{{ selectedBusiness.investorProfile.headOfficeLocation }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Organization Name:  <span class="font-light">{{ selectedBusiness.investorProfile.organizationName }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Fund Description:  <span class="font-light">{{ selectedBusiness.investorProfile.fundDescription }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Email Address:  <span class="font-light">{{ selectedBusiness.investorProfile.emailAddress }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Website URL:  <span class="font-light">{{ selectedBusiness.investorProfile.url }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Available Funding:  <span class="font-light">{{ selectedBusiness.investorProfile.availableFunding | currency }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Funding Vehicles:  <span class="font-light">{{ selectedBusiness.investorProfile.differentFundingVehicles }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Countries of Investment Focus:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let country of selectedBusiness.investorProfile.countriesOfInvestmentFocus" [value]="country">{{ country }}</option>
+                  </select>
+                </p>
+              </div>
+              <div>
+                <p class="font-bold">Use of Funds:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let use of selectedBusiness.investorProfile.useOfFunds" [value]="use">{{ use }}</option>
+                  </select>
+                </p>
+              </div>
+              <div>
+                <p class="font-bold">Minimum Funding: <span class="font-light">{{ selectedBusiness.investorProfile.minimumFunding | currency }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Maximum Funding: <span class="font-light">{{ selectedBusiness.investorProfile.maximumFunding | currency }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">No Maximum Funding: <span class="font-light">{{ selectedBusiness.investorProfile.noMaximumFunding ? 'Yes' : 'No' }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Business Growth Stages:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let stage of selectedBusiness.investorProfile.businessGrowthStages" [value]="stage">{{ stage }}</option>
+                  </select>
+                </p>
+              </div>
+              <div>
+                <p class="font-bold">Investor Type: <span class="font-light">{{ selectedBusiness.investorProfile.investorType }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold">Investment Structures:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let structure of selectedBusiness.investorProfile.investmentStructures" [value]="structure">{{ structure }}</option>
+                  </select>
+                </p>
+              </div>
+              <div>
+                <p class="font-bold">ESG Focus Areas:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let area of selectedBusiness.investorProfile.esgFocusAreas" [value]="area">{{ area }}</option>
+                  </select>
+                </p>
+              </div>
+              <div>
+                <p class="font-bold">Registration Structures:</p>
+                <p>
+                  <select class="w-full p-2 border border-gray-300 rounded-md">
+                    <option *ngFor="let structure of selectedBusiness.investorProfile.registrationStructures" [value]="structure">{{ structure }}</option>
+                  </select>
+                </p>
+              </div>
+            </div>
+          </div> -->
+          
+          <!-- Back Button -->
+          <div class="flex justify-end details">
+            <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+              Back to List
+            </button>
+          </div>
+        </div>
+        
+
+
+
+
+
+  
+      </div>
+    </ng-template>
+
+    <div *ngIf="currentModal === 'connected_businesses'">
+      <table class="table" *ngIf="table">
+        <tbody>
+          <tr class="border-b border-gray-200">
+            <td class="font-bold">#</td>
+            <td class="font-bold">Country</td>
+            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Business Sub Sector</td>
+            <td class="font-bold">Growth Stage</td>
+            <td class="flex font-bold space-x-2">Actions</td>
+          </tr>
+
+
+          <tr *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex"
+            class="border-b border-gray-200">
+            <td class="font-bold">{{ i + 1 }}</td>
+            <td class="">{{ business.company.country }}</td>
+            <td class="">{{ business.company.businessSector }}</td>
+            <td class="">{{ business.company.businessSubsector }}</td>
+            <td class="">{{ business.company.growthStage }}</td>
+            <td class="flex space-x-2 justify-center p-2">
+              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                (click)="cancelConnection(business.company.id)">Reject</button>
+
+                <div class="py-auto eye" (click)="showDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+
+
+
+       <!-- Connected Business Extra Details -->
+       <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>CONNECTED COMPANY INFORMATION</strong></h5>
+          <hr/>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Products and Services: <span class="font-light">{{ selectedBusiness.company.productsAndServices }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Years of Operation: <span class="font-light">{{ selectedBusiness.company.yearsOfOperation }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedBusiness.company.numberOfEmployees }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+            </div>
+          </div>
+        </div>
+      
+            
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
+        </div>
+      </div>
+      
+    </div>
+
+    <div *ngIf="currentModal === 'rejected_businesses'">
+      <table class="table" *ngIf="table">
+        <tbody>
+          <tr class="border-b border-gray-200">
+            <td class="font-bold">#</td>
+            <td class="font-bold">Country</td>
+            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Business Sub Sector</td>
+            <td class="font-bold">Growth Stage</td>
+            <td class="flex font-bold space-x-2">Actions</td>
+          </tr>
+
+
+          <tr *ngFor="let business of rejectedBusinesses; let i = index; trackBy: trackByIndex"
+            class="border-b border-gray-200">
+            <td class="font-bold">{{ i + 1 }}</td>
+            <td class="">{{ business.company.country }}</td>
+            <td class="">{{ business.company.businessSector }}</td>
+            <td class="">{{ business.company.businessSubsector }}</td>
+            <td class="">{{ business.company.growthStage }}</td>
+
+            <td>
+              <div class="py-auto eye" (click)="showDetails(business)">           
+                <mat-icon class="small-icon">visibility</mat-icon>
+              </div>
+            </td>
+        
+          </tr>
+        </tbody>
+      </table>
+
+
+      <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+        <!-- Company Details -->
+        <div class="mb-6 details">
+          <h5 class="text-xl font-semibold mb-2 text-center"><strong>REJECTED COMPANY INFORMATION</strong></h5>
+          <hr/>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+            </div>    
+          </div>
+        </div>
+      
+            
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedBusiness.company.id)">Interested</button>
+
+          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            Back to List
+          </button>
+        </div>
+      </div>
+
+
+
+
+    </div>  
   </div>
 </app-modal>

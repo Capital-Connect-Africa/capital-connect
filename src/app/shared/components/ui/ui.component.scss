@@ -2,8 +2,7 @@
 
 main {
   display: grid;
-  padding: 1rem;
-  justify-items: center;
+  padding: 0 2rem;
   grid-template-rows: max-content auto;
 
   .logo {
@@ -43,7 +42,6 @@ main {
     display: flex;
     width: 100%;
     flex-direction: column;
-    padding: 1rem 0;
 
   }
   .form__section {
@@ -57,7 +55,6 @@ main {
 
 @include when-screen-is-atleast(large){
   main{
-    padding: 2rem 4.5rem;
     .logo {
       justify-content: flex-start;
       img{
@@ -73,8 +70,7 @@ main {
       }
     }
     .grid__area {
-      width: 70%;
-      gap: 2rem;
+      width: 100%;
     }
   }
 }
