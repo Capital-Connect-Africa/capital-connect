@@ -4,7 +4,7 @@
 <ng-container *ngIf="businessResponses$ | async"></ng-container>
 <ng-container *ngIf="impactAssessmentResponses$ | async"></ng-container>
 <ng-container *ngIf="scoring$ | async"></ng-container>
-
+<ng-container *ngIf="delete$ | async"></ng-container>
 <div details class="tab-view">
   <div class="tab-headers">
     <div class="tab-header" [class.active]="activeTab === 'investorEligibility'"
@@ -27,12 +27,17 @@
 
   <div class="tab-content">
     <div class="answer-container" *ngIf="activeTab === 'investorEligibility'">
-      <div class="score-card"> 
-        Score: &nbsp;&nbsp;
-        <span>
-          {{investorEligibilityScore}} %
-        </span>
-      </div>
+      <div class="flex items-center gap-4" *ngIf="investorEligibilityResponses && investorEligibilityResponses.length">
+        <div class="score-card"> 
+          Score: &nbsp;&nbsp;
+          <span>
+            {{investorEligibilityScore}} %
+          </span>
+        </div>
+        <button (click) ="deleteSubmission('investorEligibility')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+          <i class="pi pi-trash"></i>
+        </button>
+    </div>
       <ng-container *ngIf="investorEligibilityResponses && investorEligibilityResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of investorEligibilityResponses">
@@ -52,6 +57,11 @@
     </div>
 
     <div class="answer-container" *ngIf="activeTab === 'businessResponses'">
+      <div class="flex items-center gap-4" *ngIf="businessResponses && businessResponses.length">
+        <button (click) ="deleteSubmission('businessResponses')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+          <i class="pi pi-trash"></i>
+        </button>
+    </div>
       <ng-container *ngIf="businessResponses && businessResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of businessResponses">
@@ -71,11 +81,17 @@
     </div>
 
     <div class="answer-container" *ngIf="activeTab === 'investorPreparedness'">
-      <div class="score-card">Score:  &nbsp;&nbsp;
-        <span>
-          {{investorPreparednessScore}} %
-        </span>
-      </div>
+      <div class="flex items-center gap-4" *ngIf="investorPreparednessResponses && investorPreparednessResponses.length">
+        <div class="score-card"> 
+          Score: &nbsp;&nbsp;
+          <span>
+            {{investorPreparednessScore}} %
+          </span>
+        </div>
+        <button (click) ="deleteSubmission('investorPreparedness')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+          <i class="pi pi-trash"></i>
+        </button>
+    </div>
       <ng-container *ngIf="investorPreparednessResponses && investorPreparednessResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of investorPreparednessResponses">
@@ -94,12 +110,17 @@
       </ng-container>
     </div>
     <div class="answer-container" *ngIf="activeTab === 'impactAssessment'">
-      <div class="score-card">
-        Score:  &nbsp;&nbsp;
-        <span>
-          {{impactAssessmentScore}} %
-        </span>
+      <div class="flex items-center gap-4" *ngIf="impactAssessmentResponses && impactAssessmentResponses.length">
+        <div class="score-card"> 
+          Score: &nbsp;&nbsp;
+          <span>
+            {{impactAssessmentScore}} %
+          </span>
         </div>
+        <button (click) ="deleteSubmission('impactAssessment')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+          <i class="pi pi-trash"></i>
+        </button>
+    </div>
       <ng-container *ngIf="impactAssessmentResponses && impactAssessmentResponses.length; else noResponses">
         <ul>
           <li *ngFor="let response of impactAssessmentResponses">
