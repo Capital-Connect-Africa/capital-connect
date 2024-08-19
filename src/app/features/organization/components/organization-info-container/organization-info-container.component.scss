@@ -1,15 +1,15 @@
 .card__item {
   gap: 1rem;
-  padding: 2rem;
+  // padding: 2rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  // align-items: center;
   height: auto;
   background-color: #fff;
   text-align: center;
   border-radius: 1rem;
   transform: translateY(-0.5rem);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s;
 
   .card__item__header {
@@ -29,7 +29,7 @@
   .card__item__body {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    // align-items: center;
   }
 
   .card__item__user {

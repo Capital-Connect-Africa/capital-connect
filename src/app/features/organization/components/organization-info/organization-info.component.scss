@@ -61,25 +61,28 @@ li {
 }
 
 /* Styles for the question, answer, and explanation */
-.card__item__details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  width: 100%;
+.card__item__details{
+  gap: 2rem;
+  display: flex;
+  padding-top: 1rem;
+  flex-direction: column;
 
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-
-    label {
-      font-weight: bold;
-      margin-bottom: 0.25rem;
-    }
-
-    p {
-      margin: 0.25rem 0;
-      color: #555;
+  .card__item__detail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid #ddd;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      label {
+        font-weight: bold;
+      }
+  
+      p {
+        margin: 0.25rem 0;
+        color: #555;
+      }
     }
   }
 }
@@ -87,7 +90,6 @@ li {
 /* Styles for buttons */
 .button-group {
   display: flex;
-  justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
 

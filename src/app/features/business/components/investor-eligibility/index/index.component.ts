@@ -91,29 +91,6 @@ export class IndexComponent {
       }
     });
     
-    /** 
-     * @pchesa I commented out the company growth stage logic because I was getting an error
-     * I would like to know why we were updating the organization's growth stage 
-    */
-
-    // @TODO: uncomment me
-
-    // const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.Idea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenue
-    // We update company growth stage first based on this answer
-    // Why when the company stage
-    // const isPreRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 45)
-    // const isPostRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 46)
-
-    // const companyToEdit = {
-    //   ...this._companyStateService.currentCompany,
-    //   growthStage: isPreRevenue ? GrowthStage.Idea : isPostRevenue ? 
-    //   GrowthStage.StartUpPostRevenue
-    //     : this._companyStateService.currentCompany.growthStage
-    // }
-
-    // this._orgOnboardService.updateCompanyInput(companyToEdit)
-    // const updateCompany$ =  shouldUpdateCompany ? this._orgOnboardService.submitCompanyInfo(true, companyToEdit.id) : of(true)
-    
     
     const submission$ = this._submissionService.createMultipleSubmissions(submissionData)
 

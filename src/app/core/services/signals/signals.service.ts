@@ -14,5 +14,6 @@ export class SignalsService {
     message: 'Please add your mobile phone number',
     command: 'Add'
   })
+  pageTitle: WritableSignal<string> =signal('Dashboard')
 
 }

@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
   styleUrl: './ui.component.scss'
 })
 export class UiSharedComponent {
-  @Input({ required: true }) title: string | undefined;
 
   private _router = inject(Router);
 
