@@ -105,8 +105,5 @@ export class StepOneComponent {
     });
     this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
     this.setNextStep();
-    // this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-    //   this.setNextStep();
-    // }));
   }
 }
