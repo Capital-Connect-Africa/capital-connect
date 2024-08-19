@@ -12,6 +12,7 @@ import { BusinessPageService } from "../../../services/business-page/business.pa
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { getInvestorEligibilitySubsectionIds } from "../../../../../shared/business/services/onboarding.questions.service";
 import { CompanyStateService } from '../../../../organization/services/company-state.service';
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-two',
@@ -34,13 +35,14 @@ export class StepTwoComponent {
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
   private _companyStateService = inject(CompanyStateService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
   
   private _companyGrowthStage = this._companyStateService.currentCompany.growthStage;
   private _investorEligibilitySubsectionId = getInvestorEligibilitySubsectionIds(this._companyGrowthStage);
 
   private _idToLoad = (this._investorEligibilitySubsectionId).STEP_TWO
   
-  submission$ = new Observable<unknown>();
+  // submission$ = new Observable<unknown>();
   formGroup: FormGroup = this._formBuilder.group({})
   protected fieldType = QuestionType;
   questions: Question[] = [];
@@ -50,7 +52,7 @@ export class StepTwoComponent {
     this._createFormControls();
   }))
 
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
+  // currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -100,8 +102,7 @@ export class StepTwoComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
-      this.setNextStep();
-    }));
+    this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    this.setNextStep();
   }
 }

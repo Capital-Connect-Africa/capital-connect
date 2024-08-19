@@ -15,6 +15,7 @@ import { MultiSelectModule } from "primeng/multiselect";
 import { CompanyStateService } from '../../../../organization/services/company-state.service';
 import { GrowthStage } from '../../../../organization/interfaces';
 import { OrganizationOnboardService } from '../../../../organization/services/organization-onboard.service';
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-index',
@@ -33,6 +34,7 @@ export class IndexComponent {
   private _router = inject(Router);
   private _companyStateService = inject(CompanyStateService);
   private _orgOnboardService = inject(OrganizationOnboardService)
+  private _submissionsStorageService =inject(UserSubmissionsService)
 
   fieldType = QuestionType
 
@@ -44,8 +46,6 @@ export class IndexComponent {
     })
   );
   currentEntries$ = this._submissionStateService.currentUserSubmission$;
-
-  submit$ = new Observable<unknown>()
 
   questions: Question[] = [];
 
@@ -90,14 +90,10 @@ export class IndexComponent {
         });
       }
     });
+    this._submissionsStorageService.investorEligibilitySubmissions.push(submissionData)
+    this.setNextScreen()
     
-    
-    const submission$ = this._submissionService.createMultipleSubmissions(submissionData)
-
-    this.submit$ =
-    submission$.pipe(tap(res => {
-        this.setNextScreen();
-      }))
+   
   }
 
   skip() {
