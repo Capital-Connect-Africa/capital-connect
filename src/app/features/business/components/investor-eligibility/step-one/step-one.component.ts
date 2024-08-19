@@ -12,6 +12,7 @@ import { BusinessPageService } from "../../../services/business-page/business.pa
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { getInvestorEligibilitySubsectionIds, loadInvestorEligibilityQuestions } from "../../../../../shared/business/services/onboarding.questions.service";
 import { CompanyStateService } from '../../../../organization/services/company-state.service';
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-one',
@@ -32,8 +33,9 @@ export class StepOneComponent {
   private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService);
   private _companyStateService = inject(CompanyStateService);
+  private _submissionStateService = inject(SubMissionStateService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   formGroup: FormGroup = this._formBuilder.group({})
   fieldType = QuestionType;
@@ -44,14 +46,10 @@ export class StepOneComponent {
 
   private _idToLoad = (this._investorEligibilitySubsectionId).STEP_ONE
 
-  submission$ = new Observable<unknown>();
-
   questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(tap(questions => {
     this.questions = questions
     this._createFormControls();
   }))
-
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -98,10 +96,10 @@ export class StepOneComponent {
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
+        
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
-    }));
+    this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    this.setNextStep();
   }
 }

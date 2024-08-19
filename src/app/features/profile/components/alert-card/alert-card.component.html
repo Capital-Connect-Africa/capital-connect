@@ -1,0 +1,9 @@
+<div class="flex items-center justify-between alert__container relative bg__warning"  [class]="className">
+    <div class="flex flex-col gap-4 w-max">
+        <div class="flex flex-col">
+            <strong class="block text-lg">{{heading}}</strong>
+            <span>{{body}}</span>
+        </div>
+        <a [routerLink]="[link]"  class="cta" >{{command}}</a>
+    </div>
+</div>

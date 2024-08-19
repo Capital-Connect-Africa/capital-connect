@@ -11,6 +11,7 @@ import { QuestionsService } from "../../../../questions/services/questions/quest
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-two',
@@ -32,6 +33,7 @@ export class StepTwoComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
   
   protected fieldType = QuestionType;
   
@@ -94,8 +96,7 @@ export class StepTwoComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
-    }));
+    this._userSubmissionsStorageService.impactAssessmentSubmissions.push(submissionData)
+    this.setNextStep();
   }
 }

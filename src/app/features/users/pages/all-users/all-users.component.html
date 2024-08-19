@@ -3,13 +3,14 @@
 
 <app-admin-ui-container [title]="'Users'">
   <div class="mat-elevation-z8">
-    <div class="table-header">
+    <div class="table-header flex items-center justify-between">
       <span class="p-input-icon-left">
         <input type="text" pInputText placeholder="Search users..." (input)="applyFilter($event)">
       </span>
+      <div>{{usersShowingCount}} of <span>{{usersCount}}</span></div>
     </div>
     <p-table #dt [value]="users" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]"
-      [globalFilterFields]="['firstName', 'lastName', 'roles']">
+      [globalFilterFields]="['firstName', 'lastName', 'roles']" (onPage)="onPage($event)">
       <ng-template pTemplate="header">
         <tr>
           <th *ngFor="let col of cols" [pSortableColumn]="col.field">

@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { RouterLink } from "@angular/router";
 import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
-import { Observable, tap } from "rxjs";
+import { catchError, EMPTY, Observable, switchMap, tap } from "rxjs";
 import { Question, QuestionType } from "../../../../questions/interfaces";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
@@ -11,6 +11,7 @@ import { BusinessPageService } from "../../../services/business-page/business.pa
 import { SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { AuthModule } from "../../../../auth/modules/auth.module";
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-three',
@@ -25,6 +26,7 @@ export class StepThreeComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   questions: Question[] = [];
   formGroup: FormGroup = this._formBuilder.group({})
@@ -59,8 +61,15 @@ export class StepThreeComponent {
       return { questionId, answerId: parseInt(answerId), text: formValues['question_' + question.id] }
     });
 
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
+    this._userSubmissionsStorageService.impactAssessmentSubmissions.push(submissionData)
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.impactAssessmentSubmissions).pipe(switchMap(res =>{
+      return this._submissionStateService.getSectionSubmissions(true)
+    }),
+    tap(res =>{
+      this.setNextStep()
+    }),
+    catchError(err =>{
+      return EMPTY;
     }))
   }
 }

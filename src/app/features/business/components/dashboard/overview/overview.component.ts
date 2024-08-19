@@ -14,6 +14,7 @@ import { UserSubmissionResponse } from '../../../../../shared';
 import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
 import { RouterModule } from '@angular/router';
+import { RoutingService } from '../../../../../shared/business/services/routing.service';
 
 @Component({
   selector: 'app-overview',
@@ -34,7 +35,11 @@ export class OverviewComponent {
   @ViewChild('content', { static: false }) content!: ElementRef;
   @ViewChild('business_content', { static: false }) business_content!: ElementRef;
   @ViewChild('impact_content', { static: false }) impact_content!: ElementRef;
-
+  private _routingService =inject(RoutingService);
+  next_route:{url: string, title?: string} ={url: '', title: ''}
+  nextRoute$ =this._routingService.nextRoute().pipe(tap(res =>{
+    this.next_route =res.length? res[0]: {url: '', title: ''}
+  }));
 
   visible = false;
   factSheetVisible = false;

@@ -41,7 +41,7 @@ export class SuccessScreenComponent {
   //   this._router.navigateByUrl('/business');
   // }
 
-  goToImpactAssessment() {
-    this._router.navigateByUrl('/business/impact-assessment');
+  goToBusinessInformation() {
+    this._router.navigateByUrl('/business/financials');
   }
 }

@@ -10,6 +10,7 @@ import { Question, QuestionType } from "../../../../questions/interfaces";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-two',
@@ -25,19 +26,16 @@ export class StepTwoComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
   
   questions: Question[] = [];
   fieldType = QuestionType;
-  formGroup: FormGroup = this._formBuilder.group({})
-  
-  submission$ = new Observable<unknown>()
+  formGroup: FormGroup = this._formBuilder.group({});
 
   questions$ = this._questionService.getQuestionsOfSubSection(BUSINESS_INFORMATION_SUBSECTION_IDS.STEP_TWO).pipe(tap(questions => {
     this.questions = questions
     this._createFormControls();
   }))
-
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -87,8 +85,7 @@ export class StepTwoComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
-    }));
+    this._submissionsStorageService.businessInformationSubmissions.push(submissionData)
+    this.setNextStep();
   }
 }

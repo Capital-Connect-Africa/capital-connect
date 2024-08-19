@@ -13,6 +13,7 @@ import {
 } from "../../../../../shared/business/services/onboarding.questions.service";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-two',
@@ -36,6 +37,7 @@ export class StepTwoComponent {
   private _submissionService = inject(SubmissionService);
   formGroup: FormGroup = this._formBuilder.group({})
   private _submissionStateService = inject(SubMissionStateService)
+  private _submissionsStorageService =inject(UserSubmissionsService);
 
   submission$ = new Observable<unknown>()
   questions$ = this._questionService.getQuestionsOfSubSection(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.STEP_TWO).pipe(tap(questions => {
@@ -47,8 +49,6 @@ export class StepTwoComponent {
     const responseQuestionIds = new Set(responses.map(response => response.question.id));
     return questions.some(question => responseQuestionIds.has(question.id));
   }
-
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -94,8 +94,7 @@ export class StepTwoComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
-      this.setNextScreen();
-    }));
+    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData)
+    this.setNextScreen();
   }
 }
