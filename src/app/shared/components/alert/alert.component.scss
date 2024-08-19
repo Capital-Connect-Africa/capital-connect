@@ -6,6 +6,10 @@
 
 .alert__container{
     padding: 2rem;
+    position :absolute;
+    width: 65%;
+    top: 0;
+    height: 4cm;
 }
 .bg__warning{
     color: $yellow-900;
