@@ -96,8 +96,8 @@ export class SubMissionStateService {
     }));
   }
 
-  getSectionSubmissions(){
-    if(this._signalService.userSectionSubmissions()) return of(this._signalService.userSectionSubmissions())
+  getSectionSubmissions(force =false){
+    if(this._signalService.userSectionSubmissions() && !force) return of(this._signalService.userSectionSubmissions())
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     const requests =[
       this._submissionService.fetchSubmissionsByUserPerSection(userId,  getInvestorEligibilitySubsectionIds(this._companyService.currentCompany.growthStage).ID),
@@ -115,11 +115,7 @@ export class SubMissionStateService {
   
         }
       )
-      return this._signalService.userSectionSubmissions()
+      return this._signalService.userSectionSubmissions();
     }))
-  }
-
-  sectionsToFill(){
-    
   }
 }
