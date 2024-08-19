@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { forkJoin, map, Observable } from 'rxjs';
 import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Submission, SubmissionResponse, UserSubmissionResponse } from '../../interfaces/submission.interface';
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
@@ -56,11 +56,15 @@ export class SubmissionService extends BaseHttpService {
     return this._httpClient.get(`${BASE_URL}/submissions/user/${userId}/score`) as Observable<{ score: number }>
   }
 
-
   getSubmissionsScores(userId: number) {
     return this._httpClient.get(`${BASE_URL}/submissions/user/${userId}/score`)
   }
 
-
+  deleteUserSubmissions(submissionIds:number[]){
+    const requests =submissionIds.map(id =>this._httpClient.delete(`${BASE_URL}/submissions/${id}`))
+    return forkJoin(requests).pipe(map(res =>{
+      return res
+    }))
+  }
 
 }
