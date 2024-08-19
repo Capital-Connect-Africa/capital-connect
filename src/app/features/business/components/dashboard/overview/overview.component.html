@@ -9,23 +9,23 @@
 <ng-container *ngIf="nextRoute$ | async"></ng-container>
 
 <app-overview-section>
-  <app-card [detail]="{title: 'Investor/Funder Eligibility', icon: 'question_mark', value: eligibilityAnswers.length > 0?investorEligibilityScore+' %': '', featured: true}"
+  <app-card [detail]="{title: 'Investor/Funder Eligibility', icon: eligibilityAnswers.length>0? '' :'question_mark', value: eligibilityAnswers.length > 0?investorEligibilityScore+' %': '', featured: true}"
     (click)="showDialog(investorEligibilityScore)">
     <p class="helper__text text__yellow">See suggested actions</p> 
   </app-card>
-  <app-card [detail]="{title: 'Investor/Funder Preparedness', icon: 'question_mark', value: preparednessAnswers.length>0? investorPreparednessScore+' %': '', featured: true}"
+  <app-card [detail]="{title: 'Investor/Funder Preparedness', icon: preparednessAnswers.length>0?'':'question_mark', value: preparednessAnswers.length>0? investorPreparednessScore+' %': '', featured: true}"
     (click)="showDialog(investorPreparednessScore)">
     <p class="helper__text text__yellow">See suggested actions</p>
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', icon: 'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
+  <app-card [detail]="{title: 'Impact element assessment', icon: impactElementAnswers.length >0? '':'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
   (click)="setDialog('impactAssesment')">
     <p class="helper__text text__red">See suggested actions</p>
   </app-card>
 
   <app-card 
-    [detail]="{title: 'Business Fact Sheet', icon: 'description', value: '', featured: true}"
+    [detail]="{title: 'Business Fact Sheet', icon: factSheetAnswers.length? 'description': 'question_mark', value: '', featured: true}"
     (click)="setDialog('factSheet')">
     <p class="helper__text text__red">View</p>
   </app-card>
@@ -71,7 +71,7 @@
         <p>No submissions found.  
           <a [routerLink]="next_route.url"
           class="text-blue-500 hover:text-blue-700 underline"
-          > <strong>submissions</strong></a>
+          > <strong>add submission</strong></a>
         </p>
       </div>
     </div>
@@ -196,7 +196,7 @@
         <p>No submissions found.  
           <a [routerLink]="[next_route.url]"
           class="text-blue-500 hover:text-blue-700 underline"
-          > <strong>add submissions</strong></a>
+          > <strong>add submission</strong></a>
         </p>
       </div>
     </div>
@@ -265,7 +265,7 @@
         <p>No submissions found.  
           <a [routerLink]="[next_route.url]"
           class="text-blue-500 hover:text-blue-700 underline"
-          ><strong>add submissions</strong></a>
+          ><strong>add submission</strong></a>
         </p>
       </div>
     </div>
