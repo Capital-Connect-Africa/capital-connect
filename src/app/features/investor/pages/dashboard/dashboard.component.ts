@@ -15,7 +15,7 @@ import {MainComponent} from "../../components/dashboard/main/main.component";
 export class DashboardComponent {
     links =[
       {label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view'},
-      // {label: 'Settings', href: '/investor/onboarding', exact: false, icon: 'settings'}
-      {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
+      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'}
+      // {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
     ]
 }

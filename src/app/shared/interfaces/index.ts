@@ -4,13 +4,22 @@ export interface MatchedBusiness {
   country: string,
   businessSector: string,
   growthStage: string
-  name: string,
+  name: string, //connected
   businessSubsector: string,
-  productsAndServices: string,
-  registrationStructure: string,
-  yearsOfOperation: string,
+  productsAndServices: string, //connected
+  registrationStructure: string, //interesting
+  yearsOfOperation: string, //Interesting
   numberOfEmployees: string,
   fullTimeBusiness: boolean
+
+  //missing 
+  ImpactElements: [],
+  UseOfFunds: [],
+  InvestmentStructure : string,
+  EligibilityScore: string,
+  PreparednessScore: string,
+  ImpactAssesment : string, //connected
+
 }
 
 export interface MatchedInvestor {

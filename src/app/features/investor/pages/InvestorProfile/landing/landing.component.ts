@@ -1,6 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {Router} from "@angular/router";
 import { LayoutComponent } from '../../../../../shared/business/layout/layout.component';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -9,6 +10,7 @@ import { LayoutComponent } from '../../../../../shared/business/layout/layout.co
   standalone: true,
   imports: [
     LayoutComponent,
+    RouterModule
 ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
@@ -20,6 +22,5 @@ export class LandingComponent {
   goToProfile(): void {
     this._router.navigate(['/investor/investor-details']);
   }
-
 
 }

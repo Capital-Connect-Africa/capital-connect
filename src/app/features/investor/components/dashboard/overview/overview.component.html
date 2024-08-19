@@ -16,7 +16,7 @@
     <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Interesting Businesses', value: interestingBusinesses.length.toString(), featured: true}"
+  <app-card [detail]="{title: 'Businesses Interested In', value: interestingBusinesses.length.toString(), featured: true}"
     (click)="showDialog('interesting_businesses')">
     <p class="helper__text text__yellow">{{ interestingBusinesses.length }} Interesting Businesses</p>
   </app-card>
@@ -47,10 +47,10 @@
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
             <td class="font-bold">Country</td>
-            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Amount Raised</td>
             <td class="font-bold">Business Sub Sector</td>
             <td class="font-bold">Growth Stage</td>
-            <td class="flex font-bold space-x-2">Actions</td>
+            <td class="flex font-bold space-x-2">Actions/Info</td>
           </tr>
 
 
@@ -58,12 +58,13 @@
             class="border-b border-gray-200">
             <td class="font-bold">{{ i + 1 }}</td>
             <td class="">{{ business.country }}</td>
-            <td class="">{{ business.businessSector }}</td>
+            <td class="">N/A</td>
             <td class="">{{ business.businessSubsector }}</td>
             <td class="">{{ business.growthStage }}</td>
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-
+              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+              (click)="cancelInterest(business.id)">Decline</button>
               <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
                 <mat-icon class="small-icon">visibility</mat-icon>
               </div>
@@ -75,7 +76,6 @@
 
        <!-- Matched Business Extra Details -->
        <div *ngIf="selectedMatchedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
-        <!-- Company Details -->
         <div class="mb-6 details">
           <h5 class="text-xl font-semibold mb-2 text-center"><strong>Matched Company Information</strong></h5>
           <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -97,11 +97,14 @@
           </div>
         </div>
           
-        <!-- Back Button -->
         <div class="flex justify-end details">
-          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
-            Back to List
-          </button>
+          <td class="flex space-x-2 justify-center p-2">
+            <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+            <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedMatchedBusiness.id)">Decline</button>
+            <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+              Back to List
+            </button>
+          </td>
         </div>
       </div>
       
@@ -115,9 +118,8 @@
             <tr class="border-b border-gray-200">
               <td class="font-bold">#</td>
               <td class="font-bold">Country</td>
-              <td class="font-bold">Business Sector</td>
-              <td class="font-bold">Business Sub Sector</td>
               <td class="font-bold">Amount Raised</td>
+              <td class="font-bold">Business Sub Sector</td>
               <td class="flex font-bold space-x-2">Actions</td>
             </tr>
 
@@ -125,9 +127,8 @@
               class="border-b border-gray-200">
               <td class="font-bold">{{ i + 1 }}</td>
               <td class="">{{ business.company.country }}</td>
-              <td class="">{{ business.company.businessSector }}</td>
-              <td class="">{{ business.company.businessSubsector }}</td>
               <td class="">N/A</td>
+              <td class="">{{ business.company.businessSubsector }}</td>
               <td class="flex space-x-2 justify-center p-2">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
                 <button class="btn btn-danger btn-sm text-xs px-3 py-1"
@@ -146,12 +147,9 @@
         <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
           <!-- Company Details -->
           <div class="mb-6 details">
-            <h5 class="text-xl font-semibold mb-2 text-center"><strong>Interesting Company Information</strong></h5>
+            <h6 class="text-xl font-semibold mb-2 text-center"><strong>Interesting Company Information</strong></h6>
             <hr/>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
-              </div>
               <div>
                 <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
               </div>
@@ -270,9 +268,13 @@
           
           <!-- Back Button -->
           <div class="flex justify-end details">
-            <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
-              Back to List
-            </button>
+            <td class="flex space-x-2 justify-center p-2">
+              <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(selectedBusiness.company.id)">Connect</button>
+              <button class="btn btn-danger btn-sm text-xs px-3 py-1"(click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
+              <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+                Back to List
+              </button>               
+            </td>
           </div>
         </div>
         
@@ -291,7 +293,7 @@
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
             <td class="font-bold">Country</td>
-            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Amount Raised</td>
             <td class="font-bold">Business Sub Sector</td>
             <td class="font-bold">Growth Stage</td>
             <td class="flex font-bold space-x-2">Actions</td>
@@ -302,7 +304,7 @@
             class="border-b border-gray-200">
             <td class="font-bold">{{ i + 1 }}</td>
             <td class="">{{ business.company.country }}</td>
-            <td class="">{{ business.company.businessSector }}</td>
+            <td class="">N/A</td>
             <td class="">{{ business.company.businessSubsector }}</td>
             <td class="">{{ business.company.growthStage }}</td>
             <td class="flex space-x-2 justify-center p-2">
@@ -326,7 +328,7 @@
        <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
         <!-- Company Details -->
         <div class="mb-6 details">
-          <h5 class="text-xl font-semibold mb-2 text-center"><strong>Connected Company Information</strong></h5>
+          <h6 class="text-xl font-semibold mb-2 text-center"><strong>Connected Company Information</strong></h6>
           <hr/>
           <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -365,9 +367,10 @@
             
         <!-- Back Button -->
         <div class="flex justify-end details">
-          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
-            Back to List
-          </button>
+          <td class="flex space-x-2 justify-center p-2">
+            <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(selectedBusiness.company.id)">Decline</button>
+              <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>              
+          </td>
         </div>
       </div>
       
@@ -379,7 +382,7 @@
           <tr class="border-b border-gray-200">
             <td class="font-bold">#</td>
             <td class="font-bold">Country</td>
-            <td class="font-bold">Business Sector</td>
+            <td class="font-bold">Amount Raised</td>
             <td class="font-bold">Business Sub Sector</td>
             <td class="font-bold">Growth Stage</td>
             <td class="flex font-bold space-x-2">Actions</td>
@@ -390,7 +393,7 @@
             class="border-b border-gray-200">
             <td class="font-bold">{{ i + 1 }}</td>
             <td class="">{{ business.company.country }}</td>
-            <td class="">{{ business.company.businessSector }}</td>
+            <td class="">N/A</td>
             <td class="">{{ business.company.businessSubsector }}</td>
             <td class="">{{ business.company.growthStage }}</td>
 
@@ -409,12 +412,9 @@
       <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
         <!-- Company Details -->
         <div class="mb-6 details">
-          <h5 class="text-xl font-semibold mb-2 text-center"><strong>Rejected Company Information</strong></h5>
+          <h6 class="text-xl font-semibold mb-2 text-center"><strong>Rejected Company Information</strong></h6>
           <hr/>
           <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
-            </div>
             <div>
               <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
             </div>
@@ -436,10 +436,10 @@
             
         <!-- Back Button -->
         <div class="flex justify-end details">
-
-          <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
-            Back to List
-          </button>
+          <td  class="flex space-x-2 justify-center p-2">
+            <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedBusiness.company.id)">Interested</button>
+            <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>            
+          </td>
         </div>
       </div>
 
