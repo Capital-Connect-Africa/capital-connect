@@ -97,7 +97,7 @@ export class SubMissionStateService {
   }
 
   getSectionSubmissions(){
-    if(this._signalService.userSectionSUbmissions()) return of(this._signalService.userSectionSUbmissions())
+    if(this._signalService.userSectionSubmissions()) return of(this._signalService.userSectionSubmissions())
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     const requests =[
       this._submissionService.fetchSubmissionsByUserPerSection(userId,  getInvestorEligibilitySubsectionIds(this._companyService.currentCompany.growthStage).ID),
@@ -106,7 +106,7 @@ export class SubMissionStateService {
       this._submissionService.fetchSubmissionsByUserPerSection(userId, IMPACT_ASSESMENT_SUBSECTION_IDS.ID),
     ]
     return forkJoin(requests).pipe(map(res =>{
-      this._signalService.userSectionSUbmissions.set(
+      this._signalService.userSectionSubmissions.set(
         {
           investor_eligibility: res[0],
           investor_preparedness: res[1],
@@ -115,9 +115,11 @@ export class SubMissionStateService {
   
         }
       )
-      return this._signalService.userSectionSUbmissions()
+      return this._signalService.userSectionSubmissions()
     }))
   }
 
-  
+  sectionsToFill(){
+    
+  }
 }

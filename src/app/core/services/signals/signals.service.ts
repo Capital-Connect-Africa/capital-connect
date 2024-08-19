@@ -16,6 +16,6 @@ export class SignalsService {
     command: 'Add'
   })
   pageTitle: WritableSignal<string> =signal('Dashboard')
-  userSectionSUbmissions: WritableSignal<SectionSubmissions | null> =signal(null)
+  userSectionSubmissions: WritableSignal<SectionSubmissions | null> =signal(null)
 
 }
