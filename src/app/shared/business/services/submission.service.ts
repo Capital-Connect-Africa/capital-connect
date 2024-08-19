@@ -4,6 +4,7 @@ import { forkJoin, map, Observable } from 'rxjs';
 import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Submission, SubmissionResponse, UserSubmissionResponse } from '../../interfaces/submission.interface';
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
+import { SubMissionStateService } from './submission-state.service';
 
 @Injectable({ providedIn: 'root' })
 export class SubmissionService extends BaseHttpService {
@@ -67,4 +68,10 @@ export class SubmissionService extends BaseHttpService {
     }))
   }
 
+  saveSectionSubmissions(submissions:Submission[][]) {
+    const requests =submissions.map(submission =>this.createMultipleSubmissions(submission))
+    return forkJoin(requests).pipe(map(res =>{
+      return res;
+    }), )
+  }
 }
