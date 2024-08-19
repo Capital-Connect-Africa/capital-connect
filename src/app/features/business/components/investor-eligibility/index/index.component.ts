@@ -34,9 +34,9 @@ export class IndexComponent {
   private _router = inject(Router);
   private _companyStateService = inject(CompanyStateService);
   private _orgOnboardService = inject(OrganizationOnboardService)
-  private _submissionsStorageService =inject(UserSubmissionsService)
+  private _submissionsStorageService =inject(UserSubmissionsService);
 
-  fieldType = QuestionType
+  fieldType = QuestionType 
 
   formGroup: FormGroup = this._formBuilder.group({});
   questions$ = this._questionService.getQuestionsOfSubSection(loadInvestorEligibilityQuestions().LANDING).pipe(
@@ -45,7 +45,6 @@ export class IndexComponent {
       this._createFormControls();
     })
   );
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   questions: Question[] = [];
 

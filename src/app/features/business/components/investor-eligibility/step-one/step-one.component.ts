@@ -46,14 +46,10 @@ export class StepOneComponent {
 
   private _idToLoad = (this._investorEligibilitySubsectionId).STEP_ONE
 
-  // submission$ = new Observable<unknown>();
-
   questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(tap(questions => {
     this.questions = questions
     this._createFormControls();
   }))
-
-  // currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {

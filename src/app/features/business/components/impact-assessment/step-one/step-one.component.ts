@@ -11,6 +11,7 @@ import { QuestionsService } from "../../../../questions/services/questions/quest
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-one',
@@ -32,19 +33,16 @@ export class StepOneComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   formGroup: FormGroup = this._formBuilder.group({})
   fieldType = QuestionType;
   questions: Question[] = [];
 
-  submission$ = new Observable<unknown>();
-
   questions$ = this._questionService.getQuestionsOfSubSection(IMPACT_ASSESMENT_SUBSECTION_IDS.STEP_ONE).pipe(tap(questions => {
     this.questions = questions
     this._createFormControls();
   }))
-
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -93,8 +91,7 @@ export class StepOneComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
-    }));
+    this._userSubmissionsStorageService.impactAssessmentSubmissions.push(submissionData)
+    this.setNextStep();
   }
 }
