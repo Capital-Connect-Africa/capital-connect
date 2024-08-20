@@ -7,7 +7,7 @@
 <div class="main">
   <div class="navbar">
     <!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
-    <app-navbar onDashboard="true" />
+    <app-navbar onDashboard="true" [showBanner]="false"/>
   </div>
 
   <main>
@@ -21,11 +21,13 @@
         [linkLabel]="'Submit Special Criteria Form Request'" [link]="'mailto:services@capitalconnect.africa'" />
     </div>
     <div class="right__col">
-      
+        <app-alert [action]="showalert" className="rounded-[.5rem]"/>
         <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
           (click)="showDialog()">
           <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
         </app-card>
+
+        
 
       <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
@@ -110,3 +112,11 @@
     </div>
   </div>
 </app-modal>
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+      <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone number': 'Verify your phone number' }}</label>
+      <input formControlName="field" class="border" [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'"/>
+      <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
+  </form>
+</p-dialog>
