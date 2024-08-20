@@ -1,18 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { switchMap, tap } from "rxjs";
 import { RouterLink } from "@angular/router";
-import { Observable, tap } from "rxjs";
+import { CommonModule } from "@angular/common";
+import { Component, inject } from '@angular/core';
 import { DropdownModule } from "primeng/dropdown";
+import { Submission} from "../../../../../shared";
 import { MultiSelectModule } from "primeng/multiselect";
 import { AuthModule } from "../../../../auth/modules/auth.module";
 import { Question, QuestionType } from "../../../../questions/interfaces";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
-import { getInvestorEligibilitySubsectionIds, loadInvestorEligibilityQuestions } from "../../../../../shared/business/services/onboarding.questions.service";
 import { CompanyStateService } from '../../../../organization/services/company-state.service';
+import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { QuestionsAnswerService } from "../../../../../shared/business/services/question.answers.service";
+import { getInvestorEligibilitySubsectionIds } from "../../../../../shared/business/services/onboarding.questions.service";
 
 @Component({
   selector: 'app-step-one',
@@ -32,9 +33,8 @@ export class StepOneComponent {
   private _formBuilder = inject(FormBuilder)
   private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
-  private _submissionService = inject(SubmissionService);
   private _companyStateService = inject(CompanyStateService);
-  private _submissionStateService = inject(SubMissionStateService);
+  private _questionAnswersService =inject(QuestionsAnswerService);
   private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   formGroup: FormGroup = this._formBuilder.group({})
@@ -43,20 +43,30 @@ export class StepOneComponent {
 
   private _companyGrowthStage = this._companyStateService.currentCompany.growthStage;
   private _investorEligibilitySubsectionId = getInvestorEligibilitySubsectionIds(this._companyGrowthStage);
-
   private _idToLoad = (this._investorEligibilitySubsectionId).STEP_ONE
 
-  questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(tap(questions => {
-    this.questions = questions
-    this._createFormControls();
-  }))
+  questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(
+    switchMap(questions =>{
+      return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
+    }),
+    tap(res =>{
+
+      this.questions = res;
+      this._createFormControls();
+    })
+  )
 
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control([], Validators.required));
+        const answer =question.defaultValues??[];
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
+      } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??0:0, Validators.required));
       } else {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control('', Validators.required));
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
       }
     });
   }
@@ -75,6 +85,7 @@ export class StepOneComponent {
         const selectedAnswers = formValues['question_' + question.id];
         selectedAnswers.forEach((answerId: number) => {
           submissionData.push({
+            id: question.submissionId,
             questionId: question.id,
             answerId: answerId,
             text: ''
@@ -87,6 +98,7 @@ export class StepOneComponent {
         submissionData.push({
           questionId: question.id,
           answerId: parseInt(answerId),
+          id: question.submissionId,
           text: formValues['question_' + question.id]
         });
       }
@@ -94,9 +106,9 @@ export class StepOneComponent {
         submissionData.push({
           questionId: question.id,
           answerId: Number(formValues['question_' + question.id]),
+          id: question.submissionId,
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
-        
       }
     });
     this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
