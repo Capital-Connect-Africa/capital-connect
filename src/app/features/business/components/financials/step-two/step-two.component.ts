@@ -1,16 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { switchMap, tap } from "rxjs";
 import { RouterLink } from "@angular/router";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MultiSelectModule } from "primeng/multiselect";
+import { CommonModule } from "@angular/common";
+import { Component, inject } from '@angular/core';
+import { Submission} from "../../../../../shared";
 import { DropdownModule } from "primeng/dropdown";
-import { Observable, tap } from "rxjs";
-import { QuestionsService } from "../../../../questions/services/questions/questions.service";
+import { MultiSelectModule } from "primeng/multiselect";
 import { Question, QuestionType } from "../../../../questions/interfaces";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
-import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { QuestionsAnswerService } from "../../../../../shared/business/services/question.answers.service";
+import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
 
 @Component({
   selector: 'app-step-two',
@@ -22,27 +23,36 @@ import { UserSubmissionsService } from '../../../../../core/services/storage/use
 export class StepTwoComponent {
 
   private _formBuilder = inject(FormBuilder)
-  private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
-  private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService);
-  private _submissionsStorageService =inject(UserSubmissionsService);
+  private _questionService = inject(QuestionsService);
+  private _questionAnswersService =inject(QuestionsAnswerService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
   
   questions: Question[] = [];
   fieldType = QuestionType;
   formGroup: FormGroup = this._formBuilder.group({});
 
-  questions$ = this._questionService.getQuestionsOfSubSection(BUSINESS_INFORMATION_SUBSECTION_IDS.STEP_TWO).pipe(tap(questions => {
-    this.questions = questions
-    this._createFormControls();
-  }))
+  questions$ = this._questionService.getQuestionsOfSubSection(BUSINESS_INFORMATION_SUBSECTION_IDS.STEP_TWO).pipe(
+    switchMap(questions =>{
+      return this._questionAnswersService.businessInformation(questions)
+    }),
+    tap(res =>{
+      this.questions = res;
+      this._createFormControls();
+    })
+  )
 
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control([], Validators.required));
+        const answer =question.defaultValues??[];
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
+      } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control('', Validators.required));
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
       }
     });
   }
@@ -56,7 +66,6 @@ export class StepTwoComponent {
   handleSubmit() {
     const formValues = this.formGroup.value;
     const submissionData: Submission[] = [];
-
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
         const selectedAnswers = formValues['question_' + question.id];
@@ -85,7 +94,12 @@ export class StepTwoComponent {
         });
       }
     });
-    this._submissionsStorageService.businessInformationSubmissions.push(submissionData)
+    if(this._userSubmissionsStorageService.businessInformationSubmissions.length){
+      this._userSubmissionsStorageService.businessInformationSubmissions[2] =submissionData;
+    } else this._userSubmissionsStorageService.businessInformationSubmissions.push(submissionData);
+    if(this._userSubmissionsStorageService.businessInformationDraft.length){
+      this._userSubmissionsStorageService.businessInformationDraft[2] =submissionData;
+    } else this._userSubmissionsStorageService.businessInformationDraft.push(submissionData);
     this.setNextStep();
   }
 }
