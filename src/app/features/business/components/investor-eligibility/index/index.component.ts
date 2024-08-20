@@ -40,6 +40,7 @@ export class IndexComponent {
       return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
     }),
     tap(res =>{
+      debugger
       this.questions = res;
       this._createFormControls();
     })
@@ -49,11 +50,11 @@ export class IndexComponent {
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        const answer =question.defaultValues??[];
+        const answer =(question.defaultValues??[]);
         this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
       } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
         const answer =(question.defaultValues??[]).at(0);
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??0:0, Validators.required));
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
         const answer =(question.defaultValues??[]).at(0);
         this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
@@ -95,10 +96,14 @@ export class IndexComponent {
         });
       }
     });
-    this._submissionsStorageService.investorEligibilitySubmissions.push(submissionData)
-    this.setNextScreen()
-    
-   
+    if(this._submissionsStorageService.investorEligibilitySubmissions.length){
+      this._submissionsStorageService.investorEligibilitySubmissions[0] =submissionData;
+    } else this._submissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    if(this._submissionsStorageService.investorEligibilityDraft.length){
+      this._submissionsStorageService.investorEligibilityDraft[0] =submissionData;
+    } else this._submissionsStorageService.investorEligibilityDraft.push(submissionData);
+    this.setNextScreen();
+  
   }
 
   skip() {

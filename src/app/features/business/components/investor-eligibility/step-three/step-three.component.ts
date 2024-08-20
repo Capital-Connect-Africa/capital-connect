@@ -53,7 +53,7 @@ export class StepThreeComponent {
         this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
       } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
         const answer =(question.defaultValues??[]).at(0);
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??0:0, Validators.required));
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
         const answer =(question.defaultValues??[]).at(0);
         this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
@@ -105,10 +105,17 @@ export class StepThreeComponent {
 
     this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
     const requestType =this._signalsService.userSectionSubmissions()?.investor_eligibility.length? RequestType.EDIT: RequestType.SAVE
+    if(this._userSubmissionsStorageService.investorEligibilitySubmissions.length){
+      this._userSubmissionsStorageService.investorEligibilitySubmissions[3] =submissionData;
+    } else this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    if(this._userSubmissionsStorageService.investorEligibilityDraft.length){
+      this._userSubmissionsStorageService.investorEligibilityDraft[3] =submissionData;
+    } else this._userSubmissionsStorageService.investorEligibilityDraft.push(submissionData);
     this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.investorEligibilitySubmissions, requestType).pipe(switchMap(res =>{
       return this._submissionStateService.getSectionSubmissions(true)
     }),
     tap(res =>{
+      this._userSubmissionsStorageService.investorEligibilityDraft =[];
       this.setNextStep()
     }),
     catchError(err =>{
