@@ -6,26 +6,26 @@
 <ng-container *ngIf="preparednessSubmissions$ | async"></ng-container>
 <ng-container *ngIf="esgSubmissions$ | async"></ng-container>
 <ng-container *ngIf="factSheetSubmissions$ | async"></ng-container>
-
+<ng-container *ngIf="nextRoute$ | async"></ng-container>
 
 <app-overview-section>
-  <app-card [detail]="{title: 'Investor/Funder Eligibility', value: investorEligibilityScore+' %', featured: true}"
+  <app-card [detail]="{title: 'Investor/Funder Eligibility', icon: eligibilityAnswers.length>0? '' :'question_mark', value: eligibilityAnswers.length > 0?investorEligibilityScore+' %': '', featured: true}"
     (click)="showDialog(investorEligibilityScore)">
-    <p class="helper__text text__yellow">See suggested actions</p>
+    <p class="helper__text text__yellow">See suggested actions</p> 
   </app-card>
-  <app-card [detail]="{title: 'Investor/Funder Preparedness', value: investorPreparednessScore+' %', featured: true}"
+  <app-card [detail]="{title: 'Investor/Funder Preparedness', icon: preparednessAnswers.length>0?'':'question_mark', value: preparednessAnswers.length>0? investorPreparednessScore+' %': '', featured: true}"
     (click)="showDialog(investorPreparednessScore)">
     <p class="helper__text text__yellow">See suggested actions</p>
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', value: impactAssessmentScore+'%', featured: true}"
+  <app-card [detail]="{title: 'Impact element assessment', icon: impactElementAnswers.length >0? '':'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
   (click)="setDialog('impactAssesment')">
     <p class="helper__text text__red">See suggested actions</p>
   </app-card>
 
   <app-card 
-    [detail]="{title: 'Business Fact Sheet', icon: 'description', value: '', featured: true}"
+    [detail]="{title: 'Business Fact Sheet', icon: factSheetAnswers.length? 'description': 'question_mark', value: '', featured: true}"
     (click)="setDialog('factSheet')">
     <p class="helper__text text__red">View</p>
   </app-card>
@@ -50,10 +50,9 @@
     </section>
     <div class="content">
       <section class="score-section">
-        <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your
-          Investor/Funder Preparedness":""}}</h3>
+        <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
         <h2>{{currentModal==="eligibility"? investorEligibilityScore
-          :currentModal==="preparedness"?investorPreparednessScore:""}}%</h2>
+          :currentModal==="preparedness"? investorPreparednessScore:""}}%</h2>
       </section>
       <h2 class="title">Feedback and recommendations</h2>
 
@@ -70,9 +69,9 @@
       <div
         *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
         <p>No submissions found.  
-          <a [routerLink]="currentModal === 'eligibility'? '/business/investor-eligibility': currentModal === 'preparedness'? '/business/investor-eligibility': ''"
+          <a [routerLink]="next_route.url"
           class="text-blue-500 hover:text-blue-700 underline"
-          > <strong>submissions</strong></a>
+          > <strong>add submission</strong></a>
         </p>
       </div>
     </div>
@@ -195,9 +194,9 @@
       <div
         *ngIf="(factSheetAnswers.length === 0)">
         <p>No submissions found.  
-          <a [routerLink]="['/business/financials']"
+          <a [routerLink]="[next_route.url]"
           class="text-blue-500 hover:text-blue-700 underline"
-          > <strong>add submissions</strong></a>
+          > <strong>add submission</strong></a>
         </p>
       </div>
     </div>
@@ -264,9 +263,9 @@
       <div
         *ngIf="(impactElementAnswers.length === 0)">
         <p>No submissions found.  
-          <a [routerLink]="['/business/impact-assessment']"
+          <a [routerLink]="[next_route.url]"
           class="text-blue-500 hover:text-blue-700 underline"
-          ><strong>add submissions</strong></a>
+          ><strong>add submission</strong></a>
         </p>
       </div>
     </div>

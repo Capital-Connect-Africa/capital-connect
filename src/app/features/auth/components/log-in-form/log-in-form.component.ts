@@ -59,7 +59,8 @@ export class LogInFormComponent {
             switchMap(company => {
               this._loadingService.setLoading(true);
               if (company) {
-                return this._dynamicRoutingService.getUserSubmissions()
+                this._loadingService.setLoading(false);
+                return this._dynamicRoutingService.getNextRoute();
               } else {
                 this._router.navigateByUrl('/organization/setup')
                 this._loadingService.setLoading(false)

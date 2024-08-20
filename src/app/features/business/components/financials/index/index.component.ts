@@ -11,6 +11,7 @@ import { QuestionsService } from '../../../../questions/services/questions/quest
 import { Question, QuestionType } from '../../../../questions/interfaces';
 import { Submission, SubmissionService, SubMissionStateService, UserSubmissionResponse } from '../../../../../shared';
 import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-index',
@@ -26,6 +27,7 @@ export class IndexComponent {
   private _submissionStateService = inject(SubMissionStateService)
   private _formBuilder = inject(FormBuilder);
   private _router = inject(Router);
+  private _submissionsStorageService =inject(UserSubmissionsService)
 
   fieldType = QuestionType
   formGroup: FormGroup = this._formBuilder.group({});
@@ -36,9 +38,6 @@ export class IndexComponent {
       this._createFormControls();
     })
   );
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
-
-  submit$ = new Observable<unknown>()
 
   questions: Question[] = [];
 
@@ -91,9 +90,8 @@ export class IndexComponent {
         });
       }
     });
-    this.submit$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
-      this.setNextScreen();
-    }));
+    this._submissionsStorageService.businessInformationSubmissions.push(submissionData);
+    this.setNextScreen();
   }
 
   skip() {

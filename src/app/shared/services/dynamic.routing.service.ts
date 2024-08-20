@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { combineLatest, of } from "rxjs";
+import { combineLatest, EMPTY, of } from "rxjs";
 import { catchError, finalize, map, switchMap, tap } from "rxjs/operators";
 import { SubMissionStateService } from "../business/services/submission-state.service";
 import {
@@ -17,6 +17,7 @@ import { GrowthStage } from "../../features/organization/interfaces";
 import { InvestorProfile } from "../interfaces/Investor";
 import { InvestorScreensService } from "../../features/investor/services/investor.screens.service";
 import { AuthStateService } from "../../features/auth/services/auth-state.service";
+import { RoutingService } from "../business/services/routing.service";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +29,7 @@ export class DynamicRoutingService {
   private _route = inject(Router)
   private _loadingService = inject(LoadingService)
   investorProfile: InvestorProfile = {} as InvestorProfile;
-  
+  private _routingService =inject(RoutingService)
   private _screenService = inject(InvestorScreensService)
   private _authStateService = inject(AuthStateService)
 
@@ -38,10 +39,21 @@ export class DynamicRoutingService {
    * @param {number[]} numbers - The array of numbers.
    * @return {number[]} An array of unique numbers.
    */
+
+  
   private _getUniqueNumbers(numbers: number[]): number[] {
     const uniqueNumbersSet = new Set(numbers);
     const uniqueNumbersArray = Array.from(uniqueNumbersSet);
     return uniqueNumbersArray;
+  }
+
+  getNextRoute(){
+    const init$ =this._routingService.nextRoute().pipe(map(res =>{
+      if(!res.length) return this._authStateService.logout();
+      if(res.length >1) return this._route.navigateByUrl('/user-profile');
+      return this._route.navigateByUrl(res[0].url);
+    }))
+    return init$;
   }
 
   getUserSubmissions() {

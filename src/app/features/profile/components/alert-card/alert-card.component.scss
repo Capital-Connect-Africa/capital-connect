@@ -1,0 +1,26 @@
+@import "../../../../styles/main.scss";
+
+*{
+    font-family: $font-family-sans-serif;
+}
+
+.alert__container{
+    padding: 1rem 2rem;
+}
+.bg__warning{
+    color: $yellow-900;
+    background-color: $yellow-500
+}
+
+.cta{
+    border: 0;
+    outline: none;
+    padding: .5rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: $yellow-500;
+    border-radius: .5rem;
+    text-align: center;
+    cursor: pointer!important;
+    background-color: $yellow-900;
+}

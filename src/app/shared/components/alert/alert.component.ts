@@ -15,8 +15,8 @@ export class AlertComponent {
   alertTypes =AlertTypes;
   @Input() type:AlertTypes =AlertTypes.WARNING;
   @Input() action!:any;
+  @Input() className: string ='';
   signalsService =inject(SignalsService);
-
   close(){
     this.signalsService.showInAppAlert.set(false)
   }

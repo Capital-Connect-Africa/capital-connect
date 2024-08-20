@@ -12,6 +12,7 @@ import {
 } from "../../../../../shared/business/services/onboarding.questions.service";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-one',
@@ -29,15 +30,13 @@ export class StepOneComponent {
   private _submissionService = inject(SubmissionService);
   formGroup: FormGroup =this._formBuilder.group({})
   private _submissionStateService = inject(SubMissionStateService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
 
-
-  submission$ =new Observable<unknown>();
   questions$ =  this._questionService.getQuestionsOfSubSection(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.STEP_ONE).pipe(tap(questions => {
     this.questions = questions
     this._createFormControls();
   }))
 
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
   private _hasMatchingQuestionId(questions: Question[], responses: UserSubmissionResponse[]): boolean {
     const responseQuestionIds = new Set(responses.map(response => response.question.id));
     return questions.some(question => responseQuestionIds.has(question.id));
@@ -90,9 +89,8 @@ export class StepOneComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
-      this.setNextStep();
-    }));
+    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData)
+    this.setNextStep();
   }
 
 }

@@ -11,20 +11,20 @@
   &::after,
   &::before{
     content: "";
-    width: 270px;
-    height: 270px;
+    width: 350px;
+    height: 300px;
     position: absolute;
     border-radius: 50%;
   }
   &::after{
     top: -60%;
     right: -90%;
-    background-image: linear-gradient(-180deg, #FFFFFF66, #FFFFFF00);
+    background-image: linear-gradient(-180deg, #817a7a3f, #ffffff2f);
   }
   &::before{
     bottom: -60%;
     left: -90%;
-    background-image: linear-gradient(180deg, #FFFFFF00, #FFFFFF66);
+    background-image: linear-gradient(180deg, #ada0a028, #ffffff49);
   }
 
   .pro__card__body{
@@ -32,7 +32,7 @@
     display: flex;
     color: $yellow-900;
     text-align: center;
-    padding: 2rem 1.5rem;
+    padding: 1rem;
     flex-direction: column;
     background-color: $yellow-500;
     font-family: $font-family-sans-serif;
@@ -79,9 +79,7 @@
     font-size: 1rem;
     color: white;
     transition: .2s linear;
-    &:hover{
-      //background-color: red;
-    }
+   
   }
 }
 

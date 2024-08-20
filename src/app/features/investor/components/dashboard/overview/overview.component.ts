@@ -28,7 +28,6 @@ import { AngularMaterialModule } from '../../../../../shared';
 export class OverviewComponent {
   private _feedBackService = inject(FeedbackService)
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
-  private _confirmationService = inject(ConfirmationService);
   visible = false;
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
@@ -74,6 +73,17 @@ export class OverviewComponent {
   }
 
   showDetails(business: InterestingBusinesses): void {
+    //get the extra details 
+    // 1. Preparedness score
+    // 2. Eligibility score
+    // 3. Eligibility results
+    // 4. Preparedness results
+    // 5. Impact Assessment
+    //Impact elements
+    //Amount raised
+    //Business Details
+
+
     this.table = !this.table
     this.selectedBusiness = business;
   }
@@ -100,7 +110,7 @@ export class OverviewComponent {
       case 'interesting_businesses':
         return 'Interesting Businesses';
       case 'rejected_businesses':
-        return 'Rejected Businesess'
+        return 'Declined Businesess'
       default:
         return '';
     }
@@ -111,11 +121,11 @@ export class OverviewComponent {
       case 'connected_businesses':
         return 'You have connected with these businesses';
       case 'matched_businesses':
-        return 'You had a good match with these businesses';
+        return `You had a 100% Matching to ${this.matchedBusinesses.length} Businesses`;
       case 'interesting_businesses':
-        return 'These businesses have piqued your interest';
+        return 'Businesess Interested In';
       case 'rejected_businesses':
-        return 'You have rejected these businesses';
+        return 'You have Declined these businesses. You can review them and reconsider them as businesses of interest';
       default:
         return '';
     }
@@ -148,6 +158,12 @@ export class OverviewComponent {
         this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
           tap(res => {this.interestingBusinesses = res;})
         );
+
+
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
+        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
        })
     );
   }
@@ -158,13 +174,10 @@ export class OverviewComponent {
       tap(() => {
         this._feedBackService.success('Interest cancelled successfully.');
 
-
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );        
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(
-          tap(res => {this.rejectedBusinesses = res;})
-        );
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
+        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
       })
     );
   }
@@ -175,30 +188,23 @@ export class OverviewComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
         this._feedBackService.success('Company marked as interesting successfully.');
-            
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );
-      
-      })
-        
-    );
 
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;})); 
+        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+      })        
+    );
   }
 
   connect(id: number) {
     this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
       tap(() => { 
         this._feedBackService.success('Connected with company successfully.');
-      
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(
-          tap(res => {this.connectedBusinesses = res;})
-        );
 
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );
-      
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));      
       })
     );
   }

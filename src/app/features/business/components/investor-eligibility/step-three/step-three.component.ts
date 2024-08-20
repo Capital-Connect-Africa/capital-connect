@@ -4,13 +4,15 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {QuestionsService} from "../../../../questions/services/questions/questions.service";
 import {BusinessPageService} from "../../../services/business-page/business.page.service";
 import {SubmissionService, SubMissionStateService, UserSubmissionResponse} from "../../../../../shared";
-import {combineLatest, Observable, tap} from "rxjs";
+import {catchError, combineLatest, EMPTY, Observable, switchMap, tap} from "rxjs";
 import {CommonModule} from "@angular/common";
 import {AuthModule} from "../../../../auth/modules/auth.module";
 import {RouterLink} from "@angular/router";
 import {loadInvestorEligibilityQuestions} from "../../../../../shared/business/services/onboarding.questions.service";
 import {DropdownModule} from "primeng/dropdown";
 import {MultiSelectModule} from "primeng/multiselect";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { SignalsService } from '../../../../../core/services/signals/signals.service';
 
 @Component({
   selector: 'app-step-three',
@@ -25,9 +27,11 @@ export class StepThreeComponent {
   private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
+  private _signalsService =inject(SignalsService)
   formGroup: FormGroup =this._formBuilder.group({})
   fieldType =QuestionType;
   private _submissionStateService = inject(SubMissionStateService)
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   submission$ =new Observable<unknown>();
   questions$ =  this._questionService.getQuestionsOfSubSection(loadInvestorEligibilityQuestions().STEP_THREE).pipe(tap(questions => {
@@ -35,7 +39,6 @@ export class StepThreeComponent {
     this._createFormControls();
   }))
 
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _hasMatchingQuestionId(questions: Question[], responses: UserSubmissionResponse[]): boolean {
     // Create a set of question ids from the responses array
@@ -66,8 +69,15 @@ export class StepThreeComponent {
       return {questionId, answerId: parseInt(answerId), text: formValues['question_' + question.id]}
     });
 
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
-      this.setNextStep();
+    this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.investorEligibilitySubmissions).pipe(switchMap(res =>{
+      return this._submissionStateService.getSectionSubmissions(true)
+    }),
+    tap(res =>{
+      this.setNextStep()
+    }),
+    catchError(err =>{
+      return EMPTY;
     }))
-  }
+    }
 }

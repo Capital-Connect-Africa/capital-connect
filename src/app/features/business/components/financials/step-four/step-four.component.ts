@@ -4,12 +4,13 @@ import { RouterLink } from "@angular/router";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
-import { Observable, tap } from "rxjs";
+import { catchError, EMPTY, Observable, switchMap, tap } from "rxjs";
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { Question, QuestionType } from "../../../../questions/interfaces";
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class StepFourComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
 
   questions: Question[] = [];
   fieldType = QuestionType;
@@ -87,9 +89,16 @@ export class StepFourComponent {
       }
     });
     
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
+    this._submissionsStorageService.businessInformationSubmissions.push(submissionData)
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.businessInformationSubmissions).pipe(switchMap(res =>{
+      return this._submissionStateService.getSectionSubmissions(true)
+    }),
+    tap(res =>{
       this.setNextStep();
-    }));
-  }
+    }),
+    catchError(err =>{
+      return EMPTY;
+    }))
+    }
 
 }

@@ -10,6 +10,7 @@ import { Question, QuestionType } from "../../../../questions/interfaces";
 import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-three',
@@ -25,6 +26,7 @@ export class StepThreeComponent {
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
 
   questions: Question[] = [];
   fieldType = QuestionType;
@@ -48,7 +50,7 @@ export class StepThreeComponent {
   }
 
   setNextStep() {
-    this._pageService.setCurrentPage(3);
+    this._pageService.setCurrentStep(4);
   }
   goBack() {
     this._pageService.setCurrentStep(2);
@@ -87,9 +89,8 @@ export class StepThreeComponent {
       }
     });
 
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextStep();
-    }));
+    this._submissionsStorageService.businessInformationSubmissions.push(submissionData)
+    this.setNextStep();
   }
 
 

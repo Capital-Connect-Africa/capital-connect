@@ -13,6 +13,7 @@ import { Question, QuestionType } from "../../../../questions/interfaces";
 import {
   INVESTOR_PREPAREDNESS_SUBSECTION_IDS
 } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-index',
@@ -34,6 +35,7 @@ export class IndexComponent {
   private _submissionService = inject(SubmissionService);
   private _submissionStateService = inject(SubMissionStateService)
   private _formBuilder = inject(FormBuilder);
+  private _submissionsStorageService =inject(UserSubmissionsService)
 
   questions: Question[] = [];
   formGroup: FormGroup = this._formBuilder.group({});
@@ -58,7 +60,6 @@ export class IndexComponent {
   setNextScreen() {
     this._pageService.setCurrentPage(2);
   }
-  submit$ = new Observable<unknown>()
   onSubmit() {
     const formValues = this.formGroup.value;
     const submissionData: Submission[] = [];
@@ -90,9 +91,8 @@ export class IndexComponent {
         });
       }
     });
-    this.submit$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(() => {
-      this.setNextScreen();
-    }));
+    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData)
+    this.setNextScreen()
   }
 
   protected readonly fieldType = QuestionType;
