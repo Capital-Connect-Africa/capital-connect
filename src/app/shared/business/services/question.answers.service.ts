@@ -46,4 +46,28 @@ export class QuestionsAnswerService{
             return this._searchAnswersFromSubmissions(res?.investor_eligibility??[], questions);
         }))
     }
+
+    businessInformation(questions:Question[]) {
+        const draft =this._userSubmissionsService.businessInformationDraft.flat();
+        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
+            return this._searchAnswersFromSubmissions(res?.business_information??[], questions);
+        }))
+    }
+
+    investorPreparedness(questions:Question[]) {
+        const draft =this._userSubmissionsService.investorPreparednessDraft.flat();
+        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
+            return this._searchAnswersFromSubmissions(res?.investor_preparedness??[], questions);
+        }))
+    }
+
+    impactAssessment(questions:Question[]) {
+        const draft =this._userSubmissionsService.impactAssessmentDraft.flat();
+        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
+            return this._searchAnswersFromSubmissions(res?.impact_assessment??[], questions);
+        }))
+    }
 }
