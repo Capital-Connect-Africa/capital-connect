@@ -10,4 +10,10 @@ export class UserSubmissionsService {
   investorEligibilitySubmissions:Submission[][] =[];
   businessInformationSubmissions:Submission[][] =[];
   investorPreparednessSubmissions:Submission[][] =[];
+
+  impactAssessmentDraft:Submission[][] =[];
+  investorEligibilityDraft:Submission[][] =[];
+  businessInformationDraft:Submission[][] =[];
+  investorPreparednessDraft:Submission[][] =[];
+
 }
