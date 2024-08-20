@@ -27,21 +27,28 @@ export class QuestionsAnswerService{
 
     private _searchAnswersFromDrafts(draft:Submission[], questions:Question[]){
         const questionsSubmitted:Question[] =questions;
+        let responsesFound =0;
         draft.forEach(submission =>{
             questions.forEach((q, index) =>{
-                if(q.id ===submission.questionId) questionsSubmitted[index] ={
+                if(q.id ===submission.questionId) {
+                    questionsSubmitted[index] ={
                     ...q,
                     submissionId: submission.id,
                     defaultValues:[ { answerId: submission.answerId, text: submission.text } ]
                 }
+                responsesFound++;
+            }
             })
-        })
-        return questionsSubmitted;
+        });
+        return {questionsSubmitted, allFound: responsesFound ===questions.length}
     }
 
     investorEligibilityQuestionsAnswers(questions:Question[]) {
         const draft =this._userSubmissionsService.investorEligibilityDraft.flat();
-        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        if(draft.length) {
+            const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
+            if(allFound) return of(questionsSubmitted);
+        }
         return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
             return this._searchAnswersFromSubmissions(res?.investor_eligibility??[], questions);
         }))
@@ -49,7 +56,10 @@ export class QuestionsAnswerService{
 
     businessInformation(questions:Question[]) {
         const draft =this._userSubmissionsService.businessInformationDraft.flat();
-        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        if(draft.length) {
+            const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
+            if(allFound) return of(questionsSubmitted);
+        }
         return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
             return this._searchAnswersFromSubmissions(res?.business_information??[], questions);
         }))
@@ -57,7 +67,10 @@ export class QuestionsAnswerService{
 
     investorPreparedness(questions:Question[]) {
         const draft =this._userSubmissionsService.investorPreparednessDraft.flat();
-        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        if(draft.length) {
+            const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
+            if(allFound) return of(questionsSubmitted);
+        }
         return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
             return this._searchAnswersFromSubmissions(res?.investor_preparedness??[], questions);
         }))
@@ -65,7 +78,10 @@ export class QuestionsAnswerService{
 
     impactAssessment(questions:Question[]) {
         const draft =this._userSubmissionsService.impactAssessmentDraft.flat();
-        if(draft.length) return of(this._searchAnswersFromDrafts(draft, questions));
+        if(draft.length) {
+            const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
+            if(allFound) return of(questionsSubmitted);
+        }
         return this._submissionStateService.getSectionSubmissions().pipe(map(res =>{
             return this._searchAnswersFromSubmissions(res?.impact_assessment??[], questions);
         }))
