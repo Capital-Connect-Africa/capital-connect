@@ -1,15 +1,12 @@
 @import '../../../styles/main.scss';
 
+
 *{
     font-family: $font-family-sans-serif;
 }
 
 .alert__container{
-    padding: 2rem;
-    position :absolute;
-    width: 65%;
-    top: 0;
-    height: 4cm;
+    padding: 1rem 2rem;
 }
 .bg__warning{
     color: $yellow-900;
