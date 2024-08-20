@@ -9,10 +9,11 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {QuestionsService} from "../../../../questions/services/questions/questions.service";
 import {BusinessPageService} from "../../../services/business-page/business.page.service";
 import {Submission, SubmissionService, SubMissionStateService, UserSubmissionResponse} from "../../../../../shared";
-import {Observable, tap} from "rxjs";
+import {catchError, EMPTY, Observable, switchMap, tap} from "rxjs";
 import {
   INVESTOR_PREPAREDNESS_SUBSECTION_IDS
 } from "../../../../../shared/business/services/onboarding.questions.service";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-step-three',
@@ -34,8 +35,10 @@ export class StepThreeComponent {
   private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
   private _submissionService = inject(SubmissionService);
-  formGroup: FormGroup = this._formBuilder.group({})
-  private _submissionStateService = inject(SubMissionStateService)
+  formGroup: FormGroup = this._formBuilder.group({});
+  private _submissionStateService = inject(SubMissionStateService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
+  
 
   submission$ = new Observable<unknown>()
   questions$ = this._questionService.getQuestionsOfSubSection(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.STEP_THREE).pipe(tap(questions => {
@@ -47,8 +50,6 @@ export class StepThreeComponent {
     const responseQuestionIds = new Set(responses.map(response => response.question.id));
     return questions.some(question => responseQuestionIds.has(question.id));
   }
-
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
@@ -94,8 +95,16 @@ export class StepThreeComponent {
         });
       }
     });
-    this.submission$ = this._submissionService.createMultipleSubmissions(submissionData).pipe(tap(res => {
+    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData)
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.investorPreparednessSubmissions).pipe(switchMap(res =>{
+      return this._submissionStateService.getSectionSubmissions(true)
+    }),
+    tap(res =>{
       this.setNextScreen();
-    }));
-  }
+    }),
+    catchError(err =>{
+      return EMPTY;
+    }))
+    }
+  
 }

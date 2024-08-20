@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { EMPTY, lastValueFrom, Observable, switchMap, tap } from 'rxjs';
-import { TableModule } from 'primeng/table';
+import { TableModule, TablePageEvent } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { TooltipModule } from 'primeng/tooltip';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +31,9 @@ export class AllUsersComponent implements AfterViewInit {
 
   users$ = new Observable<User[]>();
   delete$ = new Observable();
+  usersCount:number =0;
+  usersShowingCount =0;
+
 
   users: User[] = [];
   cols: any[] = [
@@ -51,13 +54,18 @@ export class AllUsersComponent implements AfterViewInit {
     this.users$ = this._usersService.getAllUsers().pipe(
       tap(users => {
         this.users = users;
+        this.usersCount =users.length;
+        this.usersShowingCount =this.table.value.length;
+        this.updateDisplayedData();
       })
     );
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value.trim();
     this.table.filterGlobal(filterValue, 'contains');
+    this.usersCount = this.table.filteredValue ? this.table.filteredValue.length : this.users.length;
+    this.updateDisplayedData();
   }
 
   editUser(user: User) {
@@ -86,5 +94,16 @@ export class AllUsersComponent implements AfterViewInit {
     } else {
       this._feedbackService.info(`User ${user.username} does not have a company`)
     }
+  }
+
+  onPage(event: TablePageEvent){
+    this.updateDisplayedData()
+  }
+
+  updateDisplayedData() {
+    const data = this.table.filteredValue || this.users;
+    const start = this.table.first??10;
+    const end = start + (this.table.rows??10);
+    this.usersShowingCount = data.slice(start, end).length;
   }
 }

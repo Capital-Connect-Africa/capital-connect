@@ -8,6 +8,7 @@ import { StepThreeComponent } from '../../components/step-three/step-three.compo
 import { StepFourComponent } from '../../components/step-four/step-four.component';
 import { OrganizationOnboardService } from '../../services/organization-onboard.service';
 import { CompanyResponse } from '../../interfaces';
+import { AuthStateService } from '../../../auth/services/auth-state.service';
 
 @Component({
   selector: 'app-setup',
@@ -20,9 +21,10 @@ export class SetupComponent implements OnInit {
 
   private _organizationOnboardService = inject(OrganizationOnboardService);
   private _router = inject(Router);
-  private _activateRoute = inject(ActivatedRoute);
   private _location = inject(Location);
   private _cd = inject(ChangeDetectorRef);
+  private _authState =inject(AuthStateService)
+  private _activateRoute = inject(ActivatedRoute);
 
   submitCompanyInfo$ = new Observable();
   companyToBeEdited$ = new Observable();
@@ -90,7 +92,7 @@ export class SetupComponent implements OnInit {
 
   cancel() {
     this._organizationOnboardService.resetCompanyInput()
-    this.isEditMode ? this._location.back() : this._router.navigateByUrl('/')
+    this.isEditMode ? this._location.back() : this._authState.logout()
   }
 
   ngOnDestroy(): void {

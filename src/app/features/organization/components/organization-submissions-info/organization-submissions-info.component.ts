@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { TabViewModule } from 'primeng/tabview';
 import { User } from '../../../users/models';
 import { OrganizationInfoContainerComponent } from "../organization-info-container/organization-info-container.component";
@@ -8,6 +8,9 @@ import { SubmissionService, UserSubmissionResponse } from '../../../../shared';
 import { BUSINESS_INFORMATION_SUBSECTION_IDS, getInvestorEligibilitySubsectionIds, IMPACT_ASSESMENT_SUBSECTION_IDS, INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { CompanyResponse } from '../../interfaces';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
+import { ConfirmationService } from '../../../../core/services/confirmation/confirmation.service';
+import { FeedbackService } from '../../../../core/services/feedback/feedback.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-organization-submissions-info',
@@ -20,6 +23,10 @@ import { BusinessOnboardingScoringService } from '../../../../shared/services/bu
 })
 export class OrganizationSubmissionsInfoComponent implements OnChanges {
   private _scoringService = inject(BusinessOnboardingScoringService);
+  private _confirmationService = inject(ConfirmationService);
+  private _feedbackService = inject(FeedbackService);
+  private _router =inject(Router)
+  
 
   owner!: User;
   investorPreparednessResponses: UserSubmissionResponse[] = [];
@@ -31,12 +38,69 @@ export class OrganizationSubmissionsInfoComponent implements OnChanges {
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
   impactAssessmentScore: string = '0';
+  delete$ =new Observable<unknown>();
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
 
+  getTabName(tabName: string){
+    switch(tabName){
+      case 'investorEligibility':
+        return 'Investor Eligibility'
+      case 'investorPreparedness':
+        return 'Investor Preparedness'
+      case 'businessResponses':
+        return 'Business Information'
+      case 'impactAssessment':
+        return 'Impact Assessment'
+      default:
+        return ''
+    }
+  }
+
+  getSubmissionIds(tabName: string){
+    let  submissions:UserSubmissionResponse[];
+    switch(tabName){
+      case 'investorEligibility':
+        submissions =this.investorEligibilityResponses
+        break;
+      case 'investorPreparedness':
+        submissions = this.investorPreparednessResponses
+        break;
+      case 'businessResponses':
+        submissions = this.businessResponses;
+        break;
+      case 'impactAssessment':
+        submissions = this.impactAssessmentResponses
+        break
+      default:
+        submissions =[]
+    }
+    return submissions.map(submission =>submission.id)
+  }
+
+  deleteSubmission(tabName:string) {
+    const sectionName =this.getTabName(tabName);
+    const submissionIds =this.getSubmissionIds(tabName)
+
+    
+
+    this.delete$ = this._confirmationService.confirm(`Are you sure to remove user submissions from the ${sectionName} section?`)
+      .pipe(switchMap(res => {
+        if (res) {
+          return this._userSubmissionsService.deleteUserSubmissions(submissionIds)
+        }
+        return EMPTY
+      }), tap(() => {
+        this._feedbackService.success(`Submissions for ${sectionName} were removed successfully`);
+        // TODO: handle changes without reload
+        window.location.reload();
+      }))
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    debugger
     if (changes['company'] && changes['company'].currentValue) {
       this.company = changes['company'].currentValue;
       this.owner = this.company.user

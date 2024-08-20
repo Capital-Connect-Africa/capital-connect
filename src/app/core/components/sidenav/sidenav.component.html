@@ -1,3 +1,4 @@
+<ng-container *ngIf="logOut$ | async"></ng-container>
 <ng-container *ngIf="sideNavIsHidden$ | async as isHidden">
   <nav class="side__nav" [ngClass]="{shrunk: !showNav, }">
     <button class="floating__action__button" *ngIf="!isHidden"><mat-icon
@@ -10,6 +11,7 @@
       <li><a [routerLink]=link.href [routerLinkActiveOptions]="{exact: link.exact}" routerLinkActive='active'><mat-icon
             *ngIf="link.icon">{{link.icon}}</mat-icon> <span>{{link.label}}</span></a></li>
       }
+      <li><button (click)="logOut()"><mat-icon>logout</mat-icon> <span>Logout</span></button></li>
     </ul>
     <div *appRole="'user'">
       <app-pro-badge *ngIf="showNav " />

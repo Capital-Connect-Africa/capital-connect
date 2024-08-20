@@ -1,10 +1,11 @@
 import { Component, HostListener, inject, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { CommonModule } from "@angular/common";
-import { tap } from "rxjs";
+import { Observable, tap } from "rxjs";
 import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
 import { SharedModule } from "../../../shared";
 import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.service";
+import { AuthStateService } from '../../../features/auth/services/auth-state.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -17,6 +18,13 @@ import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.
 export class SidenavComponent {
   @Input() links!: { label: string, href: string, exact: boolean, icon?: string }[];
   private toggleService = inject(NavbarToggleService);
+  private _authStateService =inject(AuthStateService)
+  logOut$ = new Observable<boolean>();
+
+  logOut() {
+    this.logOut$ = this._authStateService.logout()
+  }
+
 
   ngOnInit() {
     if (window.innerWidth > 991) {

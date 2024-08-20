@@ -52,6 +52,11 @@ export class AuthStateService {
     return !!currentUser && currentUser.roles.includes('advisor');
   }
 
+  get userIsInvestor() {
+    const currentUser = JSON.parse(sessionStorage.getItem('userProfile') as string) as Profile;
+    return !!currentUser && currentUser.roles.includes('investor');
+  }
+
   get userIsUser() {
     const currentUser = JSON.parse(sessionStorage.getItem('userProfile') as string) as Profile;
     return !!currentUser && currentUser.roles.includes('user');
@@ -104,7 +109,6 @@ export class AuthStateService {
     }));
   }
 
-  // TODO: verify phone number once brevo issue is sorted
   verifyPhoneNumber(otp: string, phoneNo:string){
     return this._httpService.create(BASE_URL+'/mobile-numbers/verify', {otp, phoneNo}).pipe(map(res =>{
       this._feedBackService.success('Phone Number verified successfully', 'Phone number verification')
