@@ -75,3 +75,83 @@
     }
   }
 }
+
+
+.no-data{
+  height: 100%;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: $font-family-sans-serif;
+  line-height: 1.5rem;
+  color: #1C1C1E;
+}
+
+.details{
+  margin: auto;
+  padding: 1cm;
+}
+
+.eye {
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon */
+  padding: 0.5rem; /* Adjust padding as needed */
+}
+
+.small-icon {
+  font-size: 1.2rem; /* Adjust the size of the icon */
+}
+
+.btn{
+  padding: 12px 40px;
+  font-family: $font-family-sans-serif;
+}
+
+tbody tr{
+  text-align: center;
+  font-family: $font-family-sans-serif;
+}
+
+th{
+  text-align: start;
+}
+
+.table-parent{
+  margin: 20px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+}
+
+
+.business-details{
+  padding-bottom: 1rem;
+  .flex-layout{
+    padding: .75rem .5rem;
+  }
+  span{
+    flex: 1;
+    color: #1C1C1E;
+    font-weight: 700;
+    display: block;
+    text-align: left;
+    padding: .75rem 1rem;
+    font-family: $font-family-sans-serif;
+    width: max-content;
+  }
+  .cta-group{
+    flex: 5;
+    gap: 1rem;
+    a{
+      font-weight: 500;
+      color: #064635;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #064635;
+      padding: .5rem 2rem;
+    }
+
+  }
+
+}
+
