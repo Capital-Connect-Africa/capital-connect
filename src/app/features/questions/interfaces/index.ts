@@ -38,7 +38,9 @@ export interface Question {
     id: number;
   }
   id: number;
-  answers: Answer[]
+  answers: Answer[],
+  submissionId?: number,
+  defaultValues? :{answerId: number, text?: string}[]
 }
 
 export interface SubSection {
