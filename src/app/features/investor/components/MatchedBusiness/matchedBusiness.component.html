@@ -1,0 +1,130 @@
+<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
+<ng-container *ngIf="interestingCompanies$ | async"></ng-container>
+<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
+<ng-container *ngIf="markAsInteresting$ | async"></ng-container>
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true" [showBanner]="false" />
+  </div>
+
+  <main>
+    <p class="brand__name">Business Name</p>
+    <div class="left__col">
+      <div class="table-parent">
+        <div class="">
+          <table class="table" *ngIf="table">
+            <tbody>
+              <tr class="border-b border-gray-200">
+                <td class="font-bold">#</td>
+                <td class="font-bold">Country</td>
+                <td class="font-bold">Business Sector</td>
+                <td class="font-bold">Business Sub Sector</td>
+                <td class="font-bold">Growth Stage</td>
+                <td class="flex font-bold space-x-2">Actions</td>
+              </tr>
+
+
+              <tr *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex"
+                class="border-b border-gray-200">
+                <td class="font-bold">{{ i + 1 }}</td>
+                <td class="">{{ business.country }}</td>
+                <td class="">{{ business.businessSector }}</td>
+                <td class="">{{ business.businessSubsector }}</td>
+                <td class="">{{ business.growthStage }}</td>
+                <td class="flex space-x-2 justify-center p-2">
+                  <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+
+                  <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                    <mat-icon class="small-icon">visibility</mat-icon>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <!-- Matched Business Extra Details -->
+          <div *ngIf="selectedMatchedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
+            <!-- Company Details -->
+            <div class="mb-6 details">
+              <h5 class="text-xl font-semibold mb-2 text-center"><strong>Matched Company Information</strong></h5>
+              <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <p class="font-bold">Country: <span class="font-light">{{ selectedMatchedBusiness.country }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="font-bold">Sector: <span class="font-light">{{ selectedMatchedBusiness.businessSector
+                      }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedMatchedBusiness.businessSubsector
+                      }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedMatchedBusiness.growthStage
+                      }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold">Number of Employees: <span class="font-light">{{
+                      selectedMatchedBusiness.numberOfEmployees }}</span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="flex justify-end details">
+              <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+                Back to List
+              </button>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="right__col">
+      <app-alert [action]="showalert" className="rounded-[.5rem]" />
+      <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
+        (click)="showDialog()">
+        <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
+      </app-card>
+
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+  </main>
+</div>
+
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }"
+  class="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+    <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone
+      number': 'Verify your phone number' }}</label>
+    <input formControlName="field" class="border"
+      [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'" />
+    <button class="cta__btn" [disabled]="phoneUpdateForm.invalid"
+      (click)="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
+  </form>
+</p-dialog>

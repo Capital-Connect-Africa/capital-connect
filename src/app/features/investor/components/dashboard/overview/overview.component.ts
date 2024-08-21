@@ -5,11 +5,16 @@ import { OverviewSectionComponent } from "../../../../../shared/components/overv
 import { CardComponent } from "../../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../../shared/business/services/busines.and.investor.matching.service";
-import { AuthStateService } from "../../../../auth/services/auth-state.service";
 import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../../shared/interfaces';
-import { FeedbackService , ConfirmationService} from '../../../../../core';
-import {  switchMap } from 'rxjs/operators';
+import { FeedbackService } from '../../../../../core';
 import { AngularMaterialModule } from '../../../../../shared';
+import { CompanyHttpService } from '../../../../organization/services/company.service';
+import { CompanyResponse, GrowthStage } from '../../../../organization/interfaces';
+import { BusinessOnboardingScoringService } from '../../../../../shared/services/business.onboarding.scoring.service';
+import { Score } from '../../../../../shared/business/services/onboarding.questions.service';
+import { getInvestorEligibilitySubsectionIds } from '../../../../../shared/business/services/onboarding.questions.service';
+import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
+import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
 
 
 @Component({
@@ -28,6 +33,8 @@ import { AngularMaterialModule } from '../../../../../shared';
 export class OverviewComponent {
   private _feedBackService = inject(FeedbackService)
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
+  private _company = inject(CompanyHttpService)
+  private _scoringService = inject(BusinessOnboardingScoringService);
   visible = false;
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
@@ -39,10 +46,23 @@ export class OverviewComponent {
   interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: ConnectedBusiness[] = [];
 
+  companyDetails: CompanyResponse | undefined;
+
   markAsInteresting$ = new Observable<unknown>()
   connectWithCompany$ = new Observable<unknown>()
   cancelConnectWithCompany$ = new Observable<unknown>()
   cancelInterestWithCompany$ = new Observable<unknown>()
+  companyDetails$ = new Observable<unknown>()
+
+
+  investorEligibilityScore: Score | undefined;
+  investorPreparednessScore: Score | undefined;
+  impactAssessmentScore: Score | undefined;
+
+  investorEligibilityScore$ = new Observable<unknown>()
+  investorPreparednessScore$ =  new Observable<unknown>()
+  impactAssessmentScore$ = new Observable<unknown>()
+
   table:boolean = true
   
 
@@ -73,25 +93,63 @@ export class OverviewComponent {
   }
 
   showDetails(business: InterestingBusinesses): void {
-    //get the extra details 
-    // 1. Preparedness score
-    // 2. Eligibility score
-    // 3. Eligibility results
-    // 4. Preparedness results
-    // 5. Impact Assessment
-    //Impact elements
-    //Amount raised
-    //Business Details
+    const companyGrowthStage = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
 
+    //get the company details
+    this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
+      tap(res => {
+        this.companyDetails = res
 
+        //Get the submisions
+        this.impactAssessmentScore$ = this._businessMatchingService.getSectionScore(business.company.id,IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.impactAssessmentScore =scores        
+        }))
+
+        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.company.id,getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
+          this.investorEligibilityScore =scores        
+        }))
+
+        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.company.id,INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.investorPreparednessScore =scores        
+        }))      
+      })
+    )
     this.table = !this.table
     this.selectedBusiness = business;
   }
 
+
+
+
   showMatchedBusinessDetails(business: MatchedBusiness): void {
     this.table = !this.table
     this.selectedMatchedBusiness = business;
+
+    const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
+     //get the company details
+    this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
+      tap(res => {
+        this.companyDetails = res
+
+        //Get the submisions
+        this.impactAssessmentScore$ = this._businessMatchingService.getSectionScore(business.id,IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.impactAssessmentScore =scores        
+        }))
+
+        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id,getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
+          this.investorEligibilityScore =scores        
+        }))
+
+        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id,INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.investorPreparednessScore =scores        
+        }))      
+      })
+    )
   }
+
+
+
+
 
   hideDetails(): void {
     this.table = true
