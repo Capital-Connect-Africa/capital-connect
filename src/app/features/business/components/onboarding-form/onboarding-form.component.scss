@@ -5,8 +5,9 @@ form{
   gap: 1.5rem;
 
   .btns__group{
+    gap: 1rem;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
     
     .active{
@@ -25,10 +26,21 @@ form{
     }
 
     .btn__link{
+      text-align: left;
+      width: max-content;
       color: $primary-color;
       &:hover{
         text-decoration: underline;
       }
+    }
+  }
+}
+
+@include when-screen-is-atleast(medium){
+  form{
+    .btns__group{
+      align-items: center;
+      flex-direction: row;
     }
   }
 }
