@@ -109,6 +109,7 @@ export class StepFourComponent {
         return this._submissionStateService.getSectionSubmissions(true)
       }),
       tap(res =>{
+        this._pageService.setCurrentMode(requestType);
         this._userSubmissionsStorageService.businessInformationSubmissions =[]
       this.setNextStep()
     }),

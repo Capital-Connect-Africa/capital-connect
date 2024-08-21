@@ -107,6 +107,7 @@ export class StepThreeComponent {
       return this._submissionStateService.getSectionSubmissions(true);
     }),
     tap(res =>{
+      this._pageService.setCurrentMode(requestType);
       this._submissionsStorageService.impactAssessmentSubmissions =[];
       this.setNextStep();
     }),

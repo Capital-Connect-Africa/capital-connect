@@ -9,6 +9,7 @@ import {CompanyStateService} from "../../../../organization/services/company-sta
 import {
   getInvestorEligibilitySubsectionIds
 } from "../../../../../shared/business/services/onboarding.questions.service";
+import { RequestType } from '../../../../../shared';
 
 @Component({
   selector: 'app-success-screen',
@@ -18,11 +19,14 @@ import {
   styleUrl: './success-screen.component.scss'
 })
 export class SuccessScreenComponent {
+  mode =RequestType;
   private _router = inject(Router);
   private _pageService = inject(BusinessPageService);
   private _scoringService = inject(BusinessOnboardingScoringService);
   private _feedBackService = inject(FeedbackService);
-  private _companyService =inject(CompanyStateService)
+  private _companyService =inject(CompanyStateService);
+
+  currentMode$ =this._pageService.current_mode$
   score$ = new Observable();
   calculateScore() {
     this.score$ = this._scoringService.getSectionScore(getInvestorEligibilitySubsectionIds(this._companyService.currentCompany.growthStage).ID).pipe(tap(res => {
@@ -35,5 +39,11 @@ export class SuccessScreenComponent {
     this._pageService.setCurrentPage(1);
     this._pageService.setCurrentStep(1);
     this._router.navigateByUrl('/business/investor-preparedness');
+  }
+
+  goToDashboard() {
+    this._pageService.setCurrentPage(1);
+    this._pageService.setCurrentStep(1);
+    this._router.navigateByUrl('/business');
   }
 }

@@ -108,6 +108,7 @@ export class StepThreeComponent {
       return this._submissionStateService.getSectionSubmissions(true)
     }),
     tap(res =>{
+      this._pageService.setCurrentMode(requestType);
       this._userSubmissionsStorageService.investorEligibilitySubmissions =[];
       this.setNextStep()
     }),
