@@ -6,9 +6,10 @@ import { MultiSelectModule } from "primeng/multiselect";
 import { AuthModule } from "../../../../auth/modules/auth.module";
 import { catchError, EMPTY, Observable, switchMap, tap } from "rxjs";
 import { Question, QuestionType } from "../../../../questions/interfaces";
+import { SignalsService } from "../../../../../core/services/signals/signals.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
+import { RequestType, Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 import { QuestionsAnswerService } from '../../../../../shared/business/services/question.answers.service';
@@ -23,11 +24,12 @@ import { IMPACT_ASSESMENT_SUBSECTION_IDS } from "../../../../../shared/business/
 })
 export class StepThreeComponent {
   private _formBuilder = inject(FormBuilder)
-  private _questionService = inject(QuestionsService);
+  private _signalsService =inject(SignalsService);
   private _pageService = inject(BusinessPageService);
+  private _questionService = inject(QuestionsService);
   private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService);
   private _questionAnswersService =inject(QuestionsAnswerService);
+  private _submissionStateService = inject(SubMissionStateService);
   private _submissionsStorageService =inject(UserSubmissionsService);
 
   questions: Question[] = [];
@@ -75,6 +77,7 @@ export class StepThreeComponent {
           submissionData.push({
             questionId: question.id,
             answerId: answerId,
+            id: question.submissionId,
             text: ''
           });
         });
@@ -84,22 +87,27 @@ export class StepThreeComponent {
 
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
-      } else {
+      }
+      else {
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
       }
     });
-    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData);
-    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.investorPreparednessSubmissions).pipe(switchMap(res =>{
-      return this._submissionStateService.getSectionSubmissions(true)
+    this._submissionsStorageService.saveImpactAssessmentSubmissionProgress(submissionData, 3);
+    const requestType =this._signalsService.userSectionSubmissions()?.impact_assessment.length? RequestType.EDIT: RequestType.SAVE;
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.impactAssessmentSubmissions, requestType).pipe(switchMap(res =>{
+      return this._submissionStateService.getSectionSubmissions(true);
     }),
     tap(res =>{
+      this._submissionsStorageService.impactAssessmentSubmissions =[];
       this.setNextStep();
     }),
     catchError(err =>{

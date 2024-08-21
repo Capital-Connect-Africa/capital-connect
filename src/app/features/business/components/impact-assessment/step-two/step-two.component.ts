@@ -85,20 +85,25 @@ export class StepTwoComponent {
           submissionData.push({
             questionId: question.id,
             answerId: answerId,
+            id: question.submissionId,
             text: ''
           });
         });
       } else if (question.type == this.fieldType.SHORT_ANSWER) {
         const openQuestion = question.answers.find(a => a.text === 'OPEN');
         const answerId = openQuestion ? openQuestion.id : formValues['question_' + question.id]
+
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
-      } else {
+      }
+      else {
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
