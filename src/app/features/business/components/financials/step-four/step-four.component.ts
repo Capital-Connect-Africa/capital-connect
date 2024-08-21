@@ -71,45 +71,45 @@ export class StepFourComponent {
 
   handleSubmit() {
     const formValues = this.formGroup.value;
-      const submissionData: Submission[] = [];
-      this.questions.forEach(question => {
-        if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-          const selectedAnswers = formValues['question_' + question.id];
-          selectedAnswers.forEach((answerId: number) => {
-            submissionData.push({
-              id: question.submissionId,
-              questionId: question.id,
-              answerId: answerId,
-              text: ''
-            });
+    const submissionData: Submission[] = [];
+    this.questions.forEach(question => {
+      if (question.type === this.fieldType.MULTIPLE_CHOICE) {
+        const selectedAnswers = formValues['question_' + question.id];
+        selectedAnswers.forEach((answerId: number) => {
+          submissionData.push({
+            questionId: question.id,
+            answerId: answerId,
+            id: question.submissionId,
+            text: ''
           });
-        } else if (question.type == this.fieldType.SHORT_ANSWER) {
-          const openQuestion = question.answers.find(a => a.text === 'OPEN');
-          const answerId = openQuestion ? openQuestion.id : formValues['question_' + question.id]
+        });
+      } else if (question.type == this.fieldType.SHORT_ANSWER) {
+        const openQuestion = question.answers.find(a => a.text === 'OPEN');
+        const answerId = openQuestion ? openQuestion.id : formValues['question_' + question.id]
 
-          submissionData.push({
-            questionId: question.id,
-            answerId: parseInt(answerId),
-            id: question.submissionId,
-            text: formValues['question_' + question.id]
-          });
-        }
-        else {
-          submissionData.push({
-            questionId: question.id,
-            answerId: Number(formValues['question_' + question.id]),
-            id: question.submissionId,
-            text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
-          });
-        }
-      });
-      const requestType =this._signalsService.userSectionSubmissions()?.investor_eligibility.length? RequestType.EDIT: RequestType.SAVE
+        submissionData.push({
+          questionId: question.id,
+          id: question.submissionId,
+          answerId: parseInt(answerId),
+          text: formValues['question_' + question.id]
+        });
+      }
+      else {
+        submissionData.push({
+          questionId: question.id,
+          id: question.submissionId,
+          answerId: Number(formValues['question_' + question.id]),
+          text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
+        });
+      }
+    });
+      const requestType =this._signalsService.userSectionSubmissions()?.business_information.length? RequestType.EDIT: RequestType.SAVE
       this._userSubmissionsStorageService.saveBusinessInformationSubmissionProgress(submissionData, 4);
       this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.businessInformationSubmissions, requestType).pipe(switchMap(res =>{
         return this._submissionStateService.getSectionSubmissions(true)
       }),
       tap(res =>{
-      this._userSubmissionsStorageService.businessInformationDraft =[];
+        this._userSubmissionsStorageService.businessInformationSubmissions =[]
       this.setNextStep()
     }),
     catchError(err =>{

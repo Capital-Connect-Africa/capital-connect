@@ -67,6 +67,7 @@ export class IndexComponent {
           submissionData.push({
             questionId: question.id,
             answerId: answerId,
+            id: question.submissionId,
             text: ''
           });
         });
@@ -76,6 +77,7 @@ export class IndexComponent {
 
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
@@ -83,6 +85,7 @@ export class IndexComponent {
       else {
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
