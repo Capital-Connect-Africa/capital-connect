@@ -5,10 +5,11 @@ import { DropdownModule } from "primeng/dropdown";
 import { MultiSelectModule } from "primeng/multiselect";
 import { catchError, EMPTY, Observable, switchMap, tap} from "rxjs";
 import { Question, QuestionType } from "../../../../questions/interfaces";
+import { SignalsService } from "../../../../../core/services/signals/signals.service";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import { BusinessPageService} from "../../../services/business-page/business.page.service";
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
+import { RequestType, Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 import { QuestionsAnswerService } from '../../../../../shared/business/services/question.answers.service';
 import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
@@ -29,7 +30,8 @@ import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from "../../../../../shared/busi
 export class StepThreeComponent {
   questions: Question[] = [];
   fieldType = QuestionType;
-  private _formBuilder = inject(FormBuilder)
+  private _formBuilder = inject(FormBuilder);
+  private _signalsService =inject(SignalsService);
   private _pageService = inject(BusinessPageService);
   formGroup: FormGroup = this._formBuilder.group({});
   private _questionService = inject(QuestionsService);
@@ -83,6 +85,7 @@ export class StepThreeComponent {
           submissionData.push({
             questionId: question.id,
             answerId: answerId,
+            id: question.submissionId,
             text: ''
           });
         });
@@ -92,22 +95,27 @@ export class StepThreeComponent {
 
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
-      } else {
+      }
+      else {
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
       }
     });
-    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData);
-    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.investorPreparednessSubmissions).pipe(switchMap(res =>{
+    this._submissionsStorageService.saveInvestorPreparednessSubmissionProgress(submissionData, 3);
+    const requestType =this._signalsService.userSectionSubmissions()?.investor_preparedness.length? RequestType.EDIT: RequestType.SAVE
+    this.submission$ =this._submissionService.saveSectionSubmissions(this._submissionsStorageService.investorPreparednessSubmissions, requestType).pipe(switchMap(res =>{
       return this._submissionStateService.getSectionSubmissions(true)
     }),
     tap(res =>{
+      this._submissionsStorageService.investorPreparednessSubmissions =[]
       this.setNextScreen();
     }),
     catchError(err =>{
