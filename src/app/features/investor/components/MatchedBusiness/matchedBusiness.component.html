@@ -1,7 +1,6 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
-<ng-container *ngIf="interestingCompanies$ | async"></ng-container>
-<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
 
 
 <div class="main">
@@ -12,6 +11,12 @@
   <main>
     <p class="brand__name">Business Name</p>
     <div class="left__col">
+      <h5><strong>Matched Businesses</strong></h5>
+      <p>You had a 100% Matching to {{this.matchedBusinesses.length}} Businesses</p>
+      <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+        No matched businesess found. <br /> Check again later.
+      </div>
+
       <div class="table-parent">
         <div class="">
           <table class="table" *ngIf="table">
@@ -35,6 +40,8 @@
                 <td class="">{{ business.growthStage }}</td>
                 <td class="flex space-x-2 justify-center p-2">
                   <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+                  <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                    (click)="cancelInterest(business.id)">Decline</button>
 
                   <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
                     <mat-icon class="small-icon">visibility</mat-icon>
@@ -86,12 +93,6 @@
         </div>
       </div>
 
-
-
-
-
-
-
     </div>
 
 
@@ -117,8 +118,25 @@
 </div>
 
 
-<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }"
-  class="p-8">
+
+<app-modal [(visible)]="decline" title="Reasons for declining" 
+  helperText="Tell us why you are declining">
+  <div class="input__wrapper">
+    <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+    
+    <p-multiSelect class="input__field" styleClass="w-full gap-4"
+      optionValue="name"
+      formControlName="countriesOfInvestmentFocus"  optionLabel="name"
+      placeholder="Select countries"></p-multiSelect>
+  </div>
+
+</app-modal>
+
+
+
+
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class="p-8">
   <form class="dialog-input" [formGroup]="phoneUpdateForm">
     <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone
       number': 'Verify your phone number' }}</label>
@@ -128,3 +146,8 @@
       (click)="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
   </form>
 </p-dialog>
+
+
+
+
+

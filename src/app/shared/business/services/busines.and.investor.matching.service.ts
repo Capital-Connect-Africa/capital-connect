@@ -68,17 +68,26 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
   //Cancel Connection with a company
   cancelConnectWithCompany(companyId: number): Observable<void> {
+
+    let body = {
+      declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
+    }
+    
+
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, {}).pipe(
+    return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, body).pipe(
       map(() => void 0)  
     );
   }
 
    //Cancel Connection with a company
    cancelInterestWithCompany(companyId: number): Observable<void> {
+    let body = {
+      declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
+    }
     
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, {}).pipe(
+    return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, body).pipe(
       map(() => void 0)  
     );
   }
