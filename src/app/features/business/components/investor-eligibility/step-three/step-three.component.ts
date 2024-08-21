@@ -38,7 +38,7 @@ export class StepThreeComponent {
   submission$ =new Observable<unknown>();
   questions$ =  this._questionService.getQuestionsOfSubSection(loadInvestorEligibilityQuestions().STEP_THREE).pipe(
     switchMap(questions =>{
-      return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
+      return this._questionAnswersService.investorEligibility(questions)
     }),
     tap(res =>{
       this.questions = res;
@@ -102,20 +102,13 @@ export class StepThreeComponent {
         });
       }
     });
-
-    this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
+    this._userSubmissionsStorageService.saveInvestorEligibilitySubmissionProgress(submissionData, 3);
     const requestType =this._signalsService.userSectionSubmissions()?.investor_eligibility.length? RequestType.EDIT: RequestType.SAVE
-    if(this._userSubmissionsStorageService.investorEligibilitySubmissions.length){
-      this._userSubmissionsStorageService.investorEligibilitySubmissions[3] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
-    if(this._userSubmissionsStorageService.investorEligibilityDraft.length){
-      this._userSubmissionsStorageService.investorEligibilityDraft[3] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilityDraft.push(submissionData);
     this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.investorEligibilitySubmissions, requestType).pipe(switchMap(res =>{
       return this._submissionStateService.getSectionSubmissions(true)
     }),
     tap(res =>{
-      this._userSubmissionsStorageService.investorEligibilityDraft =[];
+      this._userSubmissionsStorageService.investorEligibilitySubmissions =[];
       this.setNextStep()
     }),
     catchError(err =>{

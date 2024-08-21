@@ -37,10 +37,9 @@ export class IndexComponent {
   questions$ = this._questionService.getQuestionsOfSubSection(loadInvestorEligibilityQuestions().LANDING).pipe(
   
     switchMap(questions =>{
-      return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
+      return this._questionAnswersService.investorEligibility(questions)
     }),
     tap(res =>{
-      debugger
       this.questions = res;
       this._createFormControls();
     })
@@ -96,12 +95,7 @@ export class IndexComponent {
         });
       }
     });
-    if(this._submissionsStorageService.investorEligibilitySubmissions.length){
-      this._submissionsStorageService.investorEligibilitySubmissions[0] =submissionData;
-    } else this._submissionsStorageService.investorEligibilitySubmissions.push(submissionData);
-    if(this._submissionsStorageService.investorEligibilityDraft.length){
-      this._submissionsStorageService.investorEligibilityDraft[0] =submissionData;
-    } else this._submissionsStorageService.investorEligibilityDraft.push(submissionData);
+    this._submissionsStorageService.saveInvestorEligibilitySubmissionProgress(submissionData);
     this.setNextScreen();
   
   }

@@ -46,7 +46,7 @@ export class StepTwoComponent {
 
   questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(
     switchMap(questions =>{
-      return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
+      return this._questionAnswersService.investorEligibility(questions)
     }),
     tap(res =>{
       this.questions = res;
@@ -109,12 +109,7 @@ export class StepTwoComponent {
         });
       }
     });
-    if(this._userSubmissionsStorageService.investorEligibilitySubmissions.length){
-      this._userSubmissionsStorageService.investorEligibilitySubmissions[2] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
-    if(this._userSubmissionsStorageService.investorEligibilityDraft.length){
-      this._userSubmissionsStorageService.investorEligibilityDraft[2] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilityDraft.push(submissionData);
+    this._userSubmissionsStorageService.saveInvestorEligibilitySubmissionProgress(submissionData, 2);
     this.setNextStep();
   }
 }

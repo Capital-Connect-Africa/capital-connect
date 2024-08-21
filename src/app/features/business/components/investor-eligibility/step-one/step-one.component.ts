@@ -47,7 +47,7 @@ export class StepOneComponent {
 
   questions$ = this._questionService.getQuestionsOfSubSection(this._idToLoad).pipe(
     switchMap(questions =>{
-      return this._questionAnswersService.investorEligibilityQuestionsAnswers(questions)
+      return this._questionAnswersService.investorEligibility(questions)
     }),
     tap(res =>{
 
@@ -111,12 +111,7 @@ export class StepOneComponent {
         });
       }
     });
-    if(this._userSubmissionsStorageService.investorEligibilitySubmissions.length){
-      this._userSubmissionsStorageService.investorEligibilitySubmissions[1] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilitySubmissions.push(submissionData);
-    if(this._userSubmissionsStorageService.investorEligibilityDraft.length){
-      this._userSubmissionsStorageService.investorEligibilityDraft[1] =submissionData;
-    } else this._userSubmissionsStorageService.investorEligibilityDraft.push(submissionData);
+    this._userSubmissionsStorageService.saveInvestorEligibilitySubmissionProgress(submissionData, 1);
     this.setNextStep();
   }
 }
