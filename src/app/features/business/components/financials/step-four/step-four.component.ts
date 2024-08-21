@@ -104,12 +104,7 @@ export class StepFourComponent {
         }
       });
       const requestType =this._signalsService.userSectionSubmissions()?.investor_eligibility.length? RequestType.EDIT: RequestType.SAVE
-      if(this._userSubmissionsStorageService.businessInformationSubmissions.length){
-        this._userSubmissionsStorageService.businessInformationSubmissions[4] =submissionData;
-      } else this._userSubmissionsStorageService.businessInformationSubmissions.push(submissionData);
-      if(this._userSubmissionsStorageService.businessInformationDraft.length){
-        this._userSubmissionsStorageService.businessInformationDraft[4] =submissionData;
-      } else this._userSubmissionsStorageService.businessInformationDraft.push(submissionData);
+      this._userSubmissionsStorageService.saveBusinessInformationSubmissionProgress(submissionData, 4);
       this.submission$ =this._submissionService.saveSectionSubmissions(this._userSubmissionsStorageService.businessInformationSubmissions, requestType).pipe(switchMap(res =>{
         return this._submissionStateService.getSectionSubmissions(true)
       }),

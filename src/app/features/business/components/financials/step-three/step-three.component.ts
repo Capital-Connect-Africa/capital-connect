@@ -100,12 +100,7 @@ export class StepThreeComponent {
       }
     });
 
-    if(this._userSubmissionsStorageService.businessInformationSubmissions.length){
-      this._userSubmissionsStorageService.businessInformationSubmissions[3] =submissionData;
-    } else this._userSubmissionsStorageService.businessInformationSubmissions.push(submissionData);
-    if(this._userSubmissionsStorageService.businessInformationDraft.length){
-      this._userSubmissionsStorageService.businessInformationDraft[3] =submissionData;
-    } else this._userSubmissionsStorageService.businessInformationDraft.push(submissionData);    
+    this._userSubmissionsStorageService.saveBusinessInformationSubmissionProgress(submissionData, 3);   
     this.setNextStep();
   }
 

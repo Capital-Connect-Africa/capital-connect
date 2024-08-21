@@ -94,12 +94,7 @@ export class StepTwoComponent {
         });
       }
     });
-    if(this._userSubmissionsStorageService.businessInformationSubmissions.length){
-      this._userSubmissionsStorageService.businessInformationSubmissions[2] =submissionData;
-    } else this._userSubmissionsStorageService.businessInformationSubmissions.push(submissionData);
-    if(this._userSubmissionsStorageService.businessInformationDraft.length){
-      this._userSubmissionsStorageService.businessInformationDraft[2] =submissionData;
-    } else this._userSubmissionsStorageService.businessInformationDraft.push(submissionData);
+    this._userSubmissionsStorageService.saveBusinessInformationSubmissionProgress(submissionData, 2);
     this.setNextStep();
   }
 }
