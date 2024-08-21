@@ -24,6 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this._trackLoadingStatusSubscription();
   }
 
+
+  //Subscription
   private _trackLoadingStatusSubscription() {
     return this._loadingService.loading$.pipe(distinctUntilChanged()).subscribe(res => {
       this.isLoading = res;
