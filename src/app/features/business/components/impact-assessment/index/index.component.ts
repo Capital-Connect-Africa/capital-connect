@@ -1,21 +1,18 @@
+import { switchMap, tap } from "rxjs";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { DropdownModule } from "primeng/dropdown";
 import { Component, inject } from '@angular/core';
+import { Submission } from "../../../../../shared";
+import { MultiSelectModule } from "primeng/multiselect";
+import { Question, QuestionType } from "../../../../questions/interfaces";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BusinessPageService } from '../../../services/business-page/business.page.service';
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { switchMap, tap } from "rxjs/operators";
-import { Observable, of } from "rxjs";
-import { Question, QuestionType } from "../../../../questions/interfaces";
-import { CommonModule } from "@angular/common";
-import { Router } from "@angular/router";
+import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { QuestionsAnswerService } from '../../../../../shared/business/services/question.answers.service';
 import { ProgressBarComponent } from "../../../../../core/components/progress-bar/progress-bar.component";
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
-import { DropdownModule } from "primeng/dropdown";
-import { MultiSelectModule } from "primeng/multiselect";
-import { CompanyStateService } from '../../../../organization/services/company-state.service';
-import { GrowthStage } from '../../../../organization/interfaces';
-import { OrganizationOnboardService } from '../../../../organization/services/organization-onboard.service';
-import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
 
 @Component({
   selector: 'app-index',
@@ -26,34 +23,39 @@ import { UserSubmissionsService } from '../../../../../core/services/storage/use
 })
 
 export class IndexComponent {
+  private _router = inject(Router);
+  private _formBuilder = inject(FormBuilder);
   private _pageService = inject(BusinessPageService);
   private _questionService = inject(QuestionsService);
-  private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService)
-  private _formBuilder = inject(FormBuilder);
-  private _router = inject(Router);
-  private _companyStateService = inject(CompanyStateService);
-  private _orgOnboardService = inject(OrganizationOnboardService)
+  private _questionAnswersService =inject(QuestionsAnswerService);
   private _submissionsStorageService =inject(UserSubmissionsService);
 
   fieldType = QuestionType
 
   formGroup: FormGroup = this._formBuilder.group({});
-  questions$ = this._questionService.getQuestionsOfSubSection(IMPACT_ASSESMENT_SUBSECTION_IDS.LANDING).pipe(
-    tap(questions => {
-      this.questions = questions;
+  questions$ =  this._questionService.getQuestionsOfSubSection(IMPACT_ASSESMENT_SUBSECTION_IDS.LANDING).pipe(
+    switchMap(questions =>{
+      return this._questionAnswersService.impactAssessment(questions)
+    }),
+    tap(res =>{
+      this.questions = res;
       this._createFormControls();
     })
-  );
+  )
 
   questions: Question[] = [];
 
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control([], Validators.required));
+        const answer =(question.defaultValues??[]);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
+      } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control('', Validators.required));
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
       }
     });
   }
@@ -80,8 +82,7 @@ export class IndexComponent {
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
-      }
-      else {
+      } else {
         submissionData.push({
           questionId: question.id,
           answerId: Number(formValues['question_' + question.id]),
@@ -89,26 +90,7 @@ export class IndexComponent {
         });
       }
     });
-
-    const shouldUpdateCompany = this._companyStateService.currentCompany.growthStage === GrowthStage.Idea || this._companyStateService.currentCompany.growthStage === GrowthStage.StartUpPostRevenue
-
-    //We update company growth stage first based on this answer
-    const isPreRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 45)
-    const isPostRevenue = submissionData.find(s => s.questionId === 20 && s.answerId === 46)
-
-    const companyToEdit = {
-      ...this._companyStateService.currentCompany,
-      growthStage: isPreRevenue ? GrowthStage.Idea : isPostRevenue ?
-        GrowthStage.StartUpPostRevenue
-        : this._companyStateService.currentCompany.growthStage
-    }
-
-    this._orgOnboardService.updateCompanyInput(companyToEdit)
-
-    const updateCompany$ = shouldUpdateCompany ? this._orgOnboardService.submitCompanyInfo(true, companyToEdit.id) : of(true)
-    const submission$ = this._submissionService.createMultipleSubmissions(submissionData)
-
-    this._submissionsStorageService.impactAssessmentSubmissions.push(submissionData)
+    this._submissionsStorageService.saveImpactAssessmentSubmissionProgress(submissionData);
     this.setNextScreen();
   }
 
