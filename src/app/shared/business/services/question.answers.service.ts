@@ -15,10 +15,12 @@ export class QuestionsAnswerService{
         const questionsSubmitted:Question[] =questions;
         submissionResponse.forEach(submission =>{
             questions.forEach((q, index) =>{
-                if(q.id ===submission.question.id) questionsSubmitted[index] ={
-                    ...q,
-                    submissionId: submission.id,
-                    defaultValues:[ { answerId: submission.answer.id, text: submission.answer.text } ]
+                if(q.id ===submission.question.id) {
+                    questionsSubmitted[index] ={
+                        ...q,
+                        submissionId: submission.id,
+                        defaultValues:[ { answerId: submission.answer.id, text: submission.text??submission.answer.text } ]
+                    }
                 }
             })
         })
@@ -32,12 +34,12 @@ export class QuestionsAnswerService{
             questions.forEach((q, index) =>{
                 if(q.id ===submission.questionId) {
                     questionsSubmitted[index] ={
-                    ...q,
-                    submissionId: submission.id,
-                    defaultValues:[ { answerId: submission.answerId, text: submission.text } ]
-                }
+                        ...q,
+                        submissionId: submission.id,
+                        defaultValues:[ { answerId: submission.answerId, text: submission.text } ]
+                    }
                 responsesFound++;
-            }
+                }
             })
         });
         return {questionsSubmitted, allFound: responsesFound ===questions.length}
