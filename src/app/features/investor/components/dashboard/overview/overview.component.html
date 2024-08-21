@@ -63,8 +63,7 @@
             <td class="">{{ business.growthStage }}</td>
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-              (click)="cancelInterest(business.id)">Decline</button>
+              <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(business.id)">Decline</button> -->
               <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
                 <mat-icon class="small-icon">visibility</mat-icon>
               </div>
@@ -100,7 +99,7 @@
         <div class="flex justify-end details">
           <td class="flex space-x-2 justify-center p-2">
             <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
-            <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedMatchedBusiness.id)">Decline</button>
+            <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedMatchedBusiness.id)">Decline</button> -->
             <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
               Back to List
             </button>
@@ -131,8 +130,7 @@
               <td class="">{{ business.company.businessSubsector }}</td>
               <td class="flex space-x-2 justify-center p-2">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                  (click)="cancelInterest(business.company.id)">Decline</button>
+                <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(business.company.id)">Decline</button> -->
 
                   <div class="py-auto eye" (click)="showDetails(business)">
                     <mat-icon class="small-icon">visibility</mat-icon>
@@ -270,7 +268,7 @@
           <div class="flex justify-end details">
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(selectedBusiness.company.id)">Connect</button>
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1"(click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
+              <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1"(click)="cancelInterest(selectedBusiness.company.id)">Decline</button> -->
               <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                 Back to List
               </button>               
@@ -308,8 +306,7 @@
             <td class="">{{ business.company.businessSubsector }}</td>
             <td class="">{{ business.company.growthStage }}</td>
             <td class="flex space-x-2 justify-center p-2">
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                (click)="cancelConnection(business.company.id)">Decline</button>
+              <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(business.company.id)">Decline</button> -->
 
                 <div class="py-auto eye" (click)="showDetails(business)">
                   <mat-icon class="small-icon">visibility</mat-icon>
@@ -368,7 +365,7 @@
         <!-- Back Button -->
         <div class="flex justify-end details">
           <td class="flex space-x-2 justify-center p-2">
-            <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(selectedBusiness.company.id)">Decline</button>
+            <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(selectedBusiness.company.id)">Decline</button> -->
               <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>              
           </td>
         </div>
