@@ -43,8 +43,8 @@ export class QuestionsAnswerService{
         return {questionsSubmitted, allFound: responsesFound ===questions.length}
     }
 
-    investorEligibilityQuestionsAnswers(questions:Question[]) {
-        const draft =this._userSubmissionsService.investorEligibilityDraft.flat();
+    investorEligibility(questions:Question[]) {
+        const draft =this._userSubmissionsService.investorEligibilitySubmissions.flat();
         if(draft.length) {
             const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
             if(allFound) return of(questionsSubmitted);
@@ -55,7 +55,7 @@ export class QuestionsAnswerService{
     }
 
     businessInformation(questions:Question[]) {
-        const draft =this._userSubmissionsService.businessInformationDraft.flat();
+        const draft =this._userSubmissionsService.businessInformationSubmissions.flat();
         if(draft.length) {
             const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
             if(allFound) return of(questionsSubmitted);
@@ -66,7 +66,7 @@ export class QuestionsAnswerService{
     }
 
     investorPreparedness(questions:Question[]) {
-        const draft =this._userSubmissionsService.investorPreparednessDraft.flat();
+        const draft =this._userSubmissionsService.investorEligibilitySubmissions.flat();
         if(draft.length) {
             const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
             if(allFound) return of(questionsSubmitted);
@@ -77,7 +77,7 @@ export class QuestionsAnswerService{
     }
 
     impactAssessment(questions:Question[]) {
-        const draft =this._userSubmissionsService.impactAssessmentDraft.flat();
+        const draft =this._userSubmissionsService.impactAssessmentSubmissions.flat();
         if(draft.length) {
             const {questionsSubmitted, allFound} =this._searchAnswersFromDrafts(draft, questions);
             if(allFound) return of(questionsSubmitted);
