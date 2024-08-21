@@ -1,10 +1,9 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, map, Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { catchError, EMPTY, forkJoin, map, Observable } from 'rxjs';
 import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
-import { RequestType, Submission, SubmissionResponse, UserSubmissionResponse } from '../../interfaces/submission.interface';
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
-import { SubMissionStateService } from './submission-state.service';
+import { RequestType, Submission, SubmissionResponse, UserSubmissionResponse } from '../../interfaces/submission.interface';
 
 @Injectable({ providedIn: 'root' })
 export class SubmissionService extends BaseHttpService {
@@ -41,8 +40,7 @@ export class SubmissionService extends BaseHttpService {
   }
 
   editSubmissions(submissions: Submission[]): Observable<SubmissionResponse[]> {
-    const requests =submissions.map(submission =>this.update(`${BASE_URL}/submissions`, submission.id??0, {answerId: submission.answerId, text: submission.text}));
-    
+    const requests =submissions.map(submission =>this.update(`${BASE_URL}/submissions`, submission.id??0, {text: submission.text}));
     return forkJoin(requests).pipe(map(res =>{
       return res;
     })) as Observable<SubmissionResponse[]>
@@ -77,15 +75,17 @@ export class SubmissionService extends BaseHttpService {
   }
 
   saveSectionSubmissions(submissions:Submission[][], request =RequestType.SAVE) {
-  
     const requests =request ==RequestType.SAVE
-      ? submissions.map(submission =>this.createMultipleSubmissions(submission.map(sub =>({userId: sub.userId, questionId: sub.questionId, answerId: sub.answerId, text: sub.text}))))
+      ? submissions.filter(submission =>submission.length).map(submission =>this.createMultipleSubmissions(submission.map(sub =>({userId: sub.userId, questionId: sub.questionId, answerId: sub.answerId, text: sub.text}))))
       : request ==RequestType.EDIT
-      ? submissions.map(submission =>this.editSubmissions(submission))
+      ? submissions.filter(submission =>submission.length).map(submission =>this.editSubmissions(submission))
       : [];
-
     return forkJoin(requests).pipe(map(res =>{
       return res;
-    }), )
+    }), 
+    catchError(err =>{
+      return EMPTY;
+    })
+  )
   }
 }
