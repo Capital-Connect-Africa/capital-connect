@@ -53,7 +53,8 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
-      <a class="edit__cta__btn">Edit Submission</a>
+      <a routerLink="/business/investor-eligibility" class="edit__cta__btn" *ngIf="currentModal === 'eligibility' && eligibilityAnswers.length > 0">Edit Submission</a>
+      <a routerLink="/business/investor-preparedness" class="edit__cta__btn" *ngIf="currentModal === 'preparedness' && preparednessAnswers.length > 0">Edit Submission</a>
       <section class="score-section">
         <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
         <h2>{{currentModal==="eligibility"? investorEligibilityScore
@@ -185,6 +186,7 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
+      <a routerLink="/business/financials" class="edit__cta__btn" *ngIf="factSheetAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(factSheetAnswers.length > 0)">
@@ -254,6 +256,7 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
+      <a routerLink="/business/impact-assessment" class="edit__cta__btn" *ngIf="impactElementAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(impactElementAnswers.length > 0)">
