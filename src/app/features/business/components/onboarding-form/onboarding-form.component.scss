@@ -1,0 +1,34 @@
+@import '../../styles/index.layout.scss';
+@import '../../styles/business.components.steps.scss';
+
+form{
+  gap: 1.5rem;
+
+  .btns__group{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    .active{
+      color: white;
+      padding: .8rem 3rem;
+      border-radius: .5rem;
+      background-color: $primary-color;
+      
+    }
+    .btn__disabled{
+      cursor: not-allowed;
+      padding: .8rem 3rem;
+      border-radius: .5rem;
+      background-color: $gray-500;
+      color: rgba(255, 255, 255, 0.966);
+    }
+
+    .btn__link{
+      color: $primary-color;
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+  }
+}
