@@ -26,3 +26,38 @@
   width: 15rem;
   padding: 2rem;
 }
+
+.stats__section{
+  display: flex;
+  padding-bottom: 2rem;
+  flex-direction: column;
+  .stat__title{
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333333d8;
+    text-transform: uppercase;
+  }
+  .stat__card{
+    padding: 1rem;
+    display: flex;
+    color: white;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .user__card{
+    padding: 1rem;
+
+    .bg__icon{
+      display: flex;
+      width: max-content;
+      height: max-content;
+      padding: .5rem;
+      background-color: rgba(255, 255, 255, 0.096);
+    }
+    p{
+      margin: 0;
+      padding: 0;
+      line-height: 1rem;
+    }
+  }
+}
