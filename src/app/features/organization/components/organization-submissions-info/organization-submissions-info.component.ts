@@ -100,7 +100,6 @@ export class OrganizationSubmissionsInfoComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    debugger
     if (changes['company'] && changes['company'].currentValue) {
       this.company = changes['company'].currentValue;
       this.owner = this.company.user

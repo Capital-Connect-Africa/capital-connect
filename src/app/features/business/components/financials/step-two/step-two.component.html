@@ -3,9 +3,9 @@
     <div class="form_content__container">
       <div class="header">
         <div class="steps__bar">
-          <p>Step 2 of 4</p>
+          <p>Step 2 of 3</p>
           <ul class="indicators">
-            @for (step of [].constructor(4); track $index){
+            @for (step of [].constructor(3); track $index){
             <li [class.active]="($index +1) <= 2"></li>
             }
           </ul>

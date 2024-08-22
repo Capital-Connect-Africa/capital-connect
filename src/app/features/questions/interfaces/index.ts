@@ -40,7 +40,7 @@ export interface Question {
   id: number;
   answers: Answer[],
   submissionId?: number,
-  defaultValues? :{answerId: number, text?: string}[]
+  defaultValues? :{answerId: number, text?: string, submissionId?:number}[]
 }
 
 export interface SubSection {

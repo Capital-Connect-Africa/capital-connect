@@ -3,7 +3,7 @@ import {SidenavComponent} from "../../../../core";
 import {MainComponent} from "../../components/dashboard/main/main.component";
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'investor-dashboard',
   standalone: true,
   imports: [
     SidenavComponent,
