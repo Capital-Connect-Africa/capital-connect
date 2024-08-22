@@ -19,8 +19,11 @@
         </filter>
         </defs>
     </svg>
-    <h2>Investor/Funder Preparedness has been captured successfully!</h2>
-    <p>Thank you {{currentUserName}} for completing</p>
-    <button (click)="goToBusinessInformation()" class="btn">Proceed to your Business Information</button>
-    <a  (click)="calculateScore()">Check my Eligibility Score</a>
+
+    <ng-container *ngIf="currentMode$ | async as currentMode">
+        <h2>{{currentMode ==mode.EDIT?'Investor/Funder Preparedness has been updated successfully!': 'Investor/Funder Preparedness has been captured successfully!'}}</h2>
+        <button class="btn" (click)="goToDashboard()" *ngIf="currentMode ==mode.EDIT">Proceed to Dashboard</button>
+        <button class="btn" (click)="goToBusinessInformation()" *ngIf="currentMode ==mode.SAVE">Proceed to investor/Funder Preparedness</button>
+        <a (click)="calculateScore()">Check my Eligibility Score</a>
+    </ng-container>
 </div>

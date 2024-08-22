@@ -50,7 +50,12 @@
     <div>
       <h3>{{subTitle}}</h3>
       <p>{{body}}</p>
-      <a><button href="#" (click)="createBooking()">{{linkLabel}}</button></a>
+      <a *ngIf="linkLabel !== 'Submit Special Criteria Form Request'"><button href="#" (click)="createBooking()">{{linkLabel}}</button></a>
+      <a href="mailto:services@capitalconnect.africa" target="_blank"
+       *ngIf="linkLabel === 'Submit Special Criteria Form Request'"><button>{{linkLabel}}</button></a>
+
+
+
     </div>
   </div>
 

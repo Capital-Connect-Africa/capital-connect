@@ -50,7 +50,7 @@ export class DynamicRoutingService {
   getNextRoute(){
     const init$ =this._routingService.nextRoute().pipe(map(res =>{
       if(!res.length) return this._authStateService.logout();
-      if(res.length >1) return this._route.navigateByUrl('/user-profile');
+      if(res.length >1) return this._route.navigateByUrl('/business');
       return this._route.navigateByUrl(res[0].url);
     }))
     return init$;

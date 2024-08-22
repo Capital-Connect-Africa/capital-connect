@@ -19,7 +19,10 @@
         </filter>
         </defs>
     </svg>
-    <h2>Impact assessment has been captured successfully!</h2>
-    <button class="btn" (click)="goToDashboard()">Proceed to dashboard</button>
+    
+    <ng-container *ngIf="currentMode$ | async as currentMode">
+        <h2>{{currentMode ==mode.EDIT?'Impact assessment has been updated successfully!': 'Impact assessment has been captured successfully!'}}</h2>
+    </ng-container>
+    <button class="btn" (click)="goToDashboard()">Proceed to Dashboard</button>
     <a (click)="calculateScore()">Check my Eligibility Score</a>
 </div>

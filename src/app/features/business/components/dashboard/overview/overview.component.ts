@@ -9,7 +9,7 @@ import { CompanyStateService } from "../../../../organization/services/company-s
 import { BusinessOnboardingScoringService } from "../../../../../shared/services/business.onboarding.scoring.service";
 import { MatchedInvestor } from "../../../../../shared/interfaces";
 import { PdfGeneratorService } from '../../../../../shared/services/pdf-generator.service';
-import { SubMissionStateService } from '../../../../../shared';
+import { SharedModule, SubMissionStateService } from '../../../../../shared';
 import { UserSubmissionResponse } from '../../../../../shared';
 import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
@@ -26,7 +26,8 @@ import { RoutingService } from '../../../../../shared/business/services/routing.
     CommonModule,
     ModalComponent,
     RemoveQuotesPipe,
-    RouterModule
+    RouterModule,
+    SharedModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'

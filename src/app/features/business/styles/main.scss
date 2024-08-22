@@ -67,8 +67,9 @@
     grid-template-rows: max-content auto;
 
     main{
+      gap: .75rem;
       grid-template-columns: auto 300px;
-      padding: 1rem 2rem;
+      padding: 1rem 1rem 1rem 2rem;
       .right__col{
         display: flex;
       }

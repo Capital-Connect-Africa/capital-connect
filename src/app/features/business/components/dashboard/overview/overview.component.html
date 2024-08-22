@@ -19,7 +19,7 @@
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact element assessment', icon: impactElementAnswers.length >0? '':'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
+  <app-card [detail]="{title: 'Impact Element Assessment', icon: impactElementAnswers.length >0? '':'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
   (click)="setDialog('impactAssesment')">
     <p class="helper__text text__red">See suggested actions</p>
   </app-card>
@@ -30,9 +30,13 @@
     <p class="helper__text text__red">View</p>
   </app-card>
 
-
   <app-card (click)="showMatchedInvestors()"
     [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: true, period: '0 Past Months'}">
+    <p class="helper__text text__red">View</p>
+  </app-card>
+
+  <app-card 
+    [detail]="{title: 'Connected Investors', value: '0', featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
 </app-overview-section>
@@ -43,12 +47,14 @@
     <img src="../../../../../../assets/img/logo.png" alt="logo" />
     <section class="brand-details">
       <h2>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility Report"
-        :currentModal==="preparedness"?"your Investor/Funder Preparedness Report":""}}</h2>
+          :currentModal==="preparedness"?"Your Investor/Funder Preparedness Report":""}}</h2>
       <h3>{{ currentCompany.name }}</h3>
       <p>Country - {{ currentCompany.country }}</p>
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
+      <a routerLink="/business/investor-eligibility" class="edit__cta__btn" *ngIf="currentModal === 'eligibility' && eligibilityAnswers.length > 0">Edit Submission</a>
+      <a routerLink="/business/investor-preparedness" class="edit__cta__btn" *ngIf="currentModal === 'preparedness' && preparednessAnswers.length > 0">Edit Submission</a>
       <section class="score-section">
         <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
         <h2>{{currentModal==="eligibility"? investorEligibilityScore
@@ -180,6 +186,7 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
+      <a routerLink="/business/financials" class="edit__cta__btn" *ngIf="factSheetAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(factSheetAnswers.length > 0)">
@@ -249,6 +256,7 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
+      <a routerLink="/business/impact-assessment" class="edit__cta__btn" *ngIf="impactElementAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(impactElementAnswers.length > 0)">

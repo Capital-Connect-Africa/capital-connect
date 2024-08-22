@@ -1,16 +1,17 @@
-import { Component, inject, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { switchMap, tap } from 'rxjs';
 import { RouterLink } from "@angular/router";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Observable, tap } from 'rxjs';
+import { CommonModule } from '@angular/common';
 import { DropdownModule } from "primeng/dropdown";
+import { Submission } from "../../../../../shared";
 import { MultiSelectModule } from "primeng/multiselect";
-import { QuestionsService } from '../../../../questions/services/questions/questions.service';
+import { Component, inject, Input } from '@angular/core';
 import { Question, QuestionType } from '../../../../questions/interfaces';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
-import { Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
-import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
+import { QuestionsService } from '../../../../questions/services/questions/questions.service';
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { QuestionsAnswerService } from '../../../../../shared/business/services/question.answers.service';
+import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
 
 @Component({
   selector: 'app-step-one',
@@ -23,25 +24,34 @@ import { UserSubmissionsService } from '../../../../../core/services/storage/use
 export class StepOneComponent {
   questions: Question[] = [];
   private _formBuilder = inject(FormBuilder)
-  private _questionService = inject(QuestionsService);
   private _pageService = inject(BusinessPageService);
-  private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService);
-  private _submissionsStorageService =inject(UserSubmissionsService);
+  private _questionService = inject(QuestionsService);
+  private _questionAnswersService =inject(QuestionsAnswerService);
+  private _userSubmissionsStorageService =inject(UserSubmissionsService);
 
   formGroup: FormGroup = this._formBuilder.group({});
   
-  questions$ = this._questionService.getQuestionsOfSubSection(BUSINESS_INFORMATION_SUBSECTION_IDS.STEP_ONE).pipe(tap(questions => {
-    this.questions = questions
-    this._createFormControls();
-  }))
+  questions$ = this._questionService.getQuestionsOfSubSection(BUSINESS_INFORMATION_SUBSECTION_IDS.STEP_ONE).pipe(
+    switchMap(questions =>{
+      return this._questionAnswersService.businessInformation(questions)
+    }),
+    tap(res =>{
+      this.questions = res;
+      this._createFormControls();
+    })
+  )
 
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control([], Validators.required));
+        const answer =question.defaultValues??[];
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
+      } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control('', Validators.required));
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
       }
     });
   }
@@ -55,7 +65,6 @@ export class StepOneComponent {
   handleSubmit() {
     const formValues = this.formGroup.value;
     const submissionData: Submission[] = [];
-
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
         const selectedAnswers = formValues['question_' + question.id];
@@ -63,6 +72,7 @@ export class StepOneComponent {
           submissionData.push({
             questionId: question.id,
             answerId: answerId,
+            id: question.submissionId,
             text: ''
           });
         });
@@ -72,6 +82,7 @@ export class StepOneComponent {
 
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: parseInt(answerId),
           text: formValues['question_' + question.id]
         });
@@ -79,12 +90,13 @@ export class StepOneComponent {
       else {
         submissionData.push({
           questionId: question.id,
+          id: question.submissionId,
           answerId: Number(formValues['question_' + question.id]),
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
       }
     });
-    this._submissionsStorageService.businessInformationSubmissions.push(submissionData)
+    this._userSubmissionsStorageService.saveBusinessInformationSubmissionProgress(submissionData, 1);
     this.setNextStep();
   }
 
