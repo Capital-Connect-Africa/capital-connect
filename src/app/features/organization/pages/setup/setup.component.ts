@@ -32,7 +32,7 @@ export class SetupComponent implements OnInit {
 
   isEditMode = !!this._activateRoute.snapshot.paramMap.get('id')?.length;
   editId = this._activateRoute.snapshot.paramMap.get('id')
-  current_step = 1;
+  current_step = 2;
   steps = [1, 2, 3, 4];
   companyToBeEdited!: CompanyResponse;
 
@@ -84,7 +84,7 @@ export class SetupComponent implements OnInit {
   }
 
   goToBusinessProfile() {
-    this._router.navigateByUrl('/business/profile')
+    // this._router.navigateByUrl('/business/investor-eligibility')
   }
   goToDashBoard() {
     this._router.navigateByUrl('/business')
