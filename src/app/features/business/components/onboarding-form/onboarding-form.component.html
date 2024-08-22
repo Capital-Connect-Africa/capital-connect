@@ -1,0 +1,60 @@
+<ng-container *ngIf="submission$ | async"></ng-container>
+<ng-container *ngIf="choices$ | async"></ng-container>
+<div class="container">
+    <div class="content">
+        <h2>Business Profile</h2>
+        <form [formGroup]="onboardingForm">
+            <div class="input__wrapper">
+                <label>What is your preferred structure for the capital raise?</label>
+                <div class="form__col">
+                    <p-multiSelect
+                      class ="input__field"
+                      styleClass ="w-full gap-4"
+                      [formControlName] ="'investment_structures'"
+                      [options]="investment_structures"
+                      optionLabel="title"
+                      optionValue="id"
+                      [placeholder]="'Select option(s)'" />
+                  </div>
+            </div>
+            <div class="input__wrapper">
+                <label>What will be your use of funds?</label>
+                <div class="form__col">
+                    <p-multiSelect
+                      class ="input__field"
+                      styleClass ="w-full gap-4"
+                      [options]="use_of_funds"
+                      optionLabel="title"
+                      optionValue="id"
+                      [formControlName] ="'use_of_funds'"
+                      [placeholder]="'Select option(s)'" 
+                      />
+                  </div>
+            </div>
+            <div class="input__wrapper">
+                <label>What elements of impact does your business focus on?</label>
+                <div class="form__col">
+                    <p-multiSelect
+                      class ="input__field"
+                      styleClass ="w-full gap-4"
+                      [options]="esg_focus"
+                      optionLabel="title"
+                      optionValue="id"
+                      [formControlName] ="'esg_focus'"
+                      [placeholder]="'Select option(s)'" />
+                  </div>
+            </div>  
+            <div  class="input__wrapper">
+                <label>How much investment in USD is the business seeking to raise?</label>
+                <div class="form__col">
+                    <input class="input__field" min="0" type="number" placeholder="Enter amount" [formControlName] ="'investiment_ticket'" />
+                </div>
+            </div>
+            <div class="btns__group">
+                <button type="submit" (click) ="handleSubmit()" [disabled]="!onboardingForm.valid" class="active" [ngClass]="{btn__disabled: !onboardingForm.valid}">Submit</button>
+                <button type="button" (click)="goToDashboard()" class="btn__link">Skip and go back to dashboard</button>
+            </div> 
+        </form>
+    </div>
+  </div>
+  

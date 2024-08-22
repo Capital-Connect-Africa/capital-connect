@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BASE_URL, BaseHttpService } from '../../../core';
-import { catchError, EMPTY, map, Observable } from 'rxjs';
+import { catchError, EMPTY, forkJoin, map, Observable } from 'rxjs';
 import { Company, CompanyInput, CompanyResponse } from '../interfaces';
+import { InvestorMatchingQuestions } from '../../business/interfaces/choice.interface';
 
 @Injectable({providedIn: 'root'})
 export class CompanyHttpService extends BaseHttpService {
@@ -65,5 +66,29 @@ export class CompanyHttpService extends BaseHttpService {
       return EMPTY
     }));
   }
+
+  fetchQuestionChoices(){
+    const requests =[
+      this.read(`${BASE_URL}/stages`),
+      this.read(`${BASE_URL}/esg-focus`),
+      this.read(`${BASE_URL}/use-funds`),
+      this.read(`${BASE_URL}/investment-structures`),
+      this.read(`${BASE_URL}/registration-structures`),
+      this.read(`${BASE_URL}/company/list/no-of-employees`),
+      this.read(`${BASE_URL}/company/list/years-of-operation`)
+    ]
+
+    return forkJoin(requests).pipe(map(res =>{
+        return {
+          esg_focus: res[1],
+          use_of_funds: res[2],
+          stage_of_growth: res[0],
+          years_of_operation: res[6],
+          number_of_employees: res[5],
+          investment_structures: res[3],
+          registration_structure: res[4],
+        }
+    })) as Observable<InvestorMatchingQuestions>
+}
 
 }
