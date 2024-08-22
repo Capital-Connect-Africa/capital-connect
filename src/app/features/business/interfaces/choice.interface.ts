@@ -4,8 +4,12 @@ export interface Choice{
     description: string,
 }
 
-export interface  MatchingChoices{
-    use_of_funds: Choice[],
-    investment_structures: Choice[],
+export interface  InvestorMatchingQuestions{
     esg_focus: Choice[]
+    use_of_funds: Choice[],
+    stage_of_growth: Choice[],
+    years_of_operation: Choice[],
+    number_of_employees: Choice[],
+    investment_structures: Choice[],
+    registration_structure: Choice[],
 }
