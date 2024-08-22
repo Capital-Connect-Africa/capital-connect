@@ -1,0 +1,216 @@
+<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
+<ng-container *ngIf="markAsInteresting$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true" [showBanner]="false" />
+  </div>
+
+  <main>
+    <p class="brand__name">Business Name</p>
+    <div class="left__col">
+
+      <div *ngIf="table">
+        <h5><strong>Matched Businesses</strong></h5>
+        <p>You had a 100% Matching to {{this.matchedBusinesses.length}} Businesses</p>
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+          No matched businesess found. <br /> Check again later.
+        </div>
+      </div>
+
+
+      <div *ngIf="!table">
+        <h6 class="text-xl font-semibold mb-2 text-center"><strong>Matched Businesses Information</strong></h6>
+      </div>
+      
+
+
+
+
+
+      <div class="table-parent">
+        <div class="">
+          <table class="table" *ngIf="table">
+            <tbody>
+              <tr class="border-b border-gray-200">
+                <td class="font-bold">#</td>
+                <td class="font-bold">Country</td>
+                <td class="font-bold">Business Sector</td>
+                <td class="font-bold">Business Sub Sector</td>
+                <td class="font-bold">Growth Stage</td>
+                <td class="flex font-bold space-x-2">Actions</td>
+              </tr>
+
+
+              <tr *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex"
+                class="border-b border-gray-200">
+                <td class="font-bold">{{ i + 1 }}</td>
+                <td class="">{{ business.country }}</td>
+                <td class="">{{ business.businessSector }}</td>
+                <td class="">{{ business.businessSubsector }}</td>
+                <td class="">{{ business.growthStage }}</td>
+                <td class="flex space-x-2 justify-center p-2">
+                  <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+                  <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                    (click)="cancelInterest(business.id)">Decline</button>
+
+                  <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                    <mat-icon class="small-icon">visibility</mat-icon>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <!-- Matched Business Extra Details -->
+          <div *ngIf="selectedMatchedBusiness" class="mx-auto  shadow-xl  p-6">
+            <!-- Company Details -->
+            <div class="mb-8 p-6 company__info">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <p class="font-semibold text-gray-700">Country: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.country }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Sector: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSector }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Sub Sector: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSubsector }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Growth Stage: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.growthStage }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-700">Number of Employees: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.numberOfEmployees }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Scores -->
+            <!-- <div class="mb-8">
+              <h5 class="text-xl font-semibold text-gray-700 mb-4">Scores</h5>
+              <div class="flex flex-col sm:flex-row justify-between gap-4">
+                <div>
+                  <p class="text-gray-700 font-medium">
+                    Investor Eligibility Score: 
+                    <span class="font-normal">{{ investorEligibilityScore ? investorEligibilityScore : '0' }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium">
+                    Investor Preparedness Score: 
+                    <span class="font-normal">{{ investorPreparednessScore ? investorPreparednessScore : '0' }}</span>
+                  </p>
+                </div>
+              </div>
+            </div> -->
+          
+            <!-- Impact Elements -->
+            <!-- <div class="mb-8">
+              <h5 class="text-xl font-semibold text-gray-700 mb-4">Impact Element Assessment</h5>
+              <div>
+                <h6 class="text-lg font-medium text-gray-800 mb-2">Feedback and Recommendations</h6>
+                <div *ngIf="(impactElementAnswers.length > 0)" class="space-y-4">
+                  <ul class="list-disc pl-5 space-y-4">
+                    <li *ngFor="let submission of impactElementAnswers">
+                      <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-gray-700">{{ submission.question.text | removeQuotes }}</h3>
+                        <h4 class="text-gray-600">{{ submission.answer.text == 'OPEN' ? submission.text : submission.answer.text | removeQuotes }}</h4>
+                        <p class="text-gray-500">{{ submission.explanation | removeQuotes }}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="(impactElementAnswers.length === 0)" class="text-gray-600">
+                  <p>No submissions found.</p>
+                </div>
+              </div>
+            </div> -->
+          
+            <!-- Back Button -->
+            <div class="flex justify-end details">
+              <td class="flex space-x-2 justify-center p-2">
+                <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedMatchedBusiness.id)">Decline</button>
+                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+                  Back to List
+                </button>
+              </td>
+            </div>
+          </div>
+          
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div class="right__col">
+      <app-alert [action]="showalert" className="rounded-[.5rem]" />
+      <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
+        (click)="showDialog()">
+        <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
+      </app-card>
+
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+  </main>
+</div>
+
+
+
+<app-modal [(visible)]="decline" title="Reasons for declining" 
+  helperText="Tell us why you are declining">
+  <div class="input__wrapper">
+    <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+    
+    <p-multiSelect class="input__field" styleClass="w-full gap-4"
+      optionValue="name"
+      formControlName="countriesOfInvestmentFocus"  optionLabel="name"
+      placeholder="Select countries"></p-multiSelect>
+  </div>
+
+</app-modal>
+
+
+
+
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+    <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone
+      number': 'Verify your phone number' }}</label>
+    <input formControlName="field" class="border"
+      [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'" />
+    <button class="cta__btn" [disabled]="phoneUpdateForm.invalid"
+      (click)="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
+  </form>
+</p-dialog>
+
+
+
+
+

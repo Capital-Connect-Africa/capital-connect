@@ -1,0 +1,163 @@
+@import "../../../../styles/main.scss";
+
+.main{
+
+  .company__info{
+    padding: 1cm;
+  }
+
+
+  height: 100%;
+  display: grid;
+  background-color: #F9FAFB;
+  .navbar{
+    display: flex;
+    padding-left: 1rem;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+    button{
+      display: flex;
+      background: none;
+    }
+  }
+  main{
+    gap: 2rem;
+    display: grid;
+    padding: 1rem;
+    .brand__name{
+      color: #031D16;
+      font-weight: 700;
+      line-height: 2rem;
+      font-size: 1.35rem;
+      font-family: $font-family-sans-serif;
+    }
+    .left__col,
+    .right__col{
+      width: 100%;
+      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .right__col{
+      gap: 2rem;
+    }
+  }
+}
+
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+
+.no-data{
+  height: 100%;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: $font-family-sans-serif;
+  line-height: 1.5rem;
+  color: #1C1C1E;
+}
+
+.details{
+  margin: auto;
+  padding: 1cm;
+}
+
+.eye {
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon */
+  padding: 0.5rem; /* Adjust padding as needed */
+}
+
+.small-icon {
+  font-size: 1.2rem; /* Adjust the size of the icon */
+}
+
+.btn{
+  padding: 12px 40px;
+  font-family: $font-family-sans-serif;
+}
+
+tbody tr{
+  text-align: center;
+  font-family: $font-family-sans-serif;
+}
+
+th{
+  text-align: start;
+}
+
+.table-parent{
+  margin: 20px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+}
+
+
+.business-details{
+  padding-bottom: 1rem;
+  .flex-layout{
+    padding: .75rem .5rem;
+  }
+  span{
+    flex: 1;
+    color: #1C1C1E;
+    font-weight: 700;
+    display: block;
+    text-align: left;
+    padding: .75rem 1rem;
+    font-family: $font-family-sans-serif;
+    width: max-content;
+  }
+  .cta-group{
+    flex: 5;
+    gap: 1rem;
+    a{
+      font-weight: 500;
+      color: #064635;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #064635;
+      padding: .5rem 2rem;
+    }
+
+  }
+
+}
+

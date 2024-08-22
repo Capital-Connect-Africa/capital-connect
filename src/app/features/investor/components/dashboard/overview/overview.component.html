@@ -8,8 +8,6 @@
 <ng-container *ngIf="rejectedCompanies$ | async"></ng-container>
 
 
-
-
 <app-overview-section>
   <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
     (click)="showDialog('matched_businesses')">
@@ -93,6 +91,23 @@
             <div>
               <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedMatchedBusiness.numberOfEmployees }}</span></p>
             </div>
+
+
+            <h1>Extra Details </h1>
+
+            <ng-container *ngIf="investorEligibilityScore$ | async">
+              <p>{{investorEligibilityScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf=" investorPreparednessScore$ | async">
+              <p>{{ investorPreparednessScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="impactAssessmentScore$ | async">
+              <p>{{ impactAssessmentScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="companyDetails$ | async">
+              <p>{{ companyDetails | json}}</p>
+            </ng-container>
+
           </div>
         </div>
           
@@ -172,6 +187,24 @@
               <div>
                 <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
               </div>
+
+
+              <h1>Extra Details </h1>
+
+              <ng-container *ngIf="investorEligibilityScore$ | async">
+                <p>{{investorEligibilityScore | json}}</p>
+              </ng-container>
+              <ng-container *ngIf=" investorPreparednessScore$ | async">
+                <p>{{ investorPreparednessScore | json}}</p>
+              </ng-container>
+              <ng-container *ngIf="impactAssessmentScore$ | async">
+                <p>{{ impactAssessmentScore | json}}</p>
+              </ng-container>
+              <ng-container *ngIf="companyDetails$ | async">
+                <p>{{ companyDetails | json}}</p>
+              </ng-container>
+
+
             </div>
           </div>
         
@@ -358,6 +391,22 @@
             <div>
               <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
             </div>
+
+
+            <h1>Extra Details </h1>
+
+            <ng-container *ngIf="investorEligibilityScore$ | async">
+              <p>{{investorEligibilityScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf=" investorPreparednessScore$ | async">
+              <p>{{ investorPreparednessScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="impactAssessmentScore$ | async">
+              <p>{{ impactAssessmentScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="companyDetails$ | async">
+              <p>{{ companyDetails | json}}</p>
+            </ng-container>
           </div>
         </div>
       
@@ -426,7 +475,22 @@
             </div>
             <div>
               <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
-            </div>    
+            </div>  
+            
+            <h1>Extra Details </h1>
+
+            <ng-container *ngIf="investorEligibilityScore$ | async">
+              <p>{{investorEligibilityScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf=" investorPreparednessScore$ | async">
+              <p>{{ investorPreparednessScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="impactAssessmentScore$ | async">
+              <p>{{ impactAssessmentScore | json}}</p>
+            </ng-container>
+            <ng-container *ngIf="companyDetails$ | async">
+              <p>{{ companyDetails | json}}</p>
+            </ng-container>
           </div>
         </div>
       
