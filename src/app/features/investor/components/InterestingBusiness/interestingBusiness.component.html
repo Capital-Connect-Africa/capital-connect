@@ -11,10 +11,17 @@
 
   <main>
     <div class="left__col">
-      <h5><strong>Interesting Businesess</strong></h5>
-      <p>Businesess Interested In</p>
-      <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
-        No interesting businesess found. <br /> Check again later.
+      <div *ngIf="table">
+        <h5><strong>Interesting Businesess</strong></h5>
+        <p>Businesess Interested In</p>
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
+          No interesting businesess found. <br /> Check again later.
+        </div>
+      </div>
+
+
+      <div *ngIf="!table">
+        <h6 class="text-xl font-semibold mb-2 text-center"><strong>Interesting Company Information</strong></h6>
       </div>
 
       <div class="table-parent">
@@ -49,10 +56,9 @@
 
 
         <!-- Intersting Business Extra Details -->
-        <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
+        <div *ngIf="selectedBusiness" class="mx-auto shadow-lg p-6">
           <!-- Company Details -->
-          <div class="mb-6 details">
-            <h6 class="text-xl font-semibold mb-2 text-center"><strong>Interesting Company Information</strong></h6>
+          <div class="mb-6 details company__info">
             <hr />
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -87,7 +93,7 @@
                     selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
               </div>
 
-
+<!-- 
               <h1>Extra Details </h1>
 
               <ng-container *ngIf="investorEligibilityScore$ | async">
@@ -101,7 +107,7 @@
               </ng-container>
               <ng-container *ngIf="companyDetails$ | async">
                 <p>{{ companyDetails | json}}</p>
-              </ng-container>
+              </ng-container> -->
 
 
             </div>
@@ -113,8 +119,7 @@
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1"
                 (click)="connect(selectedBusiness.company.id)">Connect</button>
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                (click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
+              <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
               <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                 Back to List
               </button>
@@ -133,9 +138,9 @@
 
 
     <div class="right__col">
-      <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}">
+      <!-- <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}">
         <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
-      </app-card>
+      </app-card> -->
 
       <app-advertisement-space [title]="'Advertise Here'"
         [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />

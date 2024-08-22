@@ -184,15 +184,15 @@ export class MatchedBusinessComponent {
   }
 
   cancelInterest(businessId: number): void {
-    this.decline = true
-    // this.cancelInterestWithCompany$ = this._businessMatchingService
-    // .cancelInterestWithCompany(businessId).pipe(
-    //   tap(() => {
-    //     this._feedBackService.success('Interest cancelled successfully.');
-    //     this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-    //     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-    //   })
-    // );
+    // this.decline = true
+    this.cancelInterestWithCompany$ = this._businessMatchingService
+    .cancelInterestWithCompany(businessId).pipe(
+      tap(() => {
+        this._feedBackService.success('Interest cancelled successfully.');
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
+      })
+    );
   }
 
 

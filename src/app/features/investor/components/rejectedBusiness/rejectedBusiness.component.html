@@ -19,10 +19,16 @@
 
   <main>
     <div class="left__col">
-      <h5><strong>Declined Businesess</strong></h5>
-      <p>You have declined these businesses</p>
-      <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!rejectedBusinesses.length">
-        No declined businesess found. <br /> Check again later.
+      <div *ngIf="table">
+        <h5><strong>Declined Businesess</strong></h5>
+        <p>You have declined these businesses</p>
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!rejectedBusinesses.length">
+          No declined businesess found. <br /> Check again later.
+        </div>
+      </div>
+
+      <div *ngIf="!table">
+        <h6 class="text-xl font-semibold mb-2 text-center"><strong>Rejected Company Information</strong></h6>
       </div>
 
 
@@ -31,7 +37,7 @@
       <div class="table-parent">
 
         <div>
-          <table class="table">
+          <table class="table" *ngIf="table">
             <tbody>
               <tr class="border-b border-gray-200">
                 <td class="font-bold">#</td>
@@ -63,10 +69,9 @@
           </table>
     
     
-          <div *ngIf="selectedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">          
+          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">          
             <!-- Company Details -->
-            <div class="mb-6 details">
-              <h6 class="text-xl font-semibold mb-2 text-center"><strong>Rejected Company Information</strong></h6>
+            <div class="mb-6 details company__info">
               <hr/>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -85,7 +90,7 @@
                   <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
                 </div>  
                 
-                <h1>Extra Details </h1>
+                <!-- <h1>Extra Details </h1>
     
                 <ng-container *ngIf="investorEligibilityScore$ | async">
                   <p>{{investorEligibilityScore | json}}</p>
@@ -98,7 +103,7 @@
                 </ng-container>
                 <ng-container *ngIf="companyDetails$ | async">
                   <p>{{ companyDetails | json}}</p>
-                </ng-container>
+                </ng-container> -->
               </div>
             </div>
           
@@ -128,9 +133,9 @@
 
 
     <div class="right__col">
-      <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}">
+      <!-- <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}">
         <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
-      </app-card>
+      </app-card> -->
 
       <app-advertisement-space [title]="'Advertise Here'"
         [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />

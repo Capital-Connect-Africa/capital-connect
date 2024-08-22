@@ -83,7 +83,8 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
    //Cancel Connection with a company
    cancelInterestWithCompany(companyId: number): Observable<void> {
     let body = {
-      declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
+      // declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
+      declineReasons: []
     }
     
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
