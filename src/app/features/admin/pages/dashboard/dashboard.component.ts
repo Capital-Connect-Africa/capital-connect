@@ -9,7 +9,7 @@ import { SidenavComponent } from '../../../../core';
 import { SharedModule } from '../../../../shared';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'admin-dashboard',
   standalone: true,
   imports: [CommonModule, CardModule, ButtonModule, UiComponent, MainComponent, SidenavComponent, SharedModule],
   templateUrl: './dashboard.component.html',
