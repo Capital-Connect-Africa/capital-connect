@@ -19,12 +19,18 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../../core';
 import { AdvertisementSpaceComponent } from '../../../../shared/components/advertisement-space/advertisement-space.component';
 import { DialogModule } from 'primeng/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputTextModule } from 'primeng/inputtext';
+import { MatIconModule } from '@angular/material/icon';
+import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'app-connected-business',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     OverviewSectionComponent,
     CardComponent,
     ModalComponent,
@@ -32,6 +38,12 @@ import { DialogModule } from 'primeng/dialog';
     NavbarComponent,
     AdvertisementSpaceComponent,
     DialogModule,
+    TableModule,
+    InputTextModule,
+    MatIconModule,
+    PaginatorModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss'
@@ -69,6 +81,12 @@ export class ConnectedBusinessComponent {
   investorEligibilityScore$ = new Observable<unknown>()
   investorPreparednessScore$ =  new Observable<unknown>()
   impactAssessmentScore$ = new Observable<unknown>()
+
+  globalFilter: string = '';
+  currentPage: number = 0;
+  rowsPerPage: number = 10;
+
+  
 
   table:boolean = true
   
@@ -173,6 +191,17 @@ export class ConnectedBusinessComponent {
     this.table = true
     this.selectedBusiness = null;
     this.selectedMatchedBusiness = null;
+  }
+
+
+  handlePageSizeChange(event: any) {
+    
+    // Update current page and rows per page based on the event
+    this.currentPage = event.first / event.rows; // Calculate the current page index
+    this.rowsPerPage = event.rows; // Get the number of rows per page
+
+    // Optionally, you can re-fetch or filter your data here based on the current page
+    // this.loadConnectedBusinesses(); // Adjust this to load data based on the new pagination state
   }
 
 

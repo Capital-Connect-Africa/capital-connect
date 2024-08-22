@@ -155,3 +155,18 @@ th{
 
 }
 
+
+.p-paginator .p-paginator-element {
+  cursor: pointer; /* Ensure the cursor is a pointer */
+}
+
+.p-paginator .p-paginator-element:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Slight hover effect */
+}
+
+.p-paginator .p-paginator-element:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 0 2px rgba(0, 0, 255, 0.5); /* Custom focus style */
+}
+
+

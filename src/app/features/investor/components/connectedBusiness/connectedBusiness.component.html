@@ -24,8 +24,72 @@
 
 
       <div class="table-parent">
-        <div >
-          <table class="table" *ngIf="table">
+        <div>
+
+
+          <p-table 
+              class="table" 
+              styleClass="p-datatable-gridlines" 
+              [value]="connectedBusinesses" 
+              [paginator]="true" 
+              [rows]="10" 
+              [rowHover]="true"
+              [rowsPerPageOptions]="[5,10,25,50]" 
+              [globalFilterFields]="['company.country', 'company.businessSubsector', 'company.growthStage']"
+              sortField="company.country" 
+              [sortOrder]="1" 
+              (onPage)="handlePageSizeChange($event)"
+              [totalRecords]="connectedBusinesses.length" 
+          >
+    <ng-template pTemplate="header">
+          <tr>
+            <th colspan="6">
+                <div class="flex justify-end items-center p-3 border border-gray-300 rounded">
+                    <mat-icon class="mr-2">search</mat-icon>
+                    <input 
+                        type="text" 
+                        pInputText 
+                        [(ngModel)]="globalFilter" 
+                        placeholder="Search companies..." 
+                        class="p-inputtext-sm text-center bg-gray-100 border border-gray-300 rounded p-2"
+                        style="width: 300px;"
+                    />
+                </div>
+            </th>
+        </tr>
+
+        <tr>
+            <th style="width: 5%;">#</th>
+            <th style="width: 25%;" pSortableColumn="company.country">Country <p-sortIcon field="company.country"></p-sortIcon></th>
+            <!-- <th style="width: 20%;" pSortableColumn="amountRaised">Amount Raised</th> -->
+            <th style="width: 25%;" pSortableColumn="company.businessSubsector">Business Sub Sector <p-sortIcon field="company.businessSubsector"></p-sortIcon></th>
+            <th style="width: 20%;" pSortableColumn="company.growthStage">Growth Stage <p-sortIcon field="company.growthStage"></p-sortIcon></th>
+            <th style="width: 10%;">Actions</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-business let-i="rowIndex">
+        <tr class="border-b border-gray-200">
+            <td>{{ i + 1 }}</td>
+            <td>{{ business.company.country }}</td>
+            <!-- <td>N/A</td> -->
+            <td>{{ business.company.businessSubsector }}</td>
+            <td>{{ business.company.growthStage }}</td>
+            <td class="flex space-x-2 justify-center p-2">
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(business.company.id)">Decline</button>
+                <div class="py-auto eye" (click)="showDetails(business)">
+                    <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+
+
+
+          <!-- <table class="table" *ngIf="table">
             <tbody>
               <tr class="border-b border-gray-200">
                 <td class="font-bold">#</td>
@@ -53,7 +117,7 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
 
 
 
@@ -61,40 +125,49 @@
 
 
           <!-- Connected Business Extra Details -->
-          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">          
+          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">
             <!-- Company Details -->
             <div class="mb-6 details company__info">
-              <hr/>
+              <hr />
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+                  <p class="font-bold">Name: <span class="font-light">{{ selectedBusiness.company.name }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span>
+                  </p>
                 </div>
                 <div>
-                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Products and Services: <span class="font-light">{{ selectedBusiness.company.productsAndServices }}</span></p>
+                  <p class="font-bold">Products and Services: <span class="font-light">{{
+                      selectedBusiness.company.productsAndServices }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+                  <p class="font-bold">Registration Structure: <span class="font-light">{{
+                      selectedBusiness.company.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Years of Operation: <span class="font-light">{{ selectedBusiness.company.yearsOfOperation }}</span></p>
+                  <p class="font-bold">Years of Operation: <span class="font-light">{{
+                      selectedBusiness.company.yearsOfOperation }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedBusiness.company.numberOfEmployees }}</span></p>
+                  <p class="font-bold">Number of Employees: <span class="font-light">{{
+                      selectedBusiness.company.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+                  <p class="font-bold">Full Time Business: <span class="font-light">{{
+                      selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
 
 
@@ -114,21 +187,23 @@
                 </ng-container> -->
               </div>
             </div>
-          
-                
+
+
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(selectedBusiness.company.id)">Decline</button>
-                  <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>              
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="cancelConnection(selectedBusiness.company.id)">Decline</button>
+                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
+                  List</button>
               </td>
             </div>
           </div>
-          
+
         </div>
       </div>
 
-      
+
 
 
 
@@ -146,18 +221,3 @@
     </div>
   </main>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   

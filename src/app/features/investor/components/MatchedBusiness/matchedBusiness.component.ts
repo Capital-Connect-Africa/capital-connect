@@ -25,6 +25,7 @@ import { getInvestorEligibilitySubsectionIds, IMPACT_ASSESMENT_SUBSECTION_IDS, I
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { SubMissionStateService, UserSubmissionResponse } from '../../../../shared';
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-matched-business',
@@ -43,7 +44,8 @@ import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
     DialogModule,
     ReactiveFormsModule,
     ModalComponent,
-    RemoveQuotesPipe
+    RemoveQuotesPipe,
+    TableModule
 ],
   templateUrl: './matchedBusiness.component.html',
   styleUrl: './matchedBusiness.component.scss'
