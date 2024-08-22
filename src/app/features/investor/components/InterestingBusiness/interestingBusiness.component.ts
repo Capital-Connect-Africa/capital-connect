@@ -1,37 +1,42 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Observable, tap,EMPTY } from "rxjs";
-import { OverviewSectionComponent } from "../../../../../shared/components/overview-section/overview-section.component";
-import { CardComponent } from "../../../../../shared/components/card/card.component";
-import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
-import { BusinessAndInvestorMatchingService } from "../../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../../shared/interfaces';
-import { FeedbackService } from '../../../../../core';
-import { AngularMaterialModule } from '../../../../../shared';
-import { CompanyHttpService } from '../../../../organization/services/company.service';
-import { CompanyResponse, GrowthStage } from '../../../../organization/interfaces';
-import { BusinessOnboardingScoringService } from '../../../../../shared/services/business.onboarding.scoring.service';
-import { Score } from '../../../../../shared/business/services/onboarding.questions.service';
-import { getInvestorEligibilitySubsectionIds } from '../../../../../shared/business/services/onboarding.questions.service';
-import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
-import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
+import { OverviewSectionComponent } from "../../../../shared/components/overview-section/overview-section.component";
+import { CardComponent } from "../../../../shared/components/card/card.component";
+import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../shared/interfaces';
+import { FeedbackService } from '../../../../core';
+import { AngularMaterialModule } from '../../../../shared';
+import { CompanyHttpService } from '../../../organization/services/company.service';
+import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
+import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
+import { Score } from '../../../../shared/business/services/onboarding.questions.service';
+import { getInvestorEligibilitySubsectionIds } from '../../../../shared/business/services/onboarding.questions.service';
+import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
+import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { Router } from '@angular/router';
-
+import { NavbarComponent } from '../../../../core';
+import { AdvertisementSpaceComponent } from '../../../../shared/components/advertisement-space/advertisement-space.component';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
-  selector: 'app-overview',
+  selector: 'app-interesting-business',
   standalone: true,
   imports: [
     CommonModule,
     OverviewSectionComponent,
     CardComponent,
     ModalComponent,
-    AngularMaterialModule
+    AngularMaterialModule,
+    NavbarComponent,
+    AdvertisementSpaceComponent,
+    DialogModule,
   ],
-  templateUrl: './overview.component.html',
-  styleUrl: './overview.component.scss'
+  templateUrl: './interestingBusiness.component.html',
+  styleUrl: './interestingBusiness.component.scss'
 })
-export class OverviewComponent {
+export class InterestingBusinessComponent {
   private _feedBackService = inject(FeedbackService)
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
   private _company = inject(CompanyHttpService)
@@ -90,12 +95,12 @@ export class OverviewComponent {
     if(current_modal === 'matched_businesses' ){
       this._router.navigate(['/investor/matched-business']);
     }else if(current_modal === 'interesting_businesses'){
-      this._router.navigate(['/investor/interesting-businesess']);
+      this._router.navigate(['/investor/matched-business']);
     }else if(current_modal === 'connected_businesses'){
-      this._router.navigate(['/investor/connected-businesess']);
+      this._router.navigate(['/investor/matched-business']);
     }
     else if(current_modal === 'rejected_businesses'){
-      this._router.navigate(['/investor/rejected-businesess']);
+      this._router.navigate(['/investor/matched-business']);
     }
 
     // this.visible = true
