@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', loadComponent: () => import('../pages/dashboard/dashboard.component').then(c => c.DashboardComponent) },
-  { path: 'profile', loadComponent: () => import('../pages/onboarding/onboarding.component').then(c => c.OnboardingComponent) },
   { path: 'my-business', loadComponent: () => import('../pages/my-business/my-business.component').then(c => c.MyBusinessComponent) },
   { path: 'my-bookings', loadComponent: () => import('../pages/my-bookings/my-bookings.component').then(c => c.MyBookingsComponent) },
   { path: 'financials', loadComponent: () => import('../pages/financials/financials.component').then(c => c.FinancialsComponent) },
