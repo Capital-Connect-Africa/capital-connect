@@ -7,6 +7,16 @@
   line-height: 1.5rem;
   font-family: $font-family-sans-serif;
 }
+.edit__cta__btn{
+  font-weight: 500;
+  color:  #225ab6;
+  font-size: 1rem;
+  text-decoration: none;
+  &:hover{
+    color: #1d4ed8;
+    text-decoration: underline;
+  }
+}
 .diag-body{
   display: flex;
   border-top: 1px solid #C9DDCC;

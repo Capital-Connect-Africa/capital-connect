@@ -1,10 +1,16 @@
 import { Answer, Question } from "../../features/questions/interfaces";
 
 export interface Submission {
+  id?: number;
   userId?: number;
   questionId: number;
   answerId: number;
   text?:string;
+}
+
+export enum RequestType{
+  SAVE ='save',
+  EDIT ='edit'
 }
 
 export interface SubmissionResponse {

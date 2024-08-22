@@ -19,6 +19,10 @@
         </filter>
         </defs>
     </svg>
-    <h2>Your business financials have been captured successfully!</h2>
-    <button (click)="goToImpactAssessment()" class="btn">Proceed to Impact Assessment</button>
+    <ng-container *ngIf="currentMode$ | async as currentMode">
+        <h2>{{currentMode == mode.EDIT?'Your business information has been updated successfully!':'Your business information has been captured successfully!'}}</h2>
+        <button (click)="goToDashboard()" class="btn" *ngIf="currentMode ==mode.EDIT">Proceed to Dashboard</button>
+        <button (click)="goToImpactAssessment()" class="btn" *ngIf="currentMode ==mode.SAVE">Proceed to Impact Assessment</button>
+    </ng-container>
+    
 </div>

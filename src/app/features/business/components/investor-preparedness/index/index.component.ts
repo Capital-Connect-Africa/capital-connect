@@ -1,19 +1,17 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { switchMap, tap } from "rxjs";
 import { RouterLink } from "@angular/router";
+import { CommonModule } from "@angular/common";
+import { Component, inject } from '@angular/core';
+import { DropdownModule } from "primeng/dropdown";
+import { Submission } from "../../../../../shared";
+import { MultiSelectModule } from "primeng/multiselect";
+import { Question, QuestionType } from "../../../../questions/interfaces";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Observable } from "rxjs";
 import { BusinessPageService } from '../../../services/business-page/business.page.service';
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
-import { tap } from "rxjs/operators";
-import { DropdownModule } from "primeng/dropdown";
-import { MultiSelectModule } from "primeng/multiselect";
-import { Submission, SubmissionService, SubMissionStateService, UserSubmissionResponse } from "../../../../../shared";
-import { Question, QuestionType } from "../../../../questions/interfaces";
-import {
-  INVESTOR_PREPAREDNESS_SUBSECTION_IDS
-} from "../../../../../shared/business/services/onboarding.questions.service";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
+import { QuestionsAnswerService } from '../../../../../shared/business/services/question.answers.service';
+import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from "../../../../../shared/business/services/onboarding.questions.service";
 
 @Component({
   selector: 'app-index',
@@ -30,30 +28,36 @@ import { UserSubmissionsService } from '../../../../../core/services/storage/use
 })
 export class IndexComponent {
 
+  private _formBuilder = inject(FormBuilder);
   private _pageService = inject(BusinessPageService);
   private _questionService = inject(QuestionsService);
-  private _submissionService = inject(SubmissionService);
-  private _submissionStateService = inject(SubMissionStateService)
-  private _formBuilder = inject(FormBuilder);
-  private _submissionsStorageService =inject(UserSubmissionsService)
-
+  private _questionAnswersService =inject(QuestionsAnswerService);
+  private _submissionsStorageService =inject(UserSubmissionsService);
+ 
   questions: Question[] = [];
   formGroup: FormGroup = this._formBuilder.group({});
 
   questions$ = this._questionService.getQuestionsOfSubSection(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.LANDING).pipe(
-    tap(questions => {
-      this.questions = questions;
+    switchMap(questions =>{
+      return this._questionAnswersService.investorPreparedness(questions)
+    }),
+    tap(res =>{
+      this.questions = res;
       this._createFormControls();
     })
   );
-  currentEntries$ = this._submissionStateService.currentUserSubmission$;
 
   private _createFormControls() {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control([], Validators.required));
+        const answer =(question.defaultValues??[]);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer.map(a =>a.answerId), Validators.required));
+      } else if(question.type ===this.fieldType.SINGLE_CHOICE || question.type ===this.fieldType.TRUE_FALSE){
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.answerId??'':'', Validators.required));
       } else {
-        this.formGroup.addControl('question_' + question.id, this._formBuilder.control('', Validators.required));
+        const answer =(question.defaultValues??[]).at(0);
+        this.formGroup.addControl('question_' + question.id, this._formBuilder.control(answer? answer.text??'':'', Validators.required));
       }
     });
   }
@@ -68,6 +72,7 @@ export class IndexComponent {
         const selectedAnswers = formValues['question_' + question.id];
         selectedAnswers.forEach((answerId: number) => {
           submissionData.push({
+            id: question.submissionId,
             questionId: question.id,
             answerId: answerId,
             text: ''
@@ -80,6 +85,7 @@ export class IndexComponent {
         submissionData.push({
           questionId: question.id,
           answerId: parseInt(answerId),
+          id: question.submissionId,
           text: formValues['question_' + question.id]
         });
       }
@@ -87,12 +93,13 @@ export class IndexComponent {
         submissionData.push({
           questionId: question.id,
           answerId: Number(formValues['question_' + question.id]),
+          id: question.submissionId,
           text: question.type !== this.fieldType.SINGLE_CHOICE && question.type !== this.fieldType.TRUE_FALSE ? formValues['question_' + question.id] : ''
         });
       }
     });
-    this._submissionsStorageService.investorPreparednessSubmissions.push(submissionData)
-    this.setNextScreen()
+    this._submissionsStorageService.saveInvestorPreparednessSubmissionProgress(submissionData);
+    this.setNextScreen();
   }
 
   protected readonly fieldType = QuestionType;

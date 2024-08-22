@@ -9,7 +9,7 @@ import { CommonModule } from "@angular/common";
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
 import { AlertComponent } from "../../../../../shared/components/alert/alert.component";
 import { ProfileService } from '../../../services/profile.service';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { AlertCardComponent } from "../../alert-card/alert-card.component";
 
@@ -32,9 +32,11 @@ export class MainComponent {
 @Input() showBanner =false;
   private _profileService =inject(ProfileService);
   private _routingService =inject(RoutingService)
+  submissions:{title?: string, url: string}[] =[];
 
   submissionActions$ =this._routingService.nextRoute().pipe(tap(res =>{
-    return res
+
+    this.submissions =res.filter(r =>r.url !=='/business')
   }))
   
 
