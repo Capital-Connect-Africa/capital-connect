@@ -4,7 +4,7 @@ import { MainComponent } from "../../components/main/main/main.component";
 import { AuthStateService } from '../../../auth/services/auth-state.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'profile-dashboard',
   standalone: true,
   imports: [
     SidenavComponent,

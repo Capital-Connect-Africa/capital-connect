@@ -2,7 +2,7 @@ import { Component, HostListener, inject, Input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { Observable, tap } from "rxjs";
-import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
+// import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
 import { SharedModule } from "../../../shared";
 import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.service";
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
@@ -10,7 +10,8 @@ import { AuthStateService } from '../../../features/auth/services/auth-state.ser
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [ProBadgeComponent, SharedModule, CommonModule, RouterLink, RouterLinkActive],
+  // imports: [ProBadgeComponent, SharedModule, CommonModule, RouterLink, RouterLinkActive],
+  imports: [ SharedModule, CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
 })
