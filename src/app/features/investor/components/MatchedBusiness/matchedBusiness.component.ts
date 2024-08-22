@@ -20,6 +20,11 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { FeedbackService } from '../../../../core';
+import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
+import { getInvestorEligibilitySubsectionIds, IMPACT_ASSESMENT_SUBSECTION_IDS, INVESTOR_PREPAREDNESS_SUBSECTION_IDS, Score } from '../../../../shared/business/services/onboarding.questions.service';
+import { CompanyHttpService } from '../../../organization/services/company.service';
+import { SubMissionStateService, UserSubmissionResponse } from '../../../../shared';
+import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
 
 @Component({
   selector: 'app-matched-business',
@@ -37,8 +42,9 @@ import { FeedbackService } from '../../../../core';
     AlertComponent,
     DialogModule,
     ReactiveFormsModule,
-    ModalComponent
-  ],
+    ModalComponent,
+    RemoveQuotesPipe
+],
   templateUrl: './matchedBusiness.component.html',
   styleUrl: './matchedBusiness.component.scss'
 })
@@ -49,9 +55,12 @@ export class MatchedBusinessComponent {
   visible = false;
   matchedBusinesses: MatchedBusiness[] = []
   selectedMatchedBusiness: MatchedBusiness | null = null;
+  private _company = inject(CompanyHttpService)
+  private _submissionStateService = inject(SubMissionStateService)
 
   markAsInteresting$ = new Observable<unknown>()
   interestingBusinesses: InterestingBusinesses[] = [];
+  companyDetails: CompanyResponse | undefined;
 
   table: boolean = true
 
@@ -61,7 +70,24 @@ export class MatchedBusinessComponent {
 
   decline: boolean  =  false;
 
+  companyDetails$ = new Observable<unknown>()
 
+
+  investorEligibilityScore: number = 0;
+  investorPreparednessScore: number = 0;
+
+
+  investorEligibilityScore$ = new Observable<unknown>()
+  investorPreparednessScore$ =  new Observable<unknown>()
+
+
+
+  impactElementAnswers : UserSubmissionResponse[] = [];
+  
+
+  esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
+    this.impactElementAnswers = submissions
+  }))
 
 
   showDialog() {
@@ -73,10 +99,33 @@ export class MatchedBusinessComponent {
   }
 
 
+
   showMatchedBusinessDetails(business: MatchedBusiness): void {
     this.table = !this.table
     this.selectedMatchedBusiness = business;
+
+    const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
+     //get the company details
+    this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
+      tap(res => {
+        this.companyDetails = res
+
+        //Get the scores
+        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id,getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
+          this.investorEligibilityScore =scores.score        
+        }))
+
+        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id,INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.investorPreparednessScore =scores.score        
+        }))      
+      })
+    )
   }
+
+
+
+
+
 
 
   showInterest(id: number) {

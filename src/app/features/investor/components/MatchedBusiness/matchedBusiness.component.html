@@ -53,41 +53,88 @@
 
 
           <!-- Matched Business Extra Details -->
-          <div *ngIf="selectedMatchedBusiness" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg">
+          <div *ngIf="selectedMatchedBusiness" class=" mx-auto  shadow-xl  p-6">
             <!-- Company Details -->
-            <div class="mb-6 details">
-              <h5 class="text-xl font-semibold mb-2 text-center"><strong>Matched Company Information</strong></h5>
-              <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="mb-8 p-6">
+              <h5 class="text-2xl font-bold text-center mb-6">Matched Company Information</h5>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p class="font-bold">Country: <span class="font-light">{{ selectedMatchedBusiness.country }}</span>
+                  <p class="font-semibold text-gray-700">Country: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.country }}</span>
                   </p>
                 </div>
                 <div>
-                  <p class="font-bold">Sector: <span class="font-light">{{ selectedMatchedBusiness.businessSector
-                      }}</span></p>
+                  <p class="font-semibold text-gray-700">Sector: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSector }}</span>
+                  </p>
                 </div>
                 <div>
-                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedMatchedBusiness.businessSubsector
-                      }}</span></p>
+                  <p class="font-semibold text-gray-700">Sub Sector: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSubsector }}</span>
+                  </p>
                 </div>
                 <div>
-                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedMatchedBusiness.growthStage
-                      }}</span></p>
+                  <p class="font-semibold text-gray-700">Growth Stage: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.growthStage }}</span>
+                  </p>
                 </div>
                 <div>
-                  <p class="font-bold">Number of Employees: <span class="font-light">{{
-                      selectedMatchedBusiness.numberOfEmployees }}</span></p>
+                  <p class="font-semibold text-gray-700">Number of Employees: 
+                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.numberOfEmployees }}</span>
+                  </p>
                 </div>
               </div>
             </div>
-
+          
+            <!-- Scores -->
+            <div class="mb-8">
+              <h5 class="text-xl font-semibold text-gray-700 mb-4">Scores</h5>
+              <div class="flex flex-col sm:flex-row justify-between gap-4">
+                <div>
+                  <p class="text-gray-700 font-medium">
+                    Investor Eligibility Score: 
+                    <span class="font-normal">{{ investorEligibilityScore ? investorEligibilityScore : '0' }}</span>
+                  </p>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium">
+                    Investor Preparedness Score: 
+                    <span class="font-normal">{{ investorPreparednessScore ? investorPreparednessScore : '0' }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          
+            <!-- Impact Elements -->
+            <div class="mb-8">
+              <h5 class="text-xl font-semibold text-gray-700 mb-4">Impact Element Assessment</h5>
+              <div>
+                <h6 class="text-lg font-medium text-gray-800 mb-2">Feedback and Recommendations</h6>
+                <div *ngIf="(impactElementAnswers.length > 0)" class="space-y-4">
+                  <ul class="list-disc pl-5 space-y-4">
+                    <li *ngFor="let submission of impactElementAnswers">
+                      <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                        <h3 class="font-semibold text-gray-700">{{ submission.question.text | removeQuotes }}</h3>
+                        <h4 class="text-gray-600">{{ submission.answer.text == 'OPEN' ? submission.text : submission.answer.text | removeQuotes }}</h4>
+                        <p class="text-gray-500">{{ submission.explanation | removeQuotes }}</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="(impactElementAnswers.length === 0)" class="text-gray-600">
+                  <p>No submissions found.</p>
+                </div>
+              </div>
+            </div>
+          
             <!-- Back Button -->
-            <div class="flex justify-end details">
-              <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+            <div class="flex justify-end">
+              <button class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none">
                 Back to List
               </button>
             </div>
           </div>
+          
 
 
         </div>
