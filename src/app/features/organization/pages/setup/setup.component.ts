@@ -1,6 +1,6 @@
 import { CommonModule, Location } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { catchError, EMPTY, filter, Observable, tap } from 'rxjs';
+import { catchError, combineLatest, EMPTY, filter, Observable, switchMap, tap } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StepOneComponent } from '../../components/step-one/step-one.component';
 import { StepTwoComponent } from '../../components/step-two/step-two.component';
@@ -9,6 +9,7 @@ import { StepFourComponent } from '../../components/step-four/step-four.componen
 import { OrganizationOnboardService } from '../../services/organization-onboard.service';
 import { CompanyResponse } from '../../interfaces';
 import { AuthStateService } from '../../../auth/services/auth-state.service';
+import { DynamicRoutingService } from '../../../../shared/services/dynamic.routing.service';
 
 @Component({
   selector: 'app-setup',
@@ -25,14 +26,16 @@ export class SetupComponent implements OnInit {
   private _cd = inject(ChangeDetectorRef);
   private _authState =inject(AuthStateService)
   private _activateRoute = inject(ActivatedRoute);
+  private _dynamicRoutingService =inject(DynamicRoutingService);
 
   submitCompanyInfo$ = new Observable();
   companyToBeEdited$ = new Observable();
   companyOfUser$ = new Observable();
+  router$ =new Observable();
 
   isEditMode = !!this._activateRoute.snapshot.paramMap.get('id')?.length;
   editId = this._activateRoute.snapshot.paramMap.get('id')
-  current_step = 2;
+  current_step = 1;
   steps = [1, 2, 3, 4];
   companyToBeEdited!: CompanyResponse;
 
@@ -48,12 +51,14 @@ export class SetupComponent implements OnInit {
         this._cd.detectChanges()
       }))
     } else {
-      this.companyOfUser$ = this._organizationOnboardService.getCompanyOfUser().pipe(filter(() => !this.isEditMode), tap(company => {
+      this.companyOfUser$ = this._organizationOnboardService.getCompanyOfUser().pipe(filter(() => !this.isEditMode), 
+      tap(company => {
         if (company && company.id) {
-          this._cd.detectChanges()
-          this.goToBusinessProfile();
+          this._cd.detectChanges();
+          this.isEditMode =true;
         }
-      }));
+      })
+    );
     }
   }
 
@@ -64,7 +69,12 @@ export class SetupComponent implements OnInit {
     if (this.current_step === 3 && direction !== -1) { //Only do this if we are going forward
       this.submitCompanyInfo$ = this._organizationOnboardService.submitCompanyInfo(this.isEditMode, Number(this.editId) ?? null).pipe(tap(res => {
         this.companyOfUser$ = this._organizationOnboardService.getCompanyOfUser()
-        if (this.isEditMode) this._router.navigateByUrl('/organization/list')
+        if (this.isEditMode && this._authState.userIsAdmin) this._router.navigateByUrl('/organization/list');
+        else{
+            this.router$ =this._dynamicRoutingService.getNextRoute().pipe(tap(res =>{
+              return res;
+            }))
+        }
         this.current_step += direction
 
       }), catchError(err => {
@@ -82,9 +92,11 @@ export class SetupComponent implements OnInit {
     if (this.current_step === 3) return false //TODO: @pchessah add condition to check if upload of logo is successful
     return true;
   }
-
-  goToBusinessProfile() {
-    // this._router.navigateByUrl('/business/investor-eligibility')
+  goToBusinessProfile(){
+    this.goTo('/business')
+  }
+  goTo(url:string) {
+    this._router.navigateByUrl(url)
   }
   goToDashBoard() {
     this._router.navigateByUrl('/business')
