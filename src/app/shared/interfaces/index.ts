@@ -24,7 +24,10 @@ export interface MatchedBusiness {
 }
 
 export interface MatchedInvestor {
-  name: string
+  headOfficeLocation: string,
+  minimumFunding: number,
+  maximumFunding: number,
+  investorType: string,
 }
 
 
