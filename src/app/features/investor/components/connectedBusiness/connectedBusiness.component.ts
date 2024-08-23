@@ -24,7 +24,9 @@ import { PaginationService } from 'ngx-pagination';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-connected-business',
@@ -40,6 +42,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DialogModule,
     NgxPaginationModule,
     MatPaginatorModule,
+    MultiSelectModule, ReactiveFormsModule
   ],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss',
@@ -87,6 +90,17 @@ export class ConnectedBusinessComponent {
   totalItems: number = 100; // Set total items
   
 
+  business__id: number = 0
+  declineReasons: String[] = [];
+  decline: boolean = false;
+  declineForm!: FormGroup;
+  
+  constructor(private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+    });
+  }
+
 
   dataSource = new MatTableDataSource<ConnectedBusiness>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -100,7 +114,10 @@ export class ConnectedBusinessComponent {
     })
   );
 
-  
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
+    this.declineReasons = reasons
+  })) 
 
 
 
@@ -189,25 +206,39 @@ export class ConnectedBusinessComponent {
     return index;
   }
 
-  cancelConnection(businessId: number): void {
-    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Connection cancelled successfully.');
-   
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;})); 
-       })
-    );
+
+
+  openModal(businessId: number){
+    this.business__id = businessId
+    this.decline = true
+  }
+  
+  submit(){
+    this.cancelConnect(this.business__id)
   }
 
-  cancelInterest(businessId: number): void {
-    this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');  
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;}));
-      })
-    );
+  cancelConnect(businessId: number): void {   
+
+    if (this.declineForm.valid) {
+      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+      this.cancelInterestWithCompany$ = this._businessMatchingService
+        .cancelConnectWithCompany(businessId, selectedReasons).pipe(
+          tap(() => {
+            this._feedBackService.success('Interest cancelled successfully.');
+
+            this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;})); 
+            this.declineForm.reset();
+            this.declineForm.updateValueAndValidity();
+
+            this.decline = false;
+          })
+        );
+    }
+
   }
+
+
+
 
 
 

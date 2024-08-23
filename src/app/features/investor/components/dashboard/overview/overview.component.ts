@@ -210,28 +210,7 @@ export class OverviewComponent {
     return index;
   }
 
-  cancelConnection(businessId: number): void {
-    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Connection cancelled successfully.');
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-       })
-    );
-  }
-
-  cancelInterest(businessId: number): void {
-    this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-  
-      })
-    );
-  }
-
-
+ 
 
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
