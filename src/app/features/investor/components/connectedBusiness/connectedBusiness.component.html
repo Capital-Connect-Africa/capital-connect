@@ -21,11 +21,9 @@
         <h6 class="text-xl font-semibold mb-2 text-center"><strong>Connected Businesess Information</strong></h6>
       </div>
 
-
-
       <div class="table-parent">
         <div >
-          <table class="table" *ngIf="table">
+          <table class="table"  *ngIf="table">
             <tbody>
               <tr class="border-b border-gray-200">
                 <td class="font-bold">#</td>
@@ -54,6 +52,18 @@
               </tr>
             </tbody>
           </table>
+
+          <mat-paginator  *ngIf="table"
+            [length]="totalItems"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20, 50]"
+            (page)="pageChange($event)">
+          </mat-paginator>
+
+          <!-- <div>
+            Page {{ currentPage + 1 }} of {{ dataSource.data.length / pageSize }}
+          </div> -->
+
 
 
 

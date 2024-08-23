@@ -32,7 +32,7 @@ export class BookingComponent {
   currentPage: number = 1;
   itemsPerPage: number = 8;
   totalItems: number = 0;
-  pagedBookings: any[] = [];
+
   showNewBookingForm: boolean = false;
   private _paymentService = inject(PaymentService)
   private _feedbackService = inject(FeedbackService)
@@ -46,7 +46,7 @@ export class BookingComponent {
     this.message$ = this._feedbackService.message$;
   }
 
-  bookings$ = this._bookingService.getBookings(8, 10).pipe(
+  bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
       this.bookings = res;
       this.totalItems = res.length;
@@ -68,9 +68,6 @@ export class BookingComponent {
     );
   }
 
-  onPageChange(page: number) {
-    this.currentPage = page;
-  }
 
   checkStatus(orderTrackingId: string) {
     this.transactionStatus$ = this._paymentService.getTransactionStatus(orderTrackingId).pipe(

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Observable, tap,EMPTY } from "rxjs";
 import { OverviewSectionComponent } from "../../../../shared/components/overview-section/overview-section.component";
@@ -19,6 +19,12 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../../core';
 import { AdvertisementSpaceComponent } from '../../../../shared/components/advertisement-space/advertisement-space.component';
 import { DialogModule } from 'primeng/dialog';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginationService } from 'ngx-pagination';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-connected-business',
@@ -32,9 +38,12 @@ import { DialogModule } from 'primeng/dialog';
     NavbarComponent,
     AdvertisementSpaceComponent,
     DialogModule,
+    NgxPaginationModule,
+    MatPaginatorModule,
   ],
   templateUrl: './connectedBusiness.component.html',
-  styleUrl: './connectedBusiness.component.scss'
+  styleUrl: './connectedBusiness.component.scss',
+  providers: [PaginationService]
 })
 export class ConnectedBusinessComponent {
   private _feedBackService = inject(FeedbackService)
@@ -72,22 +81,28 @@ export class ConnectedBusinessComponent {
 
   table:boolean = true
   
+  itemsPerPage: number = 8;
+  currentPage: number = 0; // Start at 0 for Material paginator
+  pageSize: number = 8;
+  totalItems: number = 100; // Set total items
+  
 
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
 
-  connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(
-    tap(res => {this.connectedBusinesses = res;})
-  );
+  dataSource = new MatTableDataSource<ConnectedBusiness>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(
-    tap(res => {this.rejectedBusinesses = res;})
-  );
-
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => {this.interestingBusinesses = res;})
+  connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,this.pageSize).pipe(
+    tap(res => {
+      this.connectedBusinesses = res;
+      // this.totalItems = res.length;
+      // this.dataSource.data = res;
+      // this.dataSource.paginator = this.paginator;
+    })
   );
 
   
+
+
 
 
 
@@ -102,12 +117,6 @@ export class ConnectedBusinessComponent {
     else if(current_modal === 'rejected_businesses'){
       this._router.navigate(['/investor/matched-business']);
     }
-
-    // this.visible = true
-    // this.table =true
-    // this.currentModal = current_modal;
-    // this.selectedBusiness = null;
-    // this.selectedMatchedBusiness = null;
   }
 
   showDetails(business: InterestingBusinesses): void {
@@ -176,52 +185,6 @@ export class ConnectedBusinessComponent {
   }
 
 
-
-  getModalTitle(): string {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return 'Connected Businesses';
-      case 'matched_businesses':
-        return 'Matched Businesses';
-      case 'interesting_businesses':
-        return 'Interesting Businesses';
-      case 'rejected_businesses':
-        return 'Declined Businesess'
-      default:
-        return '';
-    }
-  }
-
-  getModalHelperText(): string {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return 'You have connected with these businesses';
-      case 'matched_businesses':
-        return `You had a 100% Matching to ${this.matchedBusinesses.length} Businesses`;
-      case 'interesting_businesses':
-        return 'Businesess Interested In';
-      case 'rejected_businesses':
-        return 'You have Declined these businesses. You can review them and reconsider them as businesses of interest';
-      default:
-        return '';
-    }
-  }
-
-  get modalData() {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return this.connectedBusinesses;
-      case 'matched_businesses':
-        return this.matchedBusinesses;
-      case 'interesting_businesses':
-        return this.interestingBusinesses;
-      case 'rejected_businesses':
-        return this.rejectedBusinesses;
-      default:
-        return [];
-    }
-  }
-
   trackByIndex(index: number): number {
     return index;
   }
@@ -230,16 +193,8 @@ export class ConnectedBusinessComponent {
     this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
       tap(() => {
         this._feedBackService.success('Connection cancelled successfully.');
-
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );
-
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+   
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;})); 
        })
     );
   }
@@ -248,12 +203,8 @@ export class ConnectedBusinessComponent {
     this.cancelInterestWithCompany$ = this._businessMatchingService
     .cancelInterestWithCompany(businessId).pipe(
       tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+        this._feedBackService.success('Interest cancelled successfully.');  
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;}));
       })
     );
   }
@@ -263,24 +214,38 @@ export class ConnectedBusinessComponent {
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
-        this._feedBackService.success('Company marked as interesting successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;})); 
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+        this._feedBackService.success('Company marked as interesting successfully.');    
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;}));
       })        
+    );
+  }
+
+
+  pageChange(event: PageEvent): void {
+    console.log("The event is",event)
+
+    this.currentPage = event.pageIndex; // Get the new page index
+    console.log("The current page size is", this.currentPage)
+    // console.log("The event page index is", event.pageIndex)
+
+    this.pageSize = event.pageSize; // Update the page size
+    // console.log("Event pageSize:", event.pageSize);
+
+    this.pageSize = event.pageSize; // Get the new page size
+    this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(this.currentPage + 1, this.pageSize).pipe(
+      tap(res => {
+        this.connectedBusinesses = res;
+        console.log("The length of the returned items is", res.length)
+        // this.totalItems = res.length;
+      })
     );
   }
 
   connect(id: number) {
     this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
       tap(() => { 
-        this._feedBackService.success('Connected with company successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));      
+        this._feedBackService.success('Connected with company successfully.');    
+        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,8).pipe(tap(res => {this.connectedBusinesses = res;}));   
       })
     );
   }

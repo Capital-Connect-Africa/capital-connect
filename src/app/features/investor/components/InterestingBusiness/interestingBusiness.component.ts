@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
 import { Observable, tap,EMPTY } from "rxjs";
 import { OverviewSectionComponent } from "../../../../shared/components/overview-section/overview-section.component";
@@ -19,6 +19,10 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../../core';
 import { AdvertisementSpaceComponent } from '../../../../shared/components/advertisement-space/advertisement-space.component';
 import { DialogModule } from 'primeng/dialog';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { PaginationService } from 'ngx-pagination';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-interesting-business',
@@ -32,9 +36,11 @@ import { DialogModule } from 'primeng/dialog';
     NavbarComponent,
     AdvertisementSpaceComponent,
     DialogModule,
+    NgxPaginationModule
   ],
   templateUrl: './interestingBusiness.component.html',
-  styleUrl: './interestingBusiness.component.scss'
+  styleUrl: './interestingBusiness.component.scss',
+  providers: [PaginationService]
 })
 export class InterestingBusinessComponent {
   private _feedBackService = inject(FeedbackService)
@@ -44,12 +50,21 @@ export class InterestingBusinessComponent {
   private _router = inject(Router)
   visible = false;
   currentModal = '';
+
+  itemsPerPage: number = 8;
+  currentPage: number = 0; // Start at 0 for Material paginator
+  pageSize: number = 8;
+  totalItems: number = 100; // Set total items
+  
+
+
+  dataSource = new MatTableDataSource<ConnectedBusiness>([]);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   selectedBusiness: InterestingBusinesses | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
 
 
-  matchedBusinesses: MatchedBusiness[] = [];
-  connectedBusinesses: ConnectedBusiness[] = [];
   interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: ConnectedBusiness[] = [];
 
@@ -72,20 +87,49 @@ export class InterestingBusinessComponent {
 
   table:boolean = true
   
-
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
-
-  connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(
-    tap(res => {this.connectedBusinesses = res;})
+  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, 10).pipe(
+    tap(res => {
+      this.interestingBusinesses = res;
+      // this.totalItems = res.length;
+    })
   );
 
-  rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(
-    tap(res => {this.rejectedBusinesses = res;})
-  );
 
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => {this.interestingBusinesses = res;})
-  );
+  // pageChange(page: number): void {
+  //   this.currentPage = page;
+  //   // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(
+  //   //   tap(res => {
+  //   //     this.interestingBusinesses = res;
+  //   //     // this.totalItems = res.length; 
+  //   //   })
+  //   // );
+  // }
+
+
+  pageChange(event: PageEvent): void {
+    console.log("The event is",event)
+
+    this.currentPage = event.pageIndex; // Get the new page index
+    console.log("The current page size is", this.currentPage)
+    // console.log("The event page index is", event.pageIndex)
+
+    this.pageSize = event.pageSize; // Update the page size
+    // console.log("Event pageSize:", event.pageSize);
+
+    this.pageSize = event.pageSize; // Get the new page size
+    
+    this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage+1, this.pageSize).pipe(
+       tap(res => {
+        this.interestingBusinesses = res;
+         this.totalItems = res.length; 
+         console.log("The length is", res.length)
+       })
+   );
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+  }
 
   
 
@@ -111,6 +155,10 @@ export class InterestingBusinessComponent {
   }
 
   showDetails(business: InterestingBusinesses): void {
+    console.log("The business is", business)
+    this.table = !this.table
+    this.selectedBusiness = business;
+
     const companyGrowthStage = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
 
     //get the company details
@@ -132,8 +180,7 @@ export class InterestingBusinessComponent {
         }))      
       })
     )
-    this.table = !this.table
-    this.selectedBusiness = business;
+   
   }
 
 
@@ -177,50 +224,9 @@ export class InterestingBusinessComponent {
 
 
 
-  getModalTitle(): string {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return 'Connected Businesses';
-      case 'matched_businesses':
-        return 'Matched Businesses';
-      case 'interesting_businesses':
-        return 'Interesting Businesses';
-      case 'rejected_businesses':
-        return 'Declined Businesess'
-      default:
-        return '';
-    }
-  }
 
-  getModalHelperText(): string {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return 'You have connected with these businesses';
-      case 'matched_businesses':
-        return `You had a 100% Matching to ${this.matchedBusinesses.length} Businesses`;
-      case 'interesting_businesses':
-        return 'Businesess Interested In';
-      case 'rejected_businesses':
-        return 'You have Declined these businesses. You can review them and reconsider them as businesses of interest';
-      default:
-        return '';
-    }
-  }
 
-  get modalData() {
-    switch (this.currentModal) {
-      case 'connected_businesses':
-        return this.connectedBusinesses;
-      case 'matched_businesses':
-        return this.matchedBusinesses;
-      case 'interesting_businesses':
-        return this.interestingBusinesses;
-      case 'rejected_businesses':
-        return this.rejectedBusinesses;
-      default:
-        return [];
-    }
-  }
+
 
   trackByIndex(index: number): number {
     return index;
@@ -231,15 +237,10 @@ export class InterestingBusinessComponent {
       tap(() => {
         this._feedBackService.success('Connection cancelled successfully.');
 
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(
           tap(res => {this.interestingBusinesses = res;})
         );
-
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));   
        })
     );
   }
@@ -249,11 +250,7 @@ export class InterestingBusinessComponent {
     .cancelInterestWithCompany(businessId).pipe(
       tap(() => {
         this._feedBackService.success('Interest cancelled successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));   
       })
     );
   }
@@ -264,11 +261,7 @@ export class InterestingBusinessComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
         this._feedBackService.success('Company marked as interesting successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;})); 
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;})); 
       })        
     );
   }
@@ -277,10 +270,7 @@ export class InterestingBusinessComponent {
     this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
       tap(() => { 
         this._feedBackService.success('Connected with company successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));      
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
       })
     );
   }
