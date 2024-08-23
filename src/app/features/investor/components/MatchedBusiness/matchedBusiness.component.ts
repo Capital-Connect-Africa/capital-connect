@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { AlertComponent } from "../../../../shared/components/alert/alert.component";
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { MobileNumber, UserMobileNumbersIssues } from '../../../auth/interfaces/auth.interface';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { FeedbackService } from '../../../../core';
@@ -25,6 +25,9 @@ import { getInvestorEligibilitySubsectionIds, IMPACT_ASSESMENT_SUBSECTION_IDS, I
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { SubMissionStateService, UserSubmissionResponse } from '../../../../shared';
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
+import { MultiSelectModule } from 'primeng/multiselect';
+
+
 
 @Component({
   selector: 'app-matched-business',
@@ -43,8 +46,9 @@ import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
     DialogModule,
     ReactiveFormsModule,
     ModalComponent,
-    RemoveQuotesPipe
-],
+    RemoveQuotesPipe,
+    MultiSelectModule, ReactiveFormsModule
+  ],
   templateUrl: './matchedBusiness.component.html',
   styleUrl: './matchedBusiness.component.scss'
 })
@@ -57,9 +61,12 @@ export class MatchedBusinessComponent {
   selectedMatchedBusiness: MatchedBusiness | null = null;
   private _company = inject(CompanyHttpService)
   private _submissionStateService = inject(SubMissionStateService)
+  business__id: number = 0
 
   markAsInteresting$ = new Observable<unknown>()
   interestingBusinesses: InterestingBusinesses[] = [];
+  userResponses: UserSubmissionResponse[] = [];
+  declineReasons: String[] = [];
   companyDetails: CompanyResponse | undefined;
 
   table: boolean = true
@@ -68,7 +75,8 @@ export class MatchedBusinessComponent {
   private _feedBackService = inject(FeedbackService);
   cancelInterestWithCompany$ = new Observable<unknown>;
 
-  decline: boolean  =  false;
+  decline: boolean = false;
+  declineForm!: FormGroup;
 
   companyDetails$ = new Observable<unknown>()
 
@@ -78,16 +86,29 @@ export class MatchedBusinessComponent {
 
 
   investorEligibilityScore$ = new Observable<unknown>()
-  investorPreparednessScore$ =  new Observable<unknown>()
+  investorPreparednessScore$ = new Observable<unknown>()
+  userResponses$ = new Observable<unknown>()
 
 
 
-  impactElementAnswers : UserSubmissionResponse[] = [];
-  
+  impactElementAnswers: UserSubmissionResponse[] = [];
+
 
   esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
     this.impactElementAnswers = submissions
   }))
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
+    this.declineReasons = reasons
+  }))
+
+
+
+  constructor(private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+    });
+  }
 
 
   showDialog() {
@@ -105,19 +126,25 @@ export class MatchedBusinessComponent {
     this.selectedMatchedBusiness = business;
 
     const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
-     //get the company details
+    //get the company details
     this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
       tap(res => {
         this.companyDetails = res
 
         //Get the scores
-        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id,getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
-          this.investorEligibilityScore =scores.score        
+        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id, getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
+          this.investorEligibilityScore = scores.score
         }))
 
-        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id,INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
-          this.investorPreparednessScore =scores.score        
-        }))      
+        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
+          this.investorPreparednessScore = scores.score
+        }))
+
+        //get the submissions
+        this.userResponses$ = this._businessMatchingService.getSubmisionByIds(res.id, [16, 17, 21]).pipe(tap(responses => {
+          this.userResponses = responses
+        }))
+
       })
     )
   }
@@ -132,9 +159,6 @@ export class MatchedBusinessComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => {
         this._feedBackService.success('Company marked as interesting successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => { this.interestingBusinesses = res; })
-        );
       })
     );
   }
@@ -144,9 +168,6 @@ export class MatchedBusinessComponent {
     this.selectedMatchedBusiness = null;
   }
 
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => { this.interestingBusinesses = res; })
-  );
 
   private _authStateService = inject(AuthStateService);
   issue = UserMobileNumbersIssues;
@@ -183,16 +204,33 @@ export class MatchedBusinessComponent {
     }
   }
 
-  cancelInterest(businessId: number): void {
-    // this.decline = true
-    this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-      })
-    );
+  openModal(businessId: number){
+    this.business__id = businessId
+    this.decline = true
+  }
+  
+  submit(){
+    this.cancelInterest(this.business__id)
+  }
+
+  cancelInterest(businessId: number): void {   
+
+    if (this.declineForm.valid) {
+      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+      this.cancelInterestWithCompany$ = this._businessMatchingService
+        .cancelInterestWithCompany(businessId, selectedReasons).pipe(
+          tap(() => {
+            this._feedBackService.success('Interest cancelled successfully.');
+            this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+
+            this.declineForm.reset();
+            this.declineForm.updateValueAndValidity();
+
+            this.decline = false;
+          })
+        );
+    }
+
   }
 
 

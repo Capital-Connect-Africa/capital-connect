@@ -4,7 +4,8 @@ import { map, Observable } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
 import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStatistics} from "../../interfaces";
-import { GeneralSummary } from "../../interfaces/submission.interface";
+import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
+import { Submission } from "../../interfaces/submission.interface";
 // import { ConfirmationService } from "primeng/api";
 
 @Injectable({
@@ -28,6 +29,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       // @ts-ignore
       return res.score as Score[];
     })))
+  }
+
+  getSubmisionByIds(userId: number,questionIds: number[]) : Observable<UserSubmissionResponse[]>{
+    return this.read(`${BASE_URL}/submissions/by-question-ids?questionIds=${questionIds}&userId=${userId}`).pipe((map(res=>{
+      return res as UserSubmissionResponse[];
+    })))
+
   }
 
   getSectionScore(userId: number, sectionId: number): Observable<Score> {
@@ -62,6 +70,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       map(() => void 0)  
     );
   }
+
+
+  //reasons for rejecting   
+  getDeclineReasons(): Observable<String[]>{
+    return this.read(`${BASE_URL}/decline-reasons`).pipe(
+      map(res => res as unknown as String[])
+    )
+  }
   
   //Connect with a company
   connectWithCompany(companyId: number): Observable<void> {
@@ -73,53 +89,47 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
 
   //Cancel Connection with a company
-  cancelConnectWithCompany(companyId: number): Observable<void> {
-
-    let body = {
-      declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
-    }
-    
-
+  cancelConnectWithCompany(companyId: number,reasons: string[]): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, body).pipe(
+    return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, reasons).pipe(
       map(() => void 0)  
     );
   }
 
    //Cancel Connection with a company
-   cancelInterestWithCompany(companyId: number): Observable<void> {
-    let body = {
-      // declineReasons: ["No possibility for further growth.", "Not interested in the sector.", "No possibility for further growth.", "Not interested in the sector."]
-      declineReasons: []
-    }
-    
+   cancelInterestWithCompany(companyId: number, reasons: string[]): Observable<void> {    
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, body).pipe(
+    return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, reasons).pipe(
       map(() => void 0)  
     );
   }
 
 
   //Interesting companies
-  getInterestingCompanies(): Observable<InterestingBusinesses[]> {
+  getInterestingCompanies(page:number, limit:number): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}`).pipe(
+    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?limit=${limit}`).pipe(
+      map(res => res as InterestingBusinesses[])
+    );
+
+    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as InterestingBusinesses[])
     );
   }
 
   //connected companies
-  getConnectedCompanies(): Observable<ConnectedBusiness[]> {
+  getConnectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}`).pipe(
+
+    return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }
 
   //Rejected companies
-  getRejectedCompanies(): Observable<ConnectedBusiness[]> {
+  getRejectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}`).pipe(
+    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}?page=${page}&limit=100`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }

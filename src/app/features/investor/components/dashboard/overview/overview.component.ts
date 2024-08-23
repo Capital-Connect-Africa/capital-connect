@@ -73,20 +73,6 @@ export class OverviewComponent {
   matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {this.matchMakingStats = res}))
 
-  connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(
-    tap(res => {this.connectedBusinesses = res;})
-  );
-
-  rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(
-    tap(res => {this.rejectedBusinesses = res;})
-  );
-
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => {this.interestingBusinesses = res;})
-  );
-
-  
-
 
 
   showDialog(current_modal: string) {
@@ -224,39 +210,7 @@ export class OverviewComponent {
     return index;
   }
 
-  cancelConnection(businessId: number): void {
-    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Connection cancelled successfully.');
-
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );
-
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
-       })
-    );
-  }
-
-  cancelInterest(businessId: number): void {
-    this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
-      })
-    );
-  }
-
-
+ 
 
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
@@ -264,9 +218,7 @@ export class OverviewComponent {
         this._feedBackService.success('Company marked as interesting successfully.');
 
         this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;})); 
-        this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies().pipe(tap(res => {this.rejectedBusinesses = res;}));
+    
       })        
     );
   }
@@ -275,10 +227,7 @@ export class OverviewComponent {
     this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
       tap(() => { 
         this._feedBackService.success('Connected with company successfully.');
-
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies().pipe(tap(res => {this.connectedBusinesses = res;}));
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));      
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));       
       })
     );
   }

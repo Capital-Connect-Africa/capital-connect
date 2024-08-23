@@ -1,6 +1,17 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+<ng-container *ngIf="companyDetails$ | async"></ng-container>
+<ng-container *ngIf="userResponses$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessScore$ | async"></ng-container>
+<ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
+<ng-container *ngIf="declineReasons$ | async"></ng-container>
+
+
+
+
+
+
 
 
 <div class="main">
@@ -24,11 +35,6 @@
       <div *ngIf="!table">
         <h6 class="text-xl font-semibold mb-2 text-center"><strong>Matched Businesses Information</strong></h6>
       </div>
-      
-
-
-
-
 
       <div class="table-parent">
         <div class="">
@@ -54,7 +60,7 @@
                 <td class="flex space-x-2 justify-center p-2">
                   <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
                   <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                    (click)="cancelInterest(business.id)">Decline</button>
+                    (click)="openModal(business.id)">Decline</button>
 
                   <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
                     <mat-icon class="small-icon">visibility</mat-icon>
@@ -71,53 +77,48 @@
             <div class="mb-8 p-6 company__info">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p class="font-semibold text-gray-700">Country: 
+                  <p class="font-semibold text-gray-700">Country:
                     <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.country }}</span>
                   </p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Sector: 
+                  <p class="font-semibold text-gray-700">Sector:
                     <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSector }}</span>
                   </p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Sub Sector: 
+                  <p class="font-semibold text-gray-700">Sub Sector:
                     <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSubsector }}</span>
                   </p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Growth Stage: 
+                  <p class="font-semibold text-gray-700">Growth Stage:
                     <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.growthStage }}</span>
                   </p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Number of Employees: 
+                  <p class="font-semibold text-gray-700">Number of Employees:
                     <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.numberOfEmployees }}</span>
                   </p>
                 </div>
-              </div>
-            </div>
-          
-            <!-- Scores -->
-            <!-- <div class="mb-8">
-              <h5 class="text-xl font-semibold text-gray-700 mb-4">Scores</h5>
-              <div class="flex flex-col sm:flex-row justify-between gap-4">
+
                 <div>
-                  <p class="text-gray-700 font-medium">
-                    Investor Eligibility Score: 
-                    <span class="font-normal">{{ investorEligibilityScore ? investorEligibilityScore : '0' }}</span>
-                  </p>
+                  <p class="text-gray-700 font-medium">Investor Eligibility Score: <span class="font-normal">{{
+                      investorEligibilityScore ? investorEligibilityScore : '0' }}</span> </p>
                 </div>
                 <div>
                   <p class="text-gray-700 font-medium">
-                    Investor Preparedness Score: 
+                    Investor Preparedness Score:
                     <span class="font-normal">{{ investorPreparednessScore ? investorPreparednessScore : '0' }}</span>
                   </p>
                 </div>
               </div>
-            </div> -->
-          
+            </div>
+
+
+
             <!-- Impact Elements -->
+            <!-- Only Show the results from the report, not the submissions -->
             <!-- <div class="mb-8">
               <h5 class="text-xl font-semibold text-gray-700 mb-4">Impact Element Assessment</h5>
               <div>
@@ -138,24 +139,22 @@
                 </div>
               </div>
             </div> -->
-          
+
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedMatchedBusiness.id)">Decline</button>
+                <button class="btn btn-sm text-xs px-3 py-1"
+                  (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
                 <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                   Back to List
                 </button>
               </td>
             </div>
           </div>
-          
-
-
         </div>
       </div>
-
     </div>
 
 
@@ -173,7 +172,6 @@
         (click)="showDialog()">
         <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
       </app-card>
-
       <app-advertisement-space [title]="'Advertise Here'"
         [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
@@ -182,24 +180,28 @@
 
 
 
-<app-modal [(visible)]="decline" title="Reasons for declining" 
-  helperText="Tell us why you are declining">
+<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
   <div class="input__wrapper">
     <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-    
     <p-multiSelect class="input__field" styleClass="w-full gap-4"
-      optionValue="name"
-      formControlName="countriesOfInvestmentFocus"  optionLabel="name"
-      placeholder="Select countries"></p-multiSelect>
-  </div>
+      optionValue="reason"
+      [options]="declineReasons"
+      formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
 
+      <div class="button-group mt-4 flex end">
+        <button pButton type="button"
+        class="btn btn-primary mt-5"
+        label="Submit" (click)="submit()">Submit</button>
+      </div>
+  </div>
 </app-modal>
 
 
 
 
 
-<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class="p-8">
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }"
+  class="p-8">
   <form class="dialog-input" [formGroup]="phoneUpdateForm">
     <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone
       number': 'Verify your phone number' }}</label>
@@ -209,8 +211,3 @@
       (click)="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
   </form>
 </p-dialog>
-
-
-
-
-
