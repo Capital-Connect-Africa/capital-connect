@@ -28,6 +28,7 @@ export interface MatchedInvestor {
   minimumFunding: number,
   maximumFunding: number,
   investorType: string,
+  noMaximumFunding: boolean,
 }
 
 
