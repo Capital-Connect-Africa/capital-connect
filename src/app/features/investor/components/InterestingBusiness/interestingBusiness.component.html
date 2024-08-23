@@ -4,6 +4,7 @@
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="connectWithCompany$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+<ng-container *ngIf="declineReasons$ | async"></ng-container>
 
 
 
@@ -49,7 +50,7 @@
               <td class="flex space-x-2 justify-center p-2">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
                 <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                  (click)="cancelInterest(business.company.id)">Decline</button>
+                  (click)="openModal(business.company.id)">Decline</button>
 
                 <div class="py-auto eye" (click)="showDetails(business)">
                   <mat-icon class="small-icon">visibility</mat-icon>
@@ -136,7 +137,7 @@
               <button class="btn btn-sm text-xs px-3 py-1"
                 (click)="connect(selectedBusiness.company.id)">Connect</button>
               <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                (click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
+                (click)="openModal(selectedBusiness.company.id)">Decline</button>
               <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                 Back to List
               </button>
@@ -164,3 +165,20 @@
     </div>
   </main>
 </div>
+
+
+<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <div class="input__wrapper">
+    <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+    <p-multiSelect class="input__field" styleClass="w-full gap-4"
+      optionValue="reason"
+      [options]="declineReasons"
+      formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
+
+      <div class="button-group mt-4 flex end">
+        <button pButton type="button"
+        class="btn btn-primary mt-5"
+        label="Submit" (click)="submit()">Submit</button>
+      </div>
+  </div>
+</app-modal>

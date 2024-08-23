@@ -1,5 +1,8 @@
 <ng-container *ngIf="connectedCompanies$ | async"></ng-container>
 <ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
+<ng-container *ngIf="declineReasons$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+
 
 
 <div class="main">
@@ -43,7 +46,7 @@
                 <td class="">{{ business.company.businessSubsector }}</td>
                 <td class="">{{ business.company.growthStage }}</td>
                 <td class="flex space-x-2 justify-center p-2">
-                  <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(business.company.id)">Decline</button>
+                  <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.company.id)">Decline</button>
 
                     <div class="py-auto eye" (click)="showDetails(business)">
                       <mat-icon class="small-icon">visibility</mat-icon>
@@ -129,7 +132,7 @@
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(selectedBusiness.company.id)">Decline</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(selectedBusiness.company.id)">Decline</button>
                   <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>              
               </td>
             </div>
@@ -156,6 +159,23 @@
     </div>
   </main>
 </div>
+
+
+<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <div class="input__wrapper">
+    <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+    <p-multiSelect class="input__field" styleClass="w-full gap-4"
+      optionValue="reason"
+      [options]="declineReasons"
+      formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
+
+      <div class="button-group mt-4 flex end">
+        <button pButton type="button"
+        class="btn btn-primary mt-5"
+        label="Submit" (click)="submit()">Submit</button>
+      </div>
+  </div>
+</app-modal>
 
 
 

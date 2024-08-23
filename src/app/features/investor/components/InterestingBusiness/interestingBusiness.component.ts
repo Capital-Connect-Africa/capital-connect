@@ -23,6 +23,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PaginationService } from 'ngx-pagination';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-interesting-business',
@@ -36,7 +39,8 @@ import { MatTableDataSource } from '@angular/material/table';
     NavbarComponent,
     AdvertisementSpaceComponent,
     DialogModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MultiSelectModule, ReactiveFormsModule
   ],
   templateUrl: './interestingBusiness.component.html',
   styleUrl: './interestingBusiness.component.scss',
@@ -67,6 +71,7 @@ export class InterestingBusinessComponent {
 
   interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: ConnectedBusiness[] = [];
+  declineReasons: String[] = [];
 
   companyDetails: CompanyResponse | undefined;
 
@@ -85,6 +90,15 @@ export class InterestingBusinessComponent {
   investorPreparednessScore$ =  new Observable<unknown>()
   impactAssessmentScore$ = new Observable<unknown>()
 
+
+  constructor(private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+    });
+  }
+
+
+  
   table:boolean = true
   
   interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, 10).pipe(
@@ -93,18 +107,15 @@ export class InterestingBusinessComponent {
       // this.totalItems = res.length;
     })
   );
+  decline: boolean = false;
+  business__id: number = 0;
+  declineForm!: FormGroup;
 
 
-  // pageChange(page: number): void {
-  //   this.currentPage = page;
-  //   // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(
-  //   //   tap(res => {
-  //   //     this.interestingBusinesses = res;
-  //   //     // this.totalItems = res.length; 
-  //   //   })
-  //   // );
-  // }
 
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
+    this.declineReasons = reasons
+  }))
 
   pageChange(event: PageEvent): void {
     console.log("The event is",event)
@@ -233,7 +244,7 @@ export class InterestingBusinessComponent {
   }
 
   cancelConnection(businessId: number): void {
-    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId).pipe(
+    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId,[]).pipe(
       tap(() => {
         this._feedBackService.success('Connection cancelled successfully.');
 
@@ -245,14 +256,35 @@ export class InterestingBusinessComponent {
     );
   }
 
-  cancelInterest(businessId: number): void {
-    this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId).pipe(
-      tap(() => {
-        this._feedBackService.success('Interest cancelled successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));   
-      })
-    );
+ 
+
+  openModal(businessId: number){
+    this.business__id = businessId
+    this.decline = true
+  }
+  
+  submit(){
+    this.cancelInterest(this.business__id)
+  }
+
+  cancelInterest(businessId: number): void {   
+
+    if (this.declineForm.valid) {
+      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+      this.cancelInterestWithCompany$ = this._businessMatchingService
+        .cancelInterestWithCompany(businessId, selectedReasons).pipe(
+          tap(() => {
+            this._feedBackService.success('Interest cancelled successfully.');
+            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+
+            this.declineForm.reset();
+            this.declineForm.updateValueAndValidity();
+
+            this.decline = false;
+          })
+        );
+    }
+
   }
 
 
