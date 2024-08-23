@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness} from "../../interfaces";
+import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStatistics} from "../../interfaces";
 import { GeneralSummary } from "../../interfaces/submission.interface";
 // import { ConfirmationService } from "primeng/api";
 
@@ -47,6 +47,12 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     return this.read(`${BASE_URL}/matchmaking/companies`).pipe(
       map(res => res as MatchedBusiness[])
     );
+  }
+
+  getMatchMakingStatistics(): Observable<MatchMakingStatistics>{
+    return this.read(`${BASE_URL}/statistics/matchmaking`).pipe(
+      map(res => res as unknown as MatchMakingStatistics)
+    )
   }
 
   //Mark company as interesting
