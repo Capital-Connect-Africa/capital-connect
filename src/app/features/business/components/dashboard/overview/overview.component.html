@@ -157,7 +157,7 @@
     You have not matched with any investors yet <br /> check again later
   </div>
   <div class="flex flex-col gap-4" *ngIf="matchedInvestors.length">
-    <p-table [value]="matchedInvestors" [tableStyle]="{ 'width': '100%' }">
+    <p-table [value]="matchedInvestors" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
       <ng-template pTemplate="header">
           <tr>
               <th>HO Location</th>
@@ -171,8 +171,15 @@
           <tr>
               <td>{{ matchedInvestor.headOfficeLocation }}</td>
               <td>{{ matchedInvestor.investorType }}</td>
-              <td>{{ matchedInvestor.minimumFunding }}</td>
-              <td>{{ matchedInvestor.maximumFunding }}</td>
+              <td>${{ matchedInvestor.minimumFunding | numberabbreviation}}</td>
+              <td>
+                <ng-container *ngIf="matchedInvestor.noMaximumFunding; else withMaxFunding">
+                  Unlimited
+                </ng-container>
+                <ng-template #withMaxFunding>
+                  ${{ matchedInvestor.maximumFunding | numberabbreviation }}
+                </ng-template>
+              </td>
               <td>
                 <div class="cta__wrap">
                   <button class="btn__cta text-blue-600" title="coming...">View</button>
