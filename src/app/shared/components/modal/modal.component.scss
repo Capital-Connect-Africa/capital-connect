@@ -32,3 +32,27 @@ p-dialog .ui-dialog {
 p-dialog .ui-dialog-mask {
   z-index: 900; /* Lower than the modal and confirmation dialog */
 }
+
+:host ::ng-deep .p-datatable{
+  tr{
+    transition: all .2s linear;
+    cursor: default;
+    &:nth-child(even){
+      background-color: #f9f9f9;
+    }
+    &:hover{
+      background-color: #654f291a;
+    }
+    td, th{
+      padding: 1rem 0 1rem .5rem;
+    }
+    th{
+      background-color: #f4f4f5;
+     span{
+        padding: 0 .5rem;
+        justify-content: flex-start;
+        background-color: transparent!important;
+     }
+    }
+  }
+}
