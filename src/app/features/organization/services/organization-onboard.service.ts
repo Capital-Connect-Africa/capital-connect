@@ -4,7 +4,7 @@ import { of, switchMap, tap } from 'rxjs';
 import { FeedbackService, UploadService } from '../../../core';
 import { AuthStateService } from '../../auth/services/auth-state.service';
 import { SectorsService } from '../../sectors/services/sectors/sectors.service';
-import { Company, CompanyInput, GrowthStage, RegistrationStructure } from '../interfaces';
+import { Company, CompanyInput } from '../interfaces';
 import { CompanyHttpService } from './company.service';
 import { CompanyStateService } from './company-state.service';
 
@@ -34,13 +34,17 @@ export class OrganizationOnboardService {
   private _companyInput = signal<CompanyInput>({
     name: '',
     country: '',
+    useOfFunds: [],
+    fundsNeeded: 0,
+    esgFocusAreas: [],
     businessSector: '',
     businessSubsector: '',
     productsAndServices: '',
-    registrationStructure: RegistrationStructure.CoOperative,
-    yearsOfOperation: "0 - 10",
-    growthStage: GrowthStage.Idea,
-    numberOfEmployees: '1-10 employees',
+    investmentStructure: [],
+    registrationStructure: '',
+    yearsOfOperation: "",
+    growthStage: '',
+    numberOfEmployees: '',
     fullTimeBusiness: false
   });
 
@@ -61,16 +65,20 @@ export class OrganizationOnboardService {
     this._companyInput.set({
       name: '',
       country: '',
+      useOfFunds: [],
+      fundsNeeded: 0,
+      esgFocusAreas: [],
       businessSector: '',
       businessSubsector: '',
       productsAndServices: '',
-      registrationStructure: RegistrationStructure.CoOperative,
-      yearsOfOperation: '0 - 10',
-      growthStage: GrowthStage.Idea,
-      numberOfEmployees: '1-10 employees',
+      investmentStructure: [],
+      registrationStructure: '',
+      yearsOfOperation: "",
+      growthStage: '',
+      numberOfEmployees: '',
       fullTimeBusiness: false
-    });
-  }
+  })
+}
 
 
   submitCompanyInfo(isEditMode: boolean, editId = 0) {
