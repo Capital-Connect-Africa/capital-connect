@@ -15,6 +15,8 @@ import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
 import { RouterModule } from '@angular/router';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
+import { Table, TableModule } from 'primeng/table';
+import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 
 @Component({
   selector: 'app-overview',
@@ -27,7 +29,9 @@ import { RoutingService } from '../../../../../shared/business/services/routing.
     ModalComponent,
     RemoveQuotesPipe,
     RouterModule,
-    SharedModule
+    SharedModule,
+    TableModule,
+    NumberAbbriviationPipe
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'

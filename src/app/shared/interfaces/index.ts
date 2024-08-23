@@ -30,7 +30,11 @@ export interface MatchMakingStatistics{
 }
 
 export interface MatchedInvestor {
-  name: string
+  headOfficeLocation: string,
+  minimumFunding: number,
+  maximumFunding: number,
+  investorType: string,
+  noMaximumFunding: boolean,
 }
 
 

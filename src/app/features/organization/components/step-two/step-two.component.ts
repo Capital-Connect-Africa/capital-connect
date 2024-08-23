@@ -31,20 +31,20 @@ export class StepTwoComponent {
 
 
   esg_focus:Choice[] =[];
-  use_of_funds:Choice[] =[];
+  useOfFunds:Choice[] =[];
   growth_stages:Choice[] =[];
   years_of_operation:Choice[] =[];
   number_of_employees:Choice[] =[];
-  investment_structures:Choice[] =[];
+  investmentStructure:Choice[] =[];
   registration_structures:Choice[] =[];
   
   choices$ =this._companyHttpService.fetchQuestionChoices().pipe(tap(res =>{
     this.esg_focus =res.esg_focus;
-    this.use_of_funds =res.use_of_funds;
+    this.useOfFunds =res.use_of_funds;
     this.growth_stages =res.stage_of_growth;
     this.years_of_operation =res.years_of_operation
     this.number_of_employees =res.number_of_employees;
-    this.investment_structures =res.investment_structures;
+    this.investmentStructure =res.investment_structures;
     this.registration_structures =res.registration_structure;
   }));
 
@@ -55,16 +55,15 @@ export class StepTwoComponent {
     numberOfEmployees: [this._currentCompanyData.numberOfEmployees ?? '', Validators.required],
     fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness, Validators.required],
     esg_focus: [[], Validators.required],
-    use_of_funds: [[], Validators.required],
-    investment_ticket: ['', Validators.required],
-    investiment_structure: [[], Validators.required],
+    useOfFunds: [[], Validators.required],
+    fundsNeeded: ['', Validators.required],
+    investmentStructure: [[], Validators.required],
   });
 
 
   stepTwoForm$ = this.stepTwoForm.valueChanges.pipe(tap(vals => {
     this._orgStateService.step2isValid.set(this.stepTwoForm.valid)
     if (this.stepTwoForm.valid) {
-      debugger
       this._orgStateService.updateCompanyInput(vals);
     }
   }))
@@ -77,6 +76,10 @@ export class StepTwoComponent {
         growthStage: this._currentCompanyData.growthStage.length ? this._currentCompanyData.growthStage : this.companyToBeEdited.growthStage,
         numberOfEmployees: this._currentCompanyData.numberOfEmployees.length ? this._currentCompanyData.numberOfEmployees : this.companyToBeEdited.numberOfEmployees,
         fullTimeBusiness: this._currentCompanyData.fullTimeBusiness ? this._currentCompanyData.fullTimeBusiness : this.companyToBeEdited.fullTimeBusiness,
+        investmentStructure: this._currentCompanyData.investmentStructure ? this._currentCompanyData.investmentStructure : this.companyToBeEdited.investmentStructure,
+        esgFocusAreas: this._currentCompanyData.esgFocusAreas ? this._currentCompanyData.esgFocusAreas : this.companyToBeEdited.esgFocusAreas,
+        fundsNeeded: this._currentCompanyData.fundsNeeded ? this._currentCompanyData.fundsNeeded : this.companyToBeEdited.fundsNeeded,
+        useOfFunds: this._currentCompanyData.useOfFunds ? this._currentCompanyData.useOfFunds : this.companyToBeEdited.useOfFunds,
       });
     }
   }

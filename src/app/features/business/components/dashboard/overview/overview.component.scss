@@ -221,3 +221,18 @@ main{
 .implication{
   margin-top: 2rem;
 }
+
+.cta__wrap{
+  gap: .5rem;
+  display: flex;
+  align-items: center;
+
+  .btn__cta{
+    font-size: .9rem;
+    transition: .2s linear;
+
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+}
