@@ -46,7 +46,7 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
 
   LIQUIDATION: {
     ID: 11,
-    LANDING: null as unknown as number,
+    LANDING: 364,
     STEP_ONE: 133,
     STEP_TWO: 136,
     STEP_THREE: 137,
@@ -54,7 +54,7 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
 
   TURNAROUND: {
     ID: 11,
-    LANDING: null as unknown as number,
+    LANDING: 364,
     STEP_ONE: 133,
     STEP_TWO: 136,
     STEP_THREE: 137,
@@ -62,7 +62,7 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
 
   DISTRESS: {
     ID: 11,
-    LANDING: null as unknown as number,
+    LANDING: 364,
     STEP_ONE: 133,
     STEP_TWO: 136,
     STEP_THREE: 137,
