@@ -64,7 +64,6 @@ export class StepTwoComponent {
   stepTwoForm$ = this.stepTwoForm.valueChanges.pipe(tap(vals => {
     this._orgStateService.step2isValid.set(this.stepTwoForm.valid)
     if (this.stepTwoForm.valid) {
-      debugger
       this._orgStateService.updateCompanyInput(vals);
     }
   }))

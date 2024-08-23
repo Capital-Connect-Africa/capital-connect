@@ -12,7 +12,6 @@ export class UserStatisticsService extends BaseHttpService{
         return forkJoin(requests).pipe(map((res:any) =>{
             const users =res[0];
             const matches =res[1];
-            debugger
             return {
                     staff: users.admin,
                     business: users.user,
