@@ -2,6 +2,11 @@
 <ng-container *ngIf="interestingCompanies$ | async"></ng-container>
 
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
+<ng-container *ngIf="connectWithCompany$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+
+
+
 
 
 <div class="main">
@@ -24,7 +29,7 @@
         <h6 class="text-xl font-semibold mb-2 text-center"><strong>Interesting Company Information</strong></h6>
       </div>
 
-      <div class="table-parent">
+      <div class="table-parent" >
         <table class="table" *ngIf="table">
           <tbody>
             <tr class="border-b border-gray-200">
@@ -35,8 +40,8 @@
               <td class="flex font-bold space-x-2">Actions</td>
             </tr>
 
-            <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
-              class="border-b border-gray-200">
+            <tr *ngFor="let business of interestingBusinesses 
+            ; let i = index; trackBy: trackByIndex" class="border-b border-gray-200">
               <td class="font-bold">{{ i + 1 }}</td>
               <td class="">{{ business.company.country }}</td>
               <td class="">N/A</td>
@@ -53,6 +58,17 @@
             </tr>
           </tbody>
         </table>
+
+        <mat-paginator *ngIf="table"
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="pageChange($event)">
+      </mat-paginator>
+
+       <!-- <div>
+            Page {{ currentPage + 1 }} of {{ dataSource.data.length / pageSize }}
+          </div> -->
 
 
         <!-- Intersting Business Extra Details -->
@@ -93,7 +109,7 @@
                     selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
               </div>
 
-<!-- 
+              <!-- 
               <h1>Extra Details </h1>
 
               <ng-container *ngIf="investorEligibilityScore$ | async">
@@ -119,7 +135,8 @@
             <td class="flex space-x-2 justify-center p-2">
               <button class="btn btn-sm text-xs px-3 py-1"
                 (click)="connect(selectedBusiness.company.id)">Connect</button>
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
+              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                (click)="cancelInterest(selectedBusiness.company.id)">Decline</button>
               <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                 Back to List
               </button>
@@ -147,18 +164,3 @@
     </div>
   </main>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   

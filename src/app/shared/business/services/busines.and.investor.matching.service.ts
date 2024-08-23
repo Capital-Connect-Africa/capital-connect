@@ -101,25 +101,30 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
 
   //Interesting companies
-  getInterestingCompanies(): Observable<InterestingBusinesses[]> {
+  getInterestingCompanies(page:number, limit:number): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}`).pipe(
+    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?limit=${limit}`).pipe(
+      map(res => res as InterestingBusinesses[])
+    );
+
+    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as InterestingBusinesses[])
     );
   }
 
   //connected companies
-  getConnectedCompanies(): Observable<ConnectedBusiness[]> {
+  getConnectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}`).pipe(
+
+    return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }
 
   //Rejected companies
-  getRejectedCompanies(): Observable<ConnectedBusiness[]> {
+  getRejectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}`).pipe(
+    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}?page=${page}&limit=100`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }

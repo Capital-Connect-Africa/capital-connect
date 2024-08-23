@@ -132,9 +132,6 @@ export class MatchedBusinessComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => {
         this._feedBackService.success('Company marked as interesting successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => { this.interestingBusinesses = res; })
-        );
       })
     );
   }
@@ -144,9 +141,6 @@ export class MatchedBusinessComponent {
     this.selectedMatchedBusiness = null;
   }
 
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => { this.interestingBusinesses = res; })
-  );
 
   private _authStateService = inject(AuthStateService);
   issue = UserMobileNumbersIssues;
@@ -189,8 +183,7 @@ export class MatchedBusinessComponent {
     .cancelInterestWithCompany(businessId).pipe(
       tap(() => {
         this._feedBackService.success('Interest cancelled successfully.');
-        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));     
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(tap(res => {this.interestingBusinesses = res;}));   
+        this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));      
       })
     );
   }
