@@ -13,7 +13,6 @@ import {
 import { QuestionsService } from "../../features/questions/services/questions/questions.service";
 import { CompanyStateService } from "../../features/organization/services/company-state.service";
 import { LoadingService } from "../../core";
-import { GrowthStage } from "../../features/organization/interfaces";
 import { InvestorProfile } from "../interfaces/Investor";
 import { InvestorScreensService } from "../../features/investor/services/investor.screens.service";
 import { AuthStateService } from "../../features/auth/services/auth-state.service";
