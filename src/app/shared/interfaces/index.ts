@@ -23,6 +23,12 @@ export interface MatchedBusiness {
 
 }
 
+export interface MatchMakingStatistics{
+  interesting: number,
+  declined: number,
+  connected: number
+}
+
 export interface MatchedInvestor {
   id: number,
   investorType: string,

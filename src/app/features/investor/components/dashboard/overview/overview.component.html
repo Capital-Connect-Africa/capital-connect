@@ -1,34 +1,33 @@
-<ng-container *ngIf="connectedCompanies$ | async"></ng-container>
-<ng-container *ngIf="interestingCompanies$ | async"></ng-container>
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="connectWithCompany$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
 <ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
-<ng-container *ngIf="rejectedCompanies$ | async"></ng-container>
 
 
+<ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
 <app-overview-section>
   <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
     (click)="showDialog('matched_businesses')">
     <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Businesses Interested In', value: interestingBusinesses.length.toString(), featured: true}"
+  <app-card [detail]="{title: 'Businesses Interested In', value: MatchMakingStats.interesting.toString() , featured: true}"
     (click)="showDialog('interesting_businesses')">
-    <p class="helper__text text__yellow">{{ interestingBusinesses.length }} Interesting Businesses</p>
+    <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting Businesses</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Connected Businesses', value: connectedBusinesses.length.toString(), featured: true}"
+  <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"
     (click)="showDialog('connected_businesses')">
-    <p class="helper__text text__yellow">{{ connectedBusinesses.length }} Connected Businesses</p>
+    <p class="helper__text text__yellow">{{ MatchMakingStats.connected.toString() }} Connected Businesses</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Declined Businesses', value: rejectedBusinesses.length.toString(), featured: true}"
+  <app-card [detail]="{title: 'Declined Businesses', value: MatchMakingStats.declined.toString(), featured: true}"
     (click)="showDialog('rejected_businesses')">
-    <p class="helper__text text__yellow">{{ rejectedBusinesses.length }} Declined Businesses</p>
+    <p class="helper__text text__yellow">{{ MatchMakingStats.declined.toString() }} Declined Businesses</p>
   </app-card>
 </app-overview-section>
+</ng-container>
 
 <app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length"
   [helperText]="getModalHelperText()">

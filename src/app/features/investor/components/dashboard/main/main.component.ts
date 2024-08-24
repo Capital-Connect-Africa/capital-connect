@@ -86,9 +86,7 @@ export class MainComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
         this._feedBackService.success('Company marked as interesting successfully.');        
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );   
+
       })        
     );
   }
@@ -98,9 +96,7 @@ export class MainComponent {
     this.selectedMatchedBusiness = null;
   }
 
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies().pipe(
-    tap(res => {this.interestingBusinesses = res;})
-  );
+ 
 
   private _authStateService = inject(AuthStateService);
   issue =UserMobileNumbersIssues;
