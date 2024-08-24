@@ -24,11 +24,20 @@ export interface MatchedBusiness {
 }
 
 export interface MatchedInvestor {
-  headOfficeLocation: string,
+  id: number,
+  investorType: string,
+  emailAddress: string,
   minimumFunding: number,
   maximumFunding: number,
-  investorType: string,
+  esgFocusAreas: string[],
+  organizationName: string,
+  sectors:{name: string}[],
   noMaximumFunding: boolean,
+  headOfficeLocation: string,
+  businessGrowthStages: string[],
+  investmentStructures: string[],
+  registrationStructures: string[],
+  countriesOfInvestmentFocus: string[]
 }
 
 
