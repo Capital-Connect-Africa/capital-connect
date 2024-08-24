@@ -9,6 +9,7 @@ import { UserCompanyService } from "../../../../core/services/company/user.compa
 import { Sector, SubSector } from '../../../sectors/interfaces';
 import { CountriesService } from '../../../../shared/services/countries.service';
 import { Country } from '../../../../shared/interfaces/countries';
+import { CompanyStateService } from '../../services/company-state.service';
 
 @Component({
   selector: 'app-step-one',
@@ -23,13 +24,14 @@ export class StepOneComponent implements OnChanges {
   private _fb = inject(FormBuilder)
   private _countries = inject(CountriesService)
   private _orgStateService = inject(OrganizationOnboardService);
+  private _companyStateService =inject(CompanyStateService);
   countries : Country[] = []
 
   @Input() companyToBeEdited!: CompanyResponse
 
   sectors$: Observable<Sector[]> = this._orgStateService.fetchSectors$.pipe(tap(sectors => {
     this.sectors = sectors;
-    if (!this.companyToBeEdited) {
+    if (!this._currentCompany) {
       this.businessSubsectorCtrl?.disable();
       this.businessSubsectorCtrl?.reset();
     }
@@ -38,14 +40,15 @@ export class StepOneComponent implements OnChanges {
 
   private _currentCompanyData: CompanyInput = this._orgStateService.companyInput;
 
-  userCompany: Company = this.companyToBeEdited;
+  private _currentCompany =this._companyStateService.currentCompany;
+  userCompany: Company = this._currentCompany;
 
   stepOneForm: FormGroup = this._fb.group({
-    name: [this._currentCompanyData.name ?? this.companyToBeEdited.name ?? '', Validators.required],
-    country: [this._currentCompanyData.country ?? this.companyToBeEdited.country ?? 'Kenya', Validators.required],
-    businessSector: [this._currentCompanyData.businessSector ?? this.companyToBeEdited.businessSector ?? '', Validators.required],
-    businessSubsector: [this._currentCompanyData?.businessSubsector ?? this.companyToBeEdited?.businessSubsector ?? '', Validators.required],
-    productsAndServices: [this._currentCompanyData.productsAndServices ?? this.companyToBeEdited?.productsAndServices ?? '', Validators.required]
+    name: [this._currentCompanyData.name || this._currentCompany.name, Validators.required],
+    country: [(this._currentCompanyData.country || this._currentCompany.country)??  'Kenya', Validators.required],
+    businessSector: [this._currentCompanyData.businessSector || this._currentCompany.businessSector, Validators.required],
+    businessSubsector: [this._currentCompanyData?.businessSubsector || this._currentCompany?.businessSubsector, Validators.required],
+    productsAndServices: [this._currentCompanyData.productsAndServices || this._currentCompany?.productsAndServices, Validators.required]
   });
 
   stepOneForm$ = this.stepOneForm.valueChanges.pipe(tap(vals => {
@@ -53,12 +56,18 @@ export class StepOneComponent implements OnChanges {
     if (this.stepOneForm.valid) {
       this._orgStateService.updateCompanyInput(vals)
     }
-  }))
+  }));
+
+  ngOnInit(): void {
+    if(this._currentCompany.businessSector){
+      this._initSubSector(this._currentCompany.businessSector)
+    }
+    
+  }
 
   countries$ = this._countries.getCountries().pipe(tap(countries => {
     this.countries = countries
   }))
-
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["companyToBeEdited"] && changes["companyToBeEdited"].currentValue) {

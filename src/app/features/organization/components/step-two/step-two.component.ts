@@ -1,7 +1,7 @@
 import { tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../../shared';
-import { CompanyInput, CompanyResponse } from '../../interfaces';
+import { Company, CompanyInput, CompanyResponse } from '../../interfaces';
 import { CompanyHttpService } from '../../services/company.service';
 import { OrganizationOnboardService } from '../../services/organization-onboard.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, inject, Input, SimpleChanges } from
 import { Choice } from '../../../business/interfaces/choice.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
+import { CompanyStateService } from '../../services/company-state.service';
 
 @Component({
   selector: 'app-step-two',
@@ -25,39 +26,57 @@ export class StepTwoComponent {
   private _fb = inject(FormBuilder)
   private _companyHttpService =inject(CompanyHttpService)
   private _orgStateService = inject(OrganizationOnboardService);
+  private _companyStateService =inject(CompanyStateService)
 
 
   private _currentCompanyData: CompanyInput = this._orgStateService.companyInput;
+  private _savedCompanyData: Company =this._companyStateService.currentCompany
+ 
 
+  esgFocus:string[] =[];
+  useOfFunds:string[] =[];
+  growthStages:string[] =[];
+  yearsOfOperation:string[] =[];
+  numberOfEmployees:string[] =[];
+  investmentStructure:string[] =[];
+  registrationStructures:string[] =[];
 
-  esg_focus:Choice[] =[];
-  useOfFunds:Choice[] =[];
-  growth_stages:Choice[] =[];
-  years_of_operation:Choice[] =[];
-  number_of_employees:Choice[] =[];
-  investmentStructure:Choice[] =[];
-  registration_structures:Choice[] =[];
-  
+  private _defaultValues ={
+    esg: this._currentCompanyData.esgFocusAreas.length >0?this._currentCompanyData.esgFocusAreas:this._savedCompanyData.esgFocusAreas,
+    stages: this._currentCompanyData.growthStage? this._currentCompanyData.growthStage:this._savedCompanyData.growthStage,
+    years: this._currentCompanyData.yearsOfOperation? this._currentCompanyData.yearsOfOperation:this._savedCompanyData.yearsOfOperation,
+    employees: this._currentCompanyData.numberOfEmployees? this._currentCompanyData.numberOfEmployees:this._savedCompanyData.numberOfEmployees,
+    registration: this._currentCompanyData.registrationStructure? this._currentCompanyData.registrationStructure:this._savedCompanyData.registrationStructure,
+    investiment: this._currentCompanyData.investmentStructure.length? this._currentCompanyData.investmentStructure:this._savedCompanyData.investmentStructure,
+    amount: this._currentCompanyData.fundsNeeded >0?this._currentCompanyData.fundsNeeded: this._savedCompanyData.fundsNeeded >0?this._savedCompanyData.fundsNeeded:'',
+    funds: this._currentCompanyData.useOfFunds.length >0?this._currentCompanyData.useOfFunds: this._savedCompanyData.useOfFunds
+  }
+
   choices$ =this._companyHttpService.fetchQuestionChoices().pipe(tap(res =>{
-    this.esg_focus =res.esg_focus;
-    this.useOfFunds =res.use_of_funds;
-    this.growth_stages =res.stage_of_growth;
-    this.years_of_operation =res.years_of_operation
-    this.number_of_employees =res.number_of_employees;
-    this.investmentStructure =res.investment_structures;
-    this.registration_structures =res.registration_structure;
+    this.esgFocus =res.esg_focus.map(({title}) =>title);
+    this.useOfFunds =res.use_of_funds.map(({title}) =>title);
+    this.growthStages =res.stage_of_growth.map(({title}) =>title);
+    // @ts-ignore
+    this.yearsOfOperation =res.years_of_operation;
+    // @ts-ignore
+    this.numberOfEmployees =res.number_of_employees;
+    this.investmentStructure =res.investment_structures.map(({title}) =>title);
+    this.registrationStructures =res.registration_structure.map(({title}) =>title);
+
   }));
 
+
+  
   stepTwoForm: FormGroup = this._fb.group({
-    registrationStructure: [this._currentCompanyData.registrationStructure ?? '', Validators.required],
-    yearsOfOperation: [this._currentCompanyData.yearsOfOperation ?? '', [Validators.required]],
-    growthStage: [this._currentCompanyData.growthStage ?? '', Validators.required],
-    numberOfEmployees: [this._currentCompanyData.numberOfEmployees ?? '', Validators.required],
-    fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness, Validators.required],
-    esg_focus: [[], Validators.required],
-    useOfFunds: [[], Validators.required],
-    fundsNeeded: ['', Validators.required],
-    investmentStructure: [[], Validators.required],
+    fundsNeeded: [this._defaultValues.amount, Validators.required],
+    registrationStructure: [this._defaultValues.registration, Validators.required],
+    yearsOfOperation: [this._defaultValues.years, [Validators.required]],
+    numberOfEmployees: [this._defaultValues.employees, Validators.required],
+    investmentStructure: [this._defaultValues.investiment, Validators.required],
+    growthStage: [this._defaultValues.stages, Validators.required],
+    esgFocusAreas: [this._defaultValues.esg, Validators.required],
+    useOfFunds: [this._defaultValues.funds, Validators.required],
+    fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness || this._savedCompanyData.fullTimeBusiness, Validators.required],
   });
 
 

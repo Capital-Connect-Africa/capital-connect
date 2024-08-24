@@ -6,6 +6,7 @@ import { Score } from "./onboarding.questions.service";
 import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStatistics} from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
+import { Company } from "../../../features/organization/interfaces";
 // import { ConfirmationService } from "primeng/api";
 
 @Injectable({
@@ -18,8 +19,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     super(_httpClient);
   }
 
-  getMatchedInvestors(userId: number) {
+  getMatchedInvestors() {
     return this.read(`${BASE_URL}/matchmaking/investor-profiles`).pipe(map(res => {
+      return res as MatchedInvestor[]
+    }))
+  }
+  
+  getConnectedInvestors(companyId: number) {
+    return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
     }))
   }
@@ -68,6 +75,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/interesting/${investorProfileId}/${companyId}`, {}).pipe(
       map(() => void 0)  
+    );
+  }
+
+  //Search criteria
+  postSearchCriteria(criteria: Company):Observable<MatchedBusiness[]>{
+    return this.create(`${BASE_URL}/matchmaking/search-companies`, criteria).pipe(
+      map((res) => res as unknown as MatchedBusiness[])  
     );
   }
 

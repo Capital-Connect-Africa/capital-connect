@@ -13,10 +13,11 @@ import { SharedModule, SubMissionStateService } from '../../../../../shared';
 import { UserSubmissionResponse } from '../../../../../shared';
 import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
-import { Table, TableModule } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
+import { SignalsService } from '../../../../../core/services/signals/signals.service';
 
 @Component({
   selector: 'app-overview',
@@ -51,6 +52,7 @@ export class OverviewComponent {
   impactElementVisible = false;
   investorsDiagVisible = false;
   matchedInvestors: MatchedInvestor[] = [];
+  connectedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
   impactAssessmentScore: string = '0';
@@ -71,16 +73,19 @@ export class OverviewComponent {
   currentModal: 'eligibility' | 'preparedness' = 'eligibility';
 
 
-  private _companyService = inject(CompanyStateService);
-  private _scoringService = inject(BusinessOnboardingScoringService);
+  private _router =inject(Router);
+  signalService =inject(SignalsService);
   private _pdfService = inject(PdfGeneratorService)
-  private _submissionStateService = inject(SubMissionStateService)
+  private _companyService = inject(CompanyStateService);
+  private _submissionStateService = inject(SubMissionStateService);
+  private _scoringService = inject(BusinessOnboardingScoringService);
 
 
   currentCompany = this._companyService.currentCompany;
 
-  stats$ = this._scoringService.getMatchedInvestors().pipe(tap(res => {
-    this.matchedInvestors = res;
+  stats$ = this._scoringService.getInvestors().pipe(tap(res => {
+    this.connectedInvestors =res.connected
+    this.matchedInvestors = res.matched.filter(matched =>!this.connectedInvestors.find(connected =>matched.id ===connected.id));
   }))
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
@@ -150,7 +155,11 @@ export class OverviewComponent {
   }
 
   showMatchedInvestors() {
-    this.investorsDiagVisible = !this.investorsDiagVisible;
+    this.signalService.matchedInvestorsDialogIsVisible.set(true)
+  }
+
+  showConnectedInvestors() {
+    this.signalService.connectedInvestorsDialogIsVisible.set(true)
   }
 
   generatePDF() {
@@ -188,6 +197,16 @@ export class OverviewComponent {
     } else {
       console.error('Content element is null or undefined.');
     }
+  }
+
+  viewMatchedInvestor(id:number){
+    this.signalService.matchedInvestorsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/matched-${id}`)
+  }
+
+  viewConnectedInvestor(id:number){
+    this.signalService.connectedInvestorsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
   }
 
 }

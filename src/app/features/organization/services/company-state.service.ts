@@ -20,4 +20,10 @@ export class CompanyStateService {
     return this._currentCompanySrc.set(null as any)
   }
 
+  get companyDetailsCaptured(){
+    const comapany =this.currentCompany;
+    return !!comapany.growthStage && !!comapany.id && !!comapany.investmentStructure && !!comapany.fundsNeeded && !!comapany.esgFocusAreas && !!comapany.businessSector && !!comapany.businessSubsector && !!comapany.country && !!comapany.name && !!comapany.numberOfEmployees
+
+  }
+
 }

@@ -12,11 +12,15 @@ export class CompanyHttpService extends BaseHttpService {
   }
 
   createCompany(companyInput:CompanyInput) {
-    return this.create(`${BASE_URL}/company`, companyInput) as Observable<CompanyResponse>
+    const payload ={...companyInput, useOfFunds: companyInput.useOfFunds.join(','), investmentStructure: companyInput.investmentStructure.join(','), esgFocusAreas: companyInput.esgFocusAreas.join(',')}
+    return this.create(`${BASE_URL}/company`, payload) as Observable<CompanyResponse>
   }
 
   getCompanyOfUser(id:number){
-    return this.readById(`${BASE_URL}/company/owner`, id) as Observable<CompanyResponse>
+    return this.readById(`${BASE_URL}/company/owner`, id).pipe(map((res:any) =>{
+      const payload:CompanyResponse ={...res, useOfFunds: res.useOfFunds.split(','), investmentStructure: res.investmentStructure.split(','), esgFocusAreas: res.esgFocusAreas.split(',')}
+      return payload;
+    }))  as Observable<CompanyResponse>
   }
 
   getAllCompanies() {
@@ -28,7 +32,8 @@ export class CompanyHttpService extends BaseHttpService {
   }
 
   updateCompany(companyId: number, company: Company) {
-    return this.updatePatch(`${BASE_URL}/company`, companyId, company) as Observable<CompanyResponse>
+    const payload ={...company, useOfFunds: company.useOfFunds.join(','), investmentStructure: company.investmentStructure.join(','), esgFocusAreas: company.esgFocusAreas.join(',')}
+    return this.updatePatch(`${BASE_URL}/company`, companyId, payload) as Observable<CompanyResponse>
   }
 
   deleteCompany(companyId: number) {
