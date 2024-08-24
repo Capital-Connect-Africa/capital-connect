@@ -7,6 +7,7 @@ import { switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviation.pipe";
 import { ActivatedRoute, Router } from '@angular/router';
+import { SignalsService } from '../../../../core/services/signals/signals.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class InvestorDetailsComponent {
   private _router =inject(Router);
-  private _activatedRoute =inject(ActivatedRoute)
+  private _activatedRoute =inject(ActivatedRoute);
+  private _signalService =inject(SignalsService);
   links =[
     {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
     {label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center'},
@@ -42,6 +44,7 @@ export class InvestorDetailsComponent {
   
 
   goBack(){
+    this._signalService.matchedInvestorsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
   }
 

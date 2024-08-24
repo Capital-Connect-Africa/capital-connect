@@ -194,6 +194,7 @@ export class OverviewComponent {
   }
 
   viewInvestor(id:number){
+    this.signalService.matchedInvestorsDialogIsVisible.set(false);
     this._router.navigateByUrl(`/business/my-business/investors/${id}`)
   }
 
