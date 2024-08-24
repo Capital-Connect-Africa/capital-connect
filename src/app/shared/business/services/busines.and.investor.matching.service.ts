@@ -6,6 +6,7 @@ import { Score } from "./onboarding.questions.service";
 import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStatistics} from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
+import { Company } from "../../../features/organization/interfaces";
 // import { ConfirmationService } from "primeng/api";
 
 @Injectable({
@@ -23,6 +24,8 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as MatchedInvestor[]
     }))
   }
+
+
 
   getOnboardingScores(userId: number): Observable<Score[]> {
     return this.read(`${BASE_URL}/submissions/user/${userId}/score`).pipe((map(res  => {
@@ -68,6 +71,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/interesting/${investorProfileId}/${companyId}`, {}).pipe(
       map(() => void 0)  
+    );
+  }
+
+  //Search criteria
+  postSearchCriteria(criteria: Company):Observable<MatchedBusiness[]>{
+    return this.create(`${BASE_URL}/matchmaking/search-companies`, criteria).pipe(
+      map((res) => res as unknown as MatchedBusiness[])  
     );
   }
 
