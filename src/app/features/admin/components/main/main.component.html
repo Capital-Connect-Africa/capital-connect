@@ -1,15 +1,69 @@
-<app-admin-ui-container [title]="'Dashboard'">
+<app-admin-ui-container [title]="'Quick Stats'">
   <div class="main">
     <main>
-      <div class="left__col">
-        <div class="button-group">
-          <button pButton type="button" label=" Dashboard" icon="pi pi-th-large" class="btn btn-primary" (click)="navigateTo('/dashboard')"></button>
-          <button pButton type="button" label=" Sections" icon="pi pi-question-circle" class="btn btn-primary" (click)="navigateTo('/questions')"></button>
-          <button pButton type="button" label=" Sectors" icon="pi pi-sitemap" class="btn btn-primary" (click)="navigateTo('/sectors')"></button>
-          <button pButton type="button" label=" Companies" icon="pi pi-building" class="btn btn-primary" (click)="navigateTo('/organization/list')"></button>
-          <button pButton type="button" label=" Users" icon="pi pi-users" class="btn btn-primary" (click)="navigateTo('/users')"></button>
-        </div>
-      </div>
+      <ng-container *ngIf="stats$ | async as stats">
+        <section class="stats__section">
+          <h3 class="text-base stat__title">Business</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-[#064635e5] h-[200px] rounded-lg stat__card">
+              <span class="text-right"><mat-icon>handshake</mat-icon></span>
+              <div>
+                <h2 class="value">{{matches.connected}}</h2>
+                <p>Connected</p>
+              </div>
+            </div>
+            <div class="bg-[#654f29e3] h-[200px] rounded-lg stat__card">
+              <span class="text-right"><mat-icon>thumb_up</mat-icon></span>
+              <div>
+                <h2 class="value">{{matches.interesting}}</h2>
+                <p>Interesting</p>
+              </div>
+            </div>
+            <div class="bg-rose-950 h-[200px] rounded-lg stat__card">
+              <span class="text-right"><mat-icon>thumb_down</mat-icon></span>
+              <div>
+                <h2 class="value">{{matches.declined}}</h2>
+                <p>Declined</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="stats__section">
+          <h3 class="stat__title">Users</h3>
+          <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
+            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
+                <span class="rounded bg__icon"><mat-icon>group</mat-icon></span>
+                <div>
+                  <span>{{matches.investors}}</span>
+                  <p>Investors</p>
+                </div>
+            </div>
+            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
+              <span class="rounded bg__icon"><mat-icon>apartment</mat-icon></span>
+              <div>
+                <span>{{matches.business}}</span>
+                <p>Business</p>
+              </div>
+            </div>
+            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
+              <span class="rounded bg__icon"><mat-icon>support_agent</mat-icon></span>
+              <div>
+                <span>{{matches.advisors}}</span>
+                <p>Advisors</p>
+              </div>
+            </div>
+            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
+              <span class="rounded bg__icon"><mat-icon>admin_panel_settings</mat-icon></span>
+              <div>
+                <span>{{matches.staff}}</span>
+                <p>Staff</p>
+              </div>
+            </div>
+          </div>
+        </section>
+  
+      </ng-container>
+     
     </main>
   </div>
 </app-admin-ui-container>

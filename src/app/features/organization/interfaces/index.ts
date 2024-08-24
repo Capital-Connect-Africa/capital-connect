@@ -26,17 +26,22 @@ export enum GrowthStage {
 }
 
 
+
 export interface CompanyInput {
   name: string;
   country: string;
+  useOfFunds:string[],
+  esgFocusAreas: string[],
+  fundsNeeded: number,
   businessSector: string;
   businessSubsector: string;
   productsAndServices: string;
-  registrationStructure: RegistrationStructure;
   yearsOfOperation: string;
-  growthStage: GrowthStage;
+  growthStage: GrowthStage | any;
   numberOfEmployees: string;
   fullTimeBusiness: boolean;
+  registrationStructure: string;
+  investmentStructure: string[]
 }
 
  export interface CompanyResponse extends Company {

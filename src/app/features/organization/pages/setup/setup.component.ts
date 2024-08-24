@@ -32,7 +32,7 @@ export class SetupComponent implements OnInit {
 
   isEditMode = !!this._activateRoute.snapshot.paramMap.get('id')?.length;
   editId = this._activateRoute.snapshot.paramMap.get('id')
-  current_step = 1;
+  current_step = 2;
   steps = [1, 2, 3, 4];
   companyToBeEdited!: CompanyResponse;
 
@@ -51,7 +51,7 @@ export class SetupComponent implements OnInit {
       this.companyOfUser$ = this._organizationOnboardService.getCompanyOfUser().pipe(filter(() => !this.isEditMode), tap(company => {
         if (company && company.id) {
           this._cd.detectChanges()
-          this.goToInvestorEligibility();
+          this.goToBusinessProfile();
         }
       }));
     }
@@ -83,8 +83,8 @@ export class SetupComponent implements OnInit {
     return true;
   }
 
-  goToInvestorEligibility() {
-    this._router.navigateByUrl('/business/investor-eligibility')
+  goToBusinessProfile() {
+    // this._router.navigateByUrl('/business/investor-eligibility')
   }
   goToDashBoard() {
     this._router.navigateByUrl('/business')

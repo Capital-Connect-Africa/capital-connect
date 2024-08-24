@@ -29,7 +29,7 @@
         <button class="outline" (click)="setStep(1)" *ngIf="current_step == 3 ">Skip Step</button>
         <button [disabled]="isDisabled" class="fill" [ngClass]="{'disabled-btn' : isDisabled }" (click)="setStep(1)"
           *ngIf="current_step < 4">Continue</button>
-        <button class="fill" (click)="goToInvestorEligibility()" *ngIf="current_step === 4">Let's Start</button>
+        <button class="fill" (click)="goToBusinessProfile()" *ngIf="current_step === 4">Let's Start</button>
       </div>
     </div>
   </section>

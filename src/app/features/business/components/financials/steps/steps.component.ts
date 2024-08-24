@@ -6,14 +6,13 @@ import { StepThreeComponent } from '../step-three/step-three.component';
 import { BusinessPageService } from '../../../services/business-page/business.page.service';
 import { ProgressBarComponent } from '../../../../../core/components/progress-bar/progress-bar.component';
 import { tap } from 'rxjs';
-import { StepFourComponent } from "../step-four/step-four.component";
 
 @Component({
   selector: 'app-steps',
   standalone: true,
   styleUrl: './steps.component.scss',
   templateUrl: './steps.component.html',
-  imports: [CommonModule, ProgressBarComponent, StepOneComponent, StepTwoComponent, StepThreeComponent, StepFourComponent],
+  imports: [CommonModule, ProgressBarComponent, StepOneComponent, StepTwoComponent, StepThreeComponent],
 })
 export class StepsComponent {
   current_step = 1;
