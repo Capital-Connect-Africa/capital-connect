@@ -1,0 +1,101 @@
+<ng-container *ngIf="stats$ | async"></ng-container>
+
+<div class="main__content">
+    <app-sidenav [links]="links"/>
+    <div class="main">
+        <div class="navbar"><app-navbar onDashboard="true" /></div>
+        <main>
+          <div class="card__item__details" details>
+            <div class="card__item__detail_info">
+              <div>
+                <label>Investor Name:</label>
+                <p>{{matchedInvestor.organizationName}}</p>
+              </div>
+              <div>
+                <label>Email Address:</label>
+                <p>{{matchedInvestor.emailAddress}}</p>
+              </div>
+              <div>
+                <label>Country where headquatered:</label>
+                <p>{{matchedInvestor.headOfficeLocation}}</p>
+              </div>
+            </div>
+            
+            <div class="card__item__detail_info">
+              <div>
+                <label>Investor Type:</label>
+                <p>{{matchedInvestor.investorType}}</p>
+              </div>
+              <div>
+                <label>Minimum Funding:</label>
+                <p>${{matchedInvestor.minimumFunding | numberabbreviation}}</p>
+              </div>
+              <div>
+                <label>Maximum Funding:</label>
+                <p><ng-container *ngIf="matchedInvestor.noMaximumFunding; else withMaxFunding">
+                  Unlimited
+                </ng-container>
+                <ng-template #withMaxFunding>
+                  ${{ matchedInvestor.maximumFunding | numberabbreviation }}
+                </ng-template></p>
+              </div>
+            </div>
+          
+            <div class="card__item__detail">
+              <div>
+                <label>Sectors of investiment</label>
+                <ul class="chips">
+                  <li *ngFor="let sector of matchedInvestor.sectors" class="chip">{{sector.name}}</li>
+                </ul>
+              </div>
+              <div>
+                <label>ESG Focus Areas:</label>
+                <ul class="chips">
+                  <li *ngFor="let esg of matchedInvestor.esgFocusAreas" class="chip">{{esg}}</li>
+                </ul>
+              </div>
+              <div>
+                <label>Business Stages the investor focuses on:</label>
+                <ul class="chips">
+                  <li *ngFor="let stage of matchedInvestor.businessGrowthStages" class="chip">{{stage}}</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="card__item__detail">
+              <div>
+                <label>Registration Structures:</label>
+                <ul class="chips">
+                  <li *ngFor="let registration of matchedInvestor.registrationStructures" class="chip">{{registration}}</li>
+                </ul>
+              </div>
+              <div>
+                <label>Investiment Structures:</label>
+                <ul class="chips">
+                  <li *ngFor="let investiment of matchedInvestor.investmentStructures" class="chip">{{investiment}}</li>
+                </ul>
+              </div>
+              <div>
+                <label>Countries of investiment focus:</label>
+                <ul class="chips">
+                  <li *ngFor="let country of matchedInvestor.countriesOfInvestmentFocus" class="chip">{{country}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-group" footer>
+            <button class="btn__cta text-blue-600">
+              <i class="pi pi-angle-left"></i>
+              <span class="btn-text">Back</span>
+            </button>
+            <button class="btn__cta text-teal-600">
+              <i class="pi pi-check"></i>
+              <span class="btn-text">Connect</span>
+            </button>
+          </div>
+      </main>
+    </div>
+</div>
+  
+  
