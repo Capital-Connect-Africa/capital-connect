@@ -13,10 +13,11 @@ import { SharedModule, SubMissionStateService } from '../../../../../shared';
 import { UserSubmissionResponse } from '../../../../../shared';
 import { GeneralSummary } from '../../../../../shared';
 import { RemoveQuotesPipe } from '../../../../../shared/pipes/remove-quotes.pipe';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
+import { SignalsService } from '../../../../../core/services/signals/signals.service';
 
 @Component({
   selector: 'app-overview',
@@ -71,10 +72,12 @@ export class OverviewComponent {
   currentModal: 'eligibility' | 'preparedness' = 'eligibility';
 
 
-  private _companyService = inject(CompanyStateService);
-  private _scoringService = inject(BusinessOnboardingScoringService);
+  private _router =inject(Router);
+  signalService =inject(SignalsService);
   private _pdfService = inject(PdfGeneratorService)
-  private _submissionStateService = inject(SubMissionStateService)
+  private _companyService = inject(CompanyStateService);
+  private _submissionStateService = inject(SubMissionStateService);
+  private _scoringService = inject(BusinessOnboardingScoringService);
 
 
   currentCompany = this._companyService.currentCompany;
@@ -150,7 +153,7 @@ export class OverviewComponent {
   }
 
   showMatchedInvestors() {
-    this.investorsDiagVisible = !this.investorsDiagVisible;
+    this.signalService.matchedInvestorsDialogIsVisible.set(true)
   }
 
   generatePDF() {
@@ -188,6 +191,10 @@ export class OverviewComponent {
     } else {
       console.error('Content element is null or undefined.');
     }
+  }
+
+  viewInvestor(id:number){
+    this._router.navigateByUrl(`/business/my-business/investors/${id}`)
   }
 
 }
