@@ -26,6 +26,13 @@ import { CompanyHttpService } from '../../../organization/services/company.servi
 import { SubMissionStateService, UserSubmissionResponse } from '../../../../shared';
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
+import { Country } from '../../../../shared/interfaces/countries';
+import { Sector, SubSector } from '../../../sectors/interfaces';
+import { RegistrationStructure } from '../../../../shared/interfaces/Investor';
+import { CountriesService } from '../../../../shared/services/countries.service';
+import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
+import { InvestorScreensService } from '../../services/investor.screens.service';
 
 
 
@@ -33,21 +40,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
   selector: 'app-matched-business',
   standalone: true,
   imports: [
-    AdvertisementSpaceComponent,
-    AssessmentSummaryComponent,
-    MatIcon,
-    NavbarComponent,
-    OverviewSectionComponent,
-    SchedulesSectionComponent,
-    OverviewComponent,
-    CardComponent,
-    CommonModule,
-    AlertComponent,
-    DialogModule,
-    ReactiveFormsModule,
-    ModalComponent,
-    RemoveQuotesPipe,
-    MultiSelectModule, ReactiveFormsModule
+    AdvertisementSpaceComponent, AssessmentSummaryComponent,
+    MatIcon, NavbarComponent, OverviewSectionComponent,
+    SchedulesSectionComponent, OverviewComponent,
+    CardComponent, CommonModule,  AlertComponent,
+    DialogModule, ReactiveFormsModule, ModalComponent,
+    RemoveQuotesPipe, 
+    MultiSelectModule, ReactiveFormsModule,DropdownModule
   ],
   templateUrl: './matchedBusiness.component.html',
   styleUrl: './matchedBusiness.component.scss'
@@ -55,44 +54,64 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 
 export class MatchedBusinessComponent {
-  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
-  visible = false;
   matchedBusinesses: MatchedBusiness[] = []
-  selectedMatchedBusiness: MatchedBusiness | null = null;
-  private _company = inject(CompanyHttpService)
-  private _submissionStateService = inject(SubMissionStateService)
+  selectedMatchedBusiness: MatchedBusiness | null = null; 
   business__id: number = 0
-
-  markAsInteresting$ = new Observable<unknown>()
   interestingBusinesses: InterestingBusinesses[] = [];
   userResponses: UserSubmissionResponse[] = [];
   declineReasons: String[] = [];
   companyDetails: CompanyResponse | undefined;
-
-  table: boolean = true
-
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
-  private _feedBackService = inject(FeedbackService);
-  cancelInterestWithCompany$ = new Observable<unknown>;
-
-  decline: boolean = false;
-  declineForm!: FormGroup;
-
-  companyDetails$ = new Observable<unknown>()
-
-
   investorEligibilityScore: number = 0;
   investorPreparednessScore: number = 0;
+  impactElementAnswers: UserSubmissionResponse[] = [];
+  issue = UserMobileNumbersIssues;
 
+  countries: Country[] = []
+  sectors: Sector[] = []
+  subSectors: SubSector[] = []
+  registrationStructures: RegistrationStructure[] = []
+  yearsOfOperation: String[] = []
+  growthStages: String[] = []
+  numberOfEmployees: String[] = []
+  selectedSectors: string[] = [];
+  selectedSubSectors: string[] = [];
 
+  
+
+  //services
+  private _company = inject(CompanyHttpService)
+  private _submissionStateService = inject(SubMissionStateService)
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
+  private _feedBackService = inject(FeedbackService);
+  private _authStateService = inject(AuthStateService); 
+  signalsService = inject(SignalsService);
+  private _fb = inject(FormBuilder);
+  private _companyHttpService =inject(CompanyHttpService)
+  private _screenService = inject(InvestorScreensService)
+  private _countries = inject(CountriesService)
+  private _sectorService = inject(SectorsService)
+
+  //booleans
+  advanced_Search : boolean = false
+  table: boolean = true
+  decline: boolean = false;
+  visible = false;
+
+  //Forms
+  declineForm!: FormGroup;
+  searchForm!: FormGroup;
+  
+  //streams
+  markAsInteresting$ = new Observable<unknown>()
+  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+  cancelInterestWithCompany$ = new Observable<unknown>();
+  companyDetails$ = new Observable<unknown>()
   investorEligibilityScore$ = new Observable<unknown>()
   investorPreparednessScore$ = new Observable<unknown>()
   userResponses$ = new Observable<unknown>()
-
-
-
-  impactElementAnswers: UserSubmissionResponse[] = [];
-
+  savephoneNumber$ = new Observable<unknown>();
+  phoneNumberPull$ = new Observable<unknown>();
+  searchCriteria$ = new Observable<unknown>()
 
   esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
     this.impactElementAnswers = submissions
@@ -102,7 +121,35 @@ export class MatchedBusinessComponent {
     this.declineReasons = reasons
   }))
 
+  yearsOfOperation$ =this._companyHttpService.fetchCompanyYearsOfOperation().pipe(tap(res =>{
+    this.yearsOfOperation = res as string[]
+  }))
 
+  growthStages$ =this._companyHttpService.fetchGrowthStages().pipe(tap((res: any) =>{
+    this.growthStages = res as string[]
+  }))
+
+  numberOfEmployees$ =this._companyHttpService.fetchCompanyNumberOfEmployees().pipe(tap(res =>{
+    this.numberOfEmployees =  res as string[]
+  }))
+
+  sectors$ = this._sectorService.getAllSectors().pipe(tap(sectors => {
+    this.sectors = sectors
+  }))
+
+  subSectors$ = this._sectorService.getSubSectorOfaSector(1).pipe(tap(sectors => {
+    this.subSectors = sectors
+  }))
+
+  countries$ = this._countries.getCountries().pipe(tap(countries => {
+    this.countries = countries
+  }))
+
+  registrationStructureOptions$ = this._screenService.getRegistrationStructures().pipe(tap(registrationStructureOptions => {
+    this.registrationStructures = registrationStructureOptions
+  }))
+
+ 
 
   constructor(private fb: FormBuilder) {
     this.declineForm = this.fb.group({
@@ -110,7 +157,31 @@ export class MatchedBusinessComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.searchForm = this.fb.group({
+      countries: [[]],
+      businessSectors: [[]],
+      businessSubsectors: [[]],
+      productsAndServices: [''],
+      registrationStructures: [[]],
+      yearsOfOperation: [''],
+      growthStages: [[]],
+      numberOfEmployees: [''],
+      fullTimeBusiness: [false]
+    });
+  }
 
+  phoneUpdateForm = this._fb.group({
+    field: ['', [
+      Validators.required,
+    ]]
+  })
+
+ 
+
+  
+
+  //Functions
   showDialog() {
     this.visible = true;
   }
@@ -119,7 +190,27 @@ export class MatchedBusinessComponent {
     return index;
   }
 
+  onSearch() {
+    this.searchForm.value.sectors = this.selectedSectors
+    this.searchForm.value.subSectors = this.selectedSubSectors
+    const searchCriteria = this.searchForm.value;
 
+    this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
+      tap(res=>{
+        this.matchedBusinesses = res
+        this.advanced_Search = false
+      })
+    )
+  }
+
+  onResetSearch() {
+    this.searchForm.reset();
+    this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies();
+  }
+
+  showSearch(){
+    this.advanced_Search = true
+  }
 
   showMatchedBusinessDetails(business: MatchedBusiness): void {
     this.table = !this.table
@@ -150,11 +241,6 @@ export class MatchedBusinessComponent {
   }
 
 
-
-
-
-
-
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => {
@@ -167,20 +253,6 @@ export class MatchedBusinessComponent {
     this.table = true
     this.selectedMatchedBusiness = null;
   }
-
-
-  private _authStateService = inject(AuthStateService);
-  issue = UserMobileNumbersIssues;
-  signalsService = inject(SignalsService);
-  private _fb = inject(FormBuilder);
-  savephoneNumber$ = new Observable<any>();
-  phoneNumberPull$ = new Observable<any>();
-
-  phoneUpdateForm = this._fb.group({
-    field: ['', [
-      Validators.required,
-    ]]
-  })
 
   showalert() {
     this.signalsService.showDialog.set(true)
@@ -214,7 +286,6 @@ export class MatchedBusinessComponent {
   }
 
   cancelInterest(businessId: number): void {   
-
     if (this.declineForm.valid) {
       const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
       this.cancelInterestWithCompany$ = this._businessMatchingService
@@ -233,7 +304,6 @@ export class MatchedBusinessComponent {
 
   }
 
-
   ngOnChanges(): void {
     this.phoneNumberPull$ = this._authStateService.checkPhoneNumberStatus().pipe(tap((res: UserMobileNumbersIssues) => {
       this.signalsService.showInAppAlert.set(res !== UserMobileNumbersIssues.VERIFIED);
@@ -241,6 +311,6 @@ export class MatchedBusinessComponent {
         this.signalsService.actionBody.set({ issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required' })
     }));
   }
-
+  
 
 }
