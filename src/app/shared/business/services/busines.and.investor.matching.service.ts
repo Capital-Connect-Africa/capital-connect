@@ -17,8 +17,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     super(_httpClient);
   }
 
-  getMatchedInvestors(userId: number) {
+  getMatchedInvestors() {
     return this.read(`${BASE_URL}/matchmaking/investor-profiles`).pipe(map(res => {
+      return res as MatchedInvestor[]
+    }))
+  }
+
+  getConnectedInvestors(companyId: number) {
+    return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
     }))
   }
