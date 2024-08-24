@@ -3,9 +3,10 @@ import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.co
 import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
 import { MatchedInvestor } from '../../../../shared/interfaces';
-import { tap } from 'rxjs';
+import { switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviation.pipe";
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -16,6 +17,8 @@ import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviati
   styleUrl: './investor-details.component.scss'
 })
 export class InvestorDetailsComponent {
+  private _router =inject(Router);
+  private _activatedRoute =inject(ActivatedRoute)
   links =[
     {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
     {label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center'},
@@ -26,11 +29,20 @@ export class InvestorDetailsComponent {
 
   private _scoringService = inject(BusinessOnboardingScoringService);
   matchedInvestor!: MatchedInvestor;
-  stats$ = this._scoringService.getMatchedInvestors().pipe(tap(res => {
-    this.matchedInvestor = res.find(investor =>{
-      debugger
-      return investor.headOfficeLocation =='Kenya'
-    }) as MatchedInvestor;
-  }))
+  stats$ = this._activatedRoute.paramMap.pipe(
+    switchMap(params => {
+      const id = params.get('id');
+      return this._scoringService.getMatchedInvestors().pipe(
+        tap(res => {
+          this.matchedInvestor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+        })
+      );
+    })
+  );
+  
+
+  goBack(){
+    this._router.navigateByUrl('/business')
+  }
 
 }
