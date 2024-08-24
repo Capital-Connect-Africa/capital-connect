@@ -74,6 +74,14 @@
           background-color: #dddddd80;
         }
       }
+    
+}
+
+.no-data{
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @include when-screen-is-atleast(medium){
