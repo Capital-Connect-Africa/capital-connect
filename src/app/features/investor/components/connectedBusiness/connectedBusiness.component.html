@@ -2,6 +2,13 @@
 <ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
 <ng-container *ngIf="declineReasons$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+<ng-container *ngIf="scoring$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="companyDetails$ | async"></ng-container>
+
+<ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
 
 
 
@@ -25,8 +32,8 @@
       </div>
 
       <div class="table-parent">
-        <div >
-          <table class="table"  *ngIf="table">
+        <div>
+          <table class="table" *ngIf="table">
             <tbody>
               <tr class="border-b border-gray-200">
                 <td class="font-bold">#</td>
@@ -46,20 +53,18 @@
                 <td class="">{{ business.company.businessSubsector }}</td>
                 <td class="">{{ business.company.growthStage }}</td>
                 <td class="flex space-x-2 justify-center p-2">
-                  <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.company.id)">Decline</button>
+                  <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                    (click)="openModal(business.company.id)">Decline</button>
 
-                    <div class="py-auto eye" (click)="showDetails(business)">
-                      <mat-icon class="small-icon">visibility</mat-icon>
-                    </div>
+                  <div class="py-auto eye" (click)="showDetails(business)">
+                    <mat-icon class="small-icon">visibility</mat-icon>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
 
-          <mat-paginator  *ngIf="table"
-            [length]="totalItems"
-            [pageSize]="pageSize"
-            [pageSizeOptions]="[5, 10, 20, 50]"
+          <mat-paginator *ngIf="table" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
             (page)="pageChange($event)">
           </mat-paginator>
 
@@ -72,76 +77,216 @@
 
 
 
-
           <!-- Connected Business Extra Details -->
-          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">          
+          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">
             <!-- Company Details -->
             <div class="mb-6 details company__info">
-              <hr/>
+              <hr />
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <p class="font-bold">Name: <span  class="font-light">{{ selectedBusiness.company.name }}</span></p>
+                  <p class="font-bold">Name: <span class="font-light">{{ selectedBusiness.company.name }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span></p>
+                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span>
+                  </p>
                 </div>
                 <div>
-                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector }}</span></p>
+                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector }}</span></p>
+                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Products and Services: <span class="font-light">{{ selectedBusiness.company.productsAndServices }}</span></p>
+                  <p class="font-bold">Products and Services: <span class="font-light">{{
+                      selectedBusiness.company.productsAndServices }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.company.registrationStructure }}</span></p>
+                  <p class="font-bold">Registration Structure: <span class="font-light">{{
+                      selectedBusiness.company.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Years of Operation: <span class="font-light">{{ selectedBusiness.company.yearsOfOperation }}</span></p>
+                  <p class="font-bold">Years of Operation: <span class="font-light">{{
+                      selectedBusiness.company.yearsOfOperation }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage }}</span></p>
+                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Number of Employees: <span class="font-light">{{ selectedBusiness.company.numberOfEmployees }}</span></p>
+                  <p class="font-bold">Number of Employees: <span class="font-light">{{
+                      selectedBusiness.company.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Full Time Business: <span class="font-light">{{ selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+                  <p class="font-bold">Full Time Business: <span class="font-light">{{
+                      selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
 
+                <div>
+                  <p class="text-gray-700 font-medium">Investor Eligibility Score: <span
+                      class="font-normal">{{investorEligibilityScore}} %</span> </p>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium"> Investor Preparedness Score: <span class="font-normal">{{
+                      investorPreparednessScore}} %</span>
+                  </p>
+                </div>
 
-                <!-- <h1>Extra Details </h1>
+              </div>
 
-                <ng-container *ngIf="investorEligibilityScore$ | async">
-                  <p>{{investorEligibilityScore | json}}</p>
+
+              <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6>
+              <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <p><strong>Annual revenue for the last 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Annual gross profit margin for the last 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Annual EBITDA margin for the last 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Net profit in the last 3- years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong> Current value of assets held by the business</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Debt and loans the business holds</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Forecasted annual revenues for the next 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Forecasted gross profit margin for the next 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Forecasted annual EBITDA margin for the next 3 years</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Kind of Investments have been made to date</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Investment the business is seeking to raise</strong></p>
+                  <p>N/A</p>                  
+                </div>
+
+                <div>
+                  <p><strong>Preferred Structure for the capital raise</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Use of funds</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Business has a current tax compliant certificate</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Company has audited financial statements</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Documents prepared for potential investors as part of the fund raise process</strong></p>
+                  <p>N/A</p>
+                </div>
+
+          
+              </div>
+
+              <div results>
+                <!-- Eligibility Summary -->
+                 <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Eligibility Results</h6>
+                <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
+                  <div class="executive-summary">
+                    <section class="score-section">
+                      <h3>Score</h3>
+                      <h2>{{ InvestorEligibilitygeneralSummary.score}}</h2>
+                    </section>
+
+                    <p>{{InvestorEligibilitygeneralSummary.comment}}</p>
+
+                    <h2 class="title implication">Implication</h2>
+                    <p>{{InvestorEligibilitygeneralSummary.implication}}</p>
+                    <h2 class="title">Action</h2>
+
+                    <p>{{InvestorEligibilitygeneralSummary.action}}</p>
+                    <h2 class="title">Recommendation</h2>
+
+                    <p>{{InvestorEligibilitygeneralSummary.recommendation}}</p>
+                  </div>
                 </ng-container>
-                <ng-container *ngIf=" investorPreparednessScore$ | async">
-                  <p>{{ investorPreparednessScore | json}}</p>
+
+
+                <!-- Preparedness Summary -->
+                 <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Preparedness Results</h6>
+                <ng-container
+                  *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary ">
+                  <div class="executive-summary">
+                    <section class="score-section">
+                      <h3>Score</h3>
+                      <h2>{{InvestorPreparednessgeneralSummary.score}}</h2>
+                    </section>
+
+                    <p>{{InvestorPreparednessgeneralSummary.comment}}</p>
+
+                    <h2 class="title implication">Implication</h2>
+                    <p>{{InvestorPreparednessgeneralSummary.implication}}</p>
+                    <h2 class="title">Action</h2>
+
+                    <p>{{InvestorPreparednessgeneralSummary.action}}</p>
+                    <h2 class="title">Recommendation</h2>
+
+                    <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
+                  </div>
                 </ng-container>
-                <ng-container *ngIf="impactAssessmentScore$ | async">
-                  <p>{{ impactAssessmentScore | json}}</p>
-                </ng-container>
-                <ng-container *ngIf="companyDetails$ | async">
-                  <p>{{ companyDetails | json}}</p>
-                </ng-container> -->
+
               </div>
             </div>
-          
-                
+
+
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(selectedBusiness.company.id)">Decline</button>
-                  <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>              
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="openModal(selectedBusiness.company.id)">Decline</button>
+                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
+                  List</button>
               </td>
             </div>
           </div>
-          
+
         </div>
       </div>
 
-      
+
 
 
 
@@ -164,30 +309,11 @@
 <app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
   <div class="input__wrapper">
     <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-    <p-multiSelect class="input__field" styleClass="w-full gap-4"
-      optionValue="reason"
-      [options]="declineReasons"
+    <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="reason" [options]="declineReasons"
       formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
 
-      <div class="button-group mt-4 flex end">
-        <button pButton type="button"
-        class="btn btn-primary mt-5"
-        label="Submit" (click)="submit()">Submit</button>
-      </div>
+    <div class="button-group mt-4 flex end">
+      <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
+    </div>
   </div>
 </app-modal>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   

@@ -218,26 +218,26 @@ export class MatchedBusinessComponent {
 
     const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
     //get the company details
-    this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
-      tap(res => {
-        this.companyDetails = res
+    // this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
+    //   tap(res => {
+    //     this.companyDetails = res
 
-        //Get the scores
-        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id, getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
-          this.investorEligibilityScore = scores.score
-        }))
+    //     //Get the scores
+    //     this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id, getInvestorEligibilitySubsectionIds(companyGrowthStage).ID).pipe(tap(scores => {
+    //       this.investorEligibilityScore = scores.score
+    //     }))
 
-        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
-          this.investorPreparednessScore = scores.score
-        }))
+    //     this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
+    //       this.investorPreparednessScore = scores.score
+    //     }))
 
-        //get the submissions
-        this.userResponses$ = this._businessMatchingService.getSubmisionByIds(res.id, [16, 17, 21]).pipe(tap(responses => {
-          this.userResponses = responses
-        }))
+    //     //get the submissions
+    //     this.userResponses$ = this._businessMatchingService.getSubmisionByIds(res.id, [16, 17, 21]).pipe(tap(responses => {
+    //       this.userResponses = responses
+    //     }))
 
-      })
-    )
+    //   })
+    // )
   }
 
 

@@ -16,7 +16,7 @@ import { getInvestorEligibilitySubsectionIds } from '../../../../../shared/busin
 import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
 import { Router } from '@angular/router';
-import { MatchMakingStatistics } from '../../../../../shared/interfaces';
+import { MatchMakingStats } from '../../../../../shared/interfaces';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class OverviewComponent {
   selectedMatchedBusiness: MatchedBusiness | null = null;
 
 
-  matchMakingStats: MatchMakingStatistics | undefined 
+  matchMakingStats: MatchMakingStats | undefined 
   matchedBusinesses: MatchedBusiness[] = [];
   connectedBusinesses: ConnectedBusiness[] = [];
   interestingBusinesses: InterestingBusinesses[] = [];
@@ -70,8 +70,10 @@ export class OverviewComponent {
   table:boolean = true
   
 
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
-  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {this.matchMakingStats = res}))
+  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res  }));
+  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
+    this.matchMakingStats = res as MatchMakingStats
+  }))
 
 
 

@@ -18,6 +18,13 @@ export interface Score {
   subSectionName?: string, subSectionId?: number
 }
 
+export interface Scoring {
+  impactAssessment: string;
+  investorEligibility: string;
+  investorPreparedness: string;
+}
+
+
 export const INVESTOR_ONBOARDING_SUBSECTION_IDS = {
   ID: 7,
   LANDING: 21,
