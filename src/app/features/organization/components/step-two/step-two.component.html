@@ -9,9 +9,7 @@
     class ="input__field"
     styleClass ="w-full gap-4"
     [formControlName] ="'registrationStructure'"
-    [options]="registration_structures"
-    optionLabel="title"
-    optionValue="title"
+    [options]="registrationStructures"
     [placeholder]="'Select an option'" />
   </div>
 
@@ -21,7 +19,7 @@
       class ="input__field"
       styleClass ="w-full gap-4"
       [formControlName] ="'yearsOfOperation'"
-      [options]="years_of_operation"
+      [options]="yearsOfOperation"
       [placeholder]="'Select an option'" />
   </div>
   <div class="input__wrapper">
@@ -30,9 +28,7 @@
       class ="input__field"
       styleClass ="w-full gap-4"
       [formControlName] ="'growthStage'"
-      [options]="growth_stages"
-      optionLabel="title"
-      optionValue="title"
+      [options]="growthStages"
       [placeholder]="'Select an option'" />
   </div>
   <div class="input__wrapper">
@@ -41,7 +37,7 @@
       class ="input__field"
       styleClass ="w-full gap-4"
       [formControlName] ="'numberOfEmployees'"
-      [options]="number_of_employees"
+      [options]="numberOfEmployees"
       [placeholder]="'Select an option'" />
   </div>
   <div class="input__wrapper">
@@ -51,8 +47,6 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'investmentStructure'"
       [options]="investmentStructure"
-      optionLabel="title"
-      optionValue="title"
       [placeholder]="'Select option(s)'" />
   </div>
   <div class="input__wrapper">
@@ -62,8 +56,6 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'useOfFunds'"
       [options]="useOfFunds"
-      optionLabel="title"
-      optionValue="title"
       [placeholder]="'Select option(s)'" />
   </div>
   <div class="input__wrapper">
@@ -71,10 +63,8 @@
     <p-multiSelect
       class ="input__field"
       styleClass ="w-full gap-4"
-      [formControlName] ="'esg_focus'"
-      [options]="esg_focus"
-      optionLabel="title"
-      optionValue="title"
+      [formControlName] ="'esgFocusAreas'"
+      [options]="esgFocus"
       [placeholder]="'Select option(s)'" />
   </div>
   <div class="input__wrapper">

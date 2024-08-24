@@ -1,0 +1,101 @@
+@import "../../../../styles/main.scss";
+
+.main__content{
+    display: grid;
+    grid-template-columns: max-content auto;
+    main{
+        gap: 2rem;
+        display: flex;
+        padding: 3rem 2rem;
+        flex-direction: column;
+        .card__item__details{
+            gap: 2rem;
+            display: flex;
+            padding-top: 1rem;
+            flex-direction: column;
+        
+            .card__item__detail,
+            .card__item__detail_info {
+                display: grid;
+                div {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+                    label {
+                    font-weight: bold;
+                    }
+                
+                    p {
+                        margin: 0.25rem 0;
+                        color: #555;
+                    }
+                }
+            }
+            .card__item__detail_info{
+                gap: 1rem 0;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        .button-group{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chips{
+            gap: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2rem 0;
+            .chip{
+                padding: .5rem;
+                color: #3b3939;
+                cursor: pointer;
+                border-radius: .5rem;
+                transition: all .2s linear;
+                background-color: #dddddd44;
+                &:hover{
+                    background-color: #ddddddd5;
+                }
+            }
+        }
+    }
+    .btn__cta{
+        gap: .5rem;
+        display: flex;
+        font-size: 1rem;
+        font-weight: 500;
+        align-items: center;
+        transition: .2s linear;
+        border-radius: .5rem;
+        padding: .75rem;
+        cursor: pointer;
+        &:hover{
+          background-color: #dddddd80;
+        }
+      }
+}
+
+@include when-screen-is-atleast(medium){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(2, 1fr);
+                }
+            }
+        }
+    }
+}
+
+@include when-screen-is-atleast(large){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        }
+    }
+}

@@ -151,7 +151,7 @@
 </app-modal>
 
 
-<app-modal [visible]="investorsDiagVisible" title="Matched Investors" [value]="matchedInvestors.length"
+<app-modal [(visible)]="signalService.matchedInvestorsDialogIsVisible" title="Matched Investors" [value]="matchedInvestors.length"
   helperText="You had a good match with this investor">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedInvestors.length">
     You have not matched with any investors yet <br /> check again later
@@ -182,7 +182,7 @@
               </td>
               <td>
                 <div class="cta__wrap">
-                  <button class="btn__cta text-blue-600" title="coming...">View</button>
+                  <button class="btn__cta text-blue-600" (click)="viewInvestor(matchedInvestor.id)">View</button>
                   <button class="btn__cta text-teal-600" title="coming...">Connect</button>
                 </div>
               </td>
