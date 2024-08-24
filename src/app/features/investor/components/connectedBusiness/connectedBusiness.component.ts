@@ -7,7 +7,7 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
 import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
-import { AngularMaterialModule, GeneralSummary } from '../../../../shared';
+import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
@@ -28,6 +28,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
+import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 
 @Component({
   selector: 'app-connected-business',
@@ -80,6 +81,7 @@ export class ConnectedBusinessComponent {
   impactAssessmentScore: string = '0';
   preparednessScore = parseFloat(this.investorPreparednessScore);
   companyGrowthStage: GrowthStage | undefined;
+  submissions: UserSubmissionResponse[] = []
 
 
 
@@ -102,6 +104,7 @@ export class ConnectedBusinessComponent {
   investorPreparednessGeneralSummary$ = new Observable<GeneralSummary>()
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
   public scoring$ = new Observable<Scoring>;
+  submissions$ = new Observable<UserSubmissionResponse[]>
 
 
 
@@ -122,6 +125,7 @@ export class ConnectedBusinessComponent {
   eligibilityScore: number = 0;
   investor_eligibility_score: number = 0;
   investor_preparedness_score: number = 0;
+  useOfFunds: string[] = [];
   
   constructor(private fb: FormBuilder) {
     this.declineForm = this.fb.group({
@@ -166,22 +170,18 @@ export class ConnectedBusinessComponent {
     }
   }
 
-  // showDetails(business: InterestingBusinesses): void {
-  //   // const companyGrowthStage = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
-
-  //   //get the company details
-  //   this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
-  //     tap(res => {
-  //       this.companyDetails = res
-
-  //       //Get the submisions
-     
-  //     })
-  //   )
-  //   this.table = !this.table
-  //   this.selectedBusiness = business;
-  // }
-
+  getSubmissionTextById(questionId: number): string {
+    const submission = this.submissions.find(s => s.question.id === questionId);
+    if(submission?.question.type === "TRUE_FALSE" ){
+      return submission.answer.text
+    }else if(submission?.question.type === "MULTIPLE_CHOICE"){
+      return submission.answer.text 
+    }else if(submission?.question.type === "SINGLE_CHOICE"){
+      return submission.answer.text 
+    }else{
+      return submission?.text || 'N/A';
+    }
+  }
 
 
   getGrowthStageFromString(value: string): GrowthStage | undefined {
@@ -199,22 +199,16 @@ export class ConnectedBusinessComponent {
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
 
 
-
-
-
      //get the company details
     this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
       tap(res => {
         this.companyDetails = res
+        this.useOfFunds = res.useOfFunds
 
-        //Get the scores
-        
-        this.investorEligibilityScore$ = this._businessMatchingService.getSectionScore(business.id, getInvestorEligibilitySubsectionIds(companyGrowthStage2).ID).pipe(tap(scores => {
-          this.investor_eligibility_score = scores.score
-        }))
 
-        this.investorPreparednessScore$ = this._businessMatchingService.getSectionScore(business.id, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(scores => {
-           this.investor_preparedness_score = scores.score
+        //get the questions
+        this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
+          this.submissions =  submissions
         }))
 
 

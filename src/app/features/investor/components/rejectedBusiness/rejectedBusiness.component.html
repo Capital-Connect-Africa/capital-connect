@@ -49,7 +49,7 @@
                 <td class="flex space-x-2 justify-center p-2">
                   <button class="btn btn-sm text-xs px-3 py-1"
                     (click)="showInterest(business.company.id)">Interested</button>
-                  <div class="py-auto eye" (click)="showDetails(business)">
+                  <div class="py-auto eye" (click)="showDetails(business.company)">
                     <mat-icon class="small-icon">visibility</mat-icon>
                   </div>
                 </td>
@@ -78,45 +78,41 @@
               <hr />
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.company.country }}</span>
-                  </p>
+                  <p class="font-bold">Country: <span class="font-light">{{ selectedBusiness.country }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.company.businessSector
-                      }}</span></p>
+                  <p class="font-bold">Sector: <span class="font-light">{{ selectedBusiness.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Sub Sector:<span class="font-light">{{ selectedBusiness.company.businessSubsector
-                      }}</span></p>
+                  <p class="font-bold">Sub Sector: <span class="font-light">{{ selectedBusiness.businessSubsector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Registration Structure: <span class="font-light">{{
-                      selectedBusiness.company.registrationStructure }}</span></p>
+                  <p class="font-bold">Registration Structure: <span class="font-light">{{ selectedBusiness.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.company.growthStage
-                      }}</span></p>
+                  <p class="font-bold">Growth Stage: <span class="font-light">{{ selectedBusiness.growthStage }}</span></p>
                 </div>
-
-                <!-- <h1>Extra Details </h1>
-
-                <ng-container *ngIf="companyDetails$ | async">
-                  <p>{{ companyDetails | json}}</p>
-                </ng-container> -->
+          
+                <div>
+                  <p class="font-bold">Reasons for declining:</p>
+                  <ul *ngIf="selectedBusiness.declineReasons.length >= 1">
+                    <li *ngFor="let reason of selectedBusiness.declineReasons" class="font-light">{{ reason }}</li>
+                  </ul>
+                  <p *ngIf="selectedBusiness.declineReasons.length < 1" class="font-light">N/A</p>
+                </div>
               </div>
             </div>
-
-
+          
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-sm text-xs px-3 py-1"
-                  (click)="showInterest(selectedBusiness.company.id)">Interested</button>
-                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
-                  List</button>
+                <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(selectedBusiness.id)">Interested</button>
+                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>
               </td>
             </div>
           </div>
+          
+
         </div>
       </div>
 
