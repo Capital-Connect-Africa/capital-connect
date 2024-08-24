@@ -52,6 +52,7 @@ export class OverviewComponent {
   impactElementVisible = false;
   investorsDiagVisible = false;
   matchedInvestors: MatchedInvestor[] = [];
+  connectedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
   impactAssessmentScore: string = '0';
@@ -82,8 +83,9 @@ export class OverviewComponent {
 
   currentCompany = this._companyService.currentCompany;
 
-  stats$ = this._scoringService.getMatchedInvestors().pipe(tap(res => {
-    this.matchedInvestors = res;
+  stats$ = this._scoringService.getInvestors().pipe(tap(res => {
+    this.matchedInvestors = res.matched;
+    this.connectedInvestors =res.connected
   }))
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
@@ -156,6 +158,10 @@ export class OverviewComponent {
     this.signalService.matchedInvestorsDialogIsVisible.set(true)
   }
 
+  showConnectedInvestors() {
+    this.signalService.connectedInvestorsDialogIsVisible.set(true)
+  }
+
   generatePDF() {
     if (this.content && this.content.nativeElement) {
       const contentElement = this.content.nativeElement;
@@ -193,9 +199,14 @@ export class OverviewComponent {
     }
   }
 
-  viewInvestor(id:number){
+  viewMatchedInvestor(id:number){
     this.signalService.matchedInvestorsDialogIsVisible.set(false);
-    this._router.navigateByUrl(`/business/my-business/investors/${id}`)
+    this._router.navigateByUrl(`/business/my-business/investors/matched-${id}`)
+  }
+
+  viewConnectedInvestor(id:number){
+    this.signalService.connectedInvestorsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
   }
 
 }
