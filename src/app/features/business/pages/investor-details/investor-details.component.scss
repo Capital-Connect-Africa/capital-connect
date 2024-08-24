@@ -32,9 +32,9 @@
                 }
             }
             .card__item__detail_info{
+                gap: 1rem 0;
                 padding-bottom: 1rem;
                 border-bottom: 1px solid #ddd;
-                grid-template-columns: repeat(3, 1fr);
             }
         }
         .button-group{
@@ -74,4 +74,28 @@
           background-color: #dddddd80;
         }
       }
+}
+
+@include when-screen-is-atleast(medium){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(2, 1fr);
+                }
+            }
+        }
+    }
+}
+
+@include when-screen-is-atleast(large){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        }
+    }
 }
