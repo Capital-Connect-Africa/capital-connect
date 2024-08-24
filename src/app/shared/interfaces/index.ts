@@ -11,7 +11,8 @@ export interface MatchedBusiness {
   registrationStructure: string, //interesting
   yearsOfOperation: string, //Interesting
   numberOfEmployees: string,
-  fullTimeBusiness: boolean
+  fullTimeBusiness: boolean,
+  declineReasons: String[],
 
   //missing 
   ImpactElements: [],
@@ -23,7 +24,7 @@ export interface MatchedBusiness {
 
 }
 
-export interface MatchMakingStatistics{
+export interface MatchMakingStats{
   interesting: number,
   declined: number,
   connected: number

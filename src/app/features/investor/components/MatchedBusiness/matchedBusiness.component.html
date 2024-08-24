@@ -1,10 +1,7 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
-<ng-container *ngIf="companyDetails$ | async"></ng-container>
 <ng-container *ngIf="userResponses$ | async"></ng-container>
-<ng-container *ngIf="investorPreparednessScore$ | async"></ng-container>
-<ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
 <ng-container *ngIf="declineReasons$ | async"></ng-container>
 <ng-container *ngIf="searchCriteria$ | async"></ng-container>
 <ng-container *ngIf="registrationStructureOptions$ | async"></ng-container>
@@ -14,6 +11,16 @@
 <ng-container *ngIf="numberOfEmployees$ | async"></ng-container>
 <ng-container *ngIf="growthStages$ | async"></ng-container>
 <ng-container *ngIf="yearsOfOperation$ | async"></ng-container>
+
+<ng-container *ngIf="scoring$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="companyDetails$ | async"></ng-container>
+
+<ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
+
+<ng-container *ngIf="submissions$  | async"></ng-container>
 
 
 
@@ -45,11 +52,6 @@
           No matched businesess found. <br /> Check again later.
         </div>
 
-      </div>
-
-
-      <div *ngIf="!table">
-        <h6 class="text-xl font-semibold mb-2 text-center"><strong>Matched Businesses Information</strong></h6>
       </div>
 
       <div class="table-parent">
@@ -90,73 +92,129 @@
 
 
           <!-- Matched Business Extra Details -->
-          <div *ngIf="selectedMatchedBusiness" class="mx-auto  shadow-xl  p-6">
+          <div *ngIf="selectedMatchedBusiness" class="mx-auto shadow-xl p-6 business-details">
             <!-- Company Details -->
-            <div class="mb-8 p-6 company__info">
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="mb-6 details company__info">
+              <!-- <hr /> -->
+              <h6 class="text-xl font-semibold mb-2"><strong>Matched Busineses Information</strong></h6>
+              <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
-                  <p class="font-semibold text-gray-700">Country:
-                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.country }}</span>
-                  </p>
+                  <p class="font-bold"><strong>Name: </strong><span class="font-light">{{ selectedMatchedBusiness.name
+                      }}</span></p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Sector:
-                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSector }}</span>
-                  </p>
+                  <p class="font-bold"><strong>Country: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.country }}</span></p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Sub Sector:
-                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.businessSubsector }}</span>
-                  </p>
+                  <p class="font-bold"><strong>Sector: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Growth Stage:
-                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.growthStage }}</span>
-                  </p>
+                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.businessSubsector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-700">Number of Employees:
-                    <span class="font-normal text-gray-600">{{ selectedMatchedBusiness.numberOfEmployees }}</span>
-                  </p>
-                </div>
-
-                <div>
-                  <p class="text-gray-700 font-medium">Investor Eligibility Score: <span class="font-normal">{{
-                      investorEligibilityScore ? investorEligibilityScore : '0' }}</span> </p>
+                  <p class="font-bold"><strong>Products and Services: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.productsAndServices }}</span></p>
                 </div>
                 <div>
-                  <p class="text-gray-700 font-medium">
-                    Investor Preparedness Score:
-                    <span class="font-normal">{{ investorPreparednessScore ? investorPreparednessScore : '0' }}</span>
-                  </p>
+                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.registrationStructure }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.yearsOfOperation }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.growthStage }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.numberOfEmployees }}</span></p>
+                </div>
+                <div>
+                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light">{{
+                      selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium"><strong>Investor Eligibility Score: </strong><span
+                      class="font-normal">{{investorEligibilityScore}} %</span> </p>
+                </div>
+                <div>
+                  <p class="text-gray-700 font-medium"><strong>Investor Preparedness Score: </strong><span
+                      class="font-normal">{{ investorPreparednessScore }} %</span></p>
                 </div>
               </div>
-            </div>
+
+              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
+              <hr />
+              <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
+              <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
 
 
 
-            <!-- Impact Elements -->
-            <!-- Only Show the results from the report, not the submissions -->
-            <!-- <div class="mb-8">
-              <h5 class="text-xl font-semibold text-gray-700 mb-4">Impact Element Assessment</h5>
-              <div>
-                <h6 class="text-lg font-medium text-gray-800 mb-2">Feedback and Recommendations</h6>
-                <div *ngIf="(impactElementAnswers.length > 0)" class="space-y-4">
-                  <ul class="list-disc pl-5 space-y-4">
-                    <li *ngFor="let submission of impactElementAnswers">
-                      <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <h3 class="font-semibold text-gray-700">{{ submission.question.text | removeQuotes }}</h3>
-                        <h4 class="text-gray-600">{{ submission.answer.text == 'OPEN' ? submission.text : submission.answer.text | removeQuotes }}</h4>
-                        <p class="text-gray-500">{{ submission.explanation | removeQuotes }}</p>
-                      </div>
-                    </li>
+                <div>
+                  <p><strong>How much investment the business is seeking to raise</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Preferred structure for the capital raise</strong></p>
+                  <p>N/A</p>
+                </div>
+
+                <div>
+                  <p><strong>Use of funds</strong></p>
+                  <ul *ngIf="useOfFunds.length >= 1">
+                    <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
                   </ul>
+                  <p *ngIf="useOfFunds.length < 1">N/A</p>
                 </div>
-                <div *ngIf="(impactElementAnswers.length === 0)" class="text-gray-600">
-                  <p>No submissions found.</p>
-                </div>
+                
               </div>
-            </div> -->
+
+              <!-- Eligibility Summary -->
+              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Eligibility Results</h6> -->
+              <hr />
+              <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
+              <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
+                <div class="executive-summary">
+                  <section class="score-section">
+                    <h3>Score</h3>
+                    <h2>{{ InvestorEligibilitygeneralSummary.score}}</h2>
+                  </section>
+                  <p>{{InvestorEligibilitygeneralSummary.comment}}</p>
+                  <h2 class="title implication">Implication</h2>
+                  <p>{{InvestorEligibilitygeneralSummary.implication}}</p>
+                  <h2 class="title">Action</h2>
+                  <p>{{InvestorEligibilitygeneralSummary.action}}</p>
+                  <h2 class="title">Recommendation</h2>
+                  <p>{{InvestorEligibilitygeneralSummary.recommendation}}</p>
+                </div>
+              </ng-container>
+
+              <!-- Preparedness Summary -->
+              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Preparedness Results</h6> -->
+              <hr />
+              <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
+              <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
+                <div class="executive-summary">
+                  <section class="score-section">
+                    <h3>Score</h3>
+                    <h2>{{InvestorPreparednessgeneralSummary.score}}</h2>
+                  </section>
+                  <p>{{InvestorPreparednessgeneralSummary.comment}}</p>
+                  <h2 class="title implication">Implication</h2>
+                  <p>{{InvestorPreparednessgeneralSummary.implication}}</p>
+                  <h2 class="title">Action</h2>
+                  <p>{{InvestorPreparednessgeneralSummary.action}}</p>
+                  <h2 class="title">Recommendation</h2>
+                  <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
+                </div>
+              </ng-container>
+            </div>
 
             <!-- Back Button -->
             <div class="flex justify-end details">
@@ -233,75 +291,72 @@
 
 
 
-          <!-- Advanced Search Form -->
+<!-- Advanced Search Form -->
+<app-modal [(visible)]="advanced_Search" title="Advanced Company Search"
+  helperText="Search for a with various paramaters">
+  <div class="advanced-search p-4  rounded-md mb-4 mt-6">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="grid input__wrapper grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="input__wrapper">
+          <label for="country" class="input__label">Countries</label>
+          <p-multiSelect formControlName="countries" class="input__field" [options]="countries" optionLabel="name"
+            placeholder="Select countries"></p-multiSelect>
+        </div>
 
-          <app-modal [(visible)]="advanced_Search" title="Advanced Company Search"
-            helperText="Search for a company with various paramaters">
-            <div class="advanced-search p-4  rounded-md mb-4 mt-6">
-              <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-                <div class="grid input__wrapper grid-cols-1 sm:grid-cols-2 gap-6">
-                  <div class="input__wrapper">
-                    <label for="country" class="input__label">Countries</label>
-                    <p-multiSelect formControlName="countries" class="input__field" [options]="countries"
-                      optionLabel="name" placeholder="Select countries"></p-multiSelect>
-                  </div>
-                  
-                  <div class="input__wrapper">
-                    <label for="businessSector" class="input__label">Business Sectors</label>
-                    <p-multiSelect formControlName="businessSectors" class="input__field w-full"
-                      [options]="sectors" optionLabel="name" placeholder="Select sectors"></p-multiSelect>
-                  </div>
-                  <div class="input__wrapper">
-                    <label for="businessSubsector" class="input__label">Business Sub Sector</label>
-                    <p-multiSelect formControlName="businessSubsectors" [options]="subSectors"
-                      class="input__field w-full" optionLabel="name" placeholder="Select subsectors"></p-multiSelect>
-                  </div>
+        <div class="input__wrapper">
+          <label for="businessSector" class="input__label">Business Sectors</label>
+          <p-multiSelect formControlName="businessSectors" class="input__field w-full" [options]="sectors"
+            optionLabel="name" placeholder="Select sectors"></p-multiSelect>
+        </div>
+        <div class="input__wrapper">
+          <label for="businessSubsector" class="input__label">Business Sub Sector</label>
+          <p-multiSelect formControlName="businessSubsectors" [options]="subSectors" class="input__field w-full"
+            optionLabel="name" placeholder="Select subsectors"></p-multiSelect>
+        </div>
 
-                  <div class="input__wrapper">
-                    <label class="input__label">Products and Services</label>
-                    <input pInputText formControlName="productsAndServices" class="input__field w-full"
-                      placeholder="Enter product/service" />
-                  </div>
+        <div class="input__wrapper">
+          <label class="input__label">Products and Services</label>
+          <input pInputText formControlName="productsAndServices" class="input__field w-full"
+            placeholder="Enter product/service" />
+        </div>
 
-                  <div class="input__wrapper">
-                    <label class="input__label">Registration Structures</label>
-                    <p-multiSelect formControlName="registrationStructures" class="input__field w-full"
-                      [options]="registrationStructures" optionLabel="title"
-                      placeholder="Select structures"></p-multiSelect>
-                  </div>
+        <div class="input__wrapper">
+          <label class="input__label">Registration Structures</label>
+          <p-multiSelect formControlName="registrationStructures" class="input__field w-full"
+            [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
+        </div>
 
-                  <div class="input__wrapper">
-                    <label class="input__label">Years of Operation</label>
-                    <p-dropdown class="input__field w-full" formControlName="yearsOfOperation"
-                      [options]="yearsOfOperation" placeholder="Select years"></p-dropdown>
-                  </div>
+        <div class="input__wrapper">
+          <label class="input__label">Years of Operation</label>
+          <p-dropdown class="input__field w-full" formControlName="yearsOfOperation" [options]="yearsOfOperation"
+            placeholder="Select years"></p-dropdown>
+        </div>
 
-                  <div class="input__wrapper">
-                    <label for="growthStage" class="input__label">Growth Stages</label>
-                    <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
-                      optionLabel="title" placeholder="Select stages" optionValue="name"></p-multiSelect>
-                  </div>
+        <div class="input__wrapper">
+          <label for="growthStage" class="input__label">Growth Stages</label>
+          <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
+            optionLabel="title" placeholder="Select stages" optionValue="name"></p-multiSelect>
+        </div>
 
-                  <div class="input__wrapper">
-                    <label class="input__label">Number of Employees</label>
-                    <p-dropdown class="input__field w-full" formControlName="numberOfEmployees"
-                      [options]="numberOfEmployees" placeholder="Select employees"></p-dropdown>
-                  </div>
+        <div class="input__wrapper">
+          <label class="input__label">Number of Employees</label>
+          <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
+            placeholder="Select employees"></p-dropdown>
+        </div>
 
-                  <div class="input__wrapper">
-                    <label class="input__label">Full-Time Business
-                      <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /></label>
-                  </div>
+        <div class="input__wrapper">
+          <label class="input__label">Full-Time Business
+            <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /></label>
+        </div>
 
-
-                </div>
-                <div class="flex justify-end cta__group">
-                  <button class="btn btn-primary" type="submit">Search Companies</button>
-                  <!-- <button class="btn btn-secondary ml-2" type="button" (click)="onResetSearch()">Reset</button> -->
-                </div>
-              </form>
-            </div>
-          </app-modal>
+      </div>
+      <div class="flex justify-end cta__group">
+        <button class="btn btn-primary" type="submit">Search Companies</button>
+        <!-- <button class="btn btn-secondary ml-2" type="button" (click)="onResetSearch()">Reset</button> -->
+      </div>
+    </form>
+  </div>
+</app-modal>
 
 
 

@@ -155,3 +155,39 @@ th{
 
 }
 
+
+
+.details {
+  font-family: 'YourFontName', sans-serif; // Replace with your actual font name
+
+  .company__info {
+    // color: $yourPrimaryColor; // Replace with your actual color variable
+
+    .font-bold {
+      font-weight: bold;
+    }
+
+    .font-light {
+      font-weight: 300;
+    }
+
+    .text-gray-700 {
+      color: $gray-700; // Use appropriate color from main.css
+    }
+
+    .btn {
+      &-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+      }
+
+      // &-danger {
+      //   background-color: $dangerColor; // Reference from your main.css or SCSS
+      //   &:hover {
+      //     background-color: darken($dangerColor, 10%);
+      //   }
+      // }
+    }
+  }
+}

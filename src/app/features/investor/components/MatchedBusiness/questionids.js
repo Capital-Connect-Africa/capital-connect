@@ -12,6 +12,8 @@
 // If yes, how many years of audited financial statements? : 86
 // Do you have a financial plan and forecasts :87
 // What will be your use of funds? - from api
+// Which documents have you prepared for potential investors as part of the fund raise process?( i.e teaser, financial model , pitchdeck) : 88
+
 
 
 
@@ -19,4 +21,3 @@
 // What kind of investments have been made to date?
 // How much investment is the business seeking to raise?
 // What is your preferred structure for the capital raise?
-// Which documents have you prepared for potential investors as part of the fund raise process?( i.e teaser, financial model , pitchdeck)

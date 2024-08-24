@@ -18,6 +18,13 @@ export interface Score {
   subSectionName?: string, subSectionId?: number
 }
 
+export interface Scoring {
+  impactAssessment: string;
+  investorEligibility: string;
+  investorPreparedness: string;
+}
+
+
 export const INVESTOR_ONBOARDING_SUBSECTION_IDS = {
   ID: 7,
   LANDING: 21,
@@ -117,6 +124,8 @@ export const INVESTOR_ELIGIBILITY_SUBSECTION_IDS = {
     STEP_THREE: 36,
   }
 }
+
+export const CONNECTED_COMPANIES_QUESTION_IDS = [18,12,19,82,83,25,26,27,23,22,86,87,88]
 
 export const INVESTOR_PREPAREDNESS_SUBSECTION_IDS = {
   ID: 4,

@@ -45,7 +45,7 @@ export class RejectedBusinessComponent {
   private _router = inject(Router)
   visible = false;
   currentModal = '';
-  selectedBusiness: InterestingBusinesses | null = null;
+  selectedBusiness: MatchedBusiness | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
 
   rejectedBusinesses: ConnectedBusiness[] = [];
@@ -109,11 +109,11 @@ export class RejectedBusinessComponent {
 
   }
 
-  showDetails(business: InterestingBusinesses): void {
-    const companyGrowthStage = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
+  showDetails(business: MatchedBusiness): void {
+    const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
 
     //get the company details
-    this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
+    this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
       tap(res => {
         this.companyDetails = res     
       })

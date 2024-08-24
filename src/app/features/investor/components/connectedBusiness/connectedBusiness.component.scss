@@ -155,3 +155,147 @@ th{
 
 }
 
+
+.business-details {
+  background-color: $white;
+  border-radius: 0.5rem;
+  box-shadow: 10px;
+  color: $text-color;
+  // font-family: $main-font;
+  
+  .details {
+    margin-bottom: 2rem;
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+      color: $gray-800;
+      
+      &.font-bold {
+        font-weight: 700;
+      }
+
+      &.font-light {
+        font-weight: 300;
+      }
+
+      &.font-medium {
+        font-weight: 500;
+      }
+
+      &.font-normal {
+        font-weight: 400;
+      }
+    }
+  }
+
+  .company__info {
+    hr {
+      margin: 1.5rem 0;
+      border: 1px solid $gray-300;
+    }
+
+    .m-6 {
+      margin: 1.5rem;
+    }
+
+    .text-gray-700 {
+      color: $gray-700;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    .font-light {
+      font-weight: 300;
+    }
+  }
+
+  .feed_back {
+    margin-top: 2rem;
+    p {
+      margin-bottom: 1rem;
+      color: $gray-700;
+
+      strong {
+        font-weight: 600;
+        color: $primary-color;
+      }
+    }
+  }
+
+  .executive-summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: $gray-100;
+    border-radius: 0.5rem;
+    box-shadow: 5px;
+
+    .score-section {
+      h3 {
+        margin-bottom: 0.5rem;
+        color: $primary-color;
+      }
+      h2 {
+        font-size: 2rem;
+        color: $secondary-color;
+      }
+    }
+
+    .title {
+      font-size: 1.125rem;
+      margin-top: 1.5rem;
+      color: $primary-color;
+
+      &.implication {
+        color: $secondary-color;
+      }
+    }
+
+    p {
+      margin-top: 0.5rem;
+      color: $gray-800;
+    }
+  }
+
+  button {
+    &.btn {
+      border-radius: 0.25rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      // font-family: $main-font;
+    }
+
+    &.btn-danger {
+      background-color: $danger-color;
+      color: $white;
+    }
+
+    &.btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    &.bg-blue-500 {
+      background-color: $primary-color;
+      &:hover {
+        background-color: $primary-color;
+      }
+    }
+
+    &.text-xs {
+      font-size: 0.75rem;
+    }
+
+    &.px-3 {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    &.py-1 {
+      padding-top: 0.25rem;
+      padding-bottom: 0.25rem;
+    }
+  }
+}
