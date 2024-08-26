@@ -49,6 +49,12 @@
                 </ul>
               </div>
               <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+                <label>Sub-sectors</label>
+                <ul class="chips">
+                  <li *ngFor="let subSector of investor.subSectors" class="chip">{{subSector.name}}</li>
+                </ul>
+              </div>
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
                 <label>ESG Focus Areas:</label>
                 <ul class="chips">
                   <li *ngFor="let esg of investor.esgFocusAreas" class="chip">{{esg}}</li>

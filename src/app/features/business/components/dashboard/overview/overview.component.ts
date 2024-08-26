@@ -52,6 +52,7 @@ export class OverviewComponent {
   impactElementVisible = false;
   investorsDiagVisible = false;
   matchedInvestors: MatchedInvestor[] = [];
+  declinedConnections: MatchedInvestor[] = [];
   connectedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
@@ -162,6 +163,10 @@ export class OverviewComponent {
     this.signalService.connectedInvestorsDialogIsVisible.set(true)
   }
 
+  showDeclinedConnections() {
+    this.signalService.declinedConnectionsDialogIsVisible.set(true)
+  }
+
   generatePDF() {
     if (this.content && this.content.nativeElement) {
       const contentElement = this.content.nativeElement;
@@ -207,6 +212,11 @@ export class OverviewComponent {
   viewConnectedInvestor(id:number){
     this.signalService.connectedInvestorsDialogIsVisible.set(false);
     this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  }
+
+  viewReasonsForDecline(id:number){
+    this.signalService.connectedInvestorsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/${id}`)
   }
 
 }

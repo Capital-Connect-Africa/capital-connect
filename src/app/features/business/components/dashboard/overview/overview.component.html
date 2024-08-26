@@ -39,6 +39,10 @@
     [detail]="{title: 'Connected Investors', value: (connectedInvestors.length).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
+  <app-card (click)="showDeclinedConnections()"
+    [detail]="{title: 'Connections Declined', value: (declinedConnections.length).toString(), featured: true}">
+    <p class="helper__text text__red">View</p>
+  </app-card>
 </app-overview-section>
 
 <app-modal [visible]="visible">
@@ -184,6 +188,36 @@
                 <div class="cta__wrap">
                   <button class="btn__cta text-blue-600" (click)="viewMatchedInvestor(matchedInvestor.id)">View</button>
                   <button class="btn__cta text-teal-600" title="coming...">Connect</button>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </div>
+</app-modal>
+
+<app-modal [(visible)]="signalService.declinedConnectionsDialogIsVisible" title="Declined Connections" [value]="declinedConnections.length"
+  helperText="These connections were declined">
+  <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!declinedConnections.length">
+    None of your conections was recalled 
+  </div>
+  <div class="flex flex-col gap-4" *ngIf="declinedConnections.length">
+    <p-table [value]="declinedConnections" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Investor</th>
+              <th>Reasons</th>
+              <th>Action</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-declinedConnection>
+          <tr>
+              <td>{{ declinedConnection.headOfficeLocation }}</td>
+              <td>{{ declinedConnection.investorType }}</td>
+              
+              <td>
+                <div class="cta__wrap">
+                  <button class="btn__cta text-blue-600" (click)="viewMatchedInvestor(declinedConnection.id)">See why</button>
                 </div>
               </td>
           </tr>
