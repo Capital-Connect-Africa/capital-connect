@@ -4,14 +4,12 @@
 
 <div class="main">
   <div class="navbar">
-    <!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
     <app-navbar onDashboard="true" [showBanner]="false"/>
   </div>
 
   <main>
     <p class="brand__name">Business Name</p>
     <div class="left__col">
-      <!--      <app-profile-status />-->
       <app-overview />
       <app-schedules-section
         [subTitle]="'Do you have a special criteria that you would wish to apply to the businesses seeking capital?'"
@@ -24,8 +22,6 @@
           <p class="helper__text text__yellow">{{ getTotalReviewedBusinesess() }} Total Businesess Reviewed</p>
         </app-card>
 
-        
-
       <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
   </main>
@@ -37,8 +33,6 @@
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
     No matched business found. <br /> Check again later.
   </div>
-
-
 
   <div class="table-parent">
     <div class="">

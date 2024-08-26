@@ -1,7 +1,6 @@
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="rejectedCompanies$ | async"></ng-container>
-
-
+<ng-container *ngIf="matchMakingStats$ | async"></ng-container>
 
 
 <div class="main">
@@ -11,9 +10,9 @@
 
   <main>
     <div class="left__col">
-      <div *ngIf="table">
+      <div *ngIf="table" class="text-start search border-0">
         <h5><strong>Declined Businesess</strong></h5>
-        <p>You have declined these businesses</p>
+        <!-- <p>You have declined these businesses</p> -->
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!rejectedBusinesses.length">
           No declined businesess found. <br /> Check again later.
         </div>
@@ -42,7 +41,7 @@
                 class="border-b border-gray-200">
                 <td class="font-bold">{{ i + 1 }}</td>
                 <td class="">{{ business.company.country }}</td>
-                <td class="">N/A</td>
+                <td class="">{{business.company.fundsNeeded}}</td>
                 <td class="">{{ business.company.businessSubsector }}</td>
                 <td class="">{{ business.company.growthStage }}</td>
 
@@ -59,17 +58,11 @@
 
 
           <mat-paginator *ngIf="table"
-            [length]="totalItems"
             [pageSize]="pageSize"
-            [pageSizeOptions]="[8, 16, 24,48,96]"
+            [length]="totalItems"
+            [pageSizeOptions]="[5,10]"
             (page)="pageChange($event)">
           </mat-paginator>
-
-
-          <!-- <div>
-            Page {{ currentPage + 1 }} of {{ dataSource.data.length / pageSize }}
-          </div> -->
-
 
 
           <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6">

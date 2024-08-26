@@ -114,8 +114,8 @@ export class ConnectedBusinessComponent {
   
   itemsPerPage: number = 8;
   currentPage: number = 0; // Start at 0 for Material paginator
-  pageSize: number = 8;
-  totalItems: number = 100; // Set total items
+  pageSize: number = 10;
+  totalItems: number = 0; // Set total items
   
 
   business__id: number = 0
@@ -140,11 +140,14 @@ export class ConnectedBusinessComponent {
   connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(1,this.pageSize).pipe(
     tap(res => {
       this.connectedBusinesses = res;
-      // this.totalItems = res.length;
-      // this.dataSource.data = res;
-      // this.dataSource.paginator = this.paginator;
     })
   );
+
+
+  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
+    this.totalItems = res?.connected
+  }))
+
 
 
   declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
@@ -193,9 +196,7 @@ export class ConnectedBusinessComponent {
   showDetails(business:  InterestingBusinesses): void {
     this.table = !this.table
     this.selectedBusiness = business;
-    // this.selectedMatchedBusiness = business;
-
-    const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
+    // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
 
 
@@ -210,7 +211,6 @@ export class ConnectedBusinessComponent {
         this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
           this.submissions =  submissions
         }))
-
 
         // Get the summaries
         this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
@@ -246,22 +246,15 @@ export class ConnectedBusinessComponent {
     )
   }
 
-
-
-
-
   hideDetails(): void {
     this.table = true
     this.selectedBusiness = null;
     this.selectedMatchedBusiness = null;
   }
 
-
   trackByIndex(index: number): number {
     return index;
   }
-
-
 
   openModal(businessId: number){
     this.business__id = businessId
@@ -273,7 +266,6 @@ export class ConnectedBusinessComponent {
   }
 
   cancelConnect(businessId: number): void {   
-
     if (this.declineForm.valid) {
       const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
       this.cancelInterestWithCompany$ = this._businessMatchingService
@@ -293,10 +285,6 @@ export class ConnectedBusinessComponent {
   }
 
 
-
-
-
-
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
@@ -308,20 +296,13 @@ export class ConnectedBusinessComponent {
 
 
   pageChange(event: PageEvent): void {
-    console.log("The event is",event)
+    this.currentPage = event.pageIndex; 
+    this.pageSize = event.pageSize; 
 
-    this.currentPage = event.pageIndex; // Get the new page index
-    console.log("The current page size is", this.currentPage)
-    // console.log("The event page index is", event.pageIndex)
-
-    this.pageSize = event.pageSize; // Update the page size
-    // console.log("Event pageSize:", event.pageSize);
-
-    this.pageSize = event.pageSize; // Get the new page size
+    this.pageSize = event.pageSize;
     this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(this.currentPage + 1, this.pageSize).pipe(
       tap(res => {
         this.connectedBusinesses = res;
-        console.log("The length of the returned items is", res.length)
         // this.totalItems = res.length;
       })
     );

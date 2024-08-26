@@ -5,7 +5,7 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -58,10 +58,10 @@ export class InterestingBusinessComponent {
 
 
   //variables
-  itemsPerPage: number = 8;
+  itemsPerPage: number = 10;
   currentPage: number = 0; // Start at 0 for Material paginator
-  pageSize: number = 8;
-  totalItems: number = 100; // Set total items
+  pageSize: number = 10;
+  totalItems: number = 0; // Set total items
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
@@ -81,9 +81,6 @@ export class InterestingBusinessComponent {
   eligibilityScore: number = 0;
 
 
-
-
-
   dataSource = new MatTableDataSource<ConnectedBusiness>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -101,6 +98,7 @@ export class InterestingBusinessComponent {
   investorPreparednessGeneralSummary$ = new Observable<GeneralSummary>()
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
   useOfFunds: string[] = [];
+  matchMakingStats: MatchMakingStats | undefined;
 
 
 
@@ -112,12 +110,15 @@ export class InterestingBusinessComponent {
 
 
   
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, 10).pipe(
+  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
     tap(res => {
       this.interestingBusinesses = res;
-      // this.totalItems = res.length;
     })
   );
+
+  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
+    this.totalItems = res?.interesting
+  }))
 
 
 
@@ -127,21 +128,12 @@ export class InterestingBusinessComponent {
 
   pageChange(event: PageEvent): void {
     console.log("The event is",event)
-
-    this.currentPage = event.pageIndex; // Get the new page index
-    console.log("The current page size is", this.currentPage)
-    // console.log("The event page index is", event.pageIndex)
-
-    this.pageSize = event.pageSize; // Update the page size
-    // console.log("Event pageSize:", event.pageSize);
-
-    this.pageSize = event.pageSize; // Get the new page size
-    
+    this.currentPage = event.pageIndex; 
+    this.pageSize = event.pageSize;
+    this.pageSize = event.pageSize;    
     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage+1, this.pageSize).pipe(
        tap(res => {
         this.interestingBusinesses = res;
-         this.totalItems = res.length; 
-         console.log("The length is", res.length)
        })
    );
   }
@@ -151,9 +143,6 @@ export class InterestingBusinessComponent {
   }
 
   
-
-
-
   showDialog(current_modal: string) {
     if(current_modal === 'matched_businesses' ){
       this._router.navigate(['/investor/matched-business']);
@@ -166,11 +155,6 @@ export class InterestingBusinessComponent {
       this._router.navigate(['/investor/matched-business']);
     }
 
-    // this.visible = true
-    // this.table =true
-    // this.currentModal = current_modal;
-    // this.selectedBusiness = null;
-    // this.selectedMatchedBusiness = null;
   }
 
 

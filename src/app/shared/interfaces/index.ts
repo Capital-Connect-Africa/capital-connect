@@ -1,6 +1,7 @@
 import { InvestorProfile } from "./Investor"
 
 export interface MatchedBusiness {
+fundsNeeded: any;
   id: number
   country: string,
   businessSector: string,
