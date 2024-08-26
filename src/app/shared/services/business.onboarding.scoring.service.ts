@@ -44,6 +44,7 @@ export class BusinessOnboardingScoringService {
       }
     }))
   }
+  
   getMatchedInvestors() {
     return this._scoringService.getMatchedInvestors().pipe(map((investors: MatchedInvestor[]) => {
       return investors
