@@ -33,6 +33,10 @@ export interface MatchMakingStats{
 
 export interface MatchedInvestor {
   id: number,
+  matched: number,
+  connected: number,
+  declined: number,
+  interested: number,
   investorType: string,
   emailAddress: string,
   minimumFunding: number,

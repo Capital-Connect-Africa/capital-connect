@@ -79,5 +79,12 @@ export const routes: Routes = [
     loadChildren: () => import('./features/admin/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+
+  {
+    path: 'business-investors',
+    loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   }
 ];

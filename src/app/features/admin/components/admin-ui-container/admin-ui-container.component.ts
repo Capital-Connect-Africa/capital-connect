@@ -18,6 +18,7 @@ export class AdminUiContainerComponent {
     { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
     { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
     { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
+    { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
     { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' },
     { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' },
   ]
