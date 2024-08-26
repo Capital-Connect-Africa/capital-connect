@@ -118,9 +118,9 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   //Interesting companies
   getInterestingCompanies(page:number, limit:number): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?limit=${limit}`).pipe(
-      map(res => res as InterestingBusinesses[])
-    );
+    // return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?limit=${limit}`).pipe(
+    //   map(res => res as InterestingBusinesses[])
+    // );
 
     return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as InterestingBusinesses[])
@@ -139,7 +139,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   //Rejected companies
   getRejectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}?page=${page}&limit=100`).pipe(
+    return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }

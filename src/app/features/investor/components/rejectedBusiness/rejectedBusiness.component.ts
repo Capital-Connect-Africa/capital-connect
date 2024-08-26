@@ -5,12 +5,11 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../shared/interfaces';
+import { MatchedBusiness,ConnectedBusiness } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
 import { AngularMaterialModule } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
-import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
-import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
+import { CompanyResponse} from '../../../organization/interfaces';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../../core';
 import { AdvertisementSpaceComponent } from '../../../../shared/components/advertisement-space/advertisement-space.component';
@@ -57,9 +56,9 @@ export class RejectedBusinessComponent {
 
   table:boolean = true
 
-  itemsPerPage: number = 8;
-  currentPage: number = 1; // Start at 0 for Material paginator
-  pageSize: number = 8;
+  itemsPerPage: number = 10;
+  currentPage: number = 0; // Start at 0 for Material paginator
+  pageSize: number = 10;
   totalItems: number = 0; // Set total items
   
 
@@ -68,14 +67,17 @@ export class RejectedBusinessComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   
 
-  rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies(1,8).pipe(
+  rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies(1,this.pageSize).pipe(
     tap(res => {
       this.rejectedBusinesses = res;
-      this.totalItems = res.length;
-      this.dataSource.data = res;
-      this.dataSource.paginator = this.paginator;
     })
   );
+
+
+  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
+    this.totalItems = res?.declined
+  }))
+
 
   pageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex; // Get the new page index
@@ -84,7 +86,6 @@ export class RejectedBusinessComponent {
      this.rejectedCompanies$ = this._businessMatchingService.getRejectedCompanies(this.currentPage + 1, this.pageSize).pipe(
       tap(res => {
         this.rejectedBusinesses = res;
-        this.totalItems = res.length;
       })
     );
    
@@ -110,9 +111,6 @@ export class RejectedBusinessComponent {
   }
 
   showDetails(business: MatchedBusiness): void {
-    const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
-
-    //get the company details
     this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
       tap(res => {
         this.companyDetails = res     
@@ -121,23 +119,6 @@ export class RejectedBusinessComponent {
     this.table = !this.table
     this.selectedBusiness = business;
   }
-
-
-
-
-  showMatchedBusinessDetails(business: MatchedBusiness): void {
-    this.table = !this.table
-    this.selectedMatchedBusiness = business;
-
-    const companyGrowthStage = GrowthStage[business.growthStage as keyof typeof GrowthStage];
-     //get the company details
-    this.companyDetails$ = this._company.getSingleCompany(business.id).pipe(
-      tap(res => {
-        this.companyDetails = res    
-      })
-    )
-  }
-
 
 
   hideDetails(): void {
