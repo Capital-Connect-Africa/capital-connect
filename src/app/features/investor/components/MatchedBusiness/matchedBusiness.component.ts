@@ -177,7 +177,6 @@ export class MatchedBusinessComponent {
       countries: [[]],
       businessSectors: [[]],
       businessSubsectors: [[]],
-      productsAndServices: [''],
       registrationStructures: [[]],
       yearsOfOperation: [''],
       growthStages: [[]],
@@ -205,17 +204,52 @@ export class MatchedBusinessComponent {
     return index;
   }
 
-  onSearch() {
-    this.searchForm.value.sectors = this.selectedSectors
-    this.searchForm.value.subSectors = this.selectedSubSectors
-    const searchCriteria = this.searchForm.value;
-
-    this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
-      tap(res=>{
-        this.matchedBusinesses = res
-        this.advanced_Search = false
+ 
+  private removeEmptyFields(obj: any): any {
+    return Object.entries(obj)
+      .filter(([_, value]) => {
+        // Check for non-null and non-undefined values
+        if (value === null || value === undefined) return false;
+        // Check for empty strings
+        if (typeof value === 'string' && value.trim() === '') return false;
+        // Check for empty arrays
+        if (Array.isArray(value) && value.length === 0) return false;
+        // If it's a boolean or number, it's always valid
+        if (typeof value === 'boolean' || typeof value === 'number') return true;
+        // Otherwise, keep the field
+        return true;
       })
-    )
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+  }
+  
+
+  // onSearch() {
+  //   this.searchForm.value.sectors = this.selectedSectors
+  //   this.searchForm.value.subSectors = this.selectedSubSectors
+  //   const searchCriteria = this.searchForm.value;
+
+  //   this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
+  //     tap(res=>{
+  //       this.matchedBusinesses = res
+  //       this.advanced_Search = false
+  //     })
+  //   )
+  // }
+
+  onSearch() {
+    this.searchForm.patchValue({
+      sectors: this.selectedSectors,
+      subSectors: this.selectedSubSectors
+    });
+  
+    const searchCriteria = this.removeEmptyFields(this.searchForm.value);
+  
+    this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
+      tap(res => {
+        this.matchedBusinesses = res;
+        this.advanced_Search = false;
+      })
+    );
   }
 
   onResetSearch() {

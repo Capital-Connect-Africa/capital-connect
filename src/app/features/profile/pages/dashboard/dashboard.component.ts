@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { SidenavComponent } from "../../../../core";
 import { MainComponent } from "../../components/main/main/main.component";
 import { AuthStateService } from '../../../auth/services/auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'profile-dashboard',
@@ -14,6 +15,16 @@ import { AuthStateService } from '../../../auth/services/auth-state.service';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  private _router = inject(Router)
+
+  constructor(){
+    const profileId = sessionStorage.getItem('profileId');
+    if (profileId) {
+      this._router.navigate(['investor/onboarding']);
+    }
+  }
+
+
   private _authStateService =inject(AuthStateService)
   hidden = true;
   links = [
