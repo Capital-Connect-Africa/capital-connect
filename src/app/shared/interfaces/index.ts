@@ -44,6 +44,7 @@ export interface MatchedInvestor {
   esgFocusAreas: string[],
   organizationName: string,
   sectors:{name: string}[],
+  subSectors:{name: string}[],
   noMaximumFunding: boolean,
   headOfficeLocation: string,
   businessGrowthStages: string[],
