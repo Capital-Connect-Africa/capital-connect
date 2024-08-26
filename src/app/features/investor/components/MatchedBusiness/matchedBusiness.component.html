@@ -99,43 +99,45 @@
               <h6 class="text-xl font-semibold mb-2"><strong>Matched Busineses Information</strong></h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
-                  <p class="font-bold"><strong>Name: </strong><span class="font-light">{{ selectedMatchedBusiness.name
+                  <p class="font-bold"><strong>Name: </strong><span class="font-light   w-20 break-words max-w-ful">{{ selectedMatchedBusiness.name
                       }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Country: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.country }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sector: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.businessSubsector }}</span></p>
                 </div>
-                <div>
-                  <p class="font-bold"><strong>Products and Services: </strong><span class="font-light">{{
-                      selectedMatchedBusiness.productsAndServices }}</span></p>
+
+                <div class="">
+                  <p class="font-bold"><strong>Products and Services: </strong>
+                    <span class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices }}</span></p>
                 </div>
+
                 <div>
-                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.yearsOfOperation }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.growthStage }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
                 <div>

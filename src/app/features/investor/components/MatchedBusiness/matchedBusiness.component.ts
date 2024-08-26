@@ -226,14 +226,6 @@ export class MatchedBusinessComponent {
 
 
   onSearch() {
-    console.log("The selected sectors are ", this.selectedSectors)
-    console.log("The selected sub sectors are ", this.selectedSubSectors)
-
-    // this.searchForm.patchValue({
-    //   sectors: this.selectedSectors,
-    //   subSectors: this.selectedSubSectors
-    // });
-
     this.searchForm.value.sectors = this.selectedSectors
     this.searchForm.value.subSectors = this.selectedSubSectors
   

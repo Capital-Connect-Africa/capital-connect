@@ -41,18 +41,18 @@
           <table class="table" *ngIf="table">
             <tbody>
               <tr class="border-b border-gray-200">
-                <td class="font-bold">#</td>
-                <td class="font-bold">Country</td>
-                <td class="font-bold">Amount Raised</td>
-                <td class="font-bold">Business Sub Sector</td>
-                <td class="font-bold">Growth Stage</td>
-                <td class="flex font-bold space-x-2">Actions</td>
+                <td class="font-bold" >#</td>
+                <td class="font-bold" >Country</td>
+                <td class="font-bold" >Amount Raised</td>
+                <td class="font-bold" >Business Sub Sector</td>
+                <td class="font-bold" >Growth Stage</td>
+                <td class="flex font-bold  space-x-2">Actions</td>
               </tr>
 
 
               <tr *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex"
                 class="border-b border-gray-200">
-                <td class="font-bold">{{ i + 1 }}</td>
+                <td class="font-bold" >{{ i + 1 }}</td>
                 <td class="">{{ business.company.country }}</td>
                 <td class="">{{business.company.fundsNeeded}}</td>
                 <td class="">{{ business.company.businessSubsector }}</td>
@@ -79,61 +79,64 @@
             <!-- Company Details -->
             <div class="mb-6 details company__info">
               <!-- <hr /> -->
-              <h6 class="text-xl font-semibold mb-2"><strong>Connected Businesess Information</strong></h6>
+              <h6 class="text-xl font-semib old mb-2"><strong>Connected Businesess Information</strong></h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
-                  <p class="font-bold"><strong>Name: </strong><span class="font-light">{{ selectedBusiness.company.name
+                  <p class="font-bold" ><strong>Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name
                       }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Country: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Country: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.country }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sector: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Sub Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.businessSubsector }}</span></p>
                 </div>
-                <div>
-                  <p class="font-bold"><strong>Products and Services: </strong><span class="font-light">{{
-                      selectedBusiness.company.productsAndServices }}</span></p>
+                
+
+                <div class="">
+                  <p class="font-bold" ><strong>Products and Services: </strong>
+                    <span class="font-light  w-20 break-words max-w-ful  w-20 break-words max-w-full">{{ selectedBusiness.company.productsAndServices  }}</span></p>
                 </div>
+
                 <div>
-                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Registration Structure: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Years of Operation: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.yearsOfOperation }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Growth Stage: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.growthStage }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Number of Employees: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light">{{
+                  <p class="font-bold" ><strong>Full Time Business: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
                       selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
                 <div>
-                  <p class="text-gray-700 font-medium"><strong>Investor Eligibility Score: </strong><span
-                      class="font-normal">{{investorEligibilityScore}} %</span> </p>
+                  <p class="text-gray-700 font-mediu m"><strong>Investor Eligibility Score: </strong><span
+                      class="font-norma l">{{investorEligibilityScore}} %</span> </p>
                 </div>
                 <div>
-                  <p class="text-gray-700 font-medium"><strong>Investor Preparedness Score: </strong><span
-                      class="font-normal">{{ investorPreparednessScore }} %</span></p>
+                  <p class="text-gray-700 font-mediu m"><strong>Investor Preparedness Score: </strong><span
+                      class="font-norma l">{{ investorPreparednessScore }} %</span></p>
                 </div>
               </div>
 
-              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
+              <!-- <h6 class="text-gray-700 font-mediu m mt-5 text-sm text-center">Business Feedback</h6> -->
               <hr />
-              <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
+              <h6 class="text-xl font-semib old mb-2"><strong>Business Feedback</strong></h6>
               <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p><strong>Annual Revenue for the last three years</strong></p>
@@ -219,7 +222,7 @@
               </div>
 
               <hr />
-              <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
+              <h6 class="text-xl font-semib old mb-2 "><strong>Eligibility Results</strong></h6>
               <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
                 <div class="executive-summary">
                   <section class="score-section">
@@ -237,7 +240,7 @@
               </ng-container>
 
               <hr />
-              <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
+              <h6 class="text-xl font-semib old mb-2"><strong>Preparedness Results</strong></h6>
               <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
                 <div class="executive-summary">
                   <section class="score-section">
