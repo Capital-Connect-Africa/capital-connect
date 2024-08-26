@@ -40,7 +40,7 @@
     <p class="helper__text text__red">View</p>
   </app-card>
   <app-card (click)="showDeclinedConnections()"
-    [detail]="{title: 'Declines', value: (declinedConnections.length).toString(), featured: true}">
+    [detail]="{title: 'Connections Declined', value: (declinedConnections.length).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
 </app-overview-section>
@@ -196,8 +196,8 @@
   </div>
 </app-modal>
 
-<app-modal [(visible)]="signalService.declinedConnectionsDialogIsVisible" title="Declines" [value]="declinedConnections.length"
-  helperText="These connections were cancelled">
+<app-modal [(visible)]="signalService.declinedConnectionsDialogIsVisible" title="Declined Connections" [value]="declinedConnections.length"
+  helperText="These connections were declined">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!declinedConnections.length">
     None of your conections was recalled 
   </div>
