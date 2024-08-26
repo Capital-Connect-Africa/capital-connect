@@ -1,7 +1,6 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
-<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
-
+<ng-container *ngIf="matchMakingStats$ | async"></ng-container>
 
 <div class="main">
   <div class="navbar">
@@ -21,9 +20,8 @@
     </div>
     <div class="right__col">
         <app-alert [action]="showalert" className="rounded-[.5rem]"/>
-        <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
-          (click)="showDialog()">
-          <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
+        <app-card [detail]="{title: 'Total Businesess reviewed', value: getTotalReviewedBusinesess(), featured: true}">
+          <p class="helper__text text__yellow">{{ getTotalReviewedBusinesess() }} Total Businesess Reviewed</p>
         </app-card>
 
         

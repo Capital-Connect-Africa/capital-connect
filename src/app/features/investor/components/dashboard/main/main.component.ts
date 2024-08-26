@@ -15,7 +15,7 @@ import {
 } from "../../../../../shared/components/schedules-section/schedules-section.component";
 import {OverviewComponent} from "../overview/overview.component";
 import { CardComponent } from '../../../../../shared/components/card/card.component';
-import { InterestingBusinesses, MatchedBusiness } from '../../../../../shared/interfaces';
+import { InterestingBusinesses, MatchedBusiness, MatchMakingStats } from '../../../../../shared/interfaces';
 import { inject } from '@angular/core';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
 import { AuthStateService } from '../../../../auth/services/auth-state.service';
@@ -58,14 +58,29 @@ export class MainComponent {
 
   markAsInteresting$ = new Observable<unknown>()
   interestingBusinesses: InterestingBusinesses[] = [];
+  matchMakingStats: MatchMakingStats | undefined 
+
 
   table:boolean = true
 
   matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
   private _feedBackService = inject(FeedbackService);
 
+  matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
+    this.matchMakingStats = res as MatchMakingStats
+  }))
 
 
+
+  getTotalReviewedBusinesess():string{
+    let total = 0
+    if(this.matchMakingStats && this.matchedBusinesses){
+      total = this.matchMakingStats?.connected + this.matchMakingStats?.declined + this.matchMakingStats?.interesting + this.matchedBusinesses.length
+      return total.toString()
+    }else{
+      return '1'
+    }
+  }
 
   showDialog() {
     this.visible = true;
