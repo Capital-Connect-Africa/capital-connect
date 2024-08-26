@@ -99,43 +99,45 @@
               <h6 class="text-xl font-semibold mb-2"><strong>Matched Busineses Information</strong></h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
-                  <p class="font-bold"><strong>Name: </strong><span class="font-light">{{ selectedMatchedBusiness.name
+                  <p class="font-bold"><strong>Name: </strong><span class="font-light   w-20 break-words max-w-ful">{{ selectedMatchedBusiness.name
                       }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Country: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.country }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sector: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.businessSubsector }}</span></p>
                 </div>
-                <div>
-                  <p class="font-bold"><strong>Products and Services: </strong><span class="font-light">{{
-                      selectedMatchedBusiness.productsAndServices }}</span></p>
+
+                <div class="">
+                  <p class="font-bold"><strong>Products and Services: </strong>
+                    <span class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices }}</span></p>
                 </div>
+
                 <div>
-                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.registrationStructure }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.yearsOfOperation }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.growthStage }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light">{{
+                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
                 <div>
@@ -308,10 +310,11 @@
         <div class="input__wrapper">
           <label for="country" class="input__label">Countries</label>
           <p-multiSelect formControlName="countries" class="input__field" [options]="countries" optionLabel="name"
+          optionValue="name"
             placeholder="Select countries"></p-multiSelect>
         </div>
 
-        <div class="input__wrapper">
+        <!-- <div class="input__wrapper">
           <label for="businessSector" class="input__label">Business Sectors</label>
           <p-multiSelect formControlName="businessSectors" class="input__field w-full" [options]="sectors"
             optionLabel="name" placeholder="Select sectors"></p-multiSelect>
@@ -320,17 +323,12 @@
           <label for="businessSubsector" class="input__label">Business Sub Sector</label>
           <p-multiSelect formControlName="businessSubsectors" [options]="subSectors" class="input__field w-full"
             optionLabel="name" placeholder="Select subsectors"></p-multiSelect>
-        </div>
-
-        <div class="input__wrapper">
-          <label class="input__label">Products and Services</label>
-          <input pInputText formControlName="productsAndServices" class="input__field w-full"
-            placeholder="Enter product/service" />
-        </div>
+        </div> -->
 
         <div class="input__wrapper">
           <label class="input__label">Registration Structures</label>
           <p-multiSelect formControlName="registrationStructures" class="input__field w-full"
+          optionValue="title"
             [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
         </div>
 
@@ -343,7 +341,7 @@
         <div class="input__wrapper">
           <label for="growthStage" class="input__label">Growth Stages</label>
           <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
-            optionLabel="title" placeholder="Select stages" optionValue="name"></p-multiSelect>
+            optionLabel="title" placeholder="Select stages" optionValue="title"></p-multiSelect>
         </div>
 
         <div class="input__wrapper">
@@ -351,6 +349,36 @@
           <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
             placeholder="Select employees"></p-dropdown>
         </div>
+
+
+        <div class="sectors-container">
+          <p>Select Sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let sector of sectors$ | async"
+                  class="pill"
+                  [class.active]="isSectorSelected(sector.name)"
+                  [class.selected]="selectedSectors.includes(sector.name)"
+                  (click)="toggleSector(sector)">
+              {{ sector.name }}
+            </span>
+          </div>
+        </div>
+        
+        <div class="subsectors-container" *ngIf="selectedSectors.length > 0">
+          <p>Select Sub-sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let subSector of subSectors$ | async"
+                  class="pill"
+                  [class.active]="isSubSectorSelected(subSector.name)"
+                  [class.selected]="selectedSubSectors.includes(subSector.name)"
+                  (click)="toggleSubSector(subSector)">
+              {{ subSector.name }}
+            </span>
+          </div>
+        </div>
+        
+
+
 
         <div class="input__wrapper">
           <label class="input__label">Full-Time Business

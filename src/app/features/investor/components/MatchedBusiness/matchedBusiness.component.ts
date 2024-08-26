@@ -119,6 +119,7 @@ export class MatchedBusinessComponent {
   savephoneNumber$ = new Observable<unknown>();
   phoneNumberPull$ = new Observable<unknown>();
   searchCriteria$ = new Observable<unknown>()
+  subSectors$ = new Observable<SubSector[]>()
   public scoring$ = new Observable<Scoring>;
   submissions$ = new Observable<UserSubmissionResponse[]>
   investorEligibilityScore$ = new Observable<unknown>()
@@ -152,9 +153,9 @@ export class MatchedBusinessComponent {
     this.sectors = sectors
   }))
 
-  subSectors$ = this._sectorService.getSubSectorOfaSector(1).pipe(tap(sectors => {
-    this.subSectors = sectors
-  }))
+  // subSectors$ = this._sectorService.getSubSectorOfaSector(1).pipe(tap(sectors => {
+  //   this.subSectors = sectors
+  // }))
 
   countries$ = this._countries.getCountries().pipe(tap(countries => {
     this.countries = countries
@@ -177,7 +178,6 @@ export class MatchedBusinessComponent {
       countries: [[]],
       businessSectors: [[]],
       businessSubsectors: [[]],
-      productsAndServices: [''],
       registrationStructures: [[]],
       yearsOfOperation: [''],
       growthStages: [[]],
@@ -205,18 +205,48 @@ export class MatchedBusinessComponent {
     return index;
   }
 
+ 
+  private removeEmptyFields(obj: any): any {
+    return Object.entries(obj)
+      .filter(([_, value]) => {
+        // Check for non-null and non-undefined values
+        if (value === null || value === undefined) return false;
+        // Check for empty strings
+        if (typeof value === 'string' && value.trim() === '') return false;
+        // Check for empty arrays
+        if (Array.isArray(value) && value.length === 0) return false;
+        // If it's a boolean or number, it's always valid
+        if (typeof value === 'boolean' || typeof value === 'number') return true;
+        // Otherwise, keep the field
+        return true;
+      })
+      .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+  }
+  
+
+
   onSearch() {
     this.searchForm.value.sectors = this.selectedSectors
     this.searchForm.value.subSectors = this.selectedSubSectors
-    const searchCriteria = this.searchForm.value;
-
+  
+    const searchCriteria = this.removeEmptyFields(this.searchForm.value);
+  
     this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
-      tap(res=>{
-        this.matchedBusinesses = res
-        this.advanced_Search = false
+      tap(res => {
+        this.matchedBusinesses = res;
+        this.advanced_Search = false;
       })
-    )
+    );
   }
+
+  isSectorSelected(sector: string): boolean {
+    return this.selectedSectors.includes(sector);
+  }
+
+  isSubSectorSelected(subSector: string): boolean {
+    return this.selectedSubSectors.includes(subSector);
+  }
+
 
   onResetSearch() {
     this.searchForm.reset();
@@ -244,6 +274,40 @@ export class MatchedBusinessComponent {
     const stage = Object.values(GrowthStage).find(stage => stage === value);
     return stage as GrowthStage | undefined;
   }
+
+
+
+
+
+  toggleSector(sector: any): void {
+    const index = this.selectedSectors.indexOf(sector.name);
+    if (index > -1) {
+      this.selectedSectors.splice(index, 1);
+    } else {
+      this.selectedSectors.push(sector.name);
+      // this.loadSubSectors(sector.id); // Fetch subsectors based on selected sector ID
+      this.subSectors$ = this._sectorService.getSubSectorOfaSector(sector.id).pipe(tap(sectors => {
+        this.subSectors = sectors
+        console.log("The current sub sectors are", this.selectedSectors)
+
+      }))
+
+    }
+  }
+
+
+  toggleSubSector(subSector: any): void {
+    const index = this.selectedSubSectors.indexOf(subSector.name);
+    if (index > -1) {
+      this.selectedSubSectors.splice(index, 1);
+    } else {
+      this.selectedSubSectors.push(subSector.name);
+      console.log("The current sub sectors are", this.selectedSubSectors)
+    }
+  }
+
+
+
 
   showMatchedBusinessDetails(business: MatchedBusiness): void {
     this.table = !this.table
