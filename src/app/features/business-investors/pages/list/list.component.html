@@ -1,0 +1,42 @@
+<ng-container *ngIf="investors$ | async"></ng-container>
+
+<app-admin-ui-container [title]="'Investors'">
+  <div>
+    <div class="table-header flex items-center justify-between">
+      <span class="p-input-icon-left">
+        <input type="text" pInputText placeholder="Search investors..." (input)="applyFilter($event)">
+      </span>
+      <div>{{usersShowingCount}} of <span>{{usersCount}}</span></div>
+    </div>
+    <p-table #dt [value]="investors" [paginator]="true" [rows]="10" [globalFilterFields]="['organizationName', 'emailAddress', 'headOfficeLocation']" (onPage)="onPage($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+            <span class="header-container">
+              <span class="header-text">
+                {{col.header}}
+              </span>
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </span>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-investor>
+        <tr>
+          <td>{{investor.organizationName}}</td>
+          <td>{{investor.emailAddress}}</td>
+          <td>{{investor.headOfficeLocation}}</td>
+          <td class="text-center">{{investor.matched??0}}</td>
+          <td class="text-center">{{investor.interested??0}}</td>
+          <td class="text-center">{{investor.connected??0}}</td>
+          <td class="text-center">{{investor.declined??0}}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No investors found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</app-admin-ui-container>
