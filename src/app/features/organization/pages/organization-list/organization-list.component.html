@@ -1,23 +1,47 @@
+<ng-container *ngIf="companies$ | async"></ng-container>
 <app-admin-ui-container [title]="'Companies'">
-  <ng-container *ngIf="companies$ | async as companies">
-    <div class="search-container">
-      <div class="search-form">
-        <input (ngModelChange)="checkReset($event)" [(ngModel)]="searchString" type="text" class="search-input" placeholder="Search..." >
-        <button [disabled]="searchString.trim().length === 0" (click)="search()" type="submit" class="search-button"><span class="pi pi-search"></span></button>
-        <span (click)="clearSearch()">
-          <i class="pi pi-sync"></i>
-        </span>
-      </div>
-      <div *ngIf="searchString" class="chip-container">
-        <span class="chip">{{ searchString }}  <button class="chip-close" (click)="clearSearch()">×</button></span>
-      </div>
-
-  
+  <div>
+    <div class="table-header flex items-center justify-between">
+      <span class="p-input-icon-left">
+        <input type="text" pInputText placeholder="Search here..." (input)="applyFilter($event)">
+      </span>
+      <div>{{companiesShowingCount}} of <span>{{companiesCount}}</span></div>
     </div>
-    <div class="organization-container">
-      <ng-container *ngFor="let company of companies; let i = index">
-        <app-organization-card (refreshCompaniesEvent)="clearSearch()" [company]="company"></app-organization-card>
-      </ng-container>
-    </div>
-  </ng-container>
+    <p-table #dt [value]="companies" [paginator]="true" [rows]="10" [globalFilterFields]="['organizationName', 'emailAddress', 'headOfficeLocation']" (onPage)="onPage($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+            <span class="header-container">
+              <span class="header-text">
+                {{col.header}}
+              </span>
+              <p-sortIcon [field]="col.field"></p-sortIcon>
+            </span>
+          </th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-company>
+        <tr>
+          <td>{{company.name}}</td>
+          <td>{{company.country}}</td>
+          <td>{{company.growthStage}}</td>
+          <td>{{company.businessSector}}</td>
+          <td>
+            <div class="cta__btns">
+              <button class="btn__cta text-blue-600" title="Details" (click)="viewCompany(company.id)">
+                <i class="pi pi-info-circle"></i>
+              </button>
+              <button class="btn__cta text-rose-600" title="Remove"><i class="pi pi-times"></i></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No investors found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </app-admin-ui-container>

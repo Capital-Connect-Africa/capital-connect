@@ -1,0 +1,13 @@
+<main *ngIf="connected$ | async as connected">
+    <div class="card__item__details" details>
+        <div class="card__item__detail_info"*ngFor="let business of connected" >
+            <div>
+                <label>{{business.company.name}}</label>
+                <p>{{business.company.businessSector}} - {{business.company.growthStage}}</p>
+                </div>
+        </div>
+    </div>
+
+</main>
+<div *ngIf="!connected.length" class="no-data">No records found</div>
+    
