@@ -31,7 +31,6 @@ export class ListComponent {
     { field: 'emailAddress', header: 'Email' },
     { field: 'headOfficeLocation', header: 'Country' },
     { field: 'matched', header: 'Matched' },
-    { field: 'interested', header: 'Interested' },
     { field: 'connected', header: 'Connected' },
     { field: 'declined', header: 'Declined' },
   ];

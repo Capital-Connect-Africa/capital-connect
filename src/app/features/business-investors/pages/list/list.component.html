@@ -19,6 +19,7 @@
               <p-sortIcon [field]="col.field"></p-sortIcon>
             </span>
           </th>
+          <th>Action</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-investor>
@@ -27,9 +28,9 @@
           <td>{{investor.emailAddress}}</td>
           <td>{{investor.headOfficeLocation}}</td>
           <td class="text-center">{{investor.matched??0}}</td>
-          <td class="text-center">{{investor.interested??0}}</td>
           <td class="text-center">{{investor.connected??0}}</td>
           <td class="text-center">{{investor.declined??0}}</td>
+          <td><button class="btn__cta text-blue-600">Details</button></td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
