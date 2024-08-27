@@ -1,16 +1,19 @@
-import { Component, inject } from '@angular/core';
-import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
 import { CommonModule } from '@angular/common';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { CompanyHttpService } from '../../../organization/services/company.service';
-import { CompanyDashBoardData, CompanyResponse, InvestorDashboardData } from '../../../organization/interfaces';
-import { Observable, tap } from 'rxjs';
+import { Component, inject } from '@angular/core';
+import { InvestorDashboardData } from '../../../organization/interfaces';
+import { ProfileComponent } from "../../components/profile/profile.component";
+import { MatchedComponent } from "../../components/matched/matched.component";
+import { DeclinedComponent } from "../../components/declined/declined.component";
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ConnectedComponent } from "../../components/connected/connected.component";
+import { InterestedComponent } from "../../components/interested/interested.component";
+import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
 
 @Component({
   selector: 'app-single-investor',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent],
+  imports: [CommonModule, AdminUiContainerComponent, ProfileComponent, MatchedComponent, DeclinedComponent, ConnectedComponent, InterestedComponent],
   templateUrl: './single-investor.component.html',
   styleUrl: './single-investor.component.scss',
   animations: [
@@ -35,14 +38,6 @@ import { Observable, tap } from 'rxjs';
 })
 export class SingleInvestorComponent {
 
-  private _activateRoute = inject(ActivatedRoute);
-  private _companiesService = inject(CompanyHttpService);
-
-  private _companyId = Number(this._activateRoute.snapshot.paramMap.get('id'));
-
-  // company$: Observable<CompanyResponse> = this._companiesService.getSingleCompany(this._companyId).pipe(tap(c => this.company = c))
-
-  company!: CompanyResponse;
   activeTab: InvestorDashboardData = 'profile';
 
   setActiveTab(tab: InvestorDashboardData) {

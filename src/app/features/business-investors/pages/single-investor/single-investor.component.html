@@ -1,5 +1,4 @@
-<!-- <ng-container *ngIf="company$ | async as company"> -->
-    <app-admin-ui-container title="Hey">
+<app-admin-ui-container [title]="'investor.organizationName'">
       <div class="tab-view">
         <div class="tab-headers">
           <div class="tab-header" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
@@ -19,9 +18,12 @@
           </div>
         </div>
   
-        <div class="tab-content" >
-         
+        <div class="tab-content" [@tabChange]="activeTab">
+          <div *ngIf="activeTab === 'profile'"><app-profile/></div>
+          <div *ngIf="activeTab === 'matched'"><app-matched /></div>
+          <div *ngIf="activeTab === 'declined'"><app-declined /></div>
+          <div *ngIf="activeTab === 'connected'"><app-connected /></div>
+          <div *ngIf="activeTab === 'interested'"><app-interested /></div>
         </div>
       </div>
-    </app-admin-ui-container>
-  <!-- </ng-container> -->
+</app-admin-ui-container>
