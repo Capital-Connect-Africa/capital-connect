@@ -20,7 +20,7 @@ export class DashboardComponent {
   constructor(){
     const profileId = sessionStorage.getItem('profileId');
     if (profileId) {
-      this._router.navigate(['investor/onboarding']);
+      this._router.navigate(['/investor/investor-page']);
     }
   }
 
