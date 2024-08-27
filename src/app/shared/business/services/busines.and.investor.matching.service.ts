@@ -65,7 +65,8 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
 
   getMatchMakingStatistics(): Observable<MatchMakingStats>{
-    return this.read(`${BASE_URL}/statistics/matchmaking`).pipe(
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/statistics/matchmaking/${investorProfileId}`).pipe(
       map(res => res as unknown as MatchMakingStats)
     )
   }
