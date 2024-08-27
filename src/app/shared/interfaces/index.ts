@@ -38,6 +38,7 @@ export interface MatchedInvestor {
   declined: number,
   interested: number,
   investorType: string,
+  useOfFunds: string[],
   emailAddress: string,
   minimumFunding: number,
   maximumFunding: number,
@@ -50,7 +51,13 @@ export interface MatchedInvestor {
   businessGrowthStages: string[],
   investmentStructures: string[],
   registrationStructures: string[],
-  countriesOfInvestmentFocus: string[]
+  countriesOfInvestmentFocus: string[],
+  availableFunding: number,
+  investor: {
+    lastName: string,
+    username: string,
+    firstName: string,
+  }
 }
 
 
