@@ -78,3 +78,11 @@ export interface ConnectedBusiness{
   company: MatchedBusiness;
   investorProfile: InvestorProfile;
 }
+
+export interface BusinessProfile{
+   company: {
+    name: string,
+    businessSector: string,
+    growthStage: string,
+   }
+}

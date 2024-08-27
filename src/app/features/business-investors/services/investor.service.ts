@@ -1,17 +1,27 @@
+import { map, Observable } from "rxjs";
 import { inject, Injectable } from "@angular/core";
-import { BusinessAndInvestorMatchingService } from "../../../shared/business/services/busines.and.investor.matching.service";
 import { SignalsService } from "../../../core/services/signals/signals.service";
-import { map } from "rxjs";
+import { BusinessAndInvestorMatchingService } from "../../../shared/business/services/busines.and.investor.matching.service";
+import { UsersHttpService } from "../../users/services/users-http.service";
+import { BusinessProfile } from "../../../shared/interfaces";
 
 @Injectable({providedIn: 'root'})
 
 export class InvestorService{
-    private _bIService =inject(BusinessAndInvestorMatchingService);
     private _signalsService =inject(SignalsService);
+    private _bIService =inject(BusinessAndInvestorMatchingService);
+    private _userService =inject(UsersHttpService);
+
     getInvestorProfile(investorId: number){
         return this._bIService.getInvestorProfile(investorId).pipe(map(res =>{
             this._signalsService.businessInvestorPageSignal.set(res.organizationName);
             return res;
         }))
+    }
+
+    getConnectedBusinesses(investorId:number){
+        return this._userService.getInvestorConnectedBusinesses(investorId).pipe(map(res =>{
+            return res;
+        })) as Observable<BusinessProfile[]>
     }
 }
