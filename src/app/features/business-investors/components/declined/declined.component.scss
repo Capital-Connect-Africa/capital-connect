@@ -73,15 +73,6 @@ main{
     }
 }
 
-
-
-.no-data{
-height: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-
 @include when-screen-is-atleast(medium){
     main{
         .card__item__details{

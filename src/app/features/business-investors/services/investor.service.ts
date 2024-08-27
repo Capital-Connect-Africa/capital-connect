@@ -30,4 +30,10 @@ export class InvestorService{
             return res;
         })) as Observable<BusinessProfile[]>
     }
+
+    getMatchedBusinesses(investorId:number){
+        return this._userService.getInvestorMatchedBusinesses(investorId).pipe(map(res =>{
+            return res;
+        })) as Observable<BusinessProfile[]>
+    }
 }
