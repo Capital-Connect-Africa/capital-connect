@@ -24,4 +24,10 @@ export class InvestorService{
             return res;
         })) as Observable<BusinessProfile[]>
     }
+
+    getCancelledBusinesses(investorId:number){
+        return this._userService.getInvestorDeclinedBusinesses(investorId).pipe(map(res =>{
+            return res;
+        })) as Observable<BusinessProfile[]>
+    }
 }
