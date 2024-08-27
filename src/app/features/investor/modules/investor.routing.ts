@@ -10,7 +10,8 @@ const routes: Routes = [
   { path: 'matched-business', loadComponent: () => import('../pages/MatchedBusiness/matchedBusiness.component').then(c => c.MatchedBusinesComponent) },
   { path: 'interesting-businesess', loadComponent: () => import('../pages/InterestingBusiness/interestingBusiness.component').then(c => c.InterstingBusinesComponent) },
   {path: 'connected-businesess', loadComponent:()=>import('../pages/connectedBusiness/connectedBusiness.component').then(c=>c.ConnectedBusinesComponent)},
-  {path: 'rejected-businesess', loadComponent:()=>import('../pages/rejectedBusiness/rejectedBusiness.component').then(c=>c.RejectedBusinesComponent)}
+  {path: 'rejected-businesess', loadComponent:()=>import('../pages/rejectedBusiness/rejectedBusiness.component').then(c=>c.RejectedBusinesComponent)},
+  {path: 'investor-page',loadComponent:()=>import('../pages/InvestorPage/investorPage.component').then(c=>c.InvestorPage) }
 
 
 ]
