@@ -33,6 +33,10 @@ export interface MatchMakingStats{
 
 export interface MatchedInvestor {
   id: number,
+  matched: number,
+  connected: number,
+  declined: number,
+  interested: number,
   investorType: string,
   emailAddress: string,
   minimumFunding: number,
@@ -40,6 +44,7 @@ export interface MatchedInvestor {
   esgFocusAreas: string[],
   organizationName: string,
   sectors:{name: string}[],
+  subSectors:{name: string}[],
   noMaximumFunding: boolean,
   headOfficeLocation: string,
   businessGrowthStages: string[],

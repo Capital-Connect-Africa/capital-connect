@@ -7,7 +7,7 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
 import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
-import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
+import { AngularMaterialModule, GeneralSummary, SubmissionService, SubMissionStateService, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
@@ -29,6 +29,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
 import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
+import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
 
 @Component({
   selector: 'app-connected-business',
@@ -44,8 +45,9 @@ import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/se
     DialogModule,
     NgxPaginationModule,
     MatPaginatorModule,
-    MultiSelectModule, ReactiveFormsModule
-  ],
+    MultiSelectModule, ReactiveFormsModule,
+    RemoveQuotesPipe
+],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss',
   providers: [PaginationService]
@@ -61,6 +63,8 @@ export class ConnectedBusinessComponent {
   private _company = inject(CompanyHttpService)
   private _scoringService = inject(BusinessOnboardingScoringService);
   private _router = inject(Router)
+  private _submissionService = inject(SubmissionService);
+
  
 
 
@@ -105,6 +109,7 @@ export class ConnectedBusinessComponent {
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
   public scoring$ = new Observable<Scoring>;
   submissions$ = new Observable<UserSubmissionResponse[]>
+  esgSubmissions$ = new Observable<UserSubmissionResponse[]>
 
 
 
@@ -126,6 +131,7 @@ export class ConnectedBusinessComponent {
   investor_eligibility_score: number = 0;
   investor_preparedness_score: number = 0;
   useOfFunds: string[] = [];
+  impactElementAnswers : UserSubmissionResponse[] = [];
   
   constructor(private fb: FormBuilder) {
     this.declineForm = this.fb.group({
@@ -153,10 +159,6 @@ export class ConnectedBusinessComponent {
   declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
     this.declineReasons = reasons
   })) 
-
-
-
-
 
 
 
@@ -211,6 +213,12 @@ export class ConnectedBusinessComponent {
         this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
           this.submissions =  submissions
         }))
+
+        //get impact results
+        this.esgSubmissions$ = this._submissionService.fetchSubmissionsByUserPerSection(res.user.id,IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(res => {
+          this.impactElementAnswers = res
+        }));
+
 
         // Get the summaries
         this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
