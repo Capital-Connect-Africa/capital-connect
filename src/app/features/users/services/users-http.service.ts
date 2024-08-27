@@ -42,17 +42,15 @@ export class UsersHttpService extends BaseHttpService {
       switchMap((investors: MatchedInvestor[] | any[]) => {
         const investorRequests = investors.map((investor: MatchedInvestor) => {
           return forkJoin([
-            this.getInvestorMatchedBusinesses(investor.id),
-            this.getInvestorInterestedBusinesses(investor.id),
+            // this.getInvestorMatchedBusinesses(investor.id),
             this.getInvestorConnectedBusinesses(investor.id),
             this.getInvestorDeclinedBusinesses(investor.id),
           ]).pipe(
             map(res => ({
               ...investor,
-              matched: res[0].length,
-              interested: res[1].length,
-              connected: res[2].length,
-              declined: res[3].length
+              matched: 0,
+              connected: res[0].length,
+              declined: res[1].length
             }))
           );
         });
