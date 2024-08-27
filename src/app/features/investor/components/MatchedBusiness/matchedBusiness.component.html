@@ -98,10 +98,7 @@
               <!-- <hr /> -->
               <h6 class="text-xl font-semibold mb-2"><strong>Matched Busineses Information</strong></h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
-                <div>
-                  <p class="font-bold"><strong>Name: </strong><span class="font-light   w-20 break-words max-w-ful">{{ selectedMatchedBusiness.name
-                      }}</span></p>
-                </div>
+
                 <div>
                   <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.country }}</span></p>
@@ -124,10 +121,7 @@
                   <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.registrationStructure }}</span></p>
                 </div>
-                <div>
-                  <p class="font-bold"><strong>Years of Operation: </strong><span class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.yearsOfOperation }}</span></p>
-                </div>
+
                 <div>
                   <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.growthStage }}</span></p>
@@ -177,55 +171,17 @@
                 
               </div>
 
-              <!-- Eligibility Summary -->
-              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Eligibility Results</h6> -->
               <hr />
-              <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
-              <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
-                <div class="executive-summary">
-                  <section class="score-section">
-                    <h3>Score</h3>
-                    <h2>{{ InvestorEligibilitygeneralSummary.score}}</h2>
-                  </section>
-                  <p>{{InvestorEligibilitygeneralSummary.comment}}</p>
-                  <h2 class="title implication">Implication</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.implication}}</p>
-                  <h2 class="title">Action</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.action}}</p>
-                  <h2 class="title">Recommendation</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.recommendation}}</p>
-                </div>
-              </ng-container>
-
-              <!-- Preparedness Summary -->
-              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Preparedness Results</h6> -->
-              <hr />
-              <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
-              <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
-                <div class="executive-summary">
-                  <section class="score-section">
-                    <h3>Score</h3>
-                    <h2>{{InvestorPreparednessgeneralSummary.score}}</h2>
-                  </section>
-                  <p>{{InvestorPreparednessgeneralSummary.comment}}</p>
-                  <h2 class="title implication">Implication</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.implication}}</p>
-                  <h2 class="title">Action</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.action}}</p>
-                  <h2 class="title">Recommendation</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
-                </div>
-              </ng-container>
             </div>
 
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-sm text-xs px-3 py-1"
+                <button class="btn  px-3 py-1"
                   (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                <button class="btn btn-danger px-3 py-1"
                   (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
-                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+                <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
                   Back to List
                 </button>
               </td>
