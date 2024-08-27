@@ -10,7 +10,13 @@
     styleClass ="w-full gap-4"
     [formControlName] ="'registrationStructure'"
     [options]="registrationStructures"
-    [placeholder]="'Select an option'" />
+    [optionLabel]="'title'"
+    [optionValue]="'title'"
+    [placeholder]="'Select an option'" >
+      <ng-template let-option pTemplate="item">
+        <span [pTooltip]="" [title]="option.description">{{option.title }}</span>
+      </ng-template>
+    </p-dropdown>
   </div>
 
   <div class="input__wrapper">
@@ -29,7 +35,13 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'growthStage'"
       [options]="growthStages"
-      [placeholder]="'Select an option'" />
+      [optionLabel]="'title'"
+      [optionValue]="'title'"
+      [placeholder]="'Select an option'" >
+      <ng-template let-option pTemplate="item">
+        <span [pTooltip]="" [title]="option.description">{{option.title }}</span>
+      </ng-template>
+    </p-dropdown>
   </div>
   <div class="input__wrapper">
     <label class="input__label">How many employees do you currently have?<sup>*</sup></label>
@@ -47,7 +59,13 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'investmentStructure'"
       [options]="investmentStructure"
-      [placeholder]="'Select option(s)'" />
+      [optionLabel]="'title'"
+      [optionValue]="'title'"
+      [placeholder]="'Select option(s)'" >
+      <ng-template let-option pTemplate="item">
+        <span [pTooltip]="" [title]="option.description">{{option.title }}</span>
+      </ng-template>
+    </p-multiSelect>
   </div>
   <div class="input__wrapper">
     <label class="input__label">What will be your use of funds?<sup>*</sup></label>
@@ -56,7 +74,13 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'useOfFunds'"
       [options]="useOfFunds"
-      [placeholder]="'Select option(s)'" />
+      [optionLabel]="'title'"
+      [optionValue]="'title'"
+      [placeholder]="'Select option(s)'" >
+      <ng-template let-option pTemplate="item">
+        <span [pTooltip]="" [title]="option.description">{{option.title }}</span>
+      </ng-template>
+    </p-multiSelect>
   </div>
   <div class="input__wrapper">
     <label class="input__label">What elements of impact does your business focus on?<sup>*</sup></label>
@@ -65,7 +89,13 @@
       styleClass ="w-full gap-4"
       [formControlName] ="'esgFocusAreas'"
       [options]="esgFocus"
-      [placeholder]="'Select option(s)'" />
+      [optionLabel]="'title'"
+      [optionValue]="'title'"
+      [placeholder]="'Select option(s)'" >
+      <ng-template let-option pTemplate="item">
+        <span [pTooltip]="" [title]="option.description">{{option.title }}</span>
+      </ng-template>
+    </p-multiSelect>
   </div>
   <div class="input__wrapper">
     <label class="input__label">How much investment is the business seeking to raise?<sup>*</sup></label>

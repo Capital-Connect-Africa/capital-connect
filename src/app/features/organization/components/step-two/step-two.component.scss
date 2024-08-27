@@ -20,8 +20,27 @@
     }
     .p-dropdown-item,
     .p-dropdown-label{
+      
       white-space: wrap!important;
     }
+
+    .p-dropdown-item{
+      span,
+      .custom__option{
+        width: 100%!important;
+        display: block!important;
+
+      }
+    }
+    .p-tooltip {
+      font-size: 0.75rem;
+      background-color: #4b5563; /* Tailwind gray-600 */
+      color: #ffffff;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.25rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
     .p-multiselect-panel ul,
     .p-dropdown ul{
         padding: .5rem;

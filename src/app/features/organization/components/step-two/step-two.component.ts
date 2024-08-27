@@ -10,11 +10,12 @@ import { Choice } from '../../../business/interfaces/choice.interface';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { CompanyStateService } from '../../services/company-state.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-step-two',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SharedModule, MultiSelectModule, DropdownModule],
+  imports: [CommonModule, ReactiveFormsModule, SharedModule, MultiSelectModule, DropdownModule, TooltipModule],
   templateUrl: './step-two.component.html',
   styleUrl: './step-two.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -33,13 +34,13 @@ export class StepTwoComponent {
   private _savedCompanyData: Company =this._companyStateService.currentCompany
  
 
-  esgFocus:string[] =[];
-  useOfFunds:string[] =[];
-  growthStages:string[] =[];
-  yearsOfOperation:string[] =[];
-  numberOfEmployees:string[] =[];
-  investmentStructure:string[] =[];
-  registrationStructures:string[] =[];
+  esgFocus:Choice[] =[];
+  useOfFunds:Choice[] =[];
+  growthStages:Choice[] =[];
+  yearsOfOperation:Choice[] =[];
+  numberOfEmployees:Choice[] =[];
+  investmentStructure:Choice[] =[];
+  registrationStructures:Choice[] =[];
 
   private _defaultValues ={
     esg: this._currentCompanyData.esgFocusAreas.length >0?this._currentCompanyData.esgFocusAreas:this._savedCompanyData.esgFocusAreas,
@@ -53,15 +54,15 @@ export class StepTwoComponent {
   }
 
   choices$ =this._companyHttpService.fetchQuestionChoices().pipe(tap(res =>{
-    this.esgFocus =res.esg_focus.map(({title}) =>title);
-    this.useOfFunds =res.use_of_funds.map(({title}) =>title);
-    this.growthStages =res.stage_of_growth.map(({title}) =>title);
+    this.esgFocus =res.esg_focus;
+    this.useOfFunds =res.use_of_funds;
+    this.growthStages =res.stage_of_growth;
     // @ts-ignore
     this.yearsOfOperation =res.years_of_operation;
     // @ts-ignore
     this.numberOfEmployees =res.number_of_employees;
-    this.investmentStructure =res.investment_structures.map(({title}) =>title);
-    this.registrationStructures =res.registration_structure.map(({title}) =>title);
+    this.investmentStructure =res.investment_structures
+    this.registrationStructures =res.registration_structure
 
   }));
 
