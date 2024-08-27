@@ -1,4 +1,4 @@
-<app-admin-ui-container [title]="'investor.organizationName'">
+<app-admin-ui-container [title]="signalService.businessInvestorPageSignal()">
       <div class="tab-view">
         <div class="tab-headers">
           <div class="tab-header" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">

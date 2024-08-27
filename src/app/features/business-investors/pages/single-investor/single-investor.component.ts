@@ -9,6 +9,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ConnectedComponent } from "../../components/connected/connected.component";
 import { InterestedComponent } from "../../components/interested/interested.component";
 import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
+import { SignalsService } from '../../../../core/services/signals/signals.service';
 
 @Component({
   selector: 'app-single-investor',
@@ -38,6 +39,7 @@ import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-co
 })
 export class SingleInvestorComponent {
 
+  signalService =inject(SignalsService);
   activeTab: InvestorDashboardData = 'profile';
 
   setActiveTab(tab: InvestorDashboardData) {
