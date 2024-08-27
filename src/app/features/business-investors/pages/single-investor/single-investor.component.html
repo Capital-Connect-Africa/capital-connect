@@ -1,0 +1,27 @@
+<!-- <ng-container *ngIf="company$ | async as company"> -->
+    <app-admin-ui-container title="Hey">
+      <div class="tab-view">
+        <div class="tab-headers">
+          <div class="tab-header" [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
+            Profile
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'matched'" (click)="setActiveTab('matched')">
+            Matched
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'interested'" (click)="setActiveTab('interested')">
+            Interested
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'connected'" (click)="setActiveTab('connected')">
+            Connected
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'declined'" (click)="setActiveTab('declined')">
+            Declined
+          </div>
+        </div>
+  
+        <div class="tab-content" >
+         
+        </div>
+      </div>
+    </app-admin-ui-container>
+  <!-- </ng-container> -->
