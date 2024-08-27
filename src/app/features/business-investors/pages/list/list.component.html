@@ -30,7 +30,7 @@
           <td class="text-center">{{investor.matched??0}}</td>
           <td class="text-center">{{investor.connected??0}}</td>
           <td class="text-center">{{investor.declined??0}}</td>
-          <td><button class="btn__cta text-blue-600">Details</button></td>
+          <td><button class="btn__cta text-blue-600" (click)="viewInvestor(investor.id)">Details</button></td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
