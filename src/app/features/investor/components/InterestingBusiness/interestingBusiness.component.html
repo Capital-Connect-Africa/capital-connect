@@ -69,12 +69,8 @@
         </mat-paginator>
         <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
           <div class="mb-6 details company__info">
-            <h6 class="text-xl font-semibold mb-2"><strong>Connected Businesess Information</strong></h6>
+            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesess Information</strong></h6>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
-              <div>
-                <p class="font-bold"><strong>Name: </strong><span class="font-light    w-20 break-words max-w-ful">{{ selectedBusiness.company.name
-                    }}</span></p>
-              </div>
               <div>
                 <p class="font-bold"><strong>Country: </strong><span class="font-light    w-20 break-words max-w-ful">{{
                     selectedBusiness.company.country }}</span></p>
@@ -216,9 +212,9 @@
           <!-- Back Button -->
           <div class="flex justify-end details">
             <div class="flex space-x-2 justify-center p-2">
-              <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+              <button class="btn btn-danger px-3 py-1"
                 (click)="openModal(selectedBusiness.company.id)">Decline</button>
-              <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
+              <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
                 List</button>
             </div>
           </div>

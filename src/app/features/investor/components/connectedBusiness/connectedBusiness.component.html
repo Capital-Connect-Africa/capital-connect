@@ -10,6 +10,7 @@
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="matchMakingStats$ | async"> </ng-container>
+<ng-container *ngIf="esgSubmissions$ | async"></ng-container>
 
  
 
@@ -256,14 +257,28 @@
                   <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
                 </div>
               </ng-container>
+
+
+              <hr>
+              <h6 class="text-xl font-semib old mb-2"><strong>Impact Results</strong></h6>
+              <div *ngIf="(impactElementAnswers.length > 0)" class="feed_back">
+                <ul class="">
+                  <li *ngFor="let submission of  impactElementAnswers ">
+                    <p><strong>{{ submission.question.text | removeQuotes }}</strong></p>
+                    <p>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</p>
+                    <p>{{ submission.explanation | removeQuotes }}</p>
+                  </li>
+                </ul>
+              </div>
+
             </div>
 
             <!-- Back Button -->
             <div class="flex justify-end details">
               <div class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                <button class="btn btn-danger px-3 py-1"
                   (click)="openModal(selectedBusiness.company.id)">Decline</button>
-                <button class="btn btn-sm bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
+                <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
                   List</button>
               </div>
             </div>
