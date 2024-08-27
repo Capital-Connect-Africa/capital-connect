@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { BusinessAndInvestorMatchingService } from "../business/services/busines.and.investor.matching.service";
-import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
+import { forkJoin, map, Observable } from "rxjs";
 import { AuthStateService } from "../../features/auth/services/auth-state.service";
 import {
   BUSINESS_INFORMATION_SUBSECTION_IDS, getInvestorEligibilitySubsectionIds,
@@ -45,29 +45,15 @@ export class BusinessOnboardingScoringService {
     }))
   }
   
-  getInvestorProfile(investorId:number){
-
-    return this._scoringService.getInvestorProfile(investorId).pipe(map(res =>{
-      debugger
-      return res; // :)
-    }))
-  }
   getMatchedInvestors() {
     return this._scoringService.getMatchedInvestors().pipe(map((investors: MatchedInvestor[]) => {
-      return investors;
-    }),
-  catchError(err =>{
-    return EMPTY
-  }))
+      return investors
+    }))
   }
 
   getConnectedInvestors() {
-    return this._scoringService.getConnectedInvestors(this._companyService.currentCompany.id).pipe(switchMap((investors: any[]) => {
-      const requests =investors.map((investor) =>this.getInvestorProfile(investor.investorProfile.id))
-      return forkJoin(requests).pipe(map(res =>{
-        debugger
-        return res
-      }))
+    return this._scoringService.getConnectedInvestors(this._companyService.currentCompany.id).pipe(map((investors: any[]) => {
+      return investors.map(investor =>investor.investorProfile)
     })) as Observable<MatchedInvestor[]>
   }
   getSectionScore(sectionId: number) {

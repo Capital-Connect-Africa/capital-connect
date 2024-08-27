@@ -16,7 +16,7 @@ export class UsersHttpService extends BaseHttpService {
   }
 
   getInvestorMatchedBusinesses(investorId: number){
-    return this.read(`${BASE_URL}/matchmaking/companies/${investorId}`) as Observable<any[]>;
+    return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}`) as Observable<any[]>;
   }
 
   getInvestorConnectedBusinesses(investorId: number){
@@ -42,15 +42,15 @@ export class UsersHttpService extends BaseHttpService {
       switchMap((investors: MatchedInvestor[] | any[]) => {
         const investorRequests = investors.map((investor: MatchedInvestor) => {
           return forkJoin([
-            // this.getInvestorMatchedBusinesses(investor.id),
+            this.getInvestorMatchedBusinesses(investor.id),
             this.getInvestorConnectedBusinesses(investor.id),
             this.getInvestorDeclinedBusinesses(investor.id),
           ]).pipe(
             map(res => ({
               ...investor,
-              matched: 0,
-              connected: res[0].length,
-              declined: res[1].length
+              matched: res[0].length,
+              connected: res[1].length,
+              declined: res[2].length
             }))
           );
         });
