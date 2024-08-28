@@ -85,4 +85,5 @@ export interface BusinessProfile{
     businessSector: string,
     growthStage: string,
    }
+   declineReasons: string[],
 }

@@ -3,7 +3,9 @@
         <div class="card__item__detail_info"*ngFor="let business of connected" >
             <div>
                 <label>{{business.company.name}}</label>
-                <p>{{business.company.businessSector}} - {{business.company.growthStage}}</p>
+                <ul>
+                    <li *ngFor="let reason of business.declineReasons">{{reason}}</li>
+                </ul>
                 </div>
         </div>
     </div>

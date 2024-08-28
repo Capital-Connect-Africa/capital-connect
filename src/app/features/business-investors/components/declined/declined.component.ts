@@ -16,9 +16,12 @@ export class DeclinedComponent {
   private _investorService =inject(InvestorService);
   private _activateRoute = inject(ActivatedRoute);
   private _investorId = Number(this._activateRoute.snapshot.paramMap.get('id'));
-  connected:BusinessProfile[] =[]
+  connected:BusinessProfile[] = []
 
   connected$ =this._investorService.getCancelledBusinesses(this._investorId).pipe(tap(res =>{
-    this.connected =res;
+    this.connected =res.map(business =>({
+      ...business,
+      declineReasons: business.declineReasons ?? []
+    }));
   }))
 }
