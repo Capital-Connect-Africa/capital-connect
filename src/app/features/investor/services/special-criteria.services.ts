@@ -1,10 +1,11 @@
-import {Injectable,inject} from "@angular/core";
-import {BehaviorSubject, map, Observable} from "rxjs";
+import { Injectable, inject } from "@angular/core";
+import { BehaviorSubject, map, Observable } from "rxjs";
 import { AuthStateService } from "../../auth/services/auth-state.service";
-import { HttpClient,HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/interfaces/Investor";
+import { UserSubmissionResponse } from "../../../shared";
 
 @Injectable(
   {
@@ -12,10 +13,7 @@ import { SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/inter
   }
 )
 
-export class InvestorScreensService extends BaseHttpService{
-  private _currentScreenSRC =new BehaviorSubject<number>(1)
-  private _currentStepSRC =new BehaviorSubject<number>(1);
-
+export class SpecialCriteriasService extends BaseHttpService {
   authStateService = inject(AuthStateService);
   token = this.authStateService.authToken;
   constructor(private _httpClient: HttpClient, private router: Router) {
@@ -28,61 +26,50 @@ export class InvestorScreensService extends BaseHttpService{
   });
 
 
-
- //Apis
- createSpecialCriteria(request: SpecialCriteria): Observable<unknown>{
+  createSpecialCriteria(request: SpecialCriteria): Observable<unknown> {
     const url = `${BASE_URL}/special-criteria`;
     return this.create(url, request, this.headers) as Observable<unknown>;
-}
+  }
 
-addQuestionsTopecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown>{
+  addQuestionsToSpecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown> {
     const url = `${BASE_URL}/special-criteria/add-questions`;
     return this.create(url, request, this.headers) as Observable<unknown>;
-}
-
-
-removeQuestionsrompecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown>{
-    const url = `${BASE_URL}/special-criteria/remove-questions`;
-    return this.create(url, request, this.headers) as Observable<unknown>;
-}
-
-getSpecialCriteriaById(id:number): Observable<SpecialCriteria>{
-    return this.read(`${BASE_URL}/special-criteria/${id}`,this.headers) as unknown as Observable<SpecialCriteria>;
   }
 
 
-getAllSpecialCriteria(): Observable<SpecialCriteria[]>{
-return this.read(`${BASE_URL}/special-criteria`,this.headers) as unknown as Observable<SpecialCriteria[]>;
-}
+  removeQuestionsFromSpecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown> {
+    const url = `${BASE_URL}/special-criteria/remove-questions`;
+    return this.create(url, request, this.headers) as Observable<unknown>;
+  }
+
+  getSpecialCriteriaById(id: number): Observable<SpecialCriteria> {
+    return this.read(`${BASE_URL}/special-criteria/${id}`, this.headers) as unknown as Observable<SpecialCriteria>;
+  }
+
+  getQuestions(): Observable<UserSubmissionResponse[]>{
+    return this.read(`${BASE_URL}/questions`, this.headers) as unknown as  Observable<UserSubmissionResponse[]>
+  }
 
 
-getAllSpecialCriteriaByInvestorProfile(id:number): Observable<SpecialCriteria[]>{
-return this.read(`${BASE_URL}/special-criteria/${id}`,this.headers) as unknown as Observable<SpecialCriteria[]>;
-}
+  // getAllSpecialCriteria(): Observable<SpecialCriteria[]> {
+  //   return this.read(`${BASE_URL}/special-criteria`, this.headers) as unknown as Observable<SpecialCriteria[]>;
+  // }
 
 
-// //check on this
-// updateSpecialCriteria(request: SpecialCriteria): Observable<unknown>{
-//     const url = `${BASE_URL}/special-criteria`;
-//     return this.PUT(url, request, this.headers) as Observable<unknown>;
-// }
-
-// ### Update Special criteria
-// PUT http://localhost:3000/special-criteria/2
-// Content-Type: application/json
-// Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-
-// {
-//   "title": "New Special Criteria updated",
-//   "description": "This is a test criteria updated."
-// }
-
-// ### Delete Special criteria by Id
-// DELETE http://localhost:3000/special-criteria/3
-// Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+  getAllSpecialCriteriaByInvestorProfile(id: number): Observable<SpecialCriteria[]> {
+    return this.read(`${BASE_URL}/special-criteria/investor-profile/${id}`, this.headers) as unknown as Observable<SpecialCriteria[]>;
+  }
 
 
+  updateSpecialCriteria(id:number,request: SpecialCriteria): Observable<unknown>{
+      const url = `${BASE_URL}/special-criteria`;
+      return this.update(url,id,request, this.headers) as Observable<unknown>;
+  }
 
-
+ 
+  deleteSpecialCriteria(id: number): Observable<unknown> {
+    const url = `${BASE_URL}/special-criteria`;
+    return this.delete(url,id, this.headers) as Observable<unknown>;
+  }
 
 }

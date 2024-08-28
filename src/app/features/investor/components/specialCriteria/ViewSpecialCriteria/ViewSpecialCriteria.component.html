@@ -1,0 +1,114 @@
+<ng-container *ngIf="specialCriteriaId$ | async"></ng-container>
+<ng-container *ngIf="getSpecialCriteria$ | async"></ng-container>
+<ng-container *ngIf="update$ | async"></ng-container>
+<ng-container *ngIf="questions$ | async"></ng-container>
+<ng-container *ngIf="addQuestions$ | async"></ng-container>
+<ng-container *ngIf="removeQuestions$ | async"></ng-container>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar [showBanner]="showBanner" onDashboard="true" />
+  </div>
+
+  <div class="main__content">
+    <section class="col__right">
+      <div class="sc__details">
+        <p>Special Criteria Details</p>
+        <p><strong>Title</strong></p>
+        <p>{{specialCriteria.title}}</p>
+
+        <p><strong>Description</strong></p>
+        <p>{{specialCriteria.description}}</p>
+
+      </div>
+
+
+
+
+
+      <div class="cta__group">
+        <button *ngIf="!update" (click)="onUpdate()" class="btn btn-primary">Update Special Criteria</button>
+        <!-- <button class="btn btn-secondary" (click)="onAddQuestions()">Add Questions</button> -->
+        <!-- <button class="btn btn-danger">Remove Questions</button> -->
+
+      </div>
+
+      <div *ngIf="update">
+        <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Title<sup>*</sup></label>
+              <input class="input__field" formControlName="title" type="text" placeholder="Enter Criteria Title" />
+            </div>
+
+
+            <div class="input__wrapper">
+              <label class="input__label">Description<sup>*</sup></label>
+              <input class="input__field" formControlName="description" type="text"
+                placeholder="Enter Criteria Description" />
+            </div>
+
+
+            <div class="cta__group">
+              <button class="btn btn-primar" [disabled]="!specialCriteriaForm.valid" [ngClass]="{'disabled-btn': !specialCriteriaForm.valid}">Submit Special Criteria</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <div>
+        <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Add Questions To Special Criteria</label>
+              <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id"
+                formControlName="questionIds" [options]="questions" optionLabel="text"
+                placeholder="Select questions"></p-multiSelect>
+            </div>
+
+
+            <div class="cta__group">
+              <button class="btn btn-primar" [disabled]="!questionsForm.valid"
+                [ngClass]="{'disabled-btn': !questionsForm}">Add Selected Questions</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <form [formGroup]="questionsRemoveForm" (ngSubmit)="onQuestionsRemove()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Remove Questions From Special Criteria</label>
+              <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id"
+                formControlName="questionIds" [options]="questions" optionLabel="text"
+                placeholder="Select questions"></p-multiSelect>
+            </div>
+
+
+            <div class="cta__group">
+              <button class="btn btn-primar" [disabled]="!questionsRemoveForm.valid"
+                [ngClass]="{'disabled-btn': !questionsRemoveForm}">Remove Questions</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </section>
+
+  </div>
+
+</div>

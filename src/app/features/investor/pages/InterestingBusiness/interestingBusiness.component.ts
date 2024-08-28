@@ -16,7 +16,9 @@ import { InterestingBusinessComponent } from '../../components/InterestingBusine
 export class InterstingBusinesComponent {
     links =[
       {label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view'},
-      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'}
+      {label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune'},
+      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'},
+
       // {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
     ]
 }

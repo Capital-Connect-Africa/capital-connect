@@ -73,6 +73,7 @@ export interface EsgFocusAreaOptions {
 }
 
 export interface SpecialCriteria{
+    id:number,
     title: string,
     description: string,
     investorProfileId: number
