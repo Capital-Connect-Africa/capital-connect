@@ -1,0 +1,9 @@
+<div class="main__content">
+    <app-sidenav [links]="links"/>
+    <div class="main">
+        <div class="navbar"><app-navbar onDashboard="true" /></div>
+        <main *ngIf="specialCriteriaQuestions$ | async as specialCriteriaQuestions"> 
+        </main>
+    </div>
+</div>
+  
