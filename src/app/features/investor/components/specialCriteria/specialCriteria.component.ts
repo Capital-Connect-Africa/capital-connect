@@ -25,6 +25,7 @@ export class SpecialCriteriaComponent implements OnInit {
 
   specialCriteria$ = new Observable<SpecialCriteria[]>;
   selectedCriteria$ = new  Observable<SpecialCriteria>;
+  delete$ = new Observable<unknown>
   loading = false;
   error: string | null = null;
 
@@ -44,6 +45,12 @@ export class SpecialCriteriaComponent implements OnInit {
         this.specialCriteria = res
       })
     );
+  }
+
+  deleteCriteria(id:number){
+    this.delete$ = this._specialCriteria.deleteSpecialCriteria(id).pipe(tap(res=>{
+      this.loadSpecialCriteria()
+    }))
   }
 
 
