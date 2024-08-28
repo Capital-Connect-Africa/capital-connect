@@ -53,6 +53,7 @@ export interface MatchedInvestor {
   registrationStructures: string[],
   countriesOfInvestmentFocus: string[],
   availableFunding: number,
+  specialCriteria: any[],
   investor: {
     lastName: string,
     username: string,
