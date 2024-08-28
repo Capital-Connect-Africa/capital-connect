@@ -1,13 +1,16 @@
 <main *ngIf="connected$ | async as connected">
     <div class="card__item__details" details>
-        <div class="card__item__detail_info"*ngFor="let business of connected" >
-            <div>
-                <label>{{business.company.name}}</label>
-                <ul>
-                    <li *ngFor="let reason of business.declineReasons">{{reason}}</li>
-                </ul>
-                </div>
-        </div>
+        <ng-container *ngFor="let business of connected">
+            <div class="card__item__detail_info">
+                <div>
+                    <label>{{business.company.name}}</label>
+                    <ul class="reasons" *ngIf="business.declineReasons.length">
+                        <li *ngFor="let reason of business.declineReasons"><i class="pi pi-times"></i><span>{{reason}}</span></li>
+                    </ul>
+                    </div>
+            </div>
+        </ng-container>
+        
     </div>
 
 </main>
