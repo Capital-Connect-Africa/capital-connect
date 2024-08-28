@@ -16,7 +16,7 @@ export class UsersHttpService extends BaseHttpService {
   }
 
   getInvestorMatchedBusinesses(investorId: number){
-    return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}`) as Observable<any[]>;
+    return this.read(`${BASE_URL}/matchmaking/companies/${investorId}`) as Observable<any[]>;
   }
 
   getInvestorConnectedBusinesses(investorId: number){
@@ -31,30 +31,34 @@ export class UsersHttpService extends BaseHttpService {
     return this.read(`${BASE_URL}/matchmaking/interested/${investorId}`) as Observable<any[]>;
   }
 
+
   getAllInvestorsProfiles(){
     return this.read(`${BASE_URL}/investor-profiles`).pipe(map(res =>{
       return res;
     })) as Observable<MatchedInvestor[]>
   }
-
+  getInvestorStats(investorId: number){
+    return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}`).pipe(map(res =>{
+      debugger
+      return res
+    })) as Observable<any[]>
+  }
   getAllInvestors(): Observable<MatchedInvestor[]> {
     return this.read(`${BASE_URL}/investor-profiles`).pipe(
       switchMap((investors: MatchedInvestor[] | any[]) => {
         const investorRequests = investors.map((investor: MatchedInvestor) => {
           return forkJoin([
             this.getInvestorMatchedBusinesses(investor.id),
-            this.getInvestorConnectedBusinesses(investor.id),
-            this.getInvestorDeclinedBusinesses(investor.id),
+            this.getInvestorStats(investor.id),
           ]).pipe(
+          
             map(res => ({
               ...investor,
               matched: res[0].length,
-              connected: res[1].length,
-              declined: res[2].length
+              ...res[1]
             }))
           );
         });
-  
         return forkJoin(investorRequests);
       })
     ) as Observable<MatchedInvestor[]>;
