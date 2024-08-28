@@ -39,7 +39,6 @@ export class UsersHttpService extends BaseHttpService {
   }
   getInvestorStats(investorId: number){
     return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}`).pipe(map(res =>{
-      debugger
       return res
     })) as Observable<any[]>
   }

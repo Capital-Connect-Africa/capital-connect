@@ -63,7 +63,6 @@ export class InvestorDetailsComponent {
   
   checkIfUserCanViewPage(){
     this.canViewPage =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
-    debugger
   }
   goBack(){
     if(this.relationship ===CompanyInvestorRelationsShip.MATCHED) this._signalService.matchedInvestorsDialogIsVisible.set(true);

@@ -33,13 +33,13 @@ export class InvestorService{
 
     getCancelledBusinesses(investorId:number){
         return this._userService.getInvestorDeclinedBusinesses(investorId).pipe(map(res =>{
-            return res;
+            return res.map(business =>({...business, declineReasons: business.declineReasons || []}));
         })) as Observable<BusinessProfile[]>
     }
 
     getMatchedBusinesses(investorId:number){
         return this._userService.getInvestorMatchedBusinesses(investorId).pipe(map(res =>{
-            return res;
+            return res.map(business =>({company: {...business}}));
         })) as Observable<BusinessProfile[]>
     }
 }
