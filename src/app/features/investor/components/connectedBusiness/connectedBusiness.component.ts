@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
 import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
+import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
 
 @Component({
   selector: 'app-connected-business',
@@ -46,7 +47,8 @@ import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
     NgxPaginationModule,
     MatPaginatorModule,
     MultiSelectModule, ReactiveFormsModule,
-    RemoveQuotesPipe
+    RemoveQuotesPipe,
+    DebouncedSearchComponent
 ],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss',
@@ -110,6 +112,7 @@ export class ConnectedBusinessComponent {
   public scoring$ = new Observable<Scoring>;
   submissions$ = new Observable<UserSubmissionResponse[]>
   esgSubmissions$ = new Observable<UserSubmissionResponse[]>
+  search$ = new Observable<InterestingBusinesses[]>;
 
 
 
@@ -192,6 +195,20 @@ export class ConnectedBusinessComponent {
   getGrowthStageFromString(value: string): GrowthStage | undefined {
     const stage = Object.values(GrowthStage).find(stage => stage === value);
     return stage as GrowthStage | undefined;
+  }
+
+  onSearch(query: string): void {
+    if (query){
+      this.search$ = this._businessMatchingService.searchCompany('connected', query).pipe(tap(res=>{
+        this.connectedBusinesses = res
+      }))
+    }else{
+      this.connectedCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
+        tap(res => {
+          this.connectedBusinesses = res;
+        })
+      );
+    }
   }
 
 

@@ -107,6 +107,16 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     );
   }
 
+  //search a company
+  // ### Search companies based on investor profile criteria and text prod (investorProfileId, status, query)
+  // GET https://capitalconnect-0060e0fb0eb4.herokuapp.com/matchmaking/search-matches/35?status=interesting&q=kenya
+  searchCompany(status:string, query:string):Observable<InterestingBusinesses[]>{
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/matchmaking/search-matches/${investorProfileId}?status=${status}&q=${query}`).pipe(
+      map(res => res as unknown as InterestingBusinesses[]))
+
+  }
+
    //Cancel Connection with a company
    cancelInterestWithCompany(companyId: number, reasons: string[]): Observable<void> {    
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
