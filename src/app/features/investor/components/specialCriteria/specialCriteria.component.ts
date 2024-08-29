@@ -28,6 +28,7 @@ export class SpecialCriteriaComponent implements OnInit {
 
   specialCriteria$ = new Observable<SpecialCriteria[]>;
   selectedCriteria$ = new  Observable<SpecialCriteria>;
+  deleteConf$ = new Observable<boolean>();
   delete$ = new Observable<unknown>
   loading = false;
   error: string | null = null;
@@ -54,8 +55,15 @@ export class SpecialCriteriaComponent implements OnInit {
   }
 
   deleteCriteria(id:number){
-    this.delete$ = this._specialCriteria.deleteSpecialCriteria(id).pipe(tap(res=>{
-      this.loadSpecialCriteria()
+
+    this.deleteConf$ = this._confirmationService.confirm('Are you sure you want to delete this special criteria?').pipe(tap(conf =>{
+      if(conf){
+        this.delete$ = this._specialCriteria.deleteSpecialCriteria(id).pipe(tap(res=>{
+        this._feedBackService.success('Special Criteria Deleted Successfully')
+
+          this.loadSpecialCriteria()
+        }))        
+      }
     }))
   }
 
@@ -103,23 +111,6 @@ export class SpecialCriteriaComponent implements OnInit {
     );
   }
 
-  deleteSpecialCriteria(id: number): void {
-    this.loading = true;
-    this._confirmationService.confirm('Are you sure you want to delete this special criteria?').pipe(tap(conf =>{
-      if(conf){
-        this._specialCriteria.deleteSpecialCriteria(id).pipe(
-          tap({
-            next: () => this.loadSpecialCriteria(),
-            error: (err) => {
-              this.error = 'Failed to delete special criteria';
-              console.error(err);
-              this.loading = false;
-            }
-          })
-        );
-      }
-    }))
-  }
 
   addQuestionsToCriteria(criteriaQuestions: SpecialCriteriaQuestions): void {
     this.loading = true;
