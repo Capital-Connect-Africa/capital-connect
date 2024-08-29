@@ -1,0 +1,44 @@
+<ng-container *ngIf="submit$ | async"></ng-container>
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar [showBanner]="showBanner" onDashboard="true" />
+  </div>
+
+  <div class="main__content">
+    <section class="col__right">
+
+
+      <h6>Create a Special Criteria</h6>
+      <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
+        <div class="form_content__container">
+          <div class="input__wrapper">
+            <label class="input__label">Title<sup>*</sup></label>
+            <input class="input__field" formControlName="title" type="text"
+              placeholder="Enter Criteria Title" />
+          </div>
+
+
+          <div class="input__wrapper">
+            <label class="input__label">Description<sup>*</sup></label>
+            <input class="input__field" formControlName="description" type="text"
+              placeholder="Enter Criteria Description" />
+          </div>
+
+
+          <div class="cta__group">
+            <button class="btn btn-primar"
+            [disabled]="!specialCriteriaForm.valid"
+            [ngClass]="{'disabled-btn': !specialCriteriaForm.valid}"
+            >Submit Special Criteria</button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+
+  </div>
+
+
+</div>
