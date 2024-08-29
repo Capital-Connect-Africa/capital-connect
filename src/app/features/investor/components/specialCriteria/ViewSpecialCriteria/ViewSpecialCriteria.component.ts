@@ -10,13 +10,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserSubmissionResponse } from '../../../../../shared';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   standalone: true,
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent,DropdownModule]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
@@ -28,6 +30,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   //boolean
   update:boolean =  false;
   addQuestions: boolean = false;
+  add_custom_ques: boolean = false
 
   // Variables
   specialCriteriaId!: number;
@@ -35,14 +38,18 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   specialCriteriaForm!: FormGroup;
   questionsForm!:FormGroup
   questionsRemoveForm!:FormGroup
+  customQuestionsForm!:FormGroup
   questions!: UserSubmissionResponse[];
-
+  question_types:string[] = ["MULTIPLE_CHOICE", "SINGLE_CHOICE", "TRUE_FALSE", "SHORT_ANSWER"]
   //streams
   addQuestions$!:Observable<unknown>;
   removeQuestions$!:Observable<unknown>;
   specialCriteriaId$!: Observable<number | null>; 
   getSpecialCriteria$!: Observable<SpecialCriteria>;
   update$!: Observable<unknown>;
+  addCustomQuestions$!: Observable<unknown>
+
+
   questions$ = this.sc.getQuestions().pipe(tap(res=>{
     this.questions = res
   }))
@@ -60,6 +67,12 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.customQuestionsForm = this._formBuilder.group({
+      text: ['', Validators.required],
+      type:['', Validators.required],
+      tooltip:['',Validators.required]
+    })
+
     this.questionsForm = this._formBuilder.group({
       questionIds: [[], Validators.required]
     })
@@ -93,6 +106,32 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   onAddQuestions(){
     this.addQuestions = true
     this.patchForm()
+  }
+
+  addCustomQues(){
+    this.add_custom_ques = true
+  }
+
+  onCustomQuestionsSubmit(){
+    if(this.customQuestionsForm){
+      const formData = this.customQuestionsForm.value
+      formData.order = 10
+
+      this.addCustomQuestions$ = this.sc.addCustomQuestionsToSpecialCriteria(formData).pipe(tap(res =>{
+        this._feedBackService.success('Custom Question Added To Special Criteria Successfully')   
+
+        let body = {
+          specialCriteriaId : this.specialCriteriaId,
+          questionIds : [res.id]
+        }
+
+        this.addQuestions$ = this.sc.addQuestionsToSpecialCriteria(body).pipe(tap(res=>{  
+        }))
+        this.add_custom_ques = false
+        this.customQuestionsForm.reset()     
+      }))
+
+    }
   }
 
   onQuestionsSubmit(){
@@ -131,7 +170,6 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   onSubmit(){
-    //ui clean up
     if(this.specialCriteriaForm.valid){
       const formData = this.specialCriteriaForm.value
       this.update$ = this.sc.updateSpecialCriteria(this.specialCriteria.id,formData).pipe(

@@ -4,6 +4,7 @@
 <ng-container *ngIf="questions$ | async"></ng-container>
 <ng-container *ngIf="addQuestions$ | async"></ng-container>
 <ng-container *ngIf="removeQuestions$ | async"></ng-container>
+<ng-container *ngIf="addCustomQuestions$ | async"></ng-container>
 
 
 
@@ -70,6 +71,7 @@
 
 
             <div class="cta__group">
+              <a class="ques__a" (click)="addCustomQues()">Did not find the question? <strong>add custom question here</strong></a>
               <button class="btn btn-primar" [disabled]="!questionsForm.valid"
                 [ngClass]="{'disabled-btn': !questionsForm}">Add Selected Questions</button>
             </div>
@@ -102,3 +104,40 @@
   </div>
 
 </div>
+
+<app-modal [(visible)]="add_custom_ques" title="Custom Question" 
+  helperText="Add A custom question">
+
+  <form [formGroup]="customQuestionsForm" (ngSubmit)="onCustomQuestionsSubmit()">
+    <div class="form_content__container">
+      <div class="input__wrapper">
+        <label class="input__label">Question<sup>*</sup></label>
+        <input class="input__field" formControlName="text" type="text"
+          placeholder="Enter Question" />
+      </div>
+
+
+
+      <div class="input__wrapper">
+        <label class="input__label">Question Type <sup>*</sup></label>
+        <p-dropdown class="input__field" styleClass="w-full gap-4" 
+          formControlName="type" [options]="question_types"
+          placeholder="Question Types"></p-dropdown>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label">Question Description<sup>*</sup></label>
+        <input class="input__field" formControlName="tooltip" type="text"
+          placeholder="Enter Question" />
+      </div>
+
+
+      <div class="cta__group">
+        <button class="btn btn-primar" [disabled]="!customQuestionsForm.valid"
+          [ngClass]="{'disabled-btn': !customQuestionsForm}">Submit</button>
+      </div>
+    </div>
+  </form>
+
+
+</app-modal>

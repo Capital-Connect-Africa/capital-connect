@@ -11,6 +11,10 @@
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="matchMakingStats$ | async"> </ng-container>
 <ng-container *ngIf="esgSubmissions$ | async"></ng-container>
+<ng-container *ngIf="search$ | async"></ng-container>
+
+
+
 
  
 
@@ -28,7 +32,7 @@
         <div class="d-flex justify-between items-center">
           <div>
           <h5><strong>Connected Businesess</strong></h5>
-          <!-- <p>You have connected with these businesses</p> -->
+          <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
           </div>
         </div>
      

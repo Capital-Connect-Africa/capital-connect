@@ -1,6 +1,8 @@
 <ng-container *ngIf="markAsInteresting$ | async"></ng-container>
 <ng-container *ngIf="rejectedCompanies$ | async"></ng-container>
 <ng-container *ngIf="matchMakingStats$ | async"></ng-container>
+<ng-container *ngIf="search$ | async"></ng-container>
+
 
 
 <div class="main">
@@ -12,7 +14,7 @@
     <div class="left__col">
       <div *ngIf="table" class="text-start search border-0">
         <h5><strong>Declined Businesess</strong></h5>
-        <!-- <p>You have declined these businesses</p> -->
+        <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!rejectedBusinesses.length">
           No declined businesess found. <br /> Check again later.
         </div>

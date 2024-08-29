@@ -23,6 +23,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
+import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
 
 @Component({
   selector: 'app-interesting-business',
@@ -37,8 +38,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     AdvertisementSpaceComponent,
     DialogModule,
     NgxPaginationModule,
-    MultiSelectModule, ReactiveFormsModule
-  ],
+    MultiSelectModule, ReactiveFormsModule,
+    DebouncedSearchComponent
+],
   templateUrl: './interestingBusiness.component.html',
   styleUrl: './interestingBusiness.component.scss',
   providers: [PaginationService]
@@ -99,6 +101,7 @@ export class InterestingBusinessComponent {
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
   useOfFunds: string[] = [];
   matchMakingStats: MatchMakingStats | undefined;
+  search$ = new Observable<InterestingBusinesses[]>()
 
 
 
@@ -246,6 +249,20 @@ export class InterestingBusinessComponent {
     this.selectedMatchedBusiness = null;
   }
 
+
+  onSearch(query: string): void {
+    if (query){
+      this.search$ = this._businessMatchingService.searchCompany('interesting', query).pipe(tap(res=>{
+        this.interestingBusinesses = res
+      }))
+    }else{
+      this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
+        tap(res => {
+          this.interestingBusinesses = res;
+        })
+      );
+    }
+  }
 
 
 
