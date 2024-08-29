@@ -69,4 +69,8 @@ export class InvestorDetailsComponent {
     else if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED) this._signalService.connectedInvestorsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
   }
+
+  takeSpecialCriteria(investorId:number){
+    this._router.navigateByUrl(`/business/my-business/special-criteria/${investorId}`)
+  }
 }
