@@ -131,6 +131,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   onSubmit(){
+    //ui clean up
     if(this.specialCriteriaForm.valid){
       const formData = this.specialCriteriaForm.value
       this.update$ = this.sc.updateSpecialCriteria(this.specialCriteria.id,formData).pipe(
