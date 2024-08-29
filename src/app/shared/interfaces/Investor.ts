@@ -84,6 +84,17 @@ export interface SpecialCriteriaQuestions{
     questionIds: number[]   
 }
 
+export interface CustomQuestion{
+    text: string,
+    type: string,
+    order: number,
+    tooltip: string
+}
+
+export interface CustomQuestionResponse{
+    id:number
+}
+
 
 
 export interface InvestorProfile {

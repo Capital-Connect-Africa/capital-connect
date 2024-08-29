@@ -4,7 +4,7 @@ import { AuthStateService } from "../../auth/services/auth-state.service";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { BASE_URL, BaseHttpService } from "../../../core";
-import { SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/interfaces/Investor";
+import { CustomQuestion, CustomQuestionResponse, SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/interfaces/Investor";
 import { UserSubmissionResponse } from "../../../shared";
 
 @Injectable(
@@ -34,6 +34,11 @@ export class SpecialCriteriasService extends BaseHttpService {
   addQuestionsToSpecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown> {
     const url = `${BASE_URL}/special-criteria/add-questions`;
     return this.create(url, request, this.headers) as Observable<unknown>;
+  }
+
+  addCustomQuestionsToSpecialCriteria(request: CustomQuestion): Observable<CustomQuestionResponse> {
+    const url = `${BASE_URL}/questions/special-criteria`;
+    return this.create(url, request, this.headers) as Observable<CustomQuestionResponse>;
   }
 
 
