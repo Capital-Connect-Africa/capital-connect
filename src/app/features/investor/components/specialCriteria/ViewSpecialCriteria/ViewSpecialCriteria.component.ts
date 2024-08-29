@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { NavbarComponent } from '../../../../../core';
+import { FeedbackService, NavbarComponent } from '../../../../../core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
@@ -22,6 +22,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
   //services
   sc = inject(SpecialCriteriasService)
+  private _feedBackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
 
   //boolean
@@ -104,7 +105,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       }
 
       this.addQuestions$ = this.sc.addQuestionsToSpecialCriteria(body).pipe(tap(res=>{
-        
+        this._feedBackService.success('Questions Added To Special Criteria Successfully')   
+        this.questionsForm.reset()     
       }))
 
     }
@@ -120,7 +122,9 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       }
 
       this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res=>{
-        
+        this._feedBackService.success('Questions Removed From Special Criteria Successfully')    
+        this.questionsRemoveForm.reset()    
+                
       }))
 
     }
@@ -131,6 +135,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       const formData = this.specialCriteriaForm.value
       this.update$ = this.sc.updateSpecialCriteria(this.specialCriteria.id,formData).pipe(
         tap(res=>{
+          this._feedBackService.success('Special Criteria Updated Successfully')        
+          this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res=>{
+            this.specialCriteria = res
+          }))
+
           this.update = false
         })
       )
