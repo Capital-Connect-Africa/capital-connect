@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
 import { AngularMaterialModule } from '../../../../shared/angular-material.module';
 import { RouterModule } from '@angular/router';
+import { ConfirmationService, FeedbackService } from '../../../../core';
+import { SharedModule } from 'primeng/api';
+
 
 
 @Component({
@@ -13,7 +16,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-special-criteria',
   templateUrl: './specialCriteria.component.html',
   styleUrls: ['./specialCriteria.component.scss'],
-  imports: [CommonModule, NavbarComponent,AngularMaterialModule,RouterModule]
+  imports: [CommonModule, SharedModule,NavbarComponent,AngularMaterialModule,RouterModule]
 })
 export class SpecialCriteriaComponent implements OnInit {
   @Input() showBanner =false;
@@ -30,7 +33,10 @@ export class SpecialCriteriaComponent implements OnInit {
   error: string | null = null;
 
   //services
-  _specialCriteria = inject(SpecialCriteriasService)
+  private _specialCriteria = inject(SpecialCriteriasService)
+  private _confirmationService = inject(ConfirmationService);
+  private _feedBackService = inject(FeedbackService);
+
 
   ngOnInit(): void {
     this.investorProfileId = Number(sessionStorage.getItem('profileId'))
@@ -99,16 +105,20 @@ export class SpecialCriteriaComponent implements OnInit {
 
   deleteSpecialCriteria(id: number): void {
     this.loading = true;
-    this._specialCriteria.deleteSpecialCriteria(id).pipe(
-      tap({
-        next: () => this.loadSpecialCriteria(),
-        error: (err) => {
-          this.error = 'Failed to delete special criteria';
-          console.error(err);
-          this.loading = false;
-        }
-      })
-    );
+    this._confirmationService.confirm('Are you sure you want to delete this special criteria?').pipe(tap(conf =>{
+      if(conf){
+        this._specialCriteria.deleteSpecialCriteria(id).pipe(
+          tap({
+            next: () => this.loadSpecialCriteria(),
+            error: (err) => {
+              this.error = 'Failed to delete special criteria';
+              console.error(err);
+              this.loading = false;
+            }
+          })
+        );
+      }
+    }))
   }
 
   addQuestionsToCriteria(criteriaQuestions: SpecialCriteriaQuestions): void {
