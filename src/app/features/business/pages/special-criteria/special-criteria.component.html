@@ -2,7 +2,50 @@
     <app-sidenav [links]="links"/>
     <div class="main">
         <div class="navbar"><app-navbar onDashboard="true" /></div>
-        <main *ngIf="specialCriteriaQuestions$ | async as specialCriteriaQuestions"> 
+        <main *ngIf="specialCriteriaQuestions$ | async">
+            <div class="meta">
+                <div class="label">{{criteria?.title}}</div>
+                <p>{{criteria?.description}}</p>
+            </div>
+            <form [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
+                <div *ngFor="let question of questions; let i = index" class="input__wrapper">
+                  <label class="input__label">{{question.text}}<sup>*</sup></label>
+                  <a class="tooltip" [title]="question.tooltip || ''">Why do we ask this?</a>
+                  @if(question.type === fieldType.SINGLE_CHOICE || question.type === fieldType.TRUE_FALSE){
+                    <div class="form__col">
+                      <p-dropdown
+                        [options]="question.answers"
+                        optionLabel="text"
+                        optionValue="id"
+                        class ="input__field"
+                        styleClass ="w-full gap-4"
+                        [formControlName]="'question_' + question.id"
+                        placeholder="Select option" />
+                    </div>
+                  }
+                  @else if(question.type === fieldType.MULTIPLE_CHOICE){
+                    <div class="form__col">
+                      <p-multiSelect
+                        class ="input__field"
+                        styleClass ="w-full gap-4"
+                        [options]="[]"
+                        optionLabel="text"
+                        optionValue="id"
+                        [formControlName]="'question_' + question.id"
+                        [placeholder]="'Select option'" />
+                    </div>
+                  } 
+                  @else if(question.type === fieldType.SHORT_ANSWER){
+                    <div  class="form__col">
+                      <input class="input__field" [formControlName]="'question_' + question.id" type="text" placeholder="" />
+                    </div>
+                  }
+                </div>
+                  <div class="cta__group">
+                      <button type="submit" [disabled]="!formGroup.valid" class="btn" [ngClass]="{'disabled-btn': !formGroup.valid }">Submit</button>
+                      <!-- <button type="button" class="button__link" (click)="skip()">Skip and go back to dashboard</button> -->
+                  </div>
+              </form>
         </main>
     </div>
 </div>
