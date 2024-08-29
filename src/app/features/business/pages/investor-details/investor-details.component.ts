@@ -63,11 +63,14 @@ export class InvestorDetailsComponent {
   
   checkIfUserCanViewPage(){
     this.canViewPage =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
-    debugger
   }
   goBack(){
     if(this.relationship ===CompanyInvestorRelationsShip.MATCHED) this._signalService.matchedInvestorsDialogIsVisible.set(true);
     else if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED) this._signalService.connectedInvestorsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
+  }
+
+  takeSpecialCriteria(investorId:number){
+    this._router.navigateByUrl(`/business/my-business/special-criteria/${investorId}`)
   }
 }

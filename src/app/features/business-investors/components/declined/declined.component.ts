@@ -19,9 +19,6 @@ export class DeclinedComponent {
   connected:BusinessProfile[] = []
 
   connected$ =this._investorService.getCancelledBusinesses(this._investorId).pipe(tap(res =>{
-    this.connected =res.map(business =>({
-      ...business,
-      declineReasons: business.declineReasons ?? []
-    }));
+    this.connected =res;
   }))
 }

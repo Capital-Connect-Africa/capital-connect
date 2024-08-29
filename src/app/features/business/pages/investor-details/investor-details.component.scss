@@ -8,6 +8,12 @@
         display: flex;
         padding: 3rem 2rem;
         flex-direction: column;
+        .sc__btn{
+            color: white;
+            padding: .75rem 1rem;
+            border-radius: .5rem;
+            background-color: $primary-color;
+        }
         .card__item__details{
             gap: 2rem;
             display: flex;

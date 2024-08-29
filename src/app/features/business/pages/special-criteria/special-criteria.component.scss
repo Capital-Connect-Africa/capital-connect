@@ -1,0 +1,45 @@
+@import "../../../../styles/main.scss";
+
+.main__content{
+    display: grid;
+    grid-template-columns: max-content auto;
+    main{
+        gap: 2rem;
+        display: flex;
+        padding: 3rem 2rem;
+        flex-direction: column;
+    }
+    
+}
+
+.cta__group{
+    padding-top: 2rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    .cta__group{
+        justify-content: flex-start;
+    }
+    a.tooltip{
+        font-size: .8rem;
+        color: #555555bb;
+    }
+}
+.meta{
+    padding-bottom: .5rem;
+    border-bottom: 1px solid #ddddddd2;
+    .label {
+
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    p {
+        margin: 0.25rem 0;
+        color: #555;
+    }
+}
