@@ -24,25 +24,15 @@
   <div class="main__content">
     <section class="col__right">
       <div class="sc__details">
-        <p>Special Criteria Details</p>
-        <p><strong>Title</strong></p>
-        <p>{{specialCriteria.title}}</p>
-
-        <p><strong>Description</strong></p>
+        <h6><strong>{{specialCriteria.title}}</strong></h6>
         <p>{{specialCriteria.description}}</p>
 
-      </div>
-
-
-
-
-
-      <div class="cta__group">
+      <div class="">
         <button *ngIf="!update" (click)="onUpdate()" class="btn btn-primary">Update Special Criteria</button>
-        <!-- <button class="btn btn-secondary" (click)="onAddQuestions()">Add Questions</button> -->
-        <!-- <button class="btn btn-danger">Remove Questions</button> -->
-
       </div>
+      </div>
+
+
 
       <div *ngIf="update">
         <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
