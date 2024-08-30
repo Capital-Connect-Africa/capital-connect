@@ -10,12 +10,16 @@
 
     <div class="main__content">
         <section class="col__right">
-            <h6><strong>My Special Criteria</strong></h6>
+            <div class="flex justify-between top__details">
+                <h6><strong>My Special Criteria</strong></h6>
 
-            <div class="">
-                <a [routerLink]="['/investor/create-special-criteria']">
-                    <button class="btn btn-primary text-light">Create Special Criteria</button></a>
+                <div class="">
+                    <a [routerLink]="['/investor/create-special-criteria']">
+                        <button class="btn btn-primary text-light">Create Special Criteria</button></a>
+                </div>
+
             </div>
+
 
             <div class="table-parent">
                 <table class="table">
@@ -35,12 +39,14 @@
                         <td class="">{{criteria.description}}</td>
                         <td class="">
                             <div class="py-auto eye">
-                              <a [routerLink]="['/investor/view-special-criteria', criteria.id]"><mat-icon class="small-icon">visibility</mat-icon></a>
+                                <a [routerLink]="['/investor/view-special-criteria', criteria.id]"><mat-icon
+                                        class="small-icon">visibility</mat-icon></a>
                             </div>
                         </td>
 
                         <td class="">
-                            <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="deleteCriteria(criteria.id)">Delete Criteria</button>
+                            <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                                (click)="deleteCriteria(criteria.id)">Delete Criteria</button>
                         </td>
                     </tr>
 

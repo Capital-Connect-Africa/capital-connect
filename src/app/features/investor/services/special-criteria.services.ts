@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { CustomQuestion, CustomQuestionResponse, SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/interfaces/Investor";
 import { UserSubmissionResponse } from "../../../shared";
+import { Answer, AnswerInput } from "../../questions/interfaces";
 
 @Injectable(
   {
@@ -34,6 +35,10 @@ export class SpecialCriteriasService extends BaseHttpService {
   addQuestionsToSpecialCriteria(request: SpecialCriteriaQuestions): Observable<unknown> {
     const url = `${BASE_URL}/special-criteria/add-questions`;
     return this.create(url, request, this.headers) as Observable<unknown>;
+  }
+
+  createAnswer(answer: AnswerInput) {
+    return this.create(`${BASE_URL}/answers`, answer, this.headers) as Observable<Answer>
   }
 
   addCustomQuestionsToSpecialCriteria(request: CustomQuestion): Observable<CustomQuestionResponse> {
