@@ -97,7 +97,7 @@ export class RejectedBusinessComponent {
 
   onSearch(query: string): void {
     if (query){
-      this.search$ = this._businessMatchingService.searchCompany('rejected', query).pipe(tap(res=>{
+      this.search$ = this._businessMatchingService.searchCompany('declined', query).pipe(tap(res=>{
         this.rejectedBusinesses = res
       }))
     }else{

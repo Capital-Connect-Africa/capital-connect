@@ -85,6 +85,7 @@ export interface SpecialCriteriaQuestions{
 }
 
 export interface CustomQuestion{
+    id: number,
     text: string,
     type: string,
     order: number,
@@ -93,6 +94,13 @@ export interface CustomQuestion{
 
 export interface CustomQuestionResponse{
     id:number
+    text: string,
+    type: string,
+    order: number,
+    tooltip: string,
+    // "subSection": {
+    //     "id": 397
+    // },
 }
 
 
