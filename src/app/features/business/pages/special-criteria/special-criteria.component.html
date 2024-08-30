@@ -1,14 +1,17 @@
+<ng-container *ngIf="submission$ | async"></ng-container>
+<ng-container *ngIf="confirmation$ | async"></ng-container>
+<ng-container *ngIf="specialCriteriaQuestions$ | async"></ng-container>
 <div class="main__content">
     <app-sidenav [links]="links"/>
     <div class="main">
         <div class="navbar"><app-navbar onDashboard="true" /></div>
-        <main *ngIf="specialCriteriaQuestions$ | async">
+        <main *ngIf="criteria">
             <div class="meta">
-                <div class="label">{{criteria?.title}}</div>
-                <p>{{criteria?.description}}</p>
+                <div class="label">{{criteria.title}}</div>
+                <p>{{criteria.description}}</p>
             </div>
             <form [formGroup]="formGroup" (ngSubmit)="handleSubmit()">
-                <div *ngFor="let question of questions; let i = index" class="input__wrapper">
+                <div *ngFor="let question of criteria.questions; let i = index" class="input__wrapper">
                   <label class="input__label">{{question.text}}<sup>*</sup></label>
                   <a class="tooltip" [title]="question.tooltip || ''">Why do we ask this?</a>
                   @if(question.type === fieldType.SINGLE_CHOICE || question.type === fieldType.TRUE_FALSE){
@@ -28,7 +31,7 @@
                       <p-multiSelect
                         class ="input__field"
                         styleClass ="w-full gap-4"
-                        [options]="[]"
+                        [options]="question.answers"
                         optionLabel="text"
                         optionValue="id"
                         [formControlName]="'question_' + question.id"
@@ -42,11 +45,21 @@
                   }
                 </div>
                   <div class="cta__group">
-                      <button type="submit" [disabled]="!formGroup.valid" class="btn" [ngClass]="{'disabled-btn': !formGroup.valid }">Submit</button>
-                      <!-- <button type="button" class="button__link" (click)="skip()">Skip and go back to dashboard</button> -->
+                    <button type="button" class="btn" (click)="getNextCriteria(-1)" [ngClass]="{'bg__warning': step <1 }">{{step >0?'Back': 'Cancel'}}</button>
+                      <button type="submit" [disabled]="!formGroup.valid" class="btn" [ngClass]="{'disabled-btn': !formGroup.valid }" (click)="getNextCriteria(1)">{{ step < specialCriteriaQuestions.length -1? 'Next':'Finish'}}</button>
                   </div>
               </form>
         </main>
+        <div class="w-full flex items-center justify-center no-data" *ngIf="!criteria">No Questions found</div>
     </div>
 </div>
-  
+
+<p-dialog header="Success" [modal]="true" [(visible)]="visible" styleClass="rounded-md modal p-8 bg-white shadow w-[60%] xl:w-[40%]">
+  <div class="modal__body">
+    Your responses for special criteria of this investor have been captured sucessfully 
+  </div>
+  <div class="cta__btns">
+    <button class="bg-teal-700" (click)="goBack()"><i class="pi pi-arrow-left"></i><span>Back to Investor</span></button>
+    <button class="bg-blue-500" (click)="goToDashboard()"><span>Proceed to Dashboard</span> <i class="pi pi-arrow-right"></i></button>
+  </div>
+</p-dialog>
