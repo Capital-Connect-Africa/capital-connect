@@ -74,6 +74,6 @@ export class InvestorDetailsComponent {
   }
 
   takeSpecialCriteria(investorId:number){
-    this._router.navigateByUrl(`/business/my-business/special-criteria/${investorId}`)
+    this._router.navigateByUrl(`/business/my-business/special-criteria/${this.relationship}-${investorId}`)
   }
 }
