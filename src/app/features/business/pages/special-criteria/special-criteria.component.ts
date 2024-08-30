@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
 import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
 import { SpecialCriteriaService } from '../../services/special-criteria/special-criteria.service';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Question, QuestionType } from '../../../questions/interfaces';
@@ -14,6 +14,7 @@ import { ConfirmationService } from '../../../../core';
 import { Submission } from '../../../../shared/interfaces/submission.interface';
 import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { SubmissionService } from '../../../../shared';
 
 @Component({
   selector: 'app-special-criteria',
@@ -31,7 +32,8 @@ export class SpecialCriteriaComponent {
   ];
   step =0;
   visible =false;
-  idParam:string =''
+  idParam:string ='';
+  formSubmitted =false;
   fieldType =QuestionType;
   submission$ =new Observable();
   criteria:Criteria | null =null;
@@ -43,6 +45,7 @@ export class SpecialCriteriaComponent {
   private _activatedRoute =inject(ActivatedRoute);
   private _confirmationService =inject(ConfirmationService);
   private _specialCriteriaService =inject(SpecialCriteriaService);
+  private _submissionsService =inject(SubmissionService);
 
   private _createFormControls() {
     this.formGroup =this._fb.group({});
@@ -74,7 +77,7 @@ export class SpecialCriteriaComponent {
   getNextCriteria(stride: number =1){
     if(this.step +stride <0) return this.exitSpecialCriteria();
     if(this.step +stride >=this.specialCriteriaQuestions.length) {
-      this.visible =true;
+      if(this.formSubmitted) this.visible =true;
       return
     }
     this.step +=stride;
@@ -83,6 +86,7 @@ export class SpecialCriteriaComponent {
   }
 
   handleSubmit() {
+    this.formSubmitted =false;
     const formValues = this.formGroup.value;
     const submissionData: Submission[] = [];
     this.criteria?.questions.forEach(question => {
@@ -116,7 +120,13 @@ export class SpecialCriteriaComponent {
         });
       }
     });
-    this.submission$ =this._specialCriteriaService.submitSpecialCriteriaQuestions(submissionData).pipe(tap(_ =>{
+
+    this.submission$ =this._submissionsService.createMultipleSubmissions(submissionData.map(submission =>{
+      delete submission.id;
+      return submission;
+    })).pipe(tap(_ =>{
+      this.formGroup.reset();
+      this.formSubmitted =true;
       return this.getNextCriteria(1);
     }))
   }
