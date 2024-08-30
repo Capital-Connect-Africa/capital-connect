@@ -77,13 +77,13 @@
                 </ul>
               </div>
               <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
-                <label>Investiment Structures:</label>
+                <label>Investment Structures:</label>
                 <ul class="chips">
                   <li *ngFor="let investiment of investor.investmentStructures" class="chip">{{investiment}}</li>
                 </ul>
               </div>
               <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
-                <label>Countries of investiment focus:</label>
+                <label>Countries of investment focus:</label>
                 <ul class="chips">
                   <li *ngFor="let country of investor.countriesOfInvestmentFocus" class="chip">{{country}}</li>
                 </ul>
