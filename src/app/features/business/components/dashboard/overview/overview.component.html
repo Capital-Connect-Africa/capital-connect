@@ -19,9 +19,9 @@
   </app-card>
 
 
-  <app-card [detail]="{title: 'Impact Element Assessment', icon: impactElementAnswers.length >0? '':'question_mark', value: impactElementAnswers.length>0?impactAssessmentScore+'%': '', featured: true}"
+  <app-card [detail]="{title: 'Impact Element Assessment', icon: impactElementAnswers.length >0? 'description':'question_mark', value: '', featured: true}"
   (click)="setDialog('impactAssesment')">
-    <p class="helper__text text__red">See suggested actions</p>
+    <p class="helper__text text__red">View</p>
   </app-card>
 
   <app-card 

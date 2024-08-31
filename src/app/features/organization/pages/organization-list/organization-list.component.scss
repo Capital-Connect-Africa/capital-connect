@@ -1,92 +1,154 @@
 @import "../../../../styles/main.scss";
 
-.organization-container {
-  gap: 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.container {
+  color: $primary-color;
 }
 
-.search-container {
-  text-align: center;
-}
-
-.search-form {
+.table-header {
   display: flex;
   align-items: center;
-  span {
-    margin-left: 5px;
-    cursor: pointer;
-    padding: 5px;
-  }
-
-  span:hover{
-    transition: border-color 0.3s ease;
-    border-radius: 50%;
-  }
-
+  // padding: 1rem;
+  margin-bottom: 1rem;
 }
 
-.search-input {
-  width: 500px;
-  padding: 10px 20px;
-  border: 1px solid #ccccccde;
-  border-radius: .5rem 0 0 .5rem;
-  border-right: none;
-  outline: none;
-  font-size: 16px;
-  transition: all 0.3s ease;
+.p-input-icon-left {
+  display: flex;
+  align-items: center;
+  position: relative;
 }
 
-.search-input:focus {
-  border-color: $success-color-alt;
-  box-shadow: 0 0 4px rgba(66, 133, 244, 0.6);
+.p-input-icon-left i {
+  position: absolute;
+  left: 10px;
+  color: #999;
 }
 
-.search-button {
-  padding: 9px 20px;
-  border: 1px solid transparent;
-  border-radius: 0 .5rem .5rem 0;
-  border-left: 0;
-  background-color: $success-color-alt;
+::ng-deep .p-dropdown {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.p-input-icon-left input {
+  padding-left: 2rem; /* Adjust padding to make room for the icon */
+  padding: 0.5rem 1rem;
+  width: 300px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, .08);
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.p-datatable {
+  margin-top: 1rem;
+}
+
+// .p-datatable-thead > tr > th {
+//   padding: 15px 20px;
+//   text-align: left;
+// }
+
+.p-datatable-tbody > tr > td {
+  padding: 15px 20px;
+  text-align: left;
+  height: 50px; /* Increase row height */
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+.input-error {
+  border-color: red;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.875rem;
+}
+
+.btn-primary {
+  background-color: $primary-color;
   color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  outline: none;
-}
-
-.search-button:hover {
-  background-color: $success-color;
-}
-
-.search-button:active {
-  background-color: $success-color;
-}
-
-/* Add these styles to your existing CSS file */
-
-.chip-container {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.chip {
-  display: inline-block;
-  padding: 0 10px;
-  height: 32px;
-  font-size: 14px;
-  line-height: 32px;
-  border-radius: 16px;
-  background-color: #e0e0e0;
-  margin-right: 10px;
-}
-
-.chip-close {
+  padding: 0.75rem 1.5rem;
   border: none;
-  background: none;
-  font-size: 18px;
+  border-radius: 4px;
   cursor: pointer;
-  line-height: 32px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:disabled {
+    background-color: lighten($primary-color, 40%);
+    cursor: not-allowed;
+  }
 }
 
+tr {
+  height: 3rem !important;
+}
+
+.btn__cta{
+  font-size: .9rem;
+  font-weight: 500;
+  transition: .2s linear;
+  &:hover{
+    text-decoration: underline;
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  ::ng-deep main {
+    .grid__area {
+      width: 95% !important;
+    }
+  }
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+td {
+  padding: 0 .5rem;
+}
+
+:host ::ng-deep .p-datatable{
+  tr{
+    transition: all .2s linear;
+    cursor: default;
+    &:nth-child(even){
+      background-color: #f9f9f9;
+    }
+    &:hover{
+      background-color: #654f291a;
+    }
+    th{
+      background-color: #f4f4f5;
+     span{
+        padding: 0 .5rem;
+        justify-content: flex-start;
+        background-color: transparent!important;
+     }
+    }
+  }
+}
+
+:host ::ng-deep .p-paginator{
+    padding-top: 2rem;
+    justify-content: flex-start!important;
+}
+
+.cta__btns{
+  gap: 1rem;
+  display: flex;
+}

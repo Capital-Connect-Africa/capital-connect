@@ -1,0 +1,68 @@
+@import "../../../../styles/main.scss";
+@import "../../styles/business.components.steps.scss";
+
+.main__content{
+    display: grid;
+    grid-template-columns: max-content auto;
+    main{
+        gap: 2rem;
+        display: flex;
+        padding: 3rem 2rem;
+        flex-direction: column;
+    }
+    
+}
+
+.cta__group{
+    padding-top: 2rem;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.meta{
+    padding-bottom: .5rem;
+    border-bottom: 1px solid #ddddddd2;
+    .label {
+
+        font-size: 1.25rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    p {
+        margin: 0.25rem 0;
+        color: #555;
+    }
+}
+.no-data{
+    height: 25%;
+    color: #555;
+}
+
+.bg__warning{
+    background-color: $yellow-900;
+    border-color: transparent;
+}
+
+.modal__body{
+    padding: 2rem 0;
+    display: flex;
+}
+
+.cta__btns{
+    display: flex;
+    align-items: center;
+    padding-bottom: 1rem;
+    justify-content: space-between;
+    button{
+        color: whitesmoke;
+        padding: .75rem 2rem;
+        border-radius: .4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+}

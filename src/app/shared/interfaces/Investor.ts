@@ -72,6 +72,37 @@ export interface EsgFocusAreaOptions {
     description: string
 }
 
+export interface SpecialCriteria{
+    id:number,
+    title: string,
+    description: string,
+    investorProfileId: number
+}
+
+export interface SpecialCriteriaQuestions{
+    specialCriteriaId: number,
+    questionIds: number[]   
+}
+
+export interface CustomQuestion{
+    id: number,
+    text: string,
+    type: string,
+    order: number,
+    tooltip: string
+}
+
+export interface CustomQuestionResponse{
+    id:number
+    text: string,
+    type: string,
+    order: number,
+    tooltip: string,
+    // "subSection": {
+    //     "id": 397
+    // },
+}
+
 
 
 export interface InvestorProfile {

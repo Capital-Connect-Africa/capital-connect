@@ -11,6 +11,10 @@
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="matchMakingStats$ | async"></ng-container>
+<ng-container *ngIf="search$ | async"></ng-container>
+
+
+
 
 
 
@@ -26,7 +30,7 @@
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
         <h5><strong>Interesting Businesess</strong></h5>
-        <!-- <p>Businesess Interested In</p> -->
+        <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
           No interesting businesess found. <br /> Check again later.
         </div>
@@ -44,6 +48,15 @@
               <td class="font-bold">Business Sub Sector</td>
               <td class="flex font-bold space-x-2">Actions</td>
             </tr>
+            <!-- <tr>
+             
+                <app-debounced-search
+                placeholder="Search for a company"
+                [debounceTime]="800"
+                (search)="onSearch($event)"                
+                />
+                
+            </tr> -->
 
             <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
               class="border-b border-gray-200">
@@ -86,7 +99,7 @@
 
               <div class="">
                 <p class="font-bold"><strong>Products and Services: </strong>
-                  <span class="font-light    w-20 break-words max-w-ful w-20 break-words max-w-full">{{ selectedBusiness.company.productsAndServices  }}</span></p>
+                  <span class="font-light  w-20 break-words max-w-ful w-20 break-words max-w-full">{{ selectedBusiness.company.productsAndServices  }}</span></p>
               </div>
 
               <div>
@@ -119,7 +132,6 @@
               </div>
             </div>
 
-            <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
             <hr />
             <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
             <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -164,12 +176,8 @@
                 <p><strong>Documents prepared for potential investors as part of the fund raise process</strong></p>
                 <p>{{ getSubmissionTextById(88) }}</p>
               </div>
-
-
             </div>
 
-            <!-- Eligibility Summary -->
-            <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Eligibility Results</h6> -->
             <hr />
             <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
             <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
@@ -188,8 +196,6 @@
               </div>
             </ng-container>
 
-            <!-- Preparedness Summary -->
-            <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Preparedness Results</h6> -->
             <hr />
             <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
             <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">

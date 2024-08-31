@@ -1,0 +1,108 @@
+<main *ngIf="investor$ | async as investor">
+    <div class="card__item__details" details>
+    <div class="card__item__detail_info">
+        <div>
+        <label>Investor:</label>
+        <p>{{investor.investor.firstName}} {{investor.investor.lastName}}</p>
+        </div>
+        <div>
+        <label>Email:</label>
+        <p>{{investor.investor.username}}</p>
+        </div>
+        <div>
+        <label>Country:</label>
+        <p>{{investor.headOfficeLocation}}</p>
+        </div>
+    </div>
+    <div class="card__item__detail_info">
+        <div>
+        <label>Organization:</label>
+        <p>{{investor.organizationName}}</p>
+        </div>
+        <div>
+        <label>Email:</label>
+        <p>{{investor.emailAddress}}</p>
+        </div>
+        <div>
+        <label>Type:</label>
+        <p>{{investor.investorType}}</p>
+        </div>
+    </div>
+    <div class="card__item__detail_info">
+        <div>
+            <label>Minimum Funding:</label>
+            <p>${{investor.minimumFunding | numberabbreviation}}</p>
+        </div>
+        <div>
+            <label>Maximum Funding:</label>
+            <p><ng-container *ngIf="investor.noMaximumFunding; else withMaxFunding">
+                Unlimited
+            </ng-container>
+            <ng-template #withMaxFunding>
+                ${{ investor.maximumFunding | numberabbreviation }}
+            </ng-template></p>
+        </div>
+        <div>
+            <label>Available Funding:</label>
+            <p>${{investor.availableFunding | numberabbreviation}}</p>
+        </div>
+    </div>
+    
+    <div class="card__item__detail">
+        <div>
+        <label>Sectors of investment</label>
+        <ul class="chips">
+            <li *ngFor="let sector of investor.sectors" class="chip">{{sector.name}}</li>
+        </ul>
+        </div>
+        <div >
+        <label>Sub-sectors</label>
+        <ul class="chips">
+            <li *ngFor="let subSector of investor.subSectors" class="chip">{{subSector.name}}</li>
+        </ul>
+        </div>
+        <div>
+            <label>ESG Focus Areas:</label>
+            <ul class="chips">
+                <li *ngFor="let esg of investor.esgFocusAreas" class="chip">{{esg}}</li>
+            </ul>
+        </div>
+        <div>
+            <label>Use Of Funds:</label>
+            <ul class="chips">
+                <li *ngFor="let fund of investor.useOfFunds" class="chip">{{fund}}</li>
+            </ul>
+        </div>
+        <div>
+        <label>Business Stages the investor focuses on:</label>
+        <ul class="chips">
+            <li *ngFor="let stage of investor.businessGrowthStages" class="chip">{{stage}}</li>
+        </ul>
+        </div>
+    </div>
+
+    <div class="card__item__detail">
+        <div>
+            <label>Registration Structures:</label>
+            <ul class="chips">
+                <li *ngFor="let registration of investor.registrationStructures" class="chip">{{registration}}</li>
+            </ul>
+        </div>
+        <div>
+            <label>Investment Structures:</label>
+            <ul class="chips">
+                <li *ngFor="let investiment of investor.investmentStructures" class="chip">{{investiment}}</li>
+            </ul>
+        </div>
+        <div>
+            <label>Countries of investment focus:</label>
+            <ul class="chips">
+                <li *ngFor="let country of investor.countriesOfInvestmentFocus" class="chip">{{country}}</li>
+            </ul>
+        </div>
+    </div>
+    </div>
+
+</main>
+<div *ngIf="!investor" class="no-data">No records found</div>
+    

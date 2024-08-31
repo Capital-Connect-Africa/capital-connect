@@ -5,7 +5,7 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,ConnectedBusiness } from '../../../../shared/interfaces';
+import { MatchedBusiness,ConnectedBusiness, InterestingBusinesses } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
 import { AngularMaterialModule } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -18,6 +18,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { PaginationService } from 'ngx-pagination';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
 
 @Component({
   selector: 'app-rejected-business',
@@ -31,8 +32,9 @@ import { MatTableDataSource } from '@angular/material/table';
     NavbarComponent,
     AdvertisementSpaceComponent,
     DialogModule,
-    NgxPaginationModule
-  ],
+    NgxPaginationModule,
+    DebouncedSearchComponent
+],
   templateUrl: './rejectedBusiness.component.html',
   styleUrl: './rejectedBusiness.component.scss',
   providers: [PaginationService]
@@ -53,6 +55,7 @@ export class RejectedBusinessComponent {
 
   markAsInteresting$ = new Observable<unknown>()
   companyDetails$ = new Observable<unknown>()
+  search$ = new Observable<InterestingBusinesses[]>()
 
   table:boolean = true
 
@@ -89,6 +92,21 @@ export class RejectedBusinessComponent {
       })
     );
    
+  }
+
+
+  onSearch(query: string): void {
+    if (query){
+      this.search$ = this._businessMatchingService.searchCompany('declined', query).pipe(tap(res=>{
+        this.rejectedBusinesses = res
+      }))
+    }else{
+      this.rejectedCompanies$  = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
+        tap(res => {
+          this.rejectedBusinesses = res;
+        })
+      );
+    }
   }
 
 

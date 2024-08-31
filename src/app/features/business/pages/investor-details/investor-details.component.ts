@@ -29,6 +29,7 @@ export class InvestorDetailsComponent {
     {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
 
   ]
+  specialCriteria:any[] =[]
   relationship_types =CompanyInvestorRelationsShip;
   relationship =CompanyInvestorRelationsShip.MATCHED;
   private _scoringService = inject(BusinessOnboardingScoringService);
@@ -44,6 +45,7 @@ export class InvestorDetailsComponent {
         return this._scoringService.getConnectedInvestors().pipe(
           tap(res => {
             this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
           })
         );
@@ -52,6 +54,7 @@ export class InvestorDetailsComponent {
         return this._scoringService.getMatchedInvestors().pipe(
           tap(res => {
             this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
           })
         );
@@ -63,11 +66,14 @@ export class InvestorDetailsComponent {
   
   checkIfUserCanViewPage(){
     this.canViewPage =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
-    debugger
   }
   goBack(){
     if(this.relationship ===CompanyInvestorRelationsShip.MATCHED) this._signalService.matchedInvestorsDialogIsVisible.set(true);
     else if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED) this._signalService.connectedInvestorsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
+  }
+
+  takeSpecialCriteria(investorId:number){
+    this._router.navigateByUrl(`/business/my-business/special-criteria/${this.relationship}-${investorId}`)
   }
 }

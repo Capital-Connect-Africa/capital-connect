@@ -59,10 +59,8 @@ export class StepOneComponent implements OnChanges {
   }));
 
   ngOnInit(): void {
-    if(this._currentCompany.businessSector){
-      this._initSubSector(this._currentCompany.businessSector)
-    }
-    
+    if(this._currentCompany.businessSector) this._initSubSector(this._currentCompany.businessSector)
+    this._orgStateService.step1isValid.set(this.stepOneForm.valid);
   }
 
   countries$ = this._countries.getCountries().pipe(tap(countries => {

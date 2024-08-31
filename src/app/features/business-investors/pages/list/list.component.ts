@@ -1,14 +1,11 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
-import { CommonModule } from '@angular/common';
-import { Table, TableModule, TablePageEvent } from 'primeng/table';
-import { Role, User } from '../../../users/models';
-import { EMPTY, lastValueFrom, Observable, switchMap, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
-import { UsersHttpService } from '../../../users/services/users-http.service';
-import { ConfirmationService, FeedbackService } from '../../../../core';
-import { CompanyHttpService } from '../../../organization/services/company.service';
+import { CommonModule } from '@angular/common';
+import { Component, inject, ViewChild } from '@angular/core';
 import { MatchedInvestor } from '../../../../shared/interfaces';
+import { Table, TableModule, TablePageEvent } from 'primeng/table';
+import { UsersHttpService } from '../../../users/services/users-http.service';
+import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
 
 @Component({
   selector: 'app-list',
@@ -19,6 +16,7 @@ import { MatchedInvestor } from '../../../../shared/interfaces';
 })
 export class ListComponent {
   private _usersService = inject(UsersHttpService);
+  private _router =inject(Router)
 
   investors$ = new Observable<MatchedInvestor[]>();
   usersCount:number =0;
@@ -31,7 +29,6 @@ export class ListComponent {
     { field: 'emailAddress', header: 'Email' },
     { field: 'headOfficeLocation', header: 'Country' },
     { field: 'matched', header: 'Matched' },
-    { field: 'interested', header: 'Interested' },
     { field: 'connected', header: 'Connected' },
     { field: 'declined', header: 'Declined' },
   ];
@@ -70,5 +67,9 @@ export class ListComponent {
     const start = this.table.first??10;
     const end = start + (this.table.rows??10);
     this.usersShowingCount = data.slice(start, end).length;
+  }
+
+  viewInvestor(investorId:number){
+    this._router.navigateByUrl(`/business-investors/${investorId}`)
   }
 }

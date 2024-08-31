@@ -1,0 +1,66 @@
+<ng-container *ngIf="specialCriteria$  | async"></ng-container>
+<ng-container *ngIf="delete$ | async"></ng-container>
+<ng-container *ngIf="deleteConf$ | async"></ng-container>
+
+
+<div class="main">
+    <div class="navbar">
+        <app-navbar [showBanner]="showBanner" onDashboard="true" />
+    </div>
+
+    <div class="main__content">
+        <section class="col__right">
+            <div class="flex justify-between top__details">
+                <h6><strong>My Special Criteria</strong></h6>
+
+                <div class="">
+                    <a [routerLink]="['/investor/create-special-criteria']">
+                        <button class="btn btn-primary text-light">Create Special Criteria</button></a>
+                </div>
+
+            </div>
+
+
+            <div class="table-parent">
+                <table class="table">
+                    <tr class="border-b border-gray-200">
+                        <td class="font-bold">#</td>
+                        <td class="font-bold">Title</td>
+                        <td class="font-bold">Description</td>
+                        <td class="font-bold">View</td>
+                        <td class="font-bold">Delete</td>
+                    </tr>
+
+
+                    <tr *ngFor="let criteria of specialCriteria; let i = index; trackBy: trackByIndex"
+                        class="border-b border-gray-200">
+                        <td class="font-bold">{{i+1}}</td>
+                        <td class="">{{criteria.title}}</td>
+                        <td class="">{{criteria.description}}</td>
+                        <td class="">
+                            <div class="py-auto eye">
+                                <a [routerLink]="['/investor/view-special-criteria', criteria.id]"><mat-icon
+                                        class="small-icon">visibility</mat-icon></a>
+                            </div>
+                        </td>
+
+                        <td class="">
+                            <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                                (click)="deleteCriteria(criteria.id)">Delete Criteria</button>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </section>
+
+        <section class="col__left">
+            <!-- <button class="btn btn-primary">Create Special Criteria</button> -->
+        </section>
+
+    </div>
+
+
+
+
+</div>

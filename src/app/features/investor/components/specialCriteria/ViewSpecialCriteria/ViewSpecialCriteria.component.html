@@ -1,0 +1,177 @@
+<ng-container *ngIf="specialCriteriaId$ | async"></ng-container>
+<ng-container *ngIf="getSpecialCriteria$ | async"></ng-container>
+<ng-container *ngIf="update$ | async"></ng-container>
+<ng-container *ngIf="questions$ | async"></ng-container>
+<ng-container *ngIf="addQuestions$ | async"></ng-container>
+<ng-container *ngIf="removeQuestions$ | async"></ng-container>
+<ng-container *ngIf="addCustomQuestions$ | async"></ng-container>
+<ng-container *ngIf="createAnwer$ | async"></ng-container>
+
+
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar [showBanner]="showBanner" onDashboard="true" />
+  </div>
+
+  <div class="main__content">
+    <section class="col__right">
+      <div class="flex justify-between top__details">
+        <div>
+        <h6><strong>{{specialCriteria.title}}</strong></h6>
+        <p>{{specialCriteria.description}}</p>
+        </div>
+
+        <div class="">
+          <button *ngIf="!update" (click)="onUpdate()" class="btn btn-primary">Update Special Criteria</button>
+        </div>
+      </div>
+
+
+
+      <div *ngIf="update">
+        <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Title<sup>*</sup></label>
+              <input class="input__field" formControlName="title" type="text" placeholder="Enter Criteria Title" />
+            </div>
+
+
+            <div class="input__wrapper">
+              <label class="input__label">Description<sup>*</sup></label>
+              <input class="input__field" formControlName="description" type="text"
+                placeholder="Enter Criteria Description" />
+            </div>
+
+
+            <div class="cta__group">
+              <button class="btn btn-primar" [disabled]="!specialCriteriaForm.valid"
+                [ngClass]="{'disabled-btn': !specialCriteriaForm.valid}">Update Special Criteria</button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+
+      <div>
+        <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Add Questions To Special Criteria</label>
+              <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id"
+                formControlName="questionIds" [options]="questions" optionLabel="text"
+                placeholder="Select questions"></p-multiSelect>
+            </div>
+
+
+            <div class="cta__group">
+              <a class="ques__a" (click)="addCustomQues()">Did not find the question? <strong>add custom question
+                  here</strong></a>
+              <button class="btn btn-primar" [disabled]="!questionsForm.valid"
+                [ngClass]="{'disabled-btn': !questionsForm}">Add Selected Questions</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div>
+        <form [formGroup]="questionsRemoveForm" (ngSubmit)="onQuestionsRemove()">
+          <div class="form_content__container">
+            <div class="input__wrapper">
+              <label class="input__label">Remove Questions From Special Criteria</label>
+              <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id"
+                formControlName="questionIds" [options]="questions" optionLabel="text"
+                placeholder="Select questions"></p-multiSelect>
+            </div>
+
+
+            <div class="cta__group">
+              <button class="btn btn-primar" [disabled]="!questionsRemoveForm.valid"
+                [ngClass]="{'disabled-btn': !questionsRemoveForm}">Remove Questions</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<app-modal [(visible)]="add_custom_ques" title="Custom Question" helperText="Add A custom question">
+
+  <form [formGroup]="customQuestionsForm" *ngIf="!add_custom_answers" (ngSubmit)="onCustomQuestionsSubmit()">
+    <div class="form_content__container">
+      <div class="input__wrapper">
+        <label class="input__label">Question<sup>*</sup></label>
+        <input class="input__field" formControlName="text" type="text" placeholder="Enter Question" />
+      </div>
+
+
+
+      <div class="input__wrapper">
+        <div class="form__row">
+          <div class="form__col">
+            <label class="input__label">Question Type <sup>*</sup></label>
+            <p-dropdown class="input__field" styleClass="w-full gap-4" formControlName="type" [options]="question_types"
+              placeholder="Question Type"></p-dropdown>
+
+          </div>
+
+          <div class="form__col">
+            <label class="input__label">Question Order<sup>*</sup></label>
+            <input class="input__field" formControlName="order" type="number" placeholder="Enter Question Order" />
+          </div>
+        </div>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label">Question Description<sup>*</sup></label>
+        <input class="input__field" formControlName="tooltip" type="text" placeholder="Enter Question Description" />
+      </div>
+
+
+      <div class="cta__group">
+        <button class="btn btn-primar" [disabled]="!customQuestionsForm.valid"
+          [ngClass]="{'disabled-btn': !customQuestionsForm}">Submit</button>
+      </div>
+    </div>
+  </form>
+
+
+  <form *ngIf="add_custom_answers" [formGroup]="customAnswersForm" (ngSubmit)="onCustomAnswersSubmit()">
+    <div class="form_content__container">
+     <p>{{customQuestionResponse.text}}</p>
+
+      <div class="input__wrapper">
+        <div class="form__row">
+          <div class="form__col">
+            <div class="input__wrapper">
+              <label class="input__label">Create answer<sup>*</sup></label>
+              <input formControlName="text" class="input__field" placeholder="create answer" />
+            </div>
+          </div>
+          <div class="form__col">
+            <div class="input__wrapper">
+              <label class="input__label">Answer rating<sup>*</sup></label>
+              <input formControlName="weight" class="input__field" type="number" min="0"
+                placeholder="enter answer score" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="cta__group">
+        <button *ngIf="multiple_answers" type="button" class="btn btn-danger text-light cta_a" (click)="cancel()">Cancel</button>
+
+        <button class="btn btn-primar" type="submit" [disabled]="!customAnswersForm.valid" [ngClass]="{'disabled-btn': !customAnswersForm}">Submit {{ multiple_answers ? "And Add Another":""}}</button>
+      </div>
+    </div>
+  </form>
+
+
+
+</app-modal>

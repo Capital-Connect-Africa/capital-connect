@@ -17,7 +17,9 @@ import { RejectedBusinessComponent } from '../../components/rejectedBusiness/rej
 export class RejectedBusinesComponent {
     links =[
       {label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view'},
-      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'}
+      {label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune'},
+      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'},
+
       // {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
     ]
 }

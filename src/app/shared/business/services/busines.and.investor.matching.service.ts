@@ -24,6 +24,12 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as MatchedInvestor[]
     }))
   }
+
+  getInvestorProfile(profileId:number){
+    return this.readById(`${BASE_URL}/investor-profiles`, profileId).pipe(map(res =>{
+      return res as MatchedInvestor;
+    }))
+  }
   
   getConnectedInvestors(companyId: number) {
     return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(map(res => {
@@ -109,6 +115,16 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, reasons).pipe(
       map(() => void 0)  
     );
+  }
+
+  //search a company
+  // ### Search companies based on investor profile criteria and text prod (investorProfileId, status, query)
+  // GET https://capitalconnect-0060e0fb0eb4.herokuapp.com/matchmaking/search-matches/35?status=interesting&q=kenya
+  searchCompany(status:string, query:string):Observable<InterestingBusinesses[]>{
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/matchmaking/search-matches/${investorProfileId}?status=${status}&q=${query}`).pipe(
+      map(res => res as unknown as InterestingBusinesses[]))
+
   }
 
    //Cancel Connection with a company

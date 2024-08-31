@@ -1,0 +1,82 @@
+@import "../../../../styles/main.scss";
+
+.main{
+    display: grid;
+    height: 100%;
+    font-family: $font-family-sans-serif;
+    grid-template-rows: max-content auto;
+    .main__content{
+        gap: 2rem;
+        display: grid;
+        padding: 0 2rem 2rem 2rem;
+        height: max-content;
+        background-color: #fafafae5;
+        grid-template-columns: auto 300px;
+        .col__right{
+            gap: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            h2{
+                gap: 1rem;
+                display: flex;
+                padding: 1rem;
+                color: white;
+                font-size: 1rem;
+                line-height: 1rem;
+                font-weight: bold;
+                border-radius: .5rem;
+                align-items: center;
+                background-color: $primary-color;
+            }
+        }
+        .cover__background{
+            height: 200px;
+            border-radius: .5rem .5rem 0 0;
+            background-image: linear-gradient(135deg, #f0bc62a2, #f0bc62a2, #f0bc62a2);
+            position: relative;
+            .profile__card{
+                padding: .25rem;
+                border-radius: 50%;
+                width: max-content;
+                height: max-content;
+                position: absolute;
+                bottom: -50px;
+                left: 50px;
+                background-color: white;
+                .avatar{
+                    width: 100px;
+                    height: 100px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        .top__details{
+            padding-top: .5cm;
+            padding-left: .7cm;
+            padding-right: .8cm;
+        }
+
+        .table-parent{
+            margin: 20px;
+            border: 1px solid rgb(211, 211, 211);
+            border-radius: 10px;
+        }
+        .bio_info{
+            
+            padding: 50px 0 1rem 50px;
+            h2{
+                font-weight: bold;
+                font-size: 1.2rem;
+                font-family: $font-family-sans-serif;
+            }
+            p{
+                gap: .5rem;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}

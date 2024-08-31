@@ -9,11 +9,12 @@ const routes: Routes = [
   { path: 'contact-person', loadComponent: () => import('../pages/InvestorProfile/success-screen/success-screen.component').then(c => c.SuccessScreenComponent) },
   { path: 'matched-business', loadComponent: () => import('../pages/MatchedBusiness/matchedBusiness.component').then(c => c.MatchedBusinesComponent) },
   { path: 'interesting-businesess', loadComponent: () => import('../pages/InterestingBusiness/interestingBusiness.component').then(c => c.InterstingBusinesComponent) },
-  {path: 'connected-businesess', loadComponent:()=>import('../pages/connectedBusiness/connectedBusiness.component').then(c=>c.ConnectedBusinesComponent)},
-  {path: 'rejected-businesess', loadComponent:()=>import('../pages/rejectedBusiness/rejectedBusiness.component').then(c=>c.RejectedBusinesComponent)},
-  {path: 'investor-page',loadComponent:()=>import('../pages/InvestorPage/investorPage.component').then(c=>c.InvestorPage) }
-
-
+  { path: 'connected-businesess', loadComponent: () => import('../pages/connectedBusiness/connectedBusiness.component').then(c => c.ConnectedBusinesComponent) },
+  { path: 'rejected-businesess', loadComponent: () => import('../pages/rejectedBusiness/rejectedBusiness.component').then(c => c.RejectedBusinesComponent) },
+  { path: 'investor-page', loadComponent: () => import('../pages/InvestorPage/investorPage.component').then(c => c.InvestorPage) },
+  { path: 'special-criteria', loadComponent: () => import('../pages/SpecialCriteria/SpecialCriteriaPage.component').then(c => c.SpecialCriteriaPage) },
+  { path: 'create-special-criteria', loadComponent: () => import('../pages/SpecialCriteria/CreateSpecialCriteriaPage/CreateSpecialCriteriaPage.component').then(c => c.CreateSpecialCriteriaPageComponent) },
+  { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) }
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],
