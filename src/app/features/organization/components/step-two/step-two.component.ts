@@ -1,4 +1,4 @@
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../../../../shared';
 import { Company, CompanyInput, CompanyResponse } from '../../interfaces';
@@ -41,6 +41,8 @@ export class StepTwoComponent {
   numberOfEmployees:Choice[] =[];
   investmentStructure:Choice[] =[];
   registrationStructures:Choice[] =[];
+  stepTwoForm: FormGroup = this._fb.group({});
+  stepTwoForm$ =new Observable<any>();
 
   private _defaultValues ={
     esg: this._currentCompanyData.esgFocusAreas.length >0?this._currentCompanyData.esgFocusAreas:this._savedCompanyData.esgFocusAreas,
@@ -51,6 +53,27 @@ export class StepTwoComponent {
     investiment: this._currentCompanyData.investmentStructure.length? this._currentCompanyData.investmentStructure:this._savedCompanyData.investmentStructure,
     amount: this._currentCompanyData.fundsNeeded >0?this._currentCompanyData.fundsNeeded: this._savedCompanyData.fundsNeeded >0?this._savedCompanyData.fundsNeeded:'',
     funds: this._currentCompanyData.useOfFunds.length >0?this._currentCompanyData.useOfFunds: this._savedCompanyData.useOfFunds
+  }
+
+  ngOnInit(): void {
+    this.stepTwoForm = this._fb.group({
+      fundsNeeded: [this._defaultValues.amount, Validators.required],
+      registrationStructure: [this._defaultValues.registration, Validators.required],
+      yearsOfOperation: [this._defaultValues.years, Validators.required],
+      numberOfEmployees: [this._defaultValues.employees, Validators.required],
+      investmentStructure: [this._defaultValues.investiment.filter(item =>item), Validators.required],
+      growthStage: [this._defaultValues.stages, Validators.required],
+      esgFocusAreas: [this._defaultValues.esg.filter(item =>item), Validators.required],
+      useOfFunds: [this._defaultValues.funds.filter(item =>item), Validators.required],
+      fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness || this._savedCompanyData.fullTimeBusiness, Validators.required],
+    });
+    this._orgStateService.step2isValid.set(this.stepTwoForm.valid);
+    this.stepTwoForm$ = this.stepTwoForm.valueChanges.pipe(tap(vals => {
+      this._orgStateService.step2isValid.set(this.stepTwoForm.valid);
+      if (this.stepTwoForm.valid) {
+        this._orgStateService.updateCompanyInput(vals);
+      }
+    }))
   }
 
   choices$ =this._companyHttpService.fetchQuestionChoices().pipe(tap(res =>{
@@ -65,28 +88,6 @@ export class StepTwoComponent {
     this.registrationStructures =res.registration_structure
 
   }));
-
-
-  
-  stepTwoForm: FormGroup = this._fb.group({
-    fundsNeeded: [this._defaultValues.amount, Validators.required],
-    registrationStructure: [this._defaultValues.registration, Validators.required],
-    yearsOfOperation: [this._defaultValues.years, [Validators.required]],
-    numberOfEmployees: [this._defaultValues.employees, Validators.required],
-    investmentStructure: [this._defaultValues.investiment, Validators.required],
-    growthStage: [this._defaultValues.stages, Validators.required],
-    esgFocusAreas: [this._defaultValues.esg, Validators.required],
-    useOfFunds: [this._defaultValues.funds, Validators.required],
-    fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness || this._savedCompanyData.fullTimeBusiness, Validators.required],
-  });
-
-
-  stepTwoForm$ = this.stepTwoForm.valueChanges.pipe(tap(vals => {
-    this._orgStateService.step2isValid.set(this.stepTwoForm.valid)
-    if (this.stepTwoForm.valid) {
-      this._orgStateService.updateCompanyInput(vals);
-    }
-  }))
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["companyToBeEdited"] && changes["companyToBeEdited"].currentValue) {
