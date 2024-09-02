@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 import { Component, inject } from '@angular/core';
 import { InvestorDashboardData } from '../../../organization/interfaces';
 import { ProfileComponent } from "../../components/profile/profile.component";
@@ -10,11 +9,12 @@ import { ConnectedComponent } from "../../components/connected/connected.compone
 import { InterestedComponent } from "../../components/interested/interested.component";
 import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
 import { SignalsService } from '../../../../core/services/signals/signals.service';
+import { SpecialCriteriaComponent } from "../../components/special-criteria/special-criteria.component";
 
 @Component({
   selector: 'app-single-investor',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent, ProfileComponent, MatchedComponent, DeclinedComponent, ConnectedComponent, InterestedComponent],
+  imports: [CommonModule, AdminUiContainerComponent, ProfileComponent, MatchedComponent, DeclinedComponent, ConnectedComponent, InterestedComponent, SpecialCriteriaComponent],
   templateUrl: './single-investor.component.html',
   styleUrl: './single-investor.component.scss',
   animations: [

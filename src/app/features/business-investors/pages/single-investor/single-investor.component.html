@@ -16,6 +16,9 @@
           <div class="tab-header" [class.active]="activeTab === 'declined'" (click)="setActiveTab('declined')">
             Declined
           </div>
+          <div class="tab-header" [class.active]="activeTab === 'special-criteria'" (click)="setActiveTab('special-criteria')">
+            Special criteria
+          </div>
         </div>
   
         <div class="tab-content" [@tabChange]="activeTab">
@@ -24,6 +27,7 @@
           <div *ngIf="activeTab === 'declined'"><app-declined /></div>
           <div *ngIf="activeTab === 'connected'"><app-connected /></div>
           <div *ngIf="activeTab === 'interested'"><app-interested /></div>
+          <div *ngIf="activeTab === 'special-criteria'"><app-special-criteria /></div>
         </div>
       </div>
 </app-admin-ui-container>
