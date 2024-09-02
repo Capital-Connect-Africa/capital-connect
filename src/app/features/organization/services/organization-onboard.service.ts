@@ -92,7 +92,7 @@ export class OrganizationOnboardService {
           const file = this.companyLogoToUpload()
           return this._uploadService.uploadFile(file)
         }
-        return of(true) //Always return an observable to satisfy conditions of switchmap
+        return this.getCompanyOfUser() //Always return an observable to satisfy conditions of switchmap
       }),
       tap(() => {
         this.resetCompanyInput()
