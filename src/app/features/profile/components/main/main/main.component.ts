@@ -12,6 +12,7 @@ import { ProfileService } from '../../../services/profile.service';
 import { Observable, tap } from 'rxjs';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { AlertCardComponent } from "../../alert-card/alert-card.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -32,6 +33,7 @@ export class MainComponent {
 @Input() showBanner =false;
   private _profileService =inject(ProfileService);
   private _routingService =inject(RoutingService)
+  private _router =inject(Router)
   submissions:{title?: string, url: string}[] =[];
 
   submissionActions$ =this._routingService.nextRoute().pipe(tap(res =>{
@@ -46,5 +48,9 @@ export class MainComponent {
   signalsService =inject(SignalsService);
   showDialog(){
     this.signalsService.showDialog.set(true)
+  }
+
+  editOrganizationProfile(){
+    this._router.navigateByUrl('/organization/setup')
   }
 }

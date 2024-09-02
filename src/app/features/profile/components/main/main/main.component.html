@@ -4,7 +4,7 @@
   </div>
     <div class="main__content">
       <ng-container *ngIf="userProfile$ | async as userProfile">
-          <div class="flex flex-col gap-4 shadow rounded-[.5rem] overflow-hidden">
+          <div class="flex flex-col gap-4 shadow rounded-[.5rem] overflow-hidden h-max">
           <section class="cover__background">
             <div class="profile__card">
               <img
@@ -17,15 +17,48 @@
             <h2>{{userProfile.name}}</h2>
             <p><mat-icon>call</mat-icon>{{userProfile.mobileNumber || 'Add phone'}}</p>
             <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
-            <p>
-              <img *ngIf="userProfile.company.logo"
-              width="24px" height="24px"
-              [src]="userProfile.company.logo"
-              alt="company logo"/>
-              <mat-icon *ngIf="!userProfile.company.logo">location_city</mat-icon> 
-              <span>{{userProfile.company.name}}, {{userProfile.company.location}} . <span>{{userProfile.company.isFullTime? 'Full-time': 'Part-time'}}</span></span></p>
+            <section>
+                <h2>Business</h2>
+                <img [src]="userProfile.company.companyLogo" class="logo" alt="Logo" *ngIf="userProfile.company.companyLogo"/>
+                <button class="btn__cta text-blue-600" title="Details" (click)="editOrganizationProfile()">
+                  <i class="pi pi-pencil"></i>
+                  Edit
+                </button>
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Name:</label>
+                      <p>{{userProfile.company.name}}</p>
+                    </div>
+                    <div>
+                      <label>Country:</label>
+                      <p>{{userProfile.company.country}}</p>
+                    </div>
+                    <div>
+                      <label>Growth Stage:</label>
+                      <p>{{userProfile.company.growthStage}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Employees:</label>
+                      <p>{{userProfile.company.numberOfEmployees}}</p>
+                    </div>
+                    <div>
+                      <label>Sector:</label>
+                      <p>{{userProfile.company.businessSector}}</p>
+                    </div>
+                    <div>
+                      <label>Sub-sector:</label>
+                      <p>{{userProfile.company.businessSubsector}}</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
           </div>
-          
+
         </div>
         </ng-container>
 
