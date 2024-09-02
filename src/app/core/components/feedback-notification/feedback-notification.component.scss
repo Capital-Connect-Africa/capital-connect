@@ -7,9 +7,10 @@
   color: white;
   position: absolute;
   z-index: 1000;
-  width: calc(100vw - 10px);
+  width: calc(100vw - 30px);
   display: flex;
   border-left: 10px solid;
+  overflow-x: hidden;
 }
 
 .message.success {
