@@ -31,6 +31,8 @@
         <div class="d-flex justify-between items-center">
         <h5><strong>Interesting Businesess</strong></h5>
         <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
+        <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('interesting')">Download Interesting Companies List</button>
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
           No interesting businesess found. <br /> Check again later.
         </div>

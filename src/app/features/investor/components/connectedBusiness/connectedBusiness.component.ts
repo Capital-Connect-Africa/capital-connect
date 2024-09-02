@@ -341,4 +341,8 @@ export class ConnectedBusinessComponent {
       })
     );
   }
+
+  downloadCSV$ = new Observable<Blob>
+  downloadCSV(status:string){this.downloadCSV$ = this._businessMatchingService.matchMakingCsv(status).pipe(tap(res=>{ })) }
+
 }

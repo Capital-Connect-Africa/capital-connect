@@ -33,6 +33,8 @@
           <div>
           <h5><strong>Connected Businesess</strong></h5>
           <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
+          <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+          <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('connected')">Download Connected businesess List</button>
           </div>
         </div>
      

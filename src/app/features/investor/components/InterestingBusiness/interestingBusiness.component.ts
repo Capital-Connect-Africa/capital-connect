@@ -336,4 +336,7 @@ export class InterestingBusinessComponent {
       })
     );
   }
+
+  downloadCSV$ = new Observable<Blob>
+  downloadCSV(status:string){this.downloadCSV$ = this._businessMatchingService.matchMakingCsv(status).pipe(tap(res=>{ })) }
 }

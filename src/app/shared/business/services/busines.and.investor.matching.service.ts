@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { map, Observable } from "rxjs";
+import { map, Observable, tap } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
 import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats} from "../../interfaces";
@@ -174,5 +174,25 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
 
 
-  
+  //Download CSV
+  matchMakingCsv(status:string){
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.downloadExcel(`${BASE_URL}/matchmaking/download-csv`,investorProfileId,status).pipe(tap(blob=>{
+      const fileName = `matchmaking_${status}.xlsx`; // Use the .xlsx extension for Excel files
+      this.saveFile(blob, fileName);      
+    })
+
+    )
+  }  
+
+  private saveFile(blob: Blob, fileName: string): void {
+    const a = document.createElement('a');
+    const objectUrl = URL.createObjectURL(blob);
+    a.href = objectUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(objectUrl);
+  }
 }

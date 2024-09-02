@@ -52,6 +52,35 @@ export class BaseHttpService {
     );
   }
 
+ 
+  // downloadCsv(url: string, id: number, status: string): Observable<Blob> {
+  //   const headers = new HttpHeaders({
+  //     'Content-Type': 'text/csv'
+  //   });
+  
+  //   return this._http.get<Blob>(`${url}/${id}?status=${status}`, {
+  //     headers,
+  //     responseType: 'blob' as 'json' // Ensure responseType is 'blob'
+  //   }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  downloadExcel(url: string, id: number, status: string): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this._http.get<Blob>(`${url}/${id}?status=${status}`, {
+      headers,
+      responseType: 'blob' as 'json'
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  
+
   // Handle HTTP error
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'Unknown error!';
