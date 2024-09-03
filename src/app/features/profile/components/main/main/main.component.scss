@@ -124,4 +124,8 @@
     display: block;
     padding: 1rem 0;
     cursor: pointer;
+    transition: .2s linear;
+    &:hover{
+        text-decoration: underline;
+    }
 }
