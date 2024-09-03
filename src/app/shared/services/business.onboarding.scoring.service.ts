@@ -71,12 +71,18 @@ export class BusinessOnboardingScoringService {
     }))
   }
 
+  getDecliningInvestors(){
+    return this._scoringService.getDecliningInvestors(this._companyService.currentCompany.id).pipe(map(investors => {
+      return investors
+    }))
+  }
 
   getInvestors(){
-    const requests =[this.getMatchedInvestors(), this.getConnectedInvestors()]
+    const requests =[this.getMatchedInvestors(), this.getConnectedInvestors(), this.getDecliningInvestors()]
     return forkJoin(requests).pipe(map(res =>({
       matched: res[0],
-      connected: res[1]
+      connected: res[1],
+      declined: res[2],
     })))
   }
 

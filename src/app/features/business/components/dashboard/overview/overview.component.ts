@@ -84,7 +84,8 @@ export class OverviewComponent {
   currentCompany = this._companyService.currentCompany;
 
   stats$ = this._scoringService.getInvestors().pipe(tap(res => {
-    this.connectedInvestors =res.connected
+    this.connectedInvestors =res.connected;
+    this.declinedConnections =res.declined;
     this.matchedInvestors = res.matched.filter(matched =>!this.connectedInvestors.find(connected =>matched.id ===connected.id));
   }))
 
