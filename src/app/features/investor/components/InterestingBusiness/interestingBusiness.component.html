@@ -29,12 +29,12 @@
     <div class="left__col">
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
-        <h5><strong>Interesting Businesess</strong></h5>
+        <h5><strong>Interesting Businesses</strong></h5>
         <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('interesting')">Download Interesting Companies List</button>
+        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('interesting')">Download List</button>
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
-          No interesting businesess found. <br /> Check again later.
+          No interesting businesses found. <br /> Check again later.
         </div>
         </div>
       </div>
@@ -84,7 +84,7 @@
         </mat-paginator>
         <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
           <div class="mb-6 details company__info">
-            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesess Information</strong></h6>
+            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesses Information</strong></h6>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
               <div>
                 <p class="font-bold"><strong>Country: </strong><span class="font-light    w-20 break-words max-w-ful">{{

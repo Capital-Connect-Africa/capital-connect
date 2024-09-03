@@ -178,7 +178,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   matchMakingCsv(status:string){
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.downloadExcel(`${BASE_URL}/matchmaking/download-csv`,investorProfileId,status).pipe(tap(blob=>{
-      const fileName = `matchmaking_${status}.xlsx`; // Use the .xlsx extension for Excel files
+      const fileName = `matchmaking_${status}.csv`; // Use the .xlsx extension for Excel files
       this.saveFile(blob, fileName);      
     })
 
