@@ -83,6 +83,7 @@ export class StepOneComponent implements OnChanges {
 
   private _initSubSector(sector: string) {
     this.sectors$ = this._orgStateService.fetchSectors$.pipe(tap(sectors => {
+      this.sectors =sectors;
       const sectorId = sectors.find(s => s.name == sector)?.id;
       if (sectorId) {
         this.subsectors$ = this._orgStateService.fetchSpecificSubSectors(Number(sectorId)).pipe(tap(subsectors => {
