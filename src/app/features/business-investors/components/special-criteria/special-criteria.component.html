@@ -1,0 +1,18 @@
+
+
+<main *ngIf="specialCriteriaQuestions$ | async as specialCriteriaQuestions">
+    <p-accordion [activeIndex]="0">
+        <p-accordionTab *ngFor="let criteria of criterias">
+            <ng-template pTemplate="header">
+                <div class="accordion__header">
+                    <label>{{criteria.title}}</label>
+                    <p>{{criteria.description}}</p>
+                </div>
+              </ng-template>
+              <ul class="flex flex-col gap-2 list-disc">
+                <li *ngFor="let question of criteria.questions">{{question.text}}</li>
+              </ul>
+        </p-accordionTab>
+    </p-accordion>
+</main>
+<div *ngIf="!criterias.length" class="no-data">No records found</div>

@@ -13,10 +13,12 @@
   <main>
     <div class="left__col">
       <div *ngIf="table" class="text-start search border-0">
-        <h5><strong>Declined Businesess</strong></h5>
+        <h5><strong>Declined Businesses</strong></h5>
         <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
+        <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('declined')">Download List</button>
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!rejectedBusinesses.length">
-          No declined businesess found. <br /> Check again later.
+          No declined businesses found. <br /> Check again later.
         </div>
       </div>
 

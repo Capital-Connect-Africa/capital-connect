@@ -31,13 +31,15 @@
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
           <div>
-          <h5><strong>Connected Businesess</strong></h5>
+          <h5><strong>Connected Businesses</strong></h5>
           <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
+          <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+          <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('connected')">Download List</button>
           </div>
         </div>
      
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectedBusinesses.length">
-          No connected businesess found. <br /> Check again later.
+          No connected businesses found. <br /> Check again later.
         </div>
       </div>
 
@@ -84,7 +86,7 @@
             <!-- Company Details -->
             <div class="mb-6 details company__info">
               <!-- <hr /> -->
-              <h6 class="text-xl font-semib old mb-2"><strong>Connected Businesess Information</strong></h6>
+              <h6 class="text-xl font-semib old mb-2"><strong>Connected Businesses Information</strong></h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
                   <p class="font-bold" ><strong>Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name

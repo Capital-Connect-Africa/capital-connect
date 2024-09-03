@@ -21,6 +21,10 @@
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
 
 <ng-container *ngIf="submissions$  | async"></ng-container>
+<ng-container *ngIf="downloadCSV$  | async"></ng-container>
+
+
+
 
 
 
@@ -33,15 +37,16 @@
     <p class="brand__name">Business Name</p>
     <div class="left__col">
 
-      <div *ngIf="table" class="ml-5 text-start search border-0">
-        <div class="d-flex justify-between items-center">
+      <div *ngIf="table" class="matched__top ml-5 text-start search border-0">
+        <div class="flex justify-between">
           <div>
             <h5><strong>Matched Businesses</strong></h5>
-            <!-- <p>You had a 100% Matching to {{this.matchedBusinesses.length}} Businesses </p> -->
           </div>
 
-          <div>
-            <button class="btn btn-primary" type="submit" (click)="showSearch()">Advanced Company Search</button>
+          <div class="flex justify-between">
+            <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+            <!-- <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('matched')">Download Matched Company List</button> -->
+            <button class="btn btn-primary btn-sm submit__btn"  type="submit" (click)="showSearch()">Advanced Company Search</button>
           </div>
         </div>
 
@@ -49,7 +54,7 @@
 
 
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
-          No matched businesess found. <br /> Check again later.
+          No matched businesses found. <br /> Check again later.
         </div>
 
       </div>

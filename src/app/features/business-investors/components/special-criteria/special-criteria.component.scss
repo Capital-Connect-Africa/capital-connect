@@ -1,0 +1,23 @@
+:host ::ng-deep .p-accordion {
+    padding-top: 1rem;
+    ul{
+        padding: .1rem 0 0 1rem;
+    }
+    .p-accordion-header-link{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        background-color: transparent;
+        .accordion__header{
+            label{
+                font-weight: 500;
+            }
+            p{
+                color: #555;
+                font-size: .8rem;
+                font-weight: normal;
+            }
+        }
+    }
+
+}

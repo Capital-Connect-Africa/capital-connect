@@ -127,6 +127,8 @@ export class MatchedBusinessComponent {
   impactAssessmentScore$ = new Observable<unknown>()
   investorPreparednessGeneralSummary$ = new Observable<GeneralSummary>()
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
+  downloadCSV$ = new Observable<Blob>
+
   useOfFunds: string[] = [];
 
   esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
@@ -435,6 +437,9 @@ export class MatchedBusinessComponent {
         this.signalsService.actionBody.set({ issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required' })
     }));
   }
+
+
+  downloadCSV(status:string){this.downloadCSV$ = this._businessMatchingService.matchMakingCsv(status).pipe(tap(res=>{ })) }
   
 
-}
+} 

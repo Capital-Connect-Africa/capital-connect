@@ -67,7 +67,7 @@ export class SpecialCriteriaComponent {
     this.idParam =param.get('id') || '';
     const parts =this.idParam.split('-');
     const investorId =Number(parts.at(-1))
-    return this._specialCriteriaService.getCompanySpecialCriteria(investorId).pipe(tap((res: any[]) =>{
+    return this._specialCriteriaService.getInvestorSpecialCriteria(investorId).pipe(tap((res: any[]) =>{
       // filter special criteria questions  based on investorId, and if it has questions
       this.specialCriteriaQuestions =res.filter(investor =>investor.investorProfile.id ==investorId && (investor.questions || []).length ).map(q =>({title: `${q.title}`, description: `${q.description}`, questions: (q.questions as Question[]).sort((a, b) =>a.order - b.order)}));
       this.getNextCriteria(0);
