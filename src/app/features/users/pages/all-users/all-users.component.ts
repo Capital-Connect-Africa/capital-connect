@@ -40,6 +40,7 @@ export class AllUsersComponent implements AfterViewInit {
     { field: 'firstName', header: 'First Name' },
     { field: 'lastName', header: 'Last Name' },
     { field: 'roles', header: 'Roles' },
+    { field: 'username', header: 'Email' },
     { field: 'isEmailVerified', header: 'Email Verified' },
     { field: 'actions', header: 'Actions' }
   ];
