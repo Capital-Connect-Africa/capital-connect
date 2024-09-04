@@ -1,4 +1,6 @@
-<ng-container *ngIf="stats$ | async"></ng-container>
+<ng-container *ngIf="matchedInvestors$ | async"></ng-container>
+<ng-container *ngIf="connectedInvestors$ | async"></ng-container>
+<ng-container *ngIf="declinedInvestors$ | async"></ng-container>
 <ng-container *ngIf="scoring$ | async"></ng-container>
 <ng-container *ngIf="submissions$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
@@ -205,7 +207,7 @@
     <p-table [value]="declinedConnections" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
       <ng-template pTemplate="header">
           <tr>
-              <th>Investor</th>
+              <th>HO Location</th>
               <th>Reasons</th>
               <th>Action</th>
           </tr>
@@ -213,11 +215,11 @@
       <ng-template pTemplate="body" let-declinedConnection>
           <tr>
               <td>{{ declinedConnection.headOfficeLocation }}</td>
-              <td>{{ declinedConnection.investorType }}</td>
+              <td>{{ declinedConnection.declineReasons.length }}</td>
               
               <td>
                 <div class="cta__wrap">
-                  <button class="btn__cta text-blue-600" (click)="viewMatchedInvestor(declinedConnection.id)">See why</button>
+                  <button class="btn__cta text-blue-600" (click)="viewReasonsForDecline(declinedConnection.id)">See why</button>
                 </div>
               </td>
           </tr>

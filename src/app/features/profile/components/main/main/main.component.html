@@ -19,11 +19,8 @@
             <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
             <section>
                 <h2>Business</h2>
-                <img [src]="userProfile.company.companyLogo" class="logo" alt="Logo" *ngIf="userProfile.company.companyLogo"/>
-                <button class="btn__cta text-blue-600" title="Details" (click)="editOrganizationProfile()">
-                  <i class="pi pi-pencil"></i>
-                  Edit
-                </button>
+                <img [src]="userProfile.company.companyLogo.path" class="logo" alt="Logo" *ngIf="userProfile.company.companyLogo"/>
+                <button class="btn__cta text-blue-600 font-bold" title="Details" (click)="editOrganizationProfile()">Edit Business Details</button>
                 <div class="card__item__details" details>
                   <div class="card__item__detail_info">
                     <div>

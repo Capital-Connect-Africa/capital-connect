@@ -36,6 +36,10 @@ export class StepOneComponent implements OnChanges {
       this.businessSubsectorCtrl?.reset();
     }
   }));
+  ngOnInit(): void {
+    if(this._currentCompany?.businessSector) this._initSubSector(this._currentCompany?.businessSector)
+    this._orgStateService.step1isValid.set(this.stepOneForm.valid);
+  }
   subsectors$!: Observable<SubSector[]>
 
   private _currentCompanyData: CompanyInput = this._orgStateService.companyInput;
@@ -44,11 +48,11 @@ export class StepOneComponent implements OnChanges {
   userCompany: Company = this._currentCompany;
 
   stepOneForm: FormGroup = this._fb.group({
-    name: [this._currentCompanyData.name || this._currentCompany.name, Validators.required],
-    country: [(this._currentCompanyData.country || this._currentCompany.country)??  'Kenya', Validators.required],
-    businessSector: [this._currentCompanyData.businessSector || this._currentCompany.businessSector, Validators.required],
-    businessSubsector: [this._currentCompanyData?.businessSubsector || this._currentCompany?.businessSubsector, Validators.required],
-    productsAndServices: [this._currentCompanyData.productsAndServices || this._currentCompany?.productsAndServices, Validators.required]
+    name: [(this._currentCompanyData?.name || this._currentCompany?.name) || '', Validators.required],
+    country: [(this._currentCompanyData?.country || this._currentCompany?.country) ||  'Kenya', Validators.required],
+    businessSector: [(this._currentCompanyData?.businessSector || this._currentCompany?.businessSector) ||'', Validators.required],
+    businessSubsector: [(this._currentCompanyData?.businessSubsector || this._currentCompany?.businessSubsector) || '', Validators.required],
+    productsAndServices: [(this._currentCompanyData?.productsAndServices || this._currentCompany?.productsAndServices) || '', Validators.required]
   });
 
   stepOneForm$ = this.stepOneForm.valueChanges.pipe(tap(vals => {
@@ -58,10 +62,7 @@ export class StepOneComponent implements OnChanges {
     }
   }));
 
-  ngOnInit(): void {
-    if(this._currentCompany.businessSector) this._initSubSector(this._currentCompany.businessSector)
-    this._orgStateService.step1isValid.set(this.stepOneForm.valid);
-  }
+ 
 
   countries$ = this._countries.getCountries().pipe(tap(countries => {
     this.countries = countries
@@ -83,12 +84,13 @@ export class StepOneComponent implements OnChanges {
 
   private _initSubSector(sector: string) {
     this.sectors$ = this._orgStateService.fetchSectors$.pipe(tap(sectors => {
+      this.sectors =sectors;
       const sectorId = sectors.find(s => s.name == sector)?.id;
-      if (sectorId) {
-        this.subsectors$ = this._orgStateService.fetchSpecificSubSectors(Number(sectorId)).pipe(tap(subsectors => {
-          this.subsectors = subsectors
-        }))
-      }
+        if (sectorId) {
+          this.subsectors$ = this._orgStateService.fetchSpecificSubSectors(Number(sectorId)).pipe(tap(subsectors => {
+            this.subsectors = subsectors
+          }))
+        }
     }));
   }
 

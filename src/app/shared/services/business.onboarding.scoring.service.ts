@@ -52,11 +52,8 @@ export class BusinessOnboardingScoringService {
   }
 
   getConnectedInvestors() {
-    return this._scoringService.getConnectedInvestors(this._companyService.currentCompany.id).pipe(switchMap((investors: any[]) => {
-      const requests =investors.map(investor =>this._scoringService.getInvestorProfile(investor.investorProfile.id))
-      return forkJoin(requests).pipe(map(res =>{
-        return res;
-      }));
+    return this._scoringService.getConnectedInvestors(this._companyService.currentCompany.id).pipe(map((investors: any[]) => {
+      return investors.map(investor =>({...investor.investorProfile}));
     })) as Observable<MatchedInvestor[]>
   }
   getSectionScore(sectionId: number) {
@@ -71,12 +68,18 @@ export class BusinessOnboardingScoringService {
     }))
   }
 
+  getDecliningInvestors(){
+    return this._scoringService.getDecliningInvestors(this._companyService.currentCompany.id).pipe(map((investors:any[]) => {
+      return investors.map(investor =>({...investor.investorProfile, declineReasons: investor.declineReasons??[]}));
+    }))
+  }
 
   getInvestors(){
-    const requests =[this.getMatchedInvestors(), this.getConnectedInvestors()]
+    const requests =[this.getMatchedInvestors(), this.getConnectedInvestors(), this.getDecliningInvestors()]
     return forkJoin(requests).pipe(map(res =>({
       matched: res[0],
-      connected: res[1]
+      connected: res[1],
+      declined: res[2],
     })))
   }
 

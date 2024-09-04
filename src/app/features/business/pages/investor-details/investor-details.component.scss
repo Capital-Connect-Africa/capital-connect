@@ -53,17 +53,7 @@
             display: flex;
             flex-wrap: wrap;
             padding: 2rem 0;
-            .chip{
-                padding: .5rem;
-                color: #3b3939;
-                cursor: pointer;
-                border-radius: .5rem;
-                transition: all .2s linear;
-                background-color: #dddddd44;
-                &:hover{
-                    background-color: #ddddddd5;
-                }
-            }
+            
         }
     }
     .btn__cta{
@@ -110,6 +100,37 @@
                  grid-template-columns: repeat(3, 1fr);
                 }
             }
+        }
+    }
+}
+
+.chip{
+    padding: .5rem;
+    color: #3b3939;
+    cursor: pointer;
+    border-radius: .5rem;
+    transition: all .2s linear;
+    background-color: #dddddd44;
+    &:hover{
+        background-color: #ddddddd5;
+    }
+}
+.items__list{
+    gap: 2rem;
+    display: flex;
+    padding: 1rem 2rem;
+    flex-direction: column;
+    label{
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+    ul{
+        gap: 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .chip{
+            padding: 1rem;
         }
     }
 }

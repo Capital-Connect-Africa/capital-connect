@@ -45,14 +45,14 @@ export class StepTwoComponent {
   stepTwoForm$ =new Observable<any>();
 
   private _defaultValues ={
-    esg: this._currentCompanyData.esgFocusAreas.length >0?this._currentCompanyData.esgFocusAreas:this._savedCompanyData.esgFocusAreas,
-    stages: this._currentCompanyData.growthStage? this._currentCompanyData.growthStage:this._savedCompanyData.growthStage,
-    years: this._currentCompanyData.yearsOfOperation? this._currentCompanyData.yearsOfOperation:this._savedCompanyData.yearsOfOperation,
-    employees: this._currentCompanyData.numberOfEmployees? this._currentCompanyData.numberOfEmployees:this._savedCompanyData.numberOfEmployees,
-    registration: this._currentCompanyData.registrationStructure? this._currentCompanyData.registrationStructure:this._savedCompanyData.registrationStructure,
-    investiment: this._currentCompanyData.investmentStructure.length? this._currentCompanyData.investmentStructure:this._savedCompanyData.investmentStructure,
-    amount: this._currentCompanyData.fundsNeeded >0?this._currentCompanyData.fundsNeeded: this._savedCompanyData.fundsNeeded >0?this._savedCompanyData.fundsNeeded:'',
-    funds: this._currentCompanyData.useOfFunds.length >0?this._currentCompanyData.useOfFunds: this._savedCompanyData.useOfFunds
+    esg: (this._currentCompanyData?.esgFocusAreas || []).length >0?this._currentCompanyData.esgFocusAreas:(this._savedCompanyData?.esgFocusAreas || []),
+    stages: this._currentCompanyData?.growthStage? this._currentCompanyData?.growthStage:(this._savedCompanyData?.growthStage || ''),
+    years: this._currentCompanyData?.yearsOfOperation? this._currentCompanyData?.yearsOfOperation:(this._savedCompanyData?.yearsOfOperation || ''),
+    employees: this._currentCompanyData?.numberOfEmployees? this._currentCompanyData?.numberOfEmployees:(this._savedCompanyData?.numberOfEmployees || ''),
+    registration: this._currentCompanyData?.registrationStructure? this._currentCompanyData?.registrationStructure:(this._savedCompanyData?.registrationStructure || ''),
+    investiment: (this._currentCompanyData?.investmentStructure || []).length? this._currentCompanyData?.investmentStructure:(this._savedCompanyData?.investmentStructure || []),
+    amount: (this._currentCompanyData?.fundsNeeded || 0) >0?this._currentCompanyData?.fundsNeeded: (this._savedCompanyData?.fundsNeeded || 0) >0?this._savedCompanyData.fundsNeeded:'',
+    funds: (this._currentCompanyData?.useOfFunds ||[]).length >0?this._currentCompanyData?.useOfFunds: (this._savedCompanyData?.useOfFunds || [])
   }
 
   ngOnInit(): void {
@@ -65,7 +65,7 @@ export class StepTwoComponent {
       growthStage: [this._defaultValues.stages, Validators.required],
       esgFocusAreas: [this._defaultValues.esg.filter(item =>item), Validators.required],
       useOfFunds: [this._defaultValues.funds.filter(item =>item), Validators.required],
-      fullTimeBusiness: [this._currentCompanyData.fullTimeBusiness || this._savedCompanyData.fullTimeBusiness, Validators.required],
+      fullTimeBusiness: [this._currentCompanyData?.fullTimeBusiness || this._savedCompanyData?.fullTimeBusiness, Validators.required],
     });
     this._orgStateService.step2isValid.set(this.stepTwoForm.valid);
     this.stepTwoForm$ = this.stepTwoForm.valueChanges.pipe(tap(vals => {
