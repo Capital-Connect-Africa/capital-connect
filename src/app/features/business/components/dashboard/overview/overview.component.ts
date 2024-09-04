@@ -72,22 +72,24 @@ export class OverviewComponent {
 
   currentModal: 'eligibility' | 'preparedness' = 'eligibility';
 
-
   private _router =inject(Router);
   signalService =inject(SignalsService);
-  private _pdfService = inject(PdfGeneratorService)
+  private _pdfService = inject(PdfGeneratorService);
   private _companyService = inject(CompanyStateService);
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
 
 
   currentCompany = this._companyService.currentCompany;
-
-  stats$ = this._scoringService.getInvestors().pipe(tap(res => {
-    this.connectedInvestors =res.connected;
-    this.declinedConnections =res.declined;
-    this.matchedInvestors = res.matched.filter(matched =>!this.connectedInvestors.find(connected =>matched.id ===connected.id));
-  }))
+  matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
+    this.matchedInvestors =res
+  }));
+  connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
+    this.connectedInvestors =res
+  }));
+  declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
+    this.declinedConnections =res
+  }));
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
     this.investorEligibilityScore = scores.investorEligibility;
