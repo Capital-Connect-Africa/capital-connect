@@ -54,6 +54,7 @@ export interface MatchedInvestor {
   countriesOfInvestmentFocus: string[],
   availableFunding: number,
   specialCriteria: any[],
+  declineReasons:string[],
   investor: {
     lastName: string,
     username: string,
