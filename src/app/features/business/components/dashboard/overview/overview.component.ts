@@ -216,8 +216,8 @@ export class OverviewComponent {
   }
 
   viewReasonsForDecline(id:number){
-    this.signalService.connectedInvestorsDialogIsVisible.set(false);
-    this._router.navigateByUrl(`/business/my-business/investors/${id}`)
+    this.signalService.declinedConnectionsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/declined-${id}`)
   }
 
 }
