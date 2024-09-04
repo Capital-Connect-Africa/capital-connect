@@ -1,0 +1,77 @@
+<ng-container *ngIf="transactionStatus$ | async"></ng-container>
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true"></app-navbar>
+  </div>
+
+  <main>
+
+    <div class="left__col">
+
+      <h6>Payment Instructions</h6>
+      <p>Thank you for engaging with www.capitalconnect.africa</p>
+      <div class="payment_instructions" *ngIf="!visible">
+        <p>
+          To book an advisory session, please proceed to make the payment. The advisory session fee is USD 40,
+          which reflects a 50% discount from the full price of USD 80. This is a special limited offer discount
+          celebrating our platform revamp.
+          A Capital Connect advisory session is a one-hour session that involves reviewing and advising on the
+          following;
+
+        </p>
+        <ol>
+          <li>How eligible the business is for capital raising</li>
+          <li>How prepared the business is for capital raising including the requisite capital raising documents and
+            information</li>
+          <li>Advise on the capital raising process</li>
+          <li>Advise on matching with investors/funders</li>
+          <li>Advisory on the structuring of the envisioned capital raise</li>
+          <li>Answer any relevant capital-raising questions.</li>
+        </ol>
+        <p>
+          This session saves you time and focus and allows you to get the best strategies for capital raising including
+          how to prepare for a capital raise in the future.
+          We are looking forward to a great session on your capital raise.
+          .</p>
+
+          <div class="cta_group flex justify-end"> 
+            <button class="btn btn-primary" (click)="createBooking()">Proceed</button>
+          </div>
+      </div>
+
+      <div class="">
+        <iframe [src]="redirectUrl" width="100%" height="535"></iframe>
+        <div *ngIf="createBooking$ | async as transactionStatus" class="temp__schedule">
+          <div *ngIf="transactionStatus">
+            <a *ngIf="transactionStatus.status === '200'"
+              href="https://calendly.com/investor-eligibility/investor-preparedness" target="_blank">Go to Calendly</a>
+  
+            <a *ngIf="transactionStatus.status === '500'">
+              <button (click)="checkPaymentStatus()" class="btn btn-primary">Check Status</button>
+            </a>
+  
+            <div
+              *ngIf="transactionStatus.status && transactionStatus.status !== '200' && transactionStatus.status !== '500'">
+              <p>Booking Failed.</p>
+            </div>
+  
+          </div>
+  
+        </div>
+      </div>
+  
+
+    
+
+    </div>
+
+    <div class="right__col">
+      <!--      <app-notifications />-->
+            <!-- <app-assessment-summary [title]="'Schedule a Session with an Advisor'" component="book" [body]="'Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth'" [linkLabel]="'Unlock the whole summary'"/>
+            <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" /> -->
+          </div>
+
+  </main>
+</div>
