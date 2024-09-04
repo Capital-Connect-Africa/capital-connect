@@ -34,7 +34,9 @@ export class InvestorDetailsComponent {
   relationship =CompanyInvestorRelationsShip.MATCHED;
   private _scoringService = inject(BusinessOnboardingScoringService);
   investor!: MatchedInvestor;
-  canViewPage =false
+  canViewDeclineReasons =false;
+  canViewInvestorDetails =false;
+  declineReasons:string[] =[];
   stats$ = this._activatedRoute.paramMap.pipe(
     switchMap(params => {
       const parts = `${params.get('id')}`.split('-');
@@ -59,17 +61,29 @@ export class InvestorDetailsComponent {
           })
         );
       }
+      else if(this.relationship ==CompanyInvestorRelationsShip.DECLINED){
+        return this._scoringService.getDecliningInvestors().pipe(
+          tap(res => {
+            const investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.declineReasons =investor.declineReasons;
+            this.checkIfUserCanViewPage();
+          })
+        );
+      }
       this.checkIfUserCanViewPage();
       return EMPTY
     })
   );
   
   checkIfUserCanViewPage(){
-    this.canViewPage =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
+    this.canViewDeclineReasons =!!this.declineReasons.length && (this.relationship ===CompanyInvestorRelationsShip.DECLINED)
+    this.canViewInvestorDetails =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
+
   }
   goBack(){
     if(this.relationship ===CompanyInvestorRelationsShip.MATCHED) this._signalService.matchedInvestorsDialogIsVisible.set(true);
     else if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED) this._signalService.connectedInvestorsDialogIsVisible.set(true);
+    else if(this.relationship ===CompanyInvestorRelationsShip.DECLINED) this._signalService.declinedConnectionsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
   }
 
