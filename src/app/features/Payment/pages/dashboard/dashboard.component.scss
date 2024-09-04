@@ -1,0 +1,14 @@
+@import '../../../../styles/main.scss';
+
+
+.main__content{
+  display: grid;
+  min-height: 100svh;
+
+}
+
+@include when-screen-is-atleast(medium){
+  .main__content{
+    grid-template-columns: max-content auto;
+  }
+}

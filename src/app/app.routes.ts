@@ -53,6 +53,13 @@ export const routes: Routes = [
     canActivate: [isLoggedInCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard]
   },
+
+  {
+    path: 'payment-instructions',
+    loadChildren:()=>import('./features/Payment/modules/payment.routing').then(m=>m.BookingRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard]
+  },
   {
     path: 'questions',
     loadChildren: () => import('./features/questions/questions.routing').then(m => m.QuestionsRoutingModule),
@@ -86,5 +93,6 @@ export const routes: Routes = [
     loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
-  }
+  },
+
 ];
