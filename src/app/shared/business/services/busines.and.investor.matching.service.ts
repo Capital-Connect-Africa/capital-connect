@@ -24,7 +24,17 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as MatchedInvestor[]
     }))
   }
-
+  getCompanyStats(companyId: number){
+    return this.read(`${BASE_URL}/statistics/matchmaking/${companyId}?role=company`).pipe(map((res:any) => {
+      debugger
+      return res as {
+        matched: number,
+        connected: number,
+        interesting: number,
+        declined: number,
+      }
+    }))
+  }
   getDecliningInvestors(companyId:number) {
     return this.read(`${BASE_URL}/matchmaking/investors/declined/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
