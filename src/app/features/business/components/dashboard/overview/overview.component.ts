@@ -65,7 +65,7 @@ export class OverviewComponent {
 
   eligibilityAnswers: UserSubmissionResponse[] = [];
 
-
+  stats = { matched: 0, connected: 0, interested: 0, declined: 0,}
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
 
@@ -80,6 +80,7 @@ export class OverviewComponent {
   private _scoringService = inject(BusinessOnboardingScoringService);
 
 
+
   currentCompany = this._companyService.currentCompany;
   matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
     this.matchedInvestors =res
@@ -90,6 +91,10 @@ export class OverviewComponent {
   declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
     this.declinedConnections =res
   }));
+
+  stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
+    this.stats =res;
+  }))
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
     this.investorEligibilityScore = scores.investorEligibility;

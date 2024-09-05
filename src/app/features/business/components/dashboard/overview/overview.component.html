@@ -1,3 +1,4 @@
+<ng-container *ngIf="stats$ | async"></ng-container>
 <ng-container *ngIf="matchedInvestors$ | async"></ng-container>
 <ng-container *ngIf="connectedInvestors$ | async"></ng-container>
 <ng-container *ngIf="declinedInvestors$ | async"></ng-container>
@@ -33,16 +34,16 @@
   </app-card>
 
   <app-card (click)="showMatchedInvestors()"
-    [detail]="{title: 'Matched Investors/Funders', value: (matchedInvestors.length).toString(), featured: true, period: '0 Past Months'}">
+    [detail]="{title: 'Matched Investors/Funders', value: (stats.matched ||0).toString(), featured: true, period: '0 Past Months'}">
     <p class="helper__text text__red">View</p>
   </app-card>
 
   <app-card (click)="showConnectedInvestors()"
-    [detail]="{title: 'Connected Investors', value: (connectedInvestors.length).toString(), featured: true}">
+    [detail]="{title: 'Connected Investors', value: (stats.connected || 0).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
   <app-card (click)="showDeclinedConnections()"
-    [detail]="{title: 'Connections Declined', value: (declinedConnections.length).toString(), featured: true}">
+    [detail]="{title: 'Connections Declined', value: (stats.declined || 0).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
 </app-overview-section>
