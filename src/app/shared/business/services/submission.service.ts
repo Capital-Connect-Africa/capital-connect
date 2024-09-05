@@ -40,7 +40,7 @@ export class SubmissionService extends BaseHttpService {
   }
 
   editSubmissions(submissions: Submission[]): Observable<SubmissionResponse[]> {
-    const requests =submissions.map(submission =>this.update(`${BASE_URL}/submissions`, submission.id??0, {text: submission.text}));
+    const requests =submissions.map(submission =>this.update(`${BASE_URL}/submissions`, submission.id??0, {text: submission.text, answerId: submission.answerId}));
     return forkJoin(requests).pipe(map(res =>{
       return res;
     })) as Observable<SubmissionResponse[]>
