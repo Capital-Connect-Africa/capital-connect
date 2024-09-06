@@ -221,7 +221,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
             this.specialCriteria = res
           }))
 
-          this.update = false
+          // this.update = false
         })
       )
     }

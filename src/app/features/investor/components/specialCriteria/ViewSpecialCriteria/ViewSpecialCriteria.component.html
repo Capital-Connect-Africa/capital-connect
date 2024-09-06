@@ -17,16 +17,49 @@
 
   <div class="main__content">
     <section class="col__right">
-      <div class="flex justify-between top__details">
-        <div>
-        <h6><strong>{{specialCriteria.title}}</strong></h6>
-        <p>{{specialCriteria.description}}</p>
-        </div>
+    
+          <h6><strong>{{ specialCriteria.title }}</strong></h6>
+          <p>{{ specialCriteria.description }}</p>
+        
 
-        <div class="">
-          <button *ngIf="!update" (click)="onUpdate()" class="btn btn-primary">Update Special Criteria</button>
-        </div>
-      </div>
+          <div *ngFor="let question of specialCriteria.questions">
+            <!-- Display the question text -->
+            <p><strong>{{ question.text }}</strong></p>
+            
+            <!-- TRUE_FALSE type questions (radio button) -->
+            <div *ngIf="question.type === 'TRUE_FALSE'">
+              <label *ngFor="let answer of question.answers">
+                <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />
+                {{ answer.text }}
+              </label>
+            </div>
+          
+            <!-- SHORT_ANSWER type questions (input field) -->
+            <div *ngIf="question.type === 'SHORT_ANSWER'">
+              <input type="text" placeholder="OPEN" name="question_{{ question.id }}" />
+            </div>
+          
+            <!-- SINGLE_CHOICE type questions (radio button) -->
+            <div *ngIf="question.type === 'SINGLE_CHOICE'">
+              <label *ngFor="let answer of question.answers">
+                <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />
+                {{ answer.text }}
+              </label>
+            </div>
+          
+            <!-- MULTIPLE_CHOICE type questions (checkboxes) -->
+            <div *ngIf="question.type === 'MULTIPLE_CHOICE'">
+              <label *ngFor="let answer of question.answers">
+                <input type="checkbox" name="question_{{ question.id }}" [value]="answer.text" />
+                {{ answer.text }}
+              </label>
+            </div>
+          
+          </div>
+
+
+       
+        
 
 
 
@@ -48,14 +81,14 @@
 
             <div class="cta__group">
               <button class="btn btn-primar" [disabled]="!specialCriteriaForm.valid"
-                [ngClass]="{'disabled-btn': !specialCriteriaForm.valid}">Update Special Criteria</button>
+                [ngClass]="{'disabled-btn': !specialCriteriaForm.valid}">Update</button>
             </div>
           </div>
         </form>
 
       </div>
 
-      <div>
+      <div *ngIf="update">
         <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
           <div class="form_content__container">
             <div class="input__wrapper">
@@ -76,7 +109,7 @@
         </form>
       </div>
 
-      <div>
+      <div *ngIf="update">
         <form [formGroup]="questionsRemoveForm" (ngSubmit)="onQuestionsRemove()">
           <div class="form_content__container">
             <div class="input__wrapper">
@@ -93,6 +126,13 @@
             </div>
           </div>
         </form>
+      </div>
+    </section>
+
+    <section class="left__col">
+
+      <div>
+        <button (click)="onUpdate()" class="btn btn-primary">Update Special Criteria</button>
       </div>
     </section>
   </div>
