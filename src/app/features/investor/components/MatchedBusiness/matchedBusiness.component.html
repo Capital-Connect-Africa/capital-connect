@@ -46,7 +46,7 @@
           <div class="flex justify-between">
             <ng-container *ngIf="downloadCSV$  | async"></ng-container>
             <!-- <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('matched')">Download Matched Company List</button> -->
-            <button class="btn btn-primary btn-sm submit__btn"  type="submit" (click)="showSearch()">Advanced Company Search</button>
+            <button class="btn btn-primary btn-sm submit__btn"  type="submit" (click)="showSearch()">Global Company Search</button>
           </div>
         </div>
 
@@ -263,7 +263,7 @@
 
 
 <!-- Advanced Search Form -->
-<app-modal [(visible)]="advanced_Search" title="Advanced Company Search"
+<app-modal [(visible)]="advanced_Search" title="Global Company Search"
   helperText="Search for a with various paramaters">
   <div class="advanced-search p-4  rounded-md mb-4 mt-6">
     <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
