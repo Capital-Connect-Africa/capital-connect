@@ -1,24 +1,5 @@
 @import '../../../styles/main';
 
-.payment_instructions{
-  p, ol li{
-
-    font-size: .9rem;
-    margin: 0;
-    line-height: 1.5rem;
-    padding-right: 1rem;
-    font-family: $font-family-sans-serif;
-    font-weight: $font-weight-normal;
-  }
-
-  ol{
-    padding-left: 2rem;
-  }
-
-  ol li{
-    list-style-type: disc;
-  }
-}
 section{
   gap: .5rem;
   display: flex;

@@ -11,6 +11,8 @@ import { SidenavComponent } from "../../../core/components/sidenav/sidenav.compo
 import { NavbarComponent } from "../../../core/components/navbar/navbar.component";
 import { AssessmentSummaryComponent } from "../../../shared/components/assessment-summary/assessment-summary.component";
 import { AdvertisementSpaceComponent } from "../../../shared/components/advertisement-space/advertisement-space.component";
+import { LoadingService } from '../../../core';
+
 
 @Component({
   standalone:true,
@@ -32,6 +34,7 @@ export class PaymentComponent implements OnInit {
   private _feedbackService = inject(FeedbackService)
   private _bookingService = inject(BookingService)
   private _sanitizer = inject(DomSanitizer); 
+  private _loader = inject(LoadingService)
 
 
   //booleans
@@ -42,7 +45,6 @@ export class PaymentComponent implements OnInit {
     {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
     {label: 'My business', href: '/business/my-business', exact: false, icon: 'business_center'},
     {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'}
-
   ]
 
   constructor() { }
@@ -55,7 +57,6 @@ export class PaymentComponent implements OnInit {
     this.transactionStatus$ = this._paymentService.getTransactionStatus(this.orderTrackingId).pipe(
       tap((status: TransactionStatus) => {
         if (status.status === '200') {
-          // this.booking = true;
           this.checkStatus = false;
           this._feedbackService.success('Payment successful!', 'Payment Status');
         } else if (status.payment_status_description === 'pending') {
@@ -73,15 +74,16 @@ export class PaymentComponent implements OnInit {
 
 
   createBooking() {
+    this._loader.setLoading(true)
     this.visible = true
     this.createBooking$ = this._bookingService.createBooking({ calendlyEventId: CALENDLYEVENTID }).pipe(
       mergeMap((response: CreateBookingResponse) => {
         if (response && response.redirectUrl) {
           this.redirectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(response.redirectUrl);
-          // this.visible = true;
-          this.orderTrackingId = response.orderTrackingId;
 
-          // Return an observable that emits the transaction status
+          this.orderTrackingId = response.orderTrackingId;
+          this._loader.setLoading(false);  // Execute when the observable emits          
+
           return interval(20000).pipe(
             take(3),
             switchMap(() => this._paymentService.getTransactionStatus(this.orderTrackingId)),
@@ -89,10 +91,8 @@ export class PaymentComponent implements OnInit {
             tap((status: TransactionStatus | null) => {
               if (status) {
                 if (status.status === '500') {
-                  // this.booking = false;
                   this.checkStatus = true;
                 } else if (status.status === '200') {
-                  // this.booking = true;
                   this.checkStatus = false;
                 }
               }
