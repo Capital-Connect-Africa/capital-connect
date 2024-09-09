@@ -29,7 +29,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { Country } from '../../../../shared/interfaces/countries';
 import { Sector, SubSector } from '../../../sectors/interfaces';
-import { RegistrationStructure } from '../../../../shared/interfaces/Investor';
+import { EsgFocusAreaOptions, InvestmentStructureOptions, RegistrationStructure, UseOfFundsOptions } from '../../../../shared/interfaces/Investor';
 import { CountriesService } from '../../../../shared/services/countries.service';
 import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
 import { InvestorScreensService } from '../../services/investor.screens.service';
@@ -82,6 +82,9 @@ export class MatchedBusinessComponent {
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
   eligibilityScore: number = 0;
+  investmentStructureOptions: InvestmentStructureOptions[] = []
+  useOfFundsOptions: UseOfFundsOptions[] = []
+  esgFocusAreaOptions: EsgFocusAreaOptions[] = []
 
 
   
@@ -155,6 +158,20 @@ export class MatchedBusinessComponent {
     this.sectors = sectors
   }))
 
+  useOfFundsOptions$ = this._screenService.getUseOfFunds().pipe(tap(useOfFunds => {
+    this.useOfFundsOptions = useOfFunds
+  }))
+
+  investmentStructureOptions$ = this._screenService.getInvestmentStructures().pipe(tap(structures => {
+    this.investmentStructureOptions = structures
+  }))
+
+  esgFocusAreaOptions$ = this._screenService.getEsgFocusAreas().pipe(tap(structures => {
+    this.esgFocusAreaOptions = structures
+  }))
+
+
+
   // subSectors$ = this._sectorService.getSubSectorOfaSector(1).pipe(tap(sectors => {
   //   this.subSectors = sectors
   // }))
@@ -184,7 +201,11 @@ export class MatchedBusinessComponent {
       yearsOfOperation: [''],
       growthStages: [[]],
       numberOfEmployees: [''],
-      fullTimeBusiness: [false]
+      fullTimeBusiness: [false],
+      fundsNeeded:[''],
+      investmentStructure:[[]],
+      useOfFunds:[[]],
+      esgFocusAreas:[[]]
     });
   }
 
@@ -211,15 +232,10 @@ export class MatchedBusinessComponent {
   private removeEmptyFields(obj: any): any {
     return Object.entries(obj)
       .filter(([_, value]) => {
-        // Check for non-null and non-undefined values
         if (value === null || value === undefined) return false;
-        // Check for empty strings
         if (typeof value === 'string' && value.trim() === '') return false;
-        // Check for empty arrays
         if (Array.isArray(value) && value.length === 0) return false;
-        // If it's a boolean or number, it's always valid
         if (typeof value === 'boolean' || typeof value === 'number') return true;
-        // Otherwise, keep the field
         return true;
       })
       .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
@@ -440,6 +456,4 @@ export class MatchedBusinessComponent {
 
 
   downloadCSV(status:string){this.downloadCSV$ = this._businessMatchingService.matchMakingCsv(status).pipe(tap(res=>{ })) }
-  
-
 } 
