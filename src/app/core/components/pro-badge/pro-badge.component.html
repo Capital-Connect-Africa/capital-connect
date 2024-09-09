@@ -1,11 +1,19 @@
 <ng-container *ngIf="transactionStatus$ | async"></ng-container>
 <ng-container *ngIf="message$ | async"></ng-container>
-<div class="pro__card">
-  <div class="pro__card__body">
-    <h4 class="title">Book a session with Capital Connect</h4>
-    <p class="body">get personalized insights, expert advice, and tailored strategies for your business</p>
-    <a class="cta"><button href="#" (click)="createBooking()">Book session</button></a>
 
+<div class="card cursor-pointer">
+  <div class="card__title">
+    <h3>Engage Capital Connect</h3>
+  </div>
+  <div class="card__body">
+    <p>Book a session with Capital Connect and get personalized insights, expert advice, and tailored strategies for your business</p>
+  </div>
+  <div class="card__footer">
+    <button class="cta__button" (click)="createBooking()">Book session</button>
+  </div>
+</div>
+
+    
 
     <app-modal [visible]="visible" title="Payment Instructions"
       helperText="Thank you for engaging with www.capitalconnect.africa">
@@ -59,6 +67,3 @@
       </div>
 
     </app-modal>
-
-  </div>
-</div>
