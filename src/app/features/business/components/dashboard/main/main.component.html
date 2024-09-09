@@ -1,23 +1,84 @@
 <div class="main">
   <div class="navbar">
     <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>
-    <app-navbar onDashboard="true" />
+    <app-navbar onDashboard="true" [showBanner]="false"/>
   </div>
 
   <main>
     <p class="brand__name">Business Name</p>
-    <div class="left__col">
+    <app-overview />
+    <!-- <div class="left__col"> -->
 <!--      <app-profile-status />-->
-      <app-overview />
-      <app-schedules-section [title]="'Upcoming Schedule'" [body]="'Book an appointment today to talk to one of our Business advisors'"  [subTitle]="'Talk to a representative at Capital connect'" [linkLabel]="'Book appointment'"/>
+      <!-- <app-schedules-section [title]="'Upcoming Schedule'" [body]="'Book an appointment today to talk to one of our Business advisors'"  [subTitle]="'Talk to a representative at Capital connect'" [linkLabel]="'Book appointment'"/> -->
 <!--      <app-schedules-section />-->
 <!--      <app-score-section />-->
-    </div>
-    <div class="right__col">
+    <!-- </div> -->
+    <section class="grid grid-cols-[auto_25%] lower__section">
+      <div class="">
+        <div>
+          <h2>Sessions</h2>
+          <div class="grid grid-cols-2 session__cards">
+            <div class="card cursor-pointer">
+              <div class="card__title">
+                <h3>Engage Capital Connect</h3>
+              </div>
+              <div class="card__body">
+                <p>Book a session with Capital Connect and get personalized insights, expert advice, and tailored strategies for your business</p>
+              </div>
+              <div class="card__footer">
+                <button class="cta__button">Book session</button>
+              </div>
+            </div>
+            <div class="card cursor-pointer">
+              <div class="card__title">
+                <h3>Session with an Advisor</h3>
+              </div>
+              <div class="card__body">
+                <p>Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth.</p>
+              </div>
+              <div class="card__footer">
+                <button class="cta__button">Book session</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>Upcoming Schedule</h2>
+          <div class="">
+            <div class="card cursor-pointer bg__green">
+              <div class="card__title">
+                <h3>Talk to a representative</h3>
+              </div>
+              <div class="card__body">
+                <p>Book an appointment today to talk to one of our Business advisors.</p>
+              </div>
+              <div class="card__footer">
+                <button class="cta__button">Book appointment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col right__col__content">
+        <div>
+          <h2>Completeness</h2>
+          <ul class="progress__bars">
+            <li *ngFor="let prog of progress">
+              <div class="values">
+                <span>{{prog.section}}</span>
+                <span>{{prog.progress+'%'}}</span>
+              </div>
+              <div class="bar"><div class="progress" [style]="'width:'+prog.progress+'%'"></div></div>
+            </li>
+          </ul>
+        </div>
+        <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" />
+      </div>
+    </section>
+    <!-- <div class="right__col"> -->
 <!--      <app-notifications />-->
-      <app-assessment-summary [title]="'Schedule a Session with an Advisor'" component="book" [body]="'Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth'" [linkLabel]="'Unlock the whole summary'"/>
-      <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" />
-    </div>
+      <!-- <app-assessment-summary [title]="'Schedule a Session with an Advisor'" component="book" [body]="'Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth'" [linkLabel]="'Unlock the whole summary'"/>
+    </div> -->
   </main>
 </div>
 

@@ -51,6 +51,12 @@
   }
 }
 
+.global_search_wrapper{
+  .input__field{
+    width: 7cm;
+  }
+}
+
 
 @include when-screen-is-atleast(medium){
   .main{
@@ -582,6 +588,7 @@ th{
   .submit__btn{
     margin-left: .5cm;
   }
+
 
 
   .pills-container {

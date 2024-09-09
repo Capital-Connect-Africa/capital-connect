@@ -36,6 +36,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   add_custom_ques: boolean = false
   add_custom_answers: boolean = false
   multiple_answers: boolean = false
+  updatePage: boolean = false
 
   // Variables
   specialCriteriaId!: number;
@@ -114,6 +115,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   onUpdate() {
     this.update = true
+    this.updatePage = true
     this.patchForm()
   }
 
@@ -164,6 +166,9 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       formData.questionId = this.customQuestionResponse.id
       this.createAnwer$ = this.sc.createAnswer(formData).pipe(tap(res => {
         this.customAnswersForm.reset();
+        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+          this.specialCriteria = res
+        }))
         if (!this.multiple_answers) {
           this.add_custom_ques = false
           this.add_custom_answers = false
@@ -173,13 +178,12 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   cancel() {
-    this.add_custom_ques = false
+    this.updatePage = false
   }
 
   onQuestionsSubmit() {
     if (this.questionsForm) {
       const formData = this.questionsForm.value
-
       let body = {
         specialCriteriaId: this.specialCriteriaId,
         questionIds: formData.questionIds
@@ -187,6 +191,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
       this.addQuestions$ = this.sc.addQuestionsToSpecialCriteria(body).pipe(tap(res => {
         this._feedBackService.success('Questions Added To Special Criteria Successfully')
+
+        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+          this.specialCriteria = res
+        }))
+
         this.questionsForm.reset()
       }))
 
@@ -204,6 +213,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
       this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
         this._feedBackService.success('Questions Removed From Special Criteria Successfully')
+
+        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+          this.specialCriteria = res
+        }))
+
         this.questionsRemoveForm.reset()
 
       }))
@@ -221,7 +235,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
             this.specialCriteria = res
           }))
 
-          this.update = false
+          // this.update = false
         })
       )
     }

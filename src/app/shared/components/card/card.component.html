@@ -1,7 +1,6 @@
 <div class="card cursor-pointer" [ngClass]="{featured: detail?.featured}">
   <div class="card__title">
     <h3>{{detail?.title}}</h3>
-    <span><mat-icon>more_horiz</mat-icon></span>
   </div>
   <div class="card__body">
     <h2 *ngIf="!detail?.icon">{{detail?.value}}</h2>
