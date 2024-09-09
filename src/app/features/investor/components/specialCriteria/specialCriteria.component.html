@@ -39,14 +39,16 @@
                         <td class="">{{criteria.description}}</td>
                         <td class="">
                             <div class="py-auto eye">
-                                <a [routerLink]="['/investor/view-special-criteria', criteria.id]"><mat-icon
-                                        class="small-icon">visibility</mat-icon></a>
+                                <a [routerLink]="['/investor/view-special-criteria', criteria.id]">
+                                    <mat-icon class="small-icon">visibility</mat-icon>
+                                    </a>
                             </div>
                         </td>
 
                         <td class="">
-                            <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                                (click)="deleteCriteria(criteria.id)">Delete</button>
+                            <mat-icon class="small-icon" style="color: red; cursor: pointer;"
+                            (click)="deleteCriteria(criteria.id)"
+                            >delete</mat-icon>
                         </td>
                     </tr>
 

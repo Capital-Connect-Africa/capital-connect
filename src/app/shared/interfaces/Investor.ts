@@ -76,7 +76,24 @@ export interface SpecialCriteria{
     id:number,
     title: string,
     description: string,
-    investorProfileId: number
+    investorProfileId: number,
+    questions: SpecialCriteriaQuestion[]
+}
+
+export interface SpecialCriteriaQuestion {
+    id: number;
+    text: string;
+    type: "MULTIPLE_CHOICE" | "SINGLE_CHOICE" |  "TRUE_FALSE" | "SHORT_ANSWER",
+    order: number;
+    tooltip: string | null;
+    answers: Answer[];
+  }
+
+export interface Answer {
+id: number;
+text: string;
+recommendation: string | null;
+weight: number;
 }
 
 export interface SpecialCriteriaQuestions{

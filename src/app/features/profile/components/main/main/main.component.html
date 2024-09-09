@@ -3,7 +3,7 @@
     <app-navbar [showBanner]="showBanner" onDashboard="true" />
   </div>
     <div class="main__content">
-      <ng-container *ngIf="userProfile$ | async as userProfile">
+      <ng-container *ngIf="userProfile$ | async as result">
           <div class="flex flex-col gap-4 shadow rounded-[.5rem] overflow-hidden h-max">
           <section class="cover__background">
             <div class="profile__card">
@@ -14,26 +14,26 @@
           </section>
           
           <div class="flex flex-col bg-white  bio_info">
-            <h2>{{userProfile.name}}</h2>
-            <p><mat-icon>call</mat-icon>{{userProfile.mobileNumber || 'Add phone'}}</p>
-            <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
+            <h2>{{result.profile.name}}</h2>
+            <p><mat-icon>call</mat-icon>{{result.profile.mobileNumber || 'Add phone'}}</p>
+            <p><mat-icon>mail</mat-icon>{{result.profile.email}}</p>
             <section>
                 <h2>Business</h2>
-                <img [src]="userProfile.company.companyLogo.path" class="logo" alt="Logo" *ngIf="userProfile.company.companyLogo"/>
+                <img [src]="result.profile.company.companyLogo.path" class="logo" alt="Logo" *ngIf="result.profile.company.companyLogo"/>
                 <button class="btn__cta text-blue-600 font-bold" title="Details" (click)="editOrganizationProfile()">Edit Business Details</button>
                 <div class="card__item__details" details>
                   <div class="card__item__detail_info">
                     <div>
                       <label>Name:</label>
-                      <p>{{userProfile.company.name}}</p>
+                      <p>{{result.profile.company.name}}</p>
                     </div>
                     <div>
                       <label>Country:</label>
-                      <p>{{userProfile.company.country}}</p>
+                      <p>{{result.profile.company.country}}</p>
                     </div>
                     <div>
                       <label>Growth Stage:</label>
-                      <p>{{userProfile.company.growthStage}}</p>
+                      <p>{{result.profile.company.growthStage}}</p>
                     </div>
                   </div>
                 </div>
@@ -41,15 +41,15 @@
                   <div class="card__item__detail_info">
                     <div>
                       <label>Employees:</label>
-                      <p>{{userProfile.company.numberOfEmployees}}</p>
+                      <p>{{result.profile.company.numberOfEmployees}}</p>
                     </div>
                     <div>
                       <label>Sector:</label>
-                      <p>{{userProfile.company.businessSector}}</p>
+                      <p>{{result.profile.company.businessSector}}</p>
                     </div>
                     <div>
                       <label>Sub-sector:</label>
-                      <p>{{userProfile.company.businessSubsector}}</p>
+                      <p>{{result.profile.company.businessSubsector}}</p>
                     </div>
                   </div>
                 </div>

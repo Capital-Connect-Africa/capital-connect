@@ -1,6 +1,6 @@
 import {Component, Input,inject} from '@angular/core';
 import {SharedModule} from "../../index";
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
@@ -31,6 +31,7 @@ export class AssessmentSummaryComponent {
   private _sanitizer = inject(DomSanitizer); 
   private _paymentService = inject(PaymentService)
   private _feedbackService = inject(FeedbackService)
+  private _router = inject(Router)
   redirectUrl: SafeResourceUrl | null = null;
   booking : boolean = false;
   subscription!: Subscription;
@@ -70,46 +71,8 @@ export class AssessmentSummaryComponent {
 
 
 
-
   createBooking() {
-    this.visible = false
-    this.createBooking$ = this._bookingService.createBooking({ calendlyEventId: CALENDLYEVENTID }).pipe(
-      mergeMap((response: CreateBookingResponse) => {
-        if (response && response.redirectUrl) {
-          this.redirectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(response.redirectUrl);
-          this.visible = true;
-          this.orderTrackingId = response.orderTrackingId;
-
-          // Return an observable that emits the transaction status
-          return interval(20000).pipe(
-            take(3),
-            switchMap(() => this._paymentService.getTransactionStatus(this.orderTrackingId)),
-            takeWhile((status: TransactionStatus) => status?.status === '500' && this.visible, true),
-            tap((status: TransactionStatus | null) => {
-              if (status) {
-                if (status.status === '500') {
-                  this.booking = false;
-                  this.checkStatus = true;
-                } else if (status.status === '200') {
-                  this.booking = true;
-                  this.checkStatus = false;
-                }
-              }
-            }),
-            catchError((error: any) => {
-              this._feedbackService.error('Error checking transaction status', error);
-              return of(null); 
-            })
-          );
-        } else {
-          return of(null); 
-        }
-      }),
-      catchError((error: any) => {
-        this._feedbackService.error('Error creating booking', error);
-        return of(null); 
-      })
-    );
+    this._router.navigate(['/payment-instructions']);
   }
-  
+
 }

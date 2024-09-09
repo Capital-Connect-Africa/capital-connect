@@ -40,7 +40,13 @@ export class SubmissionService extends BaseHttpService {
   }
 
   editSubmissions(submissions: Submission[]): Observable<SubmissionResponse[]> {
-    const requests =submissions.map(submission =>this.update(`${BASE_URL}/submissions`, submission.id??0, {text: submission.text}));
+    const requests =submissions.map(submission =>{
+      if(!submission.id){
+        return this.create(`${BASE_URL}/submissions`, {userId: this._currentUserId, questionId: submission.questionId, answerId: submission.answerId, text: submission.text})
+      }
+      return this.update(`${BASE_URL}/submissions`, submission.id, {text: submission.text, answerId: submission.answerId})
+    });
+    debugger
     return forkJoin(requests).pipe(map(res =>{
       return res;
     })) as Observable<SubmissionResponse[]>

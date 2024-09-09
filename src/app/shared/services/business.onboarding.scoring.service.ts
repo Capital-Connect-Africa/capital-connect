@@ -51,6 +51,12 @@ export class BusinessOnboardingScoringService {
     }))
   }
 
+  getCompanyStats(){
+    return this._scoringService.getCompanyStats(this._companyService.currentCompany.id).pipe(map(res => {
+      return res
+    }))
+  }
+
   getConnectedInvestors() {
     return this._scoringService.getConnectedInvestors(this._companyService.currentCompany.id).pipe(map((investors: any[]) => {
       return investors.map(investor =>({...investor.investorProfile}));

@@ -11,7 +11,6 @@
 <ng-container *ngIf="numberOfEmployees$ | async"></ng-container>
 <ng-container *ngIf="growthStages$ | async"></ng-container>
 <ng-container *ngIf="yearsOfOperation$ | async"></ng-container>
-
 <ng-container *ngIf="scoring$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
@@ -23,8 +22,9 @@
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="downloadCSV$  | async"></ng-container>
 
-
-
+<ng-container *ngIf="useOfFundsOptions$  | async"></ng-container>
+<ng-container *ngIf="investmentStructureOptions$  | async"></ng-container>
+<ng-container *ngIf="esgFocusAreaOptions$  | async"></ng-container>
 
 
 
@@ -46,7 +46,8 @@
           <div class="flex justify-between">
             <ng-container *ngIf="downloadCSV$  | async"></ng-container>
             <!-- <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('matched')">Download Matched Company List</button> -->
-            <button class="btn btn-primary btn-sm submit__btn"  type="submit" (click)="showSearch()">Advanced Company Search</button>
+            <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Global Company
+              Search</button>
           </div>
         </div>
 
@@ -105,7 +106,8 @@
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
 
                 <div>
-                  <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Country: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.country }}</span></p>
                 </div>
                 <div>
@@ -113,30 +115,38 @@
                       selectedMatchedBusiness.businessSector }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Sub Sector: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.businessSubsector }}</span></p>
                 </div>
 
                 <div class="">
                   <p class="font-bold"><strong>Products and Services: </strong>
-                    <span class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices }}</span></p>
+                    <span
+                      class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices
+                      }}</span>
+                  </p>
                 </div>
 
                 <div>
-                  <p class="font-bold"><strong>Registration Structure: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Registration Structure: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.registrationStructure }}</span></p>
                 </div>
 
                 <div>
-                  <p class="font-bold"><strong>Growth Stage: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Growth Stage: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.growthStage }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Number of Employees: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Number of Employees: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.numberOfEmployees }}</span></p>
                 </div>
                 <div>
-                  <p class="font-bold"><strong>Full Time Business: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  <p class="font-bold"><strong>Full Time Business: </strong><span
+                      class="font-light   w-20 break-words max-w-ful">{{
                       selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
                 </div>
                 <div>
@@ -173,7 +183,7 @@
                   </ul>
                   <p *ngIf="useOfFunds.length < 1">N/A</p>
                 </div>
-                
+
               </div>
 
               <hr />
@@ -182,8 +192,7 @@
             <!-- Back Button -->
             <div class="flex justify-end details">
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn  px-3 py-1"
-                  (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+                <button class="btn  px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
                 <button class="btn btn-danger px-3 py-1"
                   (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
                 <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
@@ -243,112 +252,132 @@
   <div class="form_content__container">
     <div class="input__wrapper">
       <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-      <p-multiSelect 
-      class="input__field p-6"  
-      styleClass="w-full gap-4" 
-      optionValue="reason"
-       [options]="declineReasons"
+      <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason" [options]="declineReasons"
         formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
-  
+
       <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
         <div class="cta__group">
           <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
         </div>
       </div>
     </div>
-  </div> 
+  </div>
 </app-modal>
 
 
 
 
 <!-- Advanced Search Form -->
-<app-modal [(visible)]="advanced_Search" title="Advanced Company Search"
-  helperText="Search for a with various paramaters">
-  <div class="advanced-search p-4  rounded-md mb-4 mt-6">
+<app-modal  [(visible)]="advanced_Search" title="Global Company Search" helperText="Search for a company with various paramaters">
+  <div class="advanced-search rounded-md mb-4 mt-6">
     <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-      <div class="grid input__wrapper grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="input__wrapper">
-          <label for="country" class="input__label">Countries</label>
-          <p-multiSelect formControlName="countries" class="input__field" [options]="countries" optionLabel="name"
-          optionValue="name"
-            placeholder="Select countries"></p-multiSelect>
-        </div>
+      <div class="global_search_wrapper">
 
-        <!-- <div class="input__wrapper">
-          <label for="businessSector" class="input__label">Business Sectors</label>
-          <p-multiSelect formControlName="businessSectors" class="input__field w-full" [options]="sectors"
-            optionLabel="name" placeholder="Select sectors"></p-multiSelect>
-        </div>
-        <div class="input__wrapper">
-          <label for="businessSubsector" class="input__label">Business Sub Sector</label>
-          <p-multiSelect formControlName="businessSubsectors" [options]="subSectors" class="input__field w-full"
-            optionLabel="name" placeholder="Select subsectors"></p-multiSelect>
-        </div> -->
+        <div class="flex justify-between">
+          <div class="input__wrapper">
+            <label for="country" class="input__label">Countries</label>
+            <p-multiSelect formControlName="countries" class="input__field" [options]="countries" optionLabel="name"
+              optionValue="name" placeholder="Select countries"></p-multiSelect>
+          </div>
 
-        <div class="input__wrapper">
-          <label class="input__label">Registration Structures</label>
-          <p-multiSelect formControlName="registrationStructures" class="input__field w-full"
-          optionValue="title"
-            [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
-        </div>
+          <div class="input__wrapper">
+            <label class="input__label">Registration Structures</label>
+            <p-multiSelect formControlName="registrationStructures" class="input__field" optionValue="title"
+              [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
+          </div>
 
-        <div class="input__wrapper">
-          <label class="input__label">Years of Operation</label>
-          <p-dropdown class="input__field w-full" formControlName="yearsOfOperation" [options]="yearsOfOperation"
-            placeholder="Select years"></p-dropdown>
-        </div>
-
-        <div class="input__wrapper">
-          <label for="growthStage" class="input__label">Growth Stages</label>
-          <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
-            optionLabel="title" placeholder="Select stages" optionValue="title"></p-multiSelect>
-        </div>
-
-        <div class="input__wrapper">
-          <label class="input__label">Number of Employees</label>
-          <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
-            placeholder="Select employees"></p-dropdown>
-        </div>
-
-
-        <div class="sectors-container">
-          <p>Select Sectors:</p>
-          <div class="pills-container">
-            <span *ngFor="let sector of sectors$ | async"
-                  class="pill"
-                  [class.active]="isSectorSelected(sector.name)"
-                  [class.selected]="selectedSectors.includes(sector.name)"
-                  (click)="toggleSector(sector)">
-              {{ sector.name }}
-            </span>
+          <div class="input__wrapper">
+            <label class="input__label">Years of Operation</label>
+            <p-dropdown class="input__field w-full" formControlName="yearsOfOperation" [options]="yearsOfOperation"
+              placeholder="Select years"></p-dropdown>
           </div>
         </div>
-        
-        <div class="subsectors-container" *ngIf="selectedSectors.length > 0">
-          <p>Select Sub-sectors:</p>
-          <div class="pills-container">
-            <span *ngFor="let subSector of subSectors$ | async"
-                  class="pill"
-                  [class.active]="isSubSectorSelected(subSector.name)"
-                  [class.selected]="selectedSubSectors.includes(subSector.name)"
-                  (click)="toggleSubSector(subSector)">
-              {{ subSector.name }}
-            </span>
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label for="growthStage" class="input__label">Growth Stages</label>
+            <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
+              optionLabel="title" placeholder="Select stages" optionValue="title"></p-multiSelect>
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label">Number of Employees</label>
+            <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
+              placeholder="Select employees"></p-dropdown>
+          </div>
+
+
+
+
+          <div class="input__wrapper">
+            <label class="input__label">Use of Funds</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="useOfFunds"
+              [options]="useOfFundsOptions" optionLabel="title" optionValue="title" placeholder="Select use of funds">
+            </p-multiSelect>
           </div>
         </div>
-        
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label class="input__label">Investment Structures</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="investmentStructures"
+              [options]="investmentStructureOptions" optionLabel="title" optionValue="title"
+              placeholder="Select investment structures">
+            </p-multiSelect>
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label">ESG Focus Areas</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="esgFocusAreas"
+              [options]="esgFocusAreaOptions" optionLabel="title" optionValue="title"
+              placeholder="Select ESG focus areas">
+            </p-multiSelect>
+          </div>
 
 
+          <div class="input__wrapper">
+            <label class="input__label">Funds needed USD$</label>
+            <input class="input__field" formControlName="fundsNeeded" type="number" placeholder="Enter funds needed"
+              appNumberFormat />
+          </div>
+        </div>
 
         <div class="input__wrapper">
           <label class="input__label">Full-Time Business
             <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /></label>
         </div>
 
+
+
+        <div class="sectors-container">
+          <p>Select Sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let sector of sectors$ | async" class="pill" [class.active]="isSectorSelected(sector.name)"
+              [class.selected]="selectedSectors.includes(sector.name)" (click)="toggleSector(sector)">
+              {{ sector.name }}
+            </span>
+          </div>
+        </div>
+
+        <div class="subsectors-container" *ngIf="selectedSectors.length > 0">
+          <p>Select Sub-sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let subSector of subSectors$ | async" class="pill"
+              [class.active]="isSubSectorSelected(subSector.name)"
+              [class.selected]="selectedSubSectors.includes(subSector.name)" (click)="toggleSubSector(subSector)">
+              {{ subSector.name }}
+            </span>
+          </div>
+        </div>
+
+
+
+
+
+
       </div>
       <div class="flex justify-end cta__group">
-        <button class="btn btn-primary" type="submit">Search Companies</button>
+        <button class="btn btn-primary w-full" type="submit">Search Companies</button>
         <!-- <button class="btn btn-secondary ml-2" type="button" (click)="onResetSearch()">Reset</button> -->
       </div>
     </form>
