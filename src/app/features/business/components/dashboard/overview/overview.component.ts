@@ -53,6 +53,7 @@ export class OverviewComponent {
   investorsDiagVisible = false;
   matchedInvestors: MatchedInvestor[] = [];
   declinedConnections: MatchedInvestor[] = [];
+  connectionRequests: MatchedInvestor[] = [];
   connectedInvestors: MatchedInvestor[] = [];
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
@@ -85,9 +86,15 @@ export class OverviewComponent {
   matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
     this.matchedInvestors =res
   }));
+
+  connectionRequests$ =this._scoringService.getConnectionRequests().pipe(tap(res =>{
+    this.connectionRequests =res
+  }));
+
   connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
     this.connectedInvestors =res
   }));
+
   declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
     this.declinedConnections =res
   }));
@@ -165,6 +172,10 @@ export class OverviewComponent {
     this.signalService.matchedInvestorsDialogIsVisible.set(true)
   }
 
+  showConnectionRequests() {
+    this.signalService.connectionRequestsDialogIsVisible.set(true)
+  }
+
   showConnectedInvestors() {
     this.signalService.connectedInvestorsDialogIsVisible.set(true)
   }
@@ -172,6 +183,7 @@ export class OverviewComponent {
   showDeclinedConnections() {
     this.signalService.declinedConnectionsDialogIsVisible.set(true)
   }
+  
 
   generatePDF() {
     if (this.content && this.content.nativeElement) {
@@ -217,6 +229,26 @@ export class OverviewComponent {
 
   viewConnectedInvestor(id:number){
     this.signalService.connectedInvestorsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  }
+
+  viewConnectionRequest(id:number){
+    this.signalService.connectionRequestsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  }
+
+  approveConnectionRequest(id:number){
+    this.signalService.connectionRequestsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  }
+
+  declineConnectionRequest(id:number){
+    this.signalService.connectionRequestsDialogIsVisible.set(false);
+    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  }
+
+  revokeConnection(id:number){
+    this.signalService.connectionRequestsDialogIsVisible.set(false);
     this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
   }
 

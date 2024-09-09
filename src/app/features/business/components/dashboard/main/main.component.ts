@@ -15,6 +15,7 @@ import { SharedModule } from '../../../../../shared';
 import { OverviewComponent } from "../overview/overview.component";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { CommonModule } from '@angular/common';
+import { ProBadgeComponent } from "../../../../../core/components/pro-badge/pro-badge.component";
 
 
 @Component({
@@ -24,7 +25,8 @@ import { CommonModule } from '@angular/common';
     CommonModule, NavbarComponent, ProfileStatusComponent, NotificationsComponent,
     AssessmentSummaryComponent, AdvertisementSpaceComponent, OverviewSectionComponent,
     SchedulesSectionComponent, ScoreSectionComponent, SharedModule, OverviewComponent, Button, DialogModule, InputTextModule, ModalComponent,
-  ],
+    ProBadgeComponent
+],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

@@ -1,70 +1,29 @@
 @import '../../../styles/main.scss';
+@import '../../../styles//card.scss';
 
 
-
-.pro__card{
-  display: none;
-  overflow: hidden;
-  position: relative;
-  border-radius: 1.25rem;
-  background-color: $orange-500;
-  &::after,
-  &::before{
-    content: "";
-    width: 350px;
-    height: 300px;
-    position: absolute;
-    border-radius: 50%;
-  }
-  &::after{
-    top: -60%;
-    right: -90%;
-    background-image: linear-gradient(-180deg, #817a7a3f, #ffffff2f);
-  }
-  &::before{
-    bottom: -60%;
-    left: -90%;
-    background-image: linear-gradient(180deg, #ada0a028, #ffffff49);
-  }
-
-  .pro__card__body{
-    gap: 2rem;
-    display: flex;
-    color: $yellow-900;
-    text-align: center;
-    padding: 1rem;
-    flex-direction: column;
-    background-color: $yellow-500;
-    font-family: $font-family-sans-serif;
-
-    .title{
-      font-weight: 400;
-      line-height: 2rem;
-      font-size: 1.25rem;
+.card{
+  cursor: default;
+  &.bg__green{
+    background-color: $green-50;
+    &:hover{
+      background-color: $green-50!important;
     }
-    .body{
-      font-weight: 500;
-      line-height: 1rem;
-      font-size: .75rem;
-    }
-    .cta{
-      border: 0;
-      outline: none;
-      padding: .5rem;
+  }
+  &:hover{
+    background-color: #FEFFFE!important;
+  }
+  .card__title{
+    h3 {
       font-size: 1rem;
       font-weight: 400;
-      color: $yellow-500;
-      border-radius: .5rem;
-      background-color: $yellow-900;
+      line-height: 1rem;
+      color: #374A62;
+      font-family: $font-family-inter;
     }
   }
 }
 
-@include when-screen-is-atleast(large){
-  .pro__card{
-    display: block;
-  }
-}
 
 .temp__schedule{
   a{

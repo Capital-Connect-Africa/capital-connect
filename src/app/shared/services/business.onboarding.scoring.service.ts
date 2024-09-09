@@ -62,6 +62,13 @@ export class BusinessOnboardingScoringService {
       return investors.map(investor =>({...investor.investorProfile}));
     })) as Observable<MatchedInvestor[]>
   }
+
+  getConnectionRequests() {
+    return this._scoringService.getConnectionRequests(this._companyService.currentCompany.id).pipe(map((investors: any[]) => {
+      return investors.map(investor =>({...investor.investorProfile}));
+    })) as Observable<MatchedInvestor[]>
+  }
+
   getSectionScore(sectionId: number) {
     return this._scoringService.getSectionScore(this._userId, sectionId).pipe(map(score => {
       return Number(score.percentageScore).toFixed(1);

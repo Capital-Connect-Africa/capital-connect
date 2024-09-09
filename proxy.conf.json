@@ -6,5 +6,10 @@
     "pathRewrite": {
       "^/api": ""
     }
-  }
+  },
+  "/fonts.googleapis.com/": {
+      "target": "https://fonts.gstatic.com",
+      "changeOrigin": true,
+      "pathRewrite": { "^/fonts.googleapis.com/": "" }
+    }
 }
