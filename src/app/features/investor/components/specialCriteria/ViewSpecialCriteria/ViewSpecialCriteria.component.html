@@ -75,10 +75,12 @@
           <div class="form_content__container">
             <div class="input__wrapper">
               <label class="input__label">Add Questions To Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions" optionLabel="text" placeholder="Select questions"></p-multiSelect>
+              <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions" 
+              optionValue="id"
+              optionLabel="text" placeholder="Select questions"></p-multiSelect>
             </div>
             <div class="cta__group">
-              <a class="cta__link" (click)="addCustomQues()">Did not find the question? <strong>add custom question here</strong></a>
+              <a class="cta__link" (click)="addCustomQues()">Did not find the question? <strong>add custom questions here</strong></a>
               <button class="btn btn-primary" [disabled]="!questionsForm.valid">Add Selected Questions</button>
             </div>
           </div>
@@ -90,7 +92,9 @@
           <div class="form_content__container">
             <div class="input__wrapper">
               <label class="input__label">Remove Questions From Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions" optionLabel="text" placeholder="Select questions"></p-multiSelect>
+              <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions" optionLabel="text" 
+              optionValue="id"
+              placeholder="Select questions"></p-multiSelect>
             </div>
             <div class="cta__group">
               <a></a>

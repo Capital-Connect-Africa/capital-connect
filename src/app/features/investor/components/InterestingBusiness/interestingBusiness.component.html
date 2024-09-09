@@ -50,15 +50,6 @@
               <td class="font-bold">Business Sub Sector</td>
               <td class="flex font-bold space-x-2">Actions</td>
             </tr>
-            <!-- <tr>
-             
-                <app-debounced-search
-                placeholder="Search for a company"
-                [debounceTime]="800"
-                (search)="onSearch($event)"                
-                />
-                
-            </tr> -->
 
             <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
               class="border-b border-gray-200">
