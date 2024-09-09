@@ -1,74 +1,29 @@
 @import "../../../styles/main";
+@import "../../../styles/card.scss";
 
-.wrapper{
-  gap: 1rem;
-  display: flex;
-  overflow: hidden;
-  border-radius: 10px;
-  line-height: 1.5rem;
-  flex-direction: column;
-  background-color: $green-50;
-  font-family: $font-family-sans-serif;
-  h2{
-    color: $white;
-    font-weight: 700;
-    font-size: 1.125rem;
-    background-color: $green-800;
-    padding: 10px 10px 10px 24px;
-  }
-  .body{
-    gap: 1rem;
-    display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    .button{
-      gap: 10px;
-      color: $white;
-      display: flex;
-      cursor: pointer;
-      font-weight: 500;
-      width: max-content;
-      text-align: center;
-      border-radius: 6px;
-      align-items: center;
-      justify-content: center;
-      background: $primary-color;
-      padding: .75rem 1rem;
-      font-family: $font-family-sans-serif;
-      text-decoration: none;
-      *{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      span{
-        font-size: 14px;
-      }
+
+.card{
+  cursor: default;
+  &.bg__green{
+    background-color: $green-50;
+    &:hover{
+      background-color: $green-50!important;
     }
-    p{
-      opacity: .8;
+  }
+  &:hover{
+    background-color: #FEFFFE!important;
+  }
+  .card__title{
+    h3 {
       font-size: 1rem;
       font-weight: 400;
-    }
-    a{
-      display: flex;
-      font-weight: 500;
-      font-size: .875rem;
-      padding: 11px 14px 11px 0;
-      text-decoration: none;
-      color: $secondary-color;
-      font-family: $font-family-sans-serif;
-      *{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-      }
+      line-height: 1rem;
+      color: #374A62;
+      font-family: $font-family-inter;
     }
   }
 }
+
 
 .payment_instructions{
   p, ol li{
