@@ -26,7 +26,6 @@
   .cards__grid{
     gap: 2rem 1rem;
     display: grid;
-    padding: .5rem 0;
 
     .helper__text{
       font-weight: 300;
@@ -59,7 +58,6 @@
 
 @include when-screen-is-atleast(xlarge){
   .overview__section{
-    
     .cards__grid{
       grid-template-columns: repeat(4, 1fr);
     }
