@@ -7,9 +7,12 @@
     justify-content: space-between;
 
     h2{
-      font-weight: 500;
-      font-size: 1.2rem;
-      font-family: $font-family-sans-serif;
+      font-weight: 400;
+      line-height: 15px;
+      padding: .8rem 0;
+      color: #000000a8;
+      font-size: 15px!important;
+      font-family: $font-family-inter;
     }
 
     select{
@@ -26,9 +29,11 @@
     padding: .5rem 0;
 
     .helper__text{
-      font-size: 1rem;
-      font-weight: 500;
-      line-height: 1.5rem;
+      font-weight: 300;
+      line-height: 10px;
+      font-size: 10px!important;
+      color: #000!important;
+      font-family: $font-family-inter;
       &.text__yellow{
         color: $yellow-500;
       }
@@ -56,7 +61,7 @@
   .overview__section{
     
     .cards__grid{
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 }
