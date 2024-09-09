@@ -75,4 +75,19 @@
       background-color: #374a6223;
     }
   }
-  
+ 
+  .cta__button{
+    border: 0;
+    outline: none;
+    color: $white;
+    font-size: 14px;
+    font-weight: 300;
+    padding: .75rem 1rem;
+    border-radius: .5rem;
+    font-family: $font-family-inter;
+    background-color: $primary-color;
+    transition: .2s linear;
+    &:hover{
+      color: $yellow-500;
+    }
+  } 
