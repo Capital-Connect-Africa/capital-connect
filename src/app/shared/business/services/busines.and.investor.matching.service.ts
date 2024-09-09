@@ -26,7 +26,6 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
   getCompanyStats(companyId: number){
     return this.read(`${BASE_URL}/statistics/matchmaking/${companyId}?role=company`).pipe(map((res:any) => {
-      debugger
       return res as {
         matched: number,
         requests: number,
@@ -50,7 +49,6 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
   getConnectionRequests(companyId: number) {
     return this.read(`${BASE_URL}/connection-requests/company/${companyId}`).pipe(map(res => {
-      debugger
       return res as MatchedInvestor[]
     }))
   }
