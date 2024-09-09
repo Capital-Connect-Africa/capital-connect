@@ -4,25 +4,29 @@
   gap: .5rem;
   flex: 1;
   display: flex;
-  padding: .75rem 1rem;
+  padding: 1rem;
   overflow: hidden;
-  border-radius: 1rem;
+  cursor: pointer;
+  border-radius: .5rem;
   flex-direction: column;
-  background-color: #EEF4EE;
-  font-family: $font-family-sans-serif;
-
+  transition: .2s linear;
+  background-color: #FEFFFE;
+  font-family: $font-family-inter;
+  &:hover{
+    background-color: $green-50!important;
+  }
   .card__title{
     display: flex;
     align-items: center;
     justify-content: space-between;
     h3 {
       font-weight: 400;
-      line-height: 1.5rem;
-      font-size: 1rem;
+      line-height: 1rem;
+      font-size: 14px;
     }
     span{
       >*{
-        color: #AFCDB3;
+        color: #374A62;
       }
     }
   }
@@ -32,45 +36,44 @@
     display: flex;
     align-items: center;
     h2{
-      font-weight: 700;
-      line-height: 1.5rem;
-      font-size: 2.125rem;
-      color: $primary-color;
+      font-weight: 600;
+      line-height: 1.25rem;
+      font-size: 1.25rem;
+      color: #374A62;
       margin: 0;
     }
     p{
       margin: 0;
+      color: $white;
       font-size: 12px;
       padding: 0 10px;
       border-radius: 4px;
       line-height: 1.5rem;
-      background-color: #AFCDB3;
+      background-color: #374A62;
       text-transform: capitalize;
-      font-family: $font-family-roboto;
+      font-family: $font-family-inter;
     }
+    
   }
   &.featured{
-    color: $white;
-    background-color: $primary-color;
+    color: #374A62;
+    background-color: #FEFFFE;
     .card__title{
       span{
         >*{
-          color: #588378;
+          color: #374A62;
         }
-      }
-      .hr{
-        background-color: #588378;
       }
     }
     .card__body{
       h2{
-        color: $white;
+        color: #374A62;
       }
     }
   }
   .hr{
     width: 100%;
     height: 1px;
-    background-color: #AFCDB3;
+    background-color: #374a6223;
   }
 }
