@@ -1,0 +1,78 @@
+@import './main.scss';
+
+.card{
+    gap: .5rem;
+    flex: 1;
+    display: flex;
+    padding: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: .5rem;
+    flex-direction: column;
+    transition: .2s linear;
+    background-color: #FEFFFE;
+    font-family: $font-family-inter;
+    &:hover{
+      background-color: $green-50!important;
+    }
+    .card__title{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      h3 {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1rem;
+        font-family: $font-family-inter;
+      }
+      span{
+        >*{
+          color: #374A62;
+        }
+      }
+    }
+    .card__body{
+      gap: 1rem;
+      padding: .75rem 0;
+      display: flex;
+      align-items: center;
+      h2{
+        font-weight: 600;
+        line-height: 1.25rem;
+        font-size: 1.25rem;
+        color: #374A62;
+        margin: 0;
+      }
+      p{
+        margin: 0;
+        color: #333;
+        font-size: 13px;
+        line-height: 20px;
+        font-weight: 300!important;
+        font-family: $font-family-inter;
+      }
+      
+    }
+    &.featured{
+      color: #374A62;
+      background-color: #FEFFFE;
+      .card__title{
+        span{
+          >*{
+            color: #374A62;
+          }
+        }
+      }
+      .card__body{
+        h2{
+          color: #374A62;
+        }
+      }
+    }
+    .hr{
+      width: 100%;
+      height: 1px;
+      background-color: #374a6223;
+    }
+  }
+  
