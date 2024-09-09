@@ -1,22 +1,30 @@
 <div class="main">
   <div class="navbar">
     <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>
-    <app-navbar onDashboard="true" />
+    <app-navbar onDashboard="true" [showBanner]="false"/>
   </div>
 
   <main>
     <p class="brand__name">Business Name</p>
-    <div class="left__col">
+    <app-overview />
+    <!-- <div class="left__col"> -->
 <!--      <app-profile-status />-->
-      <app-overview />
-      <app-schedules-section [title]="'Upcoming Schedule'" [body]="'Book an appointment today to talk to one of our Business advisors'"  [subTitle]="'Talk to a representative at Capital connect'" [linkLabel]="'Book appointment'"/>
+      <!-- <app-schedules-section [title]="'Upcoming Schedule'" [body]="'Book an appointment today to talk to one of our Business advisors'"  [subTitle]="'Talk to a representative at Capital connect'" [linkLabel]="'Book appointment'"/> -->
 <!--      <app-schedules-section />-->
 <!--      <app-score-section />-->
-    </div>
+    <!-- </div> -->
+    <section class="grid grid-cols-[auto_25%] lower__section">
+      <div class="">
+
+      </div>
+      <div class="">
+        
+        <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" />
+      </div>
+    </section>
     <div class="right__col">
 <!--      <app-notifications />-->
       <app-assessment-summary [title]="'Schedule a Session with an Advisor'" component="book" [body]="'Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth'" [linkLabel]="'Unlock the whole summary'"/>
-      <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs. Contact us to learn more!'" />
     </div>
   </main>
 </div>

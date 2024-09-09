@@ -1,1 +1,55 @@
 @import "../../../styles/main.scss";
+
+@import "../../../styles/main.scss";
+
+.main{
+  main{
+    gap: 2rem;
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+  }
+}
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      gap: .75rem;
+      grid-template-columns: auto 300px;
+      padding: 1rem 1rem 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+.lower__section{
+  gap: 2rem 1rem;
+  padding: .5rem 0;
+}
