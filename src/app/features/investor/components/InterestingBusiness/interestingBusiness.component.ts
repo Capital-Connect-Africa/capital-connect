@@ -305,7 +305,7 @@ export class InterestingBusinessComponent {
         .cancelInterestWithCompany(businessId, selectedReasons).pipe(
           tap(() => {
             this._feedBackService.success('Interest cancelled successfully.');
-            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
 
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();

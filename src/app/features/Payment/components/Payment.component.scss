@@ -36,7 +36,7 @@
       }
 
       .payment_instructions {
-        margin-bottom: 20px;
+        // margin-bottom: 20px;
 
         ol {
           padding-left: 20px;
@@ -110,24 +110,37 @@
 }
 
 
-
 .payment_instructions{
-    p, ol li{
-      font-size: .9rem;
-      margin: 0;
-      line-height: 1.5rem;
-      padding-right: 1rem;
-      font-family: $font-family-sans-serif;
-      font-weight: $font-weight-normal;
-      text-align: start;
-    }
-  
-    ol{
-      padding-left: 2rem;
-    }
-  
-    ol li{
-      list-style-type: disc;
-      text-align: start;
-    }
+  p, ol li{
+    font-size: .9rem;
+    margin: 0;
+    line-height: 1.5rem;
+    padding-right: 1rem;
+    font-family: $font-family-sans-serif;
+    font-weight: $font-weight-normal;
+    text-align: start;
   }
+
+  ol{
+    padding-left: 2rem;
+  }
+
+  ol li{
+    list-style-type: disc;
+    text-align: start;
+  }
+
+  .cta_group{
+    margin-top: 8cm;
+  }
+
+  .top__txt{
+    margin-bottom: .5cm;
+  }
+  .bottom__txt{
+    margin-top: 1cm;
+  }
+}
+
+
+
