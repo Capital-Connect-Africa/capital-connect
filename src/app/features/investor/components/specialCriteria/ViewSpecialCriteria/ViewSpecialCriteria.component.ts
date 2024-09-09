@@ -184,7 +184,6 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   onQuestionsSubmit() {
     if (this.questionsForm) {
       const formData = this.questionsForm.value
-
       let body = {
         specialCriteriaId: this.specialCriteriaId,
         questionIds: formData.questionIds

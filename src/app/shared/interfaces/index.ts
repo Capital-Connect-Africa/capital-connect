@@ -25,6 +25,15 @@ fundsNeeded: any;
 
 }
 
+export interface ConnectionRequest{
+
+}
+
+export interface ConnectionRequestBody{
+  investorProfileId: number,
+  companyId:number
+}
+
 export interface MatchMakingStats{
   interesting: number,
   declined: number,
