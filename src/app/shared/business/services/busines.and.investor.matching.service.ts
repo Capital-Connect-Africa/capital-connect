@@ -29,6 +29,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       debugger
       return res as {
         matched: number,
+        requests: number,
         connected: number,
         interesting: number,
         declined: number,
@@ -44,6 +45,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   getInvestorProfile(profileId:number){
     return this.readById(`${BASE_URL}/investor-profiles`, profileId).pipe(map(res =>{
       return res as MatchedInvestor;
+    }))
+  }
+
+  getConnectionRequests(companyId: number) {
+    return this.read(`${BASE_URL}/connection-requests/company/${companyId}`).pipe(map(res => {
+      debugger
+      return res as MatchedInvestor[]
     }))
   }
   
