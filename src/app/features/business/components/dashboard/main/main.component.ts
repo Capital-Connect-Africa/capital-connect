@@ -14,13 +14,14 @@ import { NavbarComponent, NavbarToggleService } from '../../../../../core';
 import { SharedModule } from '../../../../../shared';
 import { OverviewComponent } from "../overview/overview.component";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
-    NavbarComponent, ProfileStatusComponent, NotificationsComponent,
+    CommonModule, NavbarComponent, ProfileStatusComponent, NotificationsComponent,
     AssessmentSummaryComponent, AdvertisementSpaceComponent, OverviewSectionComponent,
     SchedulesSectionComponent, ScoreSectionComponent, SharedModule, OverviewComponent, Button, DialogModule, InputTextModule, ModalComponent,
   ],
@@ -34,4 +35,26 @@ export class MainComponent {
     this._toggleService.toggleVisibility();
   }
 
+  progress =[
+    {
+      section: 'Investor Eligibility',
+      progress: 20
+    },
+    {
+      section: 'Investor Preparedness',
+      progress: 40
+    },
+    {
+      section: 'Impact Assessment',
+      progress: 60
+    },
+    {
+      section: 'Business Information',
+      progress: 80
+    },
+    {
+      section: 'Business Profile',
+      progress: 100
+    }
+  ]
 }

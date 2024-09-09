@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../../index";
 import {CardComponent} from "../card/card.component";
@@ -12,5 +12,5 @@ import {PhotoCollageComponent} from "../../../features/business/components/dashb
   styleUrl: './overview-section.component.scss'
 })
 export class OverviewSectionComponent {
-
+  @Input() section_title:string ='Overview'
 }

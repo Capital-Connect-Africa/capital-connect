@@ -1,1 +1,143 @@
 @import "../../../styles/main.scss";
+@import "../../../../../styles/card.scss";
+
+.main{
+  main{
+    gap: 2rem;
+    display: flex;
+    padding: 1rem;
+    flex-direction: column;
+  }
+}
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      gap: .75rem;
+      grid-template-columns: auto 300px;
+      padding: 1rem 1rem 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+.lower__section{
+  display: grid;
+  gap: 2rem 1rem;
+  grid-template-columns: auto 23.9%;
+  .right__col__content{
+    gap: 2rem;
+  }
+  h2{
+    font-weight: 400;
+    line-height: 15px;
+    padding: .8rem 0;
+    color: #000000a8;
+    font-size: 15px!important;
+    font-family: $font-family-inter;
+  }
+}
+
+.card{
+  cursor: default;
+  &.bg__green{
+    background-color: $green-50;
+    &:hover{
+      background-color: $green-50!important;
+    }
+  }
+  &:hover{
+    background-color: #FEFFFE!important;
+  }
+  .card__title{
+    h3 {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1rem;
+      color: #374A62;
+      font-family: $font-family-inter;
+    }
+  }
+}
+
+.session__cards{
+  gap: 1rem;
+}
+
+.cta__button{
+  border: 0;
+  outline: none;
+  color: $white;
+  font-size: 14px;
+  font-weight: 300;
+  padding: .75rem 1rem;
+  border-radius: .5rem;
+  font-family: $font-family-inter;
+  background-color: $primary-color;
+  transition: .2s linear;
+  &:hover{
+    color: $yellow-500;
+  }
+}
+
+.progress__bars{
+  gap: .5rem;
+  display: flex;
+  padding: 1rem;
+  border-radius: .5rem;
+  flex-direction: column;
+  background-color: #FEFFFE;
+  li{
+    color: #374A62;
+    font-size: 11px;
+    font-weight: 400;
+    font-family: $font-family-inter;
+    display: flex;
+    gap: .2rem;
+    flex-direction: column;
+    .values{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bar{
+      height: 6px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 5px;
+      background-color: $green-50;
+      .progress{
+        height: 100%;
+        border-radius: 5px;
+        background-color: $primary-color;
+      }
+    }
+  }
+}
