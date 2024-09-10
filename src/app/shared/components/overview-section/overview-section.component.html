@@ -2,7 +2,7 @@
   <div class="title__bar">
     <h2>{{section_title}}</h2>
   </div>
-  <div class="cards__grid">
+  <div class="cards__grid" [ngClass]="{investor__cards__grid: onInvestor==true}">
         <ng-content></ng-content>
   </div>
 </section>

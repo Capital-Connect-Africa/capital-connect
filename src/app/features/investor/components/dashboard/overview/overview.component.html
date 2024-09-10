@@ -6,7 +6,7 @@
 
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
-<app-overview-section>
+<app-overview-section [onInvestor]="true">
   <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
     (click)="showDialog('matched_businesses')">
     <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
