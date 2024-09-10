@@ -13,13 +13,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsService } from '../../../../questions/services/questions/questions.service';
+import { AngularMaterialModule } from '../../../../../shared';
 
 @Component({
   standalone: true,
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
@@ -202,13 +203,13 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     }
   }
 
-  onQuestionsRemove() {
+  onQuestionsRemove(id:number) {
     if (this.questionsRemoveForm) {
       const formData = this.questionsRemoveForm.value
 
       let body = {
         specialCriteriaId: this.specialCriteriaId,
-        questionIds: formData.questionIds
+        questionIds: [id]
       }
 
       this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
