@@ -268,7 +268,7 @@
 
 
 <!-- Advanced Search Form -->
-<app-modal  [(visible)]="advanced_Search" title="Global Company Search" helperText="Search for a company with various paramaters">
+<app-modal [(visible)]="advanced_Search" title="Global Company Search" helperText="Search for a company with various paramaters">
   <div class="advanced-search rounded-md mb-4 mt-6">
     <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
       <div class="global_search_wrapper">
@@ -286,27 +286,31 @@
               [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
           </div>
 
+
+        </div>
+
+        <div class="flex justifyy-between gap-3">
           <div class="input__wrapper">
             <label class="input__label">Years of Operation</label>
             <p-dropdown class="input__field w-full" formControlName="yearsOfOperation" [options]="yearsOfOperation"
               placeholder="Select years"></p-dropdown>
           </div>
-        </div>
 
-        <div class="flex justifyy-between gap-3">
           <div class="input__wrapper">
             <label for="growthStage" class="input__label">Growth Stages</label>
             <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
               optionLabel="title" placeholder="Select stages" optionValue="title"></p-multiSelect>
           </div>
+        </div>
 
+
+
+        <div class="flex justifyy-between gap-3">
           <div class="input__wrapper">
             <label class="input__label">Number of Employees</label>
             <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
               placeholder="Select employees"></p-dropdown>
           </div>
-
-
 
 
           <div class="input__wrapper">
@@ -335,16 +339,20 @@
           </div>
 
 
-          <div class="input__wrapper">
+
+        </div>
+
+        <div class="flex justifyy-between gap-3">
+                  <div class="input__wrapper">
             <label class="input__label">Funds needed USD$</label>
             <input class="input__field" formControlName="fundsNeeded" type="number" placeholder="Enter funds needed"
               appNumberFormat />
           </div>
-        </div>
 
-        <div class="input__wrapper">
-          <label class="input__label">Full-Time Business
-            <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /></label>
+          <div class="input__wrapper">
+            <label class="input__label">
+              <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /> Full-Time Business</label>
+          </div>
         </div>
 
 

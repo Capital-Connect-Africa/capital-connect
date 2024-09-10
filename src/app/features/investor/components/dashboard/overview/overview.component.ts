@@ -88,6 +88,9 @@ export class OverviewComponent {
     else if(current_modal === 'rejected_businesses'){
       this._router.navigate(['/investor/rejected-businesess']);
     }
+    else if(current_modal === 'connection_requests'){
+      this._router.navigate(['/investor/connection-requests']);
+    }
 
     // this.visible = true
     // this.table =true
