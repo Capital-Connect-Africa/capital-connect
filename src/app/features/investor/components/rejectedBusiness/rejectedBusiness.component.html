@@ -12,8 +12,14 @@
 
   <main>
     <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
+
       <div *ngIf="table" class="text-start search border-0">
-        <h5><strong>Declined Businesses</strong></h5>
+        <h5 class="top__txt">Declined Businesses</h5>
         <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
         <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('declined')">Download List</button>
@@ -23,7 +29,7 @@
       </div>
 
       <div *ngIf="!table">
-        <h6 class="text-xl font-semibold mb-2 text-center"><strong>Rejected Company Information</strong></h6>
+        <h6 class="top__txt">Rejected Company Information></h6>
       </div>
 
       <div class="table-parent">

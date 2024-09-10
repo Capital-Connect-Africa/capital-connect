@@ -148,12 +148,6 @@ th{
   border-radius: 10px;
 }
 
-.search{
-  margin-top: -1cm;
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 
 .business-details{
   padding-bottom: 1rem;
@@ -588,9 +582,9 @@ th{
   }
 
 
-  .matched__top{
-    margin-top: .2cm;
-  }
+  // .matched__top{
+  //   margin-top: .2cm;
+  // }
 
   .submit__btn{
     margin-left: .5cm;
@@ -629,4 +623,44 @@ th{
     margin-left: 8px;
     cursor: pointer;
     font-weight: bold;
+  }
+
+
+
+  // tables 
+  :host ::ng-deep .p-paginator{
+    padding-top: 2rem;
+    justify-content: flex-start!important;
+  }
+  
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      td, th{
+        padding: 1rem 0 1rem .5rem;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .5rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
+    }
+  }
+
+  .top__txt {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1rem;
+    font-family: $font-family-inter;
+    color: #374A62;
   }
