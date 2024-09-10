@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FeedbackService, NavbarComponent } from '../../../../../core';
+import { ConfirmationService, FeedbackService, NavbarComponent } from '../../../../../core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
@@ -29,6 +29,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   private _feedBackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
   private _answer = inject(QuestionsService)
+  private _confirmationService = inject(ConfirmationService);
 
 
   //boolean
@@ -59,6 +60,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   update$!: Observable<unknown>;
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
+  deleteConf$ = new Observable<boolean>();
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
@@ -204,26 +206,38 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   onQuestionsRemove(id:number) {
-    if (this.questionsRemoveForm) {
-      const formData = this.questionsRemoveForm.value
-
-      let body = {
-        specialCriteriaId: this.specialCriteriaId,
-        questionIds: [id]
-      }
-
-      this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
-        this._feedBackService.success('Questions Removed From Special Criteria Successfully')
-
-        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
-          this.specialCriteria = res
-        }))
-
-        this.questionsRemoveForm.reset()
-
-      }))
-
+    let body = {
+      specialCriteriaId: this.specialCriteriaId,
+      questionIds: [id]
     }
+
+    this.deleteConf$ = this._confirmationService.confirm('Are you sure you want to delete this special criteria question?').pipe(tap(conf =>{
+      if(conf){
+        this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
+          this._feedBackService.success('Questions Removed From Special Criteria Successfully')
+    
+          this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+            this.specialCriteria = res
+          }))
+    
+          this.questionsRemoveForm.reset()
+    
+        }))      
+      }
+    }))
+
+    
+ 
+
+
+    // if (this.questionsRemoveForm) {
+    //   const formData = this.questionsRemoveForm.value
+
+    //   let body = {
+    //     specialCriteriaId: this.specialCriteriaId,
+    //     questionIds: [id]
+    //   }
+    // }
   }
 
   onSubmit() {

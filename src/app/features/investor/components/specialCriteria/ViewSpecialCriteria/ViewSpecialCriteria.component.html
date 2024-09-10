@@ -6,6 +6,10 @@
 <ng-container *ngIf="removeQuestions$ | async"></ng-container>
 <ng-container *ngIf="addCustomQuestions$ | async"></ng-container>
 <ng-container *ngIf="createAnwer$ | async"></ng-container>
+<ng-container *ngIf="deleteConf$ | async"></ng-container>
+
+
+
 
 
 
@@ -15,12 +19,13 @@
   </div>
 
   <h3 class="special__criteria__title"><strong>{{ specialCriteria.title }}</strong></h3>
+  <p class="special__criteria__description">{{ specialCriteria.description }}</p>
+
 
   <div class="main__content">
     <section class="col__right card">
       <div *ngIf="!updatePage">
 
-        <p class="special__criteria__description">{{ specialCriteria.description }}</p>
         <p class="ques"><strong>{{ specialCriteria.title }} questions</strong></p>
 
         <div *ngFor="let question of specialCriteria.questions" class="question__card card">
