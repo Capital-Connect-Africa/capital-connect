@@ -14,7 +14,8 @@ const routes: Routes = [
   { path: 'investor-page', loadComponent: () => import('../pages/InvestorPage/investorPage.component').then(c => c.InvestorPage) },
   { path: 'special-criteria', loadComponent: () => import('../pages/SpecialCriteria/SpecialCriteriaPage.component').then(c => c.SpecialCriteriaPage) },
   { path: 'create-special-criteria', loadComponent: () => import('../pages/SpecialCriteria/CreateSpecialCriteriaPage/CreateSpecialCriteriaPage.component').then(c => c.CreateSpecialCriteriaPageComponent) },
-  { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) }
+  { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) },
+  { path: 'connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],

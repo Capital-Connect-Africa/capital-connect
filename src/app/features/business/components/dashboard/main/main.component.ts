@@ -16,6 +16,7 @@ import { OverviewComponent } from "../overview/overview.component";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { CommonModule } from '@angular/common';
 import { ProBadgeComponent } from "../../../../../core/components/pro-badge/pro-badge.component";
+import { CompanyStateService } from '../../../../organization/services/company-state.service';
 
 
 @Component({
@@ -32,7 +33,10 @@ import { ProBadgeComponent } from "../../../../../core/components/pro-badge/pro-
 })
 export class MainComponent {
   visible = true
-  private _toggleService = inject(NavbarToggleService)
+  private _toggleService = inject(NavbarToggleService);
+  private _companyStateService =inject(CompanyStateService);
+  businessName =this._companyStateService.currentCompany.name;
+
   toggleVisibility() {
     this._toggleService.toggleVisibility();
   }

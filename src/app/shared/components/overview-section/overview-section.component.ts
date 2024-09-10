@@ -12,5 +12,6 @@ import {PhotoCollageComponent} from "../../../features/business/components/dashb
   styleUrl: './overview-section.component.scss'
 })
 export class OverviewSectionComponent {
-  @Input() section_title:string ='Overview'
+  @Input() onInvestor: boolean =false;
+  @Input() section_title:string ='Overview';
 }

@@ -10,18 +10,19 @@
     border-radius: .5rem;
     flex-direction: column;
     transition: .2s linear;
-    background-color: #FEFFFE;
+    background-color: #89c789;
     font-family: $font-family-inter;
     &:hover{
-      background-color: $green-50!important;
+      
+      background-color: gold;
     }
     .card__title{
       display: flex;
       align-items: center;
       justify-content: space-between;
       h3 {
-        font-size: 14px;
-        font-weight: 400;
+        font-size: 16px;
+        font-weight: 600;
         line-height: 1rem;
         font-family: $font-family-inter;
       }
@@ -45,7 +46,7 @@
       }
       p{
         margin: 0;
-        color: #333;
+        // color: #333;
         font-size: 13px;
         line-height: 20px;
         font-weight: 300!important;
@@ -55,7 +56,7 @@
     }
     &.featured{
       color: #374A62;
-      background-color: #FEFFFE;
+      // background-color: #FEFFFE;
       .card__title{
         span{
           >*{

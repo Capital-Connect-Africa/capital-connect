@@ -6,6 +6,10 @@
 <ng-container *ngIf="removeQuestions$ | async"></ng-container>
 <ng-container *ngIf="addCustomQuestions$ | async"></ng-container>
 <ng-container *ngIf="createAnwer$ | async"></ng-container>
+<ng-container *ngIf="deleteConf$ | async"></ng-container>
+
+
+
 
 
 
@@ -15,35 +19,47 @@
   </div>
 
   <h3 class="special__criteria__title"><strong>{{ specialCriteria.title }}</strong></h3>
+  <p class="special__criteria__description">{{ specialCriteria.description }}</p>
+
 
   <div class="main__content">
     <section class="col__right card">
       <div *ngIf="!updatePage">
-        
-        <p class="special__criteria__description">{{ specialCriteria.description }}</p>
+
         <p class="ques"><strong>{{ specialCriteria.title }} questions</strong></p>
+
         <div *ngFor="let question of specialCriteria.questions" class="question__card card">
-          <p class="question__text"><strong class="ques">{{ question.text }}</strong></p>
+          <div class="flex justify-between">
+            <div><p class="question__text"><strong class="ques">{{ question.text }}</strong></p></div>
+            <div class="action__icons">
+              <!-- <button mat-icon-button>
+                <mat-icon style="color: rgb(4, 56, 4); cursor: pointer;">edit</mat-icon>
+              </button> -->
+              <button mat-icon-button>
+                <mat-icon style="color: rgb(216, 9, 9); cursor: pointer;" (click)="onQuestionsRemove(question.id)">delete</mat-icon>
+              </button>
+            </div>
+          </div>
 
           <div *ngIf="question.type === 'TRUE_FALSE'">
-            <label *ngFor="let answer of question.answers" >
+            <label *ngFor="let answer of question.answers">
               <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />
               {{ answer.text }}
             </label>
           </div>
 
           <div *ngIf="question.type === 'SHORT_ANSWER'">
-            <input type="text" placeholder="OPEN" name="question_{{ question.id }}" class="input__field"/>
+            <input type="text" placeholder="OPEN" name="question_{{ question.id }}" class="input__field" />
           </div>
 
           <div *ngIf="question.type === 'SINGLE_CHOICE'">
             <label *ngFor="let answer of question.answers">
-              <input type="radio" name="question_{{ question.id }}" [value]="answer.text"/>{{ answer.text }}</label>
+              <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}</label>
           </div>
 
           <div *ngIf="question.type === 'MULTIPLE_CHOICE'">
             <label *ngFor="let answer of question.answers">
-              <input type="checkbox" name="question_{{ question.id }}" [value]="answer.text"/>{{ answer.text }}</label>
+              <input type="checkbox" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}</label>
           </div>
         </div>
       </div>
@@ -58,7 +74,8 @@
 
             <div class="input__wrapper">
               <label class="input__label">Description<sup>*</sup></label>
-              <input class="input__field" formControlName="description" type="text" placeholder="Enter Criteria Description" />
+              <input class="input__field" formControlName="description" type="text"
+                placeholder="Enter Criteria Description" />
             </div>
 
             <div class="cta__group">
@@ -75,26 +92,25 @@
           <div class="form_content__container">
             <div class="input__wrapper">
               <label class="input__label">Add Questions To Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions" 
-              optionValue="id"
-              optionLabel="text" placeholder="Select questions"></p-multiSelect>
+              <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions" optionValue="id"
+                optionLabel="text" placeholder="Select questions"></p-multiSelect>
             </div>
             <div class="cta__group">
-              <a class="cta__link" (click)="addCustomQues()">Did not find the question? <strong>add custom questions here</strong></a>
+              <a class="cta__link" (click)="addCustomQues()">Did not find the question? <strong>add custom questions
+                  here</strong></a>
               <button class="btn btn-primary" [disabled]="!questionsForm.valid">Add Selected Questions</button>
             </div>
           </div>
         </form>
       </div>
 
-      <div *ngIf="updatePage" class="form__section">
+      <!-- <div *ngIf="updatePage" class="form__section">
         <form [formGroup]="questionsRemoveForm" (ngSubmit)="onQuestionsRemove()">
           <div class="form_content__container">
             <div class="input__wrapper">
               <label class="input__label">Remove Questions From Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions" optionLabel="text" 
-              optionValue="id"
-              placeholder="Select questions"></p-multiSelect>
+              <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions"
+                optionLabel="text" optionValue="id" placeholder="Select questions"></p-multiSelect>
             </div>
             <div class="cta__group">
               <a></a>
@@ -102,16 +118,16 @@
             </div>
           </div>
         </form>
-      </div>
+      </div> -->
     </section>
 
     <section class="left__col flex justify-between ">
-      <div>
+      <div  *ngIf="!updatePage">
         <button (click)="onUpdate()" class="btn btn-primary">Update Criteria</button>
       </div>
 
       <div *ngIf="updatePage">
-        <button (click)="cancel()" class="btn btn-danger">Cancel</button>
+        <button (click)="cancel()" class="btn btn-secondary">Back</button>
       </div>
 
     </section>
@@ -176,7 +192,7 @@
 
   <form *ngIf="add_custom_answers" [formGroup]="customAnswersForm" (ngSubmit)="onCustomAnswersSubmit()">
     <div class="form_content__container">
-     <p>{{customQuestionResponse.text}}</p>
+      <p>{{customQuestionResponse.text}}</p>
 
       <div class="input__wrapper">
         <div class="form__row">
@@ -199,9 +215,11 @@
 
 
       <div class="cta__group">
-        <button *ngIf="multiple_answers" type="button" class="btn btn-danger text-light cta_a" (click)="cancel()">Cancel</button>
+        <button *ngIf="multiple_answers" type="button" class="btn btn-danger text-light cta_a"
+          (click)="cancel()">Cancel</button>
 
-        <button class="btn btn-primar" type="submit" [disabled]="!customAnswersForm.valid" [ngClass]="{'disabled-btn': !customAnswersForm}">Submit {{ multiple_answers ? "And Add Another":""}}</button>
+        <button class="btn btn-primar" type="submit" [disabled]="!customAnswersForm.valid"
+          [ngClass]="{'disabled-btn': !customAnswersForm}">Submit {{ multiple_answers ? "And Add Another":""}}</button>
       </div>
     </div>
   </form>

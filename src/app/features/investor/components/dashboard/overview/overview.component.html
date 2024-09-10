@@ -6,7 +6,7 @@
 
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
-<app-overview-section>
+<app-overview-section [onInvestor]="true">
   <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
     (click)="showDialog('matched_businesses')">
     <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
@@ -15,6 +15,11 @@
   <app-card [detail]="{title: 'Businesses Interested In', value: MatchMakingStats.interesting.toString() , featured: true}"
     (click)="showDialog('interesting_businesses')">
     <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting</p>
+  </app-card>
+
+  <app-card [detail]="{title: 'Connection Requests', value: MatchMakingStats.requested.toString() , featured: true}"
+    (click)="showDialog('connection_requests')">
+    <p class="helper__text text__yellow">{{ MatchMakingStats.requested.toString() }} Connection Requests</p>
   </app-card>
 
   <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"

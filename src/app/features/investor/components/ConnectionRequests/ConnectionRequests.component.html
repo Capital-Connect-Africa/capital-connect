@@ -1,8 +1,3 @@
-<ng-container *ngIf="interestingCompanies$ | async"></ng-container>
-<ng-container *ngIf="markAsInteresting$ | async"></ng-container>
-<ng-container *ngIf="connectWithCompany$ | async"></ng-container>
-<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
-<ng-container *ngIf="declineReasons$ | async"></ng-container>
 <ng-container *ngIf="scoring$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
@@ -11,7 +6,10 @@
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="matchMakingStats$ | async"></ng-container>
-<ng-container *ngIf="search$ | async"></ng-container>
+<ng-container *ngIf="connectionRequest$ | async"></ng-container>
+<ng-container *ngIf="deleteConnectionRequest$ | async"></ng-container>
+<ng-container *ngIf="deleteConf$ | async"></ng-container>
+<ng-container *ngIf="updateConnectionRequest$ | async"></ng-container>
 
 
 <div class="main">
@@ -21,21 +19,12 @@
 
   <main>
     <div class="left__col">
-      <div class="flex justify-start" *ngIf="selectedBusiness">
-        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
-          Back to List
-        </button>
-      </div>
-
-
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
-        <h3 class="top__txt" >Interesting Businesses</h3>
-        <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
+        <h5 class="top__txt " >Connection Requests</h5>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('interesting')">Download List</button>
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!interestingBusinesses.length">
-          No interesting businesses found. <br /> Check again later.
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
+          No connection requests found. <br /> Check again later.
         </div>
         </div>
       </div>
@@ -52,20 +41,16 @@
               <td class="flex font-bold space-x-2">Actions</td>
             </tr>
 
-            <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
-              class="border-b border-gray-200">
+            <tr *ngFor="let connection of connectionRequests; let i = index; trackBy: trackByIndex"  class="border-b border-gray-200">
               <td class="font-bold">{{ i + 1 }}</td>
-              <td class="">{{ business.company.country }}</td>
-              <td class="">{{business.company.fundsNeeded}}</td>
-              <td class="">{{ business.company.businessSubsector }}</td>
+              <td class="">{{ connection.company.country }}</td>
+              <td class="">{{connection.company.fundsNeeded}}</td>
+              <td class="">{{ connection.company.businessSubsector }}</td>
               <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                  (click)="openModal(business.company.id)">Decline</button>
-
-                <div class="py-auto eye" (click)="showDetails(business)">
-                  <mat-icon class="small-icon">visibility</mat-icon>
-                </div>
+                <!-- <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button> -->
+                <mat-icon class="small-icon" style="color: green; cursor: pointer;" (click)="updateConnectionRequest(connection)">check_circle</mat-icon>
+                <!-- <mat-icon class="small-icon" style="color: blue; cursor: pointer;" (click)="viewConnectionRequest()">visibility</mat-icon>            -->
+                <mat-icon class="small-icon" style="color: red; cursor: pointer;" (click)="deleteConnectionRequest(connection.id)">delete</mat-icon>
               </td>
             </tr>
           </tbody>
@@ -76,7 +61,7 @@
         </mat-paginator>
         <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
           <div class="mb-6 details company__info">
-            <h3 class="top__txt ">Interesting Businesses Information</h3>
+            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesses Information</strong></h6>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
               <div>
                 <p class="font-bold"><strong>Country: </strong><span class="font-light    w-20 break-words max-w-ful">{{
@@ -127,7 +112,7 @@
             </div>
 
             <hr />
-            <h3 class="top__txt ">Business Feedback</h3>
+            <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
             <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p><strong>Annual Revenue for the last three years</strong></p>
@@ -173,9 +158,7 @@
             </div>
 
             <hr />
-
-            <h3 class="top__txt ">Eligibility Results</h3>
-          
+            <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
             <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">
@@ -193,7 +176,7 @@
             </ng-container>
 
             <hr />
-            <h3 class="top__txt ">Preparedness Results</h3>
+            <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
             <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">
@@ -231,24 +214,3 @@
     </div>
   </main>
 </div>
-
-
-<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
-  <div class="form_content__container">
-    <div class="input__wrapper">
-      <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-      <p-multiSelect 
-      class="input__field p-6"  
-      styleClass="w-full gap-4" 
-      optionValue="reason"
-       [options]="declineReasons"
-        formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
-  
-      <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
-        <div class="cta__group">
-          <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
-        </div>
-      </div>
-    </div>
-  </div> 
-</app-modal>
