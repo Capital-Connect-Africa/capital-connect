@@ -44,7 +44,7 @@
   </app-card>
 
   <app-card (click)="showConnectionRequests()"
-    [detail]="{title: 'Connection Requests', value: (stats.declined || 0).toString(), featured: true}">
+    [detail]="{title: 'Connection Requests', value: (stats.requests || 0).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
 

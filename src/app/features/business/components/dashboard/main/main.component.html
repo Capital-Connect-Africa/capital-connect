@@ -5,13 +5,13 @@
   </div>
 
   <main>
-    <p class="brand__name">Business Name</p>
+    <p class="brand__name">{{businessName}}</p>
     <app-overview />
-    <section class="grid grid-cols-[auto_25%] lower__section">
+    <section class="lower__section">
       <div class="">
         <div>
           <h2>Sessions</h2>
-          <div class="grid grid-cols-2 session__cards">
+          <div class="session__cards">
             <app-pro-badge />
             <app-assessment-summary [title]="'Session with an Advisor'" component="book" [body]="'Book a session with an advisor at Capital Connect Africa to gain personalized insights, expert advice, and tailored strategies for your business growth'" [linkLabel]="'Unlock the whole summary'"/>
           </div>
