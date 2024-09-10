@@ -14,12 +14,6 @@
 <ng-container *ngIf="search$ | async"></ng-container>
 
 
-
-
-
-
-
-
 <div class="main">
   <div class="navbar">
     <app-navbar onDashboard="true" [showBanner]="false" />
@@ -27,9 +21,16 @@
 
   <main>
     <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
+
+
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
-        <h5><strong>Interesting Businesses</strong></h5>
+        <h3 class="top__txt" >Interesting Businesses</h3>
         <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
         <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('interesting')">Download List</button>
@@ -75,7 +76,7 @@
         </mat-paginator>
         <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
           <div class="mb-6 details company__info">
-            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesses Information</strong></h6>
+            <h3 class="top__txt ">Interesting Businesses Information</h3>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
               <div>
                 <p class="font-bold"><strong>Country: </strong><span class="font-light    w-20 break-words max-w-ful">{{
@@ -126,7 +127,7 @@
             </div>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
+            <h3 class="top__txt ">Business Feedback</h3>
             <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p><strong>Annual Revenue for the last three years</strong></p>
@@ -172,7 +173,9 @@
             </div>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
+
+            <h3 class="top__txt ">Eligibility Results</h3>
+          
             <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">
@@ -190,7 +193,7 @@
             </ng-container>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
+            <h3 class="top__txt ">Preparedness Results</h3>
             <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">

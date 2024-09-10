@@ -34,7 +34,7 @@ import { CountriesService } from '../../../../shared/services/countries.service'
 import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
 import { InvestorScreensService } from '../../services/investor.screens.service';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
-
+import { TableModule } from 'primeng/table';
 
 
 @Component({
@@ -47,7 +47,7 @@ import { BusinessOnboardingScoringService } from '../../../../shared/services/bu
     CardComponent, CommonModule,  AlertComponent,
     DialogModule, ReactiveFormsModule, ModalComponent,
     RemoveQuotesPipe, 
-    MultiSelectModule, ReactiveFormsModule,DropdownModule
+    MultiSelectModule, ReactiveFormsModule,DropdownModule,TableModule
   ],
   templateUrl: './matchedBusiness.component.html',
   styleUrl: './matchedBusiness.component.scss'

@@ -36,16 +36,20 @@
   <main>
     <p class="brand__name">Business Name</p>
     <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedMatchedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
 
-      <div *ngIf="table" class="matched__top ml-5 text-start search border-0">
+      <div *ngIf="table" class="matched__top  search border-0">
         <div class="flex justify-between">
           <div>
-            <h5><strong>Matched Businesses</strong></h5>
+            <h3 class="top__txt">Matched Businesses</h3>
           </div>
 
           <div class="flex justify-between">
             <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-            <!-- <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('matched')">Download Matched Company List</button> -->
             <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Global Company
               Search</button>
           </div>
@@ -60,150 +64,168 @@
 
       </div>
 
-      <div class="table-parent">
-        <div class="">
-          <table class="table" *ngIf="table">
-            <tbody>
-              <tr class="border-b border-gray-200">
-                <td class="font-bold">#</td>
-                <td class="font-bold">Country</td>
-                <td class="font-bold">Business Sector</td>
-                <td class="font-bold">Business Sub Sector</td>
-                <td class="font-bold">Growth Stage</td>
-                <td class="flex font-bold space-x-2">Actions</td>
-              </tr>
+      <div class="flex flex-col gap-4" *ngIf="table">
+        <p-table [value]="matchedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="false" [rows]="10">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Country</th>
+              <th>Business Sector</th>
+              <th>Business Sub Sector</th>
+              <th>Growth Stage</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
 
+          <ng-template pTemplate="body" let-business>
+            <tr>
+              <td class="">{{ business.country ? business.country : "N/A" }}</td>
+              <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
+              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+              <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
+              <td class="flex space-x-1 items-center gap-2 ">
+                <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="openModal(business.id)">Decline</button>
 
-              <tr *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex"
-                class="border-b border-gray-200">
-                <td class="font-bold">{{ i + 1 }}</td>
-                <td class="">{{ business.country }}</td>
-                <td class="">{{ business.businessSector }}</td>
-                <td class="">{{ business.businessSubsector }}</td>
-                <td class="">{{ business.growthStage }}</td>
-                <td class="flex space-x-2 justify-center p-2">
-                  <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-                  <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                    (click)="openModal(business.id)">Decline</button>
-
-                  <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
-                    <mat-icon class="small-icon">visibility</mat-icon>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-
-
-
-          <!-- Matched Business Extra Details -->
-          <div *ngIf="selectedMatchedBusiness" class="mx-auto shadow-xl p-6 business-details">
-            <!-- Company Details -->
-            <div class="mb-6 details company__info">
-              <!-- <hr /> -->
-              <h6 class="text-xl font-semibold mb-2"><strong>Matched Busineses Information</strong></h6>
-              <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
-
-                <div>
-                  <p class="font-bold"><strong>Country: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.country }}</span></p>
+                <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
                 </div>
-                <div>
-                  <p class="font-bold"><strong>Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.businessSector }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold"><strong>Sub Sector: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.businessSubsector }}</span></p>
-                </div>
+              </td>
+            </tr>
 
-                <div class="">
-                  <p class="font-bold"><strong>Products and Services: </strong>
-                    <span
-                      class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices
-                      }}</span>
-                  </p>
-                </div>
+          </ng-template>
 
-                <div>
-                  <p class="font-bold"><strong>Registration Structure: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.registrationStructure }}</span></p>
-                </div>
+        </p-table>
 
-                <div>
-                  <p class="font-bold"><strong>Growth Stage: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.growthStage }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold"><strong>Number of Employees: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.numberOfEmployees }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold"><strong>Full Time Business: </strong><span
-                      class="font-light   w-20 break-words max-w-ful">{{
-                      selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
-                </div>
-                <div>
-                  <p class="text-gray-700 font-medium"><strong>Investor Eligibility Score: </strong><span
-                      class="font-normal">{{investorEligibilityScore}} %</span> </p>
-                </div>
-                <div>
-                  <p class="text-gray-700 font-medium"><strong>Investor Preparedness Score: </strong><span
-                      class="font-normal">{{ investorPreparednessScore }} %</span></p>
-                </div>
-              </div>
-
-              <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
-              <hr />
-              <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
-              <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
+      </div>
 
 
+      <div *ngIf="selectedMatchedBusiness" class="mx-auto shadow-xl p-6 business-details">
+        <!-- Company Details -->
+        <div class="mb-6 details company__info">
+          <!-- <hr /> -->
+          <h3 class="top__txt ">Matched Busineses Information</h3>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
 
-                <div>
-                  <p><strong>How much investment the business is seeking to raise</strong></p>
-                  <p>{{selectedMatchedBusiness.fundsNeeded}}</p>
-                </div>
-
-                <div>
-                  <p><strong>Preferred structure for the capital raise</strong></p>
-                  <p>N/A</p>
-                </div>
-
-                <div>
-                  <p><strong>Use of funds</strong></p>
-                  <ul *ngIf="useOfFunds.length >= 1">
-                    <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
-                  </ul>
-                  <p *ngIf="useOfFunds.length < 1">N/A</p>
-                </div>
-
-              </div>
-
-              <hr />
+            <div>
+              <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.businessSubsector }}</span></p>
             </div>
 
-            <!-- Back Button -->
-            <div class="flex justify-end details">
-              <td class="flex space-x-2 justify-center p-2">
-                <button class="btn  px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
-                <button class="btn btn-danger px-3 py-1"
-                  (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
-                <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
-                  Back to List
-                </button>
-              </td>
+            <div class="">
+              <p class="font-bold"><strong>Products and Services: </strong>
+                <span
+                  class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices
+                  }}</span>
+              </p>
+            </div>
+
+            <div>
+              <p class="font-bold"><strong>Registration Structure: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.registrationStructure }}</span></p>
+            </div>
+
+            <div>
+              <p class="font-bold"><strong>Growth Stage: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Number of Employees: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.numberOfEmployees }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Full Time Business: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+            </div>
+            <div>
+              <p class="text-gray-700 font-medium"><strong>Investor Eligibility Score: </strong><span
+                  class="font-normal">{{investorEligibilityScore}} %</span> </p>
+            </div>
+            <div>
+              <p class="text-gray-700 font-medium"><strong>Investor Preparedness Score: </strong><span
+                  class="font-normal">{{ investorPreparednessScore }} %</span></p>
             </div>
           </div>
+
+          <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
+          <hr />
+          <h3 class="top__txt ">Business Feedback</h3>
+          <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+
+            <div>
+              <p><strong>How much investment the business is seeking to raise</strong></p>
+              <p>{{selectedMatchedBusiness.fundsNeeded}}</p>
+            </div>
+
+            <div>
+              <p><strong>Preferred structure for the capital raise</strong></p>
+              <p>N/A</p>
+            </div>
+
+            <div>
+              <p><strong>Use of funds</strong></p>
+              <ul *ngIf="useOfFunds.length >= 1">
+                <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
+              </ul>
+              <p *ngIf="useOfFunds.length < 1">N/A</p>
+            </div>
+
+          </div>
+
+          <hr />
+        </div>
+
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <td class="flex space-x-2 justify-center p-2">
+            <button class="btn  px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+            <button class="btn btn-danger px-3 py-1" (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
+            <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+              Back to List
+            </button>
+          </td>
         </div>
       </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -268,7 +290,8 @@
 
 
 <!-- Advanced Search Form -->
-<app-modal [(visible)]="advanced_Search" title="Global Company Search" helperText="Search for a company with various paramaters">
+<app-modal [(visible)]="advanced_Search" title="Global Company Search"
+  helperText="Search for a company with various paramaters">
   <div class="advanced-search rounded-md mb-4 mt-6">
     <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
       <div class="global_search_wrapper">
@@ -343,7 +366,7 @@
         </div>
 
         <div class="flex justifyy-between gap-3">
-                  <div class="input__wrapper">
+          <div class="input__wrapper">
             <label class="input__label">Funds needed USD$</label>
             <input class="input__field" formControlName="fundsNeeded" type="number" placeholder="Enter funds needed"
               appNumberFormat />
