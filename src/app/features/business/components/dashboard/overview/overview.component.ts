@@ -66,7 +66,7 @@ export class OverviewComponent {
 
   eligibilityAnswers: UserSubmissionResponse[] = [];
 
-  stats = { matched: 0, connected: 0, interesting: 0, declined: 0,}
+  stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requests: 0}
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
 
