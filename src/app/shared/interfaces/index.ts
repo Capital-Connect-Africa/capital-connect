@@ -25,8 +25,14 @@ fundsNeeded: any;
 
 }
 
-export interface ConnectionRequest{
 
+export interface ConnectionRequest{
+  id: number;
+  uuid: string;
+  isApproved: boolean | null;
+  createdAt: string;
+  updatedAt: string;
+  company: MatchedBusiness;
 }
 
 export interface ConnectionRequestBody{
@@ -34,7 +40,15 @@ export interface ConnectionRequestBody{
   companyId:number
 }
 
+export interface updateConnectionRequestBody{
+  investorProfileId: number,
+  companyId:number,
+  isApproved: boolean | null
+}
+
+
 export interface MatchMakingStats{
+  requested: number;
   interesting: number,
   declined: number,
   connected: number

@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FeedbackService, NavbarComponent } from '../../../../../core';
+import { ConfirmationService, FeedbackService, NavbarComponent } from '../../../../../core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
@@ -13,13 +13,14 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsService } from '../../../../questions/services/questions/questions.service';
+import { AngularMaterialModule } from '../../../../../shared';
 
 @Component({
   standalone: true,
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
@@ -28,6 +29,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   private _feedBackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
   private _answer = inject(QuestionsService)
+  private _confirmationService = inject(ConfirmationService);
 
 
   //boolean
@@ -58,6 +60,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   update$!: Observable<unknown>;
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
+  deleteConf$ = new Observable<boolean>();
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
@@ -202,27 +205,39 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     }
   }
 
-  onQuestionsRemove() {
-    if (this.questionsRemoveForm) {
-      const formData = this.questionsRemoveForm.value
-
-      let body = {
-        specialCriteriaId: this.specialCriteriaId,
-        questionIds: formData.questionIds
-      }
-
-      this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
-        this._feedBackService.success('Questions Removed From Special Criteria Successfully')
-
-        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
-          this.specialCriteria = res
-        }))
-
-        this.questionsRemoveForm.reset()
-
-      }))
-
+  onQuestionsRemove(id:number) {
+    let body = {
+      specialCriteriaId: this.specialCriteriaId,
+      questionIds: [id]
     }
+
+    this.deleteConf$ = this._confirmationService.confirm('Are you sure you want to delete this special criteria question?').pipe(tap(conf =>{
+      if(conf){
+        this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
+          this._feedBackService.success('Questions Removed From Special Criteria Successfully')
+    
+          this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+            this.specialCriteria = res
+          }))
+    
+          this.questionsRemoveForm.reset()
+    
+        }))      
+      }
+    }))
+
+    
+ 
+
+
+    // if (this.questionsRemoveForm) {
+    //   const formData = this.questionsRemoveForm.value
+
+    //   let body = {
+    //     specialCriteriaId: this.specialCriteriaId,
+    //     questionIds: [id]
+    //   }
+    // }
   }
 
   onSubmit() {
