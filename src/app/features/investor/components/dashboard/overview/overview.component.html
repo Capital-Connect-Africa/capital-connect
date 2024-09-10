@@ -1,9 +1,5 @@
 <ng-container *ngIf="matchedCompanies$ | async"></ng-container>
-<ng-container *ngIf="markAsInteresting$ | async"></ng-container>
-<ng-container *ngIf="connectWithCompany$ | async"></ng-container>
-<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
-<ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
-
+<!-- <ng-container *ngIf="connectionRequestsCount$ | async"></ng-container> -->
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
 <app-overview-section>
@@ -15,6 +11,11 @@
   <app-card [detail]="{title: 'Businesses Interested In', value: MatchMakingStats.interesting.toString() , featured: true}"
     (click)="showDialog('interesting_businesses')">
     <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting</p>
+  </app-card>
+
+  <app-card [detail]="{title: 'Connection Requests', value: connectionRequestsCount.toString() , featured: true}"
+    (click)="showDialog('connection_requests')">
+    <p class="helper__text text__yellow">{{ connectionRequestsCount.toString() }} Connection Requests</p>
   </app-card>
 
   <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"
@@ -29,146 +30,3 @@
 </app-overview-section>
 </ng-container>
 
-<app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length"
-  [helperText]="getModalHelperText()">
-  <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!modalData.length">
-    No {{ getModalTitle().toLowerCase() }} found. <br /> Check again later.
-  </div>
-
-
-
-  <div class="table-parent">
-    <div *ngIf="currentModal === 'matched_businesses'; else showInterestingBusinesses">
-      <table class="table" *ngIf="table">
-        <tbody>
-          <tr class="border-b border-gray-200">
-            <td class="font-bold">#</td>
-            <td class="font-bold">Country</td>
-            <td class="font-bold">Funds Raise</td>
-            <td class="font-bold">Business Sub Sector</td>
-            <td class="font-bold">Growth Stage</td>
-            <td class="flex font-bold space-x-2">Actions/Info</td>
-          </tr>
-
-
-          <tr *ngFor="let business of matchedBusinesses; let i = index; trackBy: trackByIndex"
-            class="border-b border-gray-200">
-            <td class="font-bold">{{ i + 1 }}</td>
-            <td class="">{{ business.country }}</td>
-            <td class="">N/A</td>
-            <td class="">{{ business.businessSubsector }}</td>
-            <td class="">{{ business.growthStage }}</td>
-            <td class="flex space-x-2 justify-center p-2">
-              <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-              <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(business.id)">Decline</button> -->
-              <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
-                <mat-icon class="small-icon">visibility</mat-icon>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
-    <ng-template #showInterestingBusinesses>
-      <div *ngIf="currentModal === 'interesting_businesses'">
-        <table class="table" *ngIf="table">
-          <tbody>
-            <tr class="border-b border-gray-200">
-              <td class="font-bold">#</td>
-              <td class="font-bold">Country</td>
-              <td class="font-bold">Funds Raise</td>
-              <td class="font-bold">Business Sub Sector</td>
-              <td class="flex font-bold space-x-2">Actions</td>
-            </tr>
-
-            <tr *ngFor="let business of interestingBusinesses; let i = index; trackBy: trackByIndex"
-              class="border-b border-gray-200">
-              <td class="font-bold">{{ i + 1 }}</td>
-              <td class="">{{ business.company.country }}</td>
-              <td class="">N/A</td>
-              <td class="">{{ business.company.businessSubsector }}</td>
-              <td class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
-                <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(business.company.id)">Decline</button> -->
-
-                  <div class="py-auto eye" (click)="showDetails(business)">
-                    <mat-icon class="small-icon">visibility</mat-icon>
-                  </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-  
-      </div>
-    </ng-template>
-
-    <div *ngIf="currentModal === 'connected_businesses'">
-      <table class="table" *ngIf="table">
-        <tbody>
-          <tr class="border-b border-gray-200">
-            <td class="font-bold">#</td>
-            <td class="font-bold">Country</td>
-            <td class="font-bold">Funds Raise</td>
-            <td class="font-bold">Business Sub Sector</td>
-            <td class="font-bold">Growth Stage</td>
-            <td class="flex font-bold space-x-2">Actions</td>
-          </tr>
-
-
-          <tr *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex"
-            class="border-b border-gray-200">
-            <td class="font-bold">{{ i + 1 }}</td>
-            <td class="">{{ business.company.country }}</td>
-            <td class="">N/A</td>
-            <td class="">{{ business.company.businessSubsector }}</td>
-            <td class="">{{ business.company.growthStage }}</td>
-            <td class="flex space-x-2 justify-center p-2">
-              <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(business.company.id)">Decline</button> -->
-
-                <div class="py-auto eye" (click)="showDetails(business)">
-                  <mat-icon class="small-icon">visibility</mat-icon>
-                </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div>
-
-    <div *ngIf="currentModal === 'rejected_businesses'">
-      <table class="table" *ngIf="table">
-        <tbody>
-          <tr class="border-b border-gray-200">
-            <td class="font-bold">#</td>
-            <td class="font-bold">Country</td>
-            <td class="font-bold">Funds Raise</td>
-            <td class="font-bold">Business Sub Sector</td>
-            <td class="font-bold">Growth Stage</td>
-            <td class="flex font-bold space-x-2">Actions</td>
-          </tr>
-
-
-          <tr *ngFor="let business of rejectedBusinesses; let i = index; trackBy: trackByIndex"
-            class="border-b border-gray-200">
-            <td class="font-bold">{{ i + 1 }}</td>
-            <td class="">{{ business.company.country }}</td>
-            <td class="">N/A</td>
-            <td class="">{{ business.company.businessSubsector }}</td>
-            <td class="">{{ business.company.growthStage }}</td>
-
-            <td  class="flex space-x-2 justify-center p-2">
-            <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.company.id)">Interested</button>
-              <div class="py-auto eye" (click)="showDetails(business)">           
-                <mat-icon class="small-icon">visibility</mat-icon>
-              </div>
-            </td>
-        
-          </tr>
-        </tbody>
-      </table>
-
-    </div>  
-  </div>
-</app-modal>

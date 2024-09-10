@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable, tap } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody} from "../../interfaces";
+import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody} from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
 import { Company } from "../../../features/organization/interfaces";
@@ -192,9 +192,9 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     );
   }
 
+
   //create a connection request
   createAConnectionRequest(body: ConnectionRequestBody): Observable<void> {
-    let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/connection-requests`, body).pipe(
       map(() => void 0) 
     );
@@ -205,25 +205,28 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as ConnectionRequest;
     }))
   }
+
+
   //get All connection requests made by an investor
-  getConnectionRequestByInvestor(){
+  getConnectionRequestByInvestor(page:number, limit:number):Observable<ConnectionRequest[]>{
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.readById(`${BASE_URL}/connection-requests/investor/`, investorProfileId).pipe(map(res =>{
-      return res as ConnectionRequest;
+    return this.read(`${BASE_URL}/connection-requests/investor/${investorProfileId}?page=${page}&limit=${limit}`).pipe(map(res =>{
+      return res as ConnectionRequest[];
     }))
   }
+
   //Update connection request
-  //create a connection request
-  updateConnectionRequest(body: ConnectionRequestBody): Observable<void> {
-    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+  updateConnectionRequest(body: updateConnectionRequestBody): Observable<void> {
     return this.create(`${BASE_URL}/connection-requests`, body).pipe(
       map(() => void 0) 
     );
   }
-  //Delete connection request
-  //Approve connection request
-  //Decline connection request
-
+  //Deletete connection request
+  deleteConnectionRequest(id:number): Observable<void> {
+    return this.delete(`${BASE_URL}/connection-requests`, id).pipe(
+      map(() => void 0) 
+    );
+  }
 
   //Download CSV
   matchMakingCsv(status:string){
