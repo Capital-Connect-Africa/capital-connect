@@ -19,10 +19,18 @@
 
   <main>
     <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
+      
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
         <h5 class="top__txt " >Connection Requests</h5>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('requested')">Download List</button>
+
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
           No connection requests found. <br /> Check again later.
         </div>
@@ -51,6 +59,7 @@
                 <mat-icon class="small-icon" style="color: green; cursor: pointer;" (click)="updateConnectionRequest(connection)">check_circle</mat-icon>
                 <!-- <mat-icon class="small-icon" style="color: blue; cursor: pointer;" (click)="viewConnectionRequest()">visibility</mat-icon>            -->
                 <mat-icon class="small-icon" style="color: red; cursor: pointer;" (click)="deleteConnectionRequest(connection.id)">delete</mat-icon>
+                <mat-icon class="small-icon" style="color: rgb(37, 55, 63); cursor: pointer;" (click)="showDetails(connection)">visibility</mat-icon>
               </td>
             </tr>
           </tbody>
@@ -61,7 +70,7 @@
         </mat-paginator>
         <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
           <div class="mb-6 details company__info">
-            <h6 class="text-xl font-semibold mb-2"><strong>Interesting Businesses Information</strong></h6>
+            <h6 class="top__txt">Requested Connection Company Information</h6>
             <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
               <div>
                 <p class="font-bold"><strong>Country: </strong><span class="font-light    w-20 break-words max-w-ful">{{
@@ -112,7 +121,7 @@
             </div>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2"><strong>Business Feedback</strong></h6>
+            <h6 class="top__txt">Business Feedback</h6>
             <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <p><strong>Annual Revenue for the last three years</strong></p>
@@ -158,7 +167,7 @@
             </div>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2 "><strong>Eligibility Results</strong></h6>
+            <h6 class="top__txt">Eligibility Results</h6>
             <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">
@@ -176,7 +185,7 @@
             </ng-container>
 
             <hr />
-            <h6 class="text-xl font-semibold mb-2"><strong>Preparedness Results</strong></h6>
+            <h6 class="top__txt">Preparedness Results</h6>
             <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
               <div class="executive-summary">
                 <section class="score-section">

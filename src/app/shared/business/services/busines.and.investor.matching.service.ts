@@ -201,7 +201,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
   //Get connection request by Id
   getConnectionRequestById(id:number){
-    return this.readById(`${BASE_URL}/connection-requests/`, id).pipe(map(res =>{
+    return this.readById(`${BASE_URL}/connection-requests`, id).pipe(map(res =>{
       return res as ConnectionRequest;
     }))
   }
