@@ -332,7 +332,7 @@ export class InterestingBusinessComponent {
     this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
       tap(() => { 
         this._feedBackService.success('Connected with company successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
       })
     );
   }
