@@ -66,11 +66,11 @@ export class ConnectionRequestsComponent {
   pageSize: number = 10;
   totalItems: number = 0; // Set total items
   currentModal = '';
-  selectedBusiness: InterestingBusinesses | null = null;
+  selectedBusiness: ConnectionRequest | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
   rejectedBusinesses: ConnectedBusiness[] = [];
   declineReasons: String[] = [];
-  companyDetails: CompanyResponse | undefined;
+  companyDetails: ConnectionRequest | undefined;
   business__id: number = 0;
   declineForm!: FormGroup;
   investorEligibilityScore: string = '0';
@@ -210,25 +210,25 @@ export class ConnectionRequestsComponent {
 
 
 
-  showDetails(business: InterestingBusinesses): void {
+  showDetails(business: ConnectionRequest): void {
     this.table = !this.table
     this.selectedBusiness = business;
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
 
-    this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
+    this.companyDetails$ = this._businessMatchingService.getConnectionRequestById(business.id).pipe(
       tap(res => {
         this.companyDetails = res
-        this.useOfFunds = res.useOfFunds
+        this.useOfFunds = this.companyDetails.company.useOfFunds
 
-        this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
-          this.submissions =  submissions
-        }))
+        // this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
+        //   this.submissions =  submissions
+        // }))
 
-        this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
-          this.impactAssessmentScore =scores.impactAssessment;
-          this.investorEligibilityScore = scores.investorEligibility;
-          this.investorPreparednessScore = scores.investorPreparedness;
-        }))
+        // this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
+        //   this.impactAssessmentScore =scores.impactAssessment;
+        //   this.investorEligibilityScore = scores.investorEligibility;
+        //   this.investorPreparednessScore = scores.investorPreparedness;
+        // }))
         
         
         this.investorPreparednessGeneralSummary$ = this.scoring$.pipe(

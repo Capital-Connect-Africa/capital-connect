@@ -12,7 +12,8 @@ export class AuthStateService {
   private _confirmationService = inject(ConfirmationService);
   private _feedBackService = inject(FeedbackService);
   private _router = inject(Router);
-
+  
+  next!:string;
   currentToken: WritableSignal<string> = signal(sessionStorage.getItem('token') as string) ?? null
   currentUserId: WritableSignal<number> = signal(Number(sessionStorage.getItem('userId') as string)) ?? null
   currentUserName: WritableSignal<string> = signal(sessionStorage.getItem('userName') as string);

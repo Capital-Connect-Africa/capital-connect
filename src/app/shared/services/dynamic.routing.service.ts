@@ -49,7 +49,8 @@ export class DynamicRoutingService {
   getNextRoute(){
     const init$ =this._routingService.nextRoute().pipe(map(res =>{
       if(!res.length) return this._authStateService.logout();
-      return this._route.navigateByUrl(res[0].url);
+      const nextPage =this._authStateService.next;
+      return this._route.navigateByUrl(nextPage || res[0].url);
     }))
     return init$;
   }

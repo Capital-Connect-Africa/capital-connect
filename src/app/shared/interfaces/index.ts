@@ -17,7 +17,7 @@ fundsNeeded: any;
 
   //missing 
   ImpactElements: [],
-  UseOfFunds: [],
+  useOfFunds: [],
   InvestmentStructure : string,
   EligibilityScore: string,
   PreparednessScore: string,
