@@ -1,0 +1,9 @@
+<ng-container *ngIf="response$ | async"></ng-container>
+
+<div class="h-screen w-screen flex items-center justify-center">
+    <div class="flex flex-col gap-1 justify-center items-center">
+        <p class="text-red-300 text-sm" *ngIf="!done">{{message}}</p>
+        <p class="text-green-300 text-sm" *ngIf="done">{{message}}</p>
+        <button (click)="goHome()" class="flex gap-4 items-center text-sm text-blue-500 font-medium cursor-pointer px-4 py-3 hover:bg-zinc-100 rounded"><i class="pi pi-arrow-left"></i>Back Home</button>
+    </div>
+</div>

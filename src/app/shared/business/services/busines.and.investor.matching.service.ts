@@ -59,6 +59,12 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     }))
   }
 
+  respondToInvestorConnectionRequest(uuid: string, response: string){
+    return this.put(`${BASE_URL}/connection-requests/${uuid}/${response}`).pipe(map(res =>{
+      return res
+    }))
+  }
+
   getOnboardingScores(userId: number): Observable<Score[]> {
     return this.read(`${BASE_URL}/submissions/user/${userId}/score`).pipe((map(res  => {
       // @ts-ignore
