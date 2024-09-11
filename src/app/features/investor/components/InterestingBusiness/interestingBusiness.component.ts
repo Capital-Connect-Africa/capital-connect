@@ -5,7 +5,7 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats } from '../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -328,13 +328,26 @@ export class InterestingBusinessComponent {
     );
   }
 
-  connect(id: number) {
-    this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(id).pipe(
-      tap(() => { 
-        this._feedBackService.success('Connected with company successfully.');
+  connect(companyId: number) {
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+
+    let payload : ConnectionRequestBody = {
+      investorProfileId: investorProfileId,
+      companyId: companyId
+    }
+
+    this.connectWithCompany$ = this._businessMatchingService.createAConnectionRequest(payload).pipe(
+      tap(()=>{
+        this._feedBackService.success('Connection Request Created Succesfully');
         this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
       })
-    );
+    )
+    // this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(companyId).pipe(
+    //   tap(() => { 
+    //     this._feedBackService.success('Connected with company successfully.');
+    //     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
+    //   })
+    // );
   }
 
   downloadCSV$ = new Observable<Blob>
