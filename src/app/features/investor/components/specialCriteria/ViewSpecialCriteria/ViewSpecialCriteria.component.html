@@ -17,9 +17,20 @@
   <div class="navbar">
     <app-navbar [showBanner]="showBanner" onDashboard="true"></app-navbar>
   </div>
+    <mat-icon 
+      style="color: rgb(4, 56, 4); cursor: pointer;" 
+      [routerLink]="['/investor/special-criteria']">
+      arrow_back
+    </mat-icon>
+  <div class="flex justify-betweeen">
+    
+    <div>
+      <h3 class="special__criteria__title"><strong>{{ specialCriteria.title }}</strong></h3>
+      <p class="special__criteria__description">{{ specialCriteria.description }}</p>
+    </div>
 
-  <h3 class="special__criteria__title"><strong>{{ specialCriteria.title }}</strong></h3>
-  <p class="special__criteria__description">{{ specialCriteria.description }}</p>
+   
+  </div>
 
 
   <div class="main__content">
@@ -30,13 +41,16 @@
 
         <div *ngFor="let question of specialCriteria.questions" class="question__card card">
           <div class="flex justify-between">
-            <div><p class="question__text"><strong class="ques">{{ question.text }}</strong></p></div>
+            <div>
+              <p class="question__text"><strong class="ques">{{ question.text }}</strong></p>
+            </div>
             <div class="action__icons">
               <!-- <button mat-icon-button>
                 <mat-icon style="color: rgb(4, 56, 4); cursor: pointer;">edit</mat-icon>
               </button> -->
               <button mat-icon-button>
-                <mat-icon style="color: rgb(216, 9, 9); cursor: pointer;" (click)="onQuestionsRemove(question.id)">delete</mat-icon>
+                <mat-icon style="color: rgb(216, 9, 9); cursor: pointer;"
+                  (click)="onQuestionsRemove(question.id)">delete</mat-icon>
               </button>
             </div>
           </div>
@@ -104,25 +118,11 @@
         </form>
       </div>
 
-      <!-- <div *ngIf="updatePage" class="form__section">
-        <form [formGroup]="questionsRemoveForm" (ngSubmit)="onQuestionsRemove()">
-          <div class="form_content__container">
-            <div class="input__wrapper">
-              <label class="input__label">Remove Questions From Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions"
-                optionLabel="text" optionValue="id" placeholder="Select questions"></p-multiSelect>
-            </div>
-            <div class="cta__group">
-              <a></a>
-              <button class="btn btn-primary" [disabled]="!questionsRemoveForm.valid">Remove Questions</button>
-            </div>
-          </div>
-        </form>
-      </div> -->
+
     </section>
 
     <section class="left__col flex justify-between ">
-      <div  *ngIf="!updatePage">
+      <div *ngIf="!updatePage">
         <button (click)="onUpdate()" class="btn btn-primary">Update Criteria</button>
       </div>
 

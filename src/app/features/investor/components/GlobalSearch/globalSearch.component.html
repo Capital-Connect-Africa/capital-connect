@@ -1,0 +1,432 @@
+<ng-container *ngIf="matchedCompanies$ | async"></ng-container>
+<ng-container *ngIf="markAsInteresting$ | async"></ng-container>
+<ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
+<ng-container *ngIf="userResponses$ | async"></ng-container>
+<ng-container *ngIf="declineReasons$ | async"></ng-container>
+<ng-container *ngIf="searchCriteria$ | async"></ng-container>
+<ng-container *ngIf="registrationStructureOptions$ | async"></ng-container>
+<ng-container *ngIf="countries$ | async"></ng-container>
+<ng-container *ngIf="subSectors$ | async"></ng-container>
+<ng-container *ngIf="sectors$ | async"></ng-container>
+<ng-container *ngIf="numberOfEmployees$ | async"></ng-container>
+<ng-container *ngIf="growthStages$ | async"></ng-container>
+<ng-container *ngIf="yearsOfOperation$ | async"></ng-container>
+<ng-container *ngIf="scoring$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="companyDetails$ | async"></ng-container>
+
+<ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
+<ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
+
+<ng-container *ngIf="submissions$  | async"></ng-container>
+<ng-container *ngIf="downloadCSV$  | async"></ng-container>
+
+<ng-container *ngIf="useOfFundsOptions$  | async"></ng-container>
+<ng-container *ngIf="investmentStructureOptions$  | async"></ng-container>
+<ng-container *ngIf="esgFocusAreaOptions$  | async"></ng-container>
+
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true" [showBanner]="false" />
+  </div>
+
+  <main>
+    <p class="brand__name">Business Name</p>
+    <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedMatchedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
+
+      <div *ngIf="table" class="matched__top  search border-0">
+        <div class="flex justify-between">
+          <div>
+            <h3 class="top__txt">Companies</h3>
+          </div>
+
+          <div class="flex justify-between">
+            <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+            <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Global Company
+              Search</button>
+          </div>
+        </div>
+
+
+
+
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+          No matched businesses found. <br /> Check again later.
+        </div>
+
+      </div>
+
+      <div class="flex flex-col gap-4" *ngIf="table">
+        <p-table [value]="matchedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="false" [rows]="10">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Country</th>
+              <th>Business Sector</th>
+              <th>Business Sub Sector</th>
+              <th>Growth Stage</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-business>
+            <tr>
+              <td class="">{{ business.country ? business.country : "N/A" }}</td>
+              <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
+              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+              <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
+              <td class="flex space-x-1 items-center gap-2 ">
+                <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="openModal(business.id)">Decline</button>
+
+                <div class="py-auto eye" (click)="showMatchedBusinessDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
+              </td>
+            </tr>
+
+          </ng-template>
+
+        </p-table>
+
+      </div>
+
+
+      <div *ngIf="selectedMatchedBusiness" class="mx-auto shadow-xl p-6 business-details">
+        <!-- Company Details -->
+        <div class="mb-6 details company__info">
+          <!-- <hr /> -->
+          <h3 class="top__txt ">Matched Busineses Information</h3>
+          <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
+
+            <div>
+              <p class="font-bold"><strong>Country: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.country }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.businessSector }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Sub Sector: </strong><span class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.businessSubsector }}</span></p>
+            </div>
+
+            <div class="">
+              <p class="font-bold"><strong>Products and Services: </strong>
+                <span
+                  class="font-light   w-20 break-words max-w-ful w-20 break-words max-w-full">{{selectedMatchedBusiness.productsAndServices
+                  }}</span>
+              </p>
+            </div>
+
+            <div>
+              <p class="font-bold"><strong>Registration Structure: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.registrationStructure }}</span></p>
+            </div>
+
+            <div>
+              <p class="font-bold"><strong>Growth Stage: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.growthStage }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Number of Employees: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.numberOfEmployees }}</span></p>
+            </div>
+            <div>
+              <p class="font-bold"><strong>Full Time Business: </strong><span
+                  class="font-light   w-20 break-words max-w-ful">{{
+                  selectedMatchedBusiness.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+            </div>
+            <div>
+              <p class="text-gray-700 font-medium"><strong>Investor Eligibility Score: </strong><span
+                  class="font-normal">{{investorEligibilityScore}} %</span> </p>
+            </div>
+            <div>
+              <p class="text-gray-700 font-medium"><strong>Investor Preparedness Score: </strong><span
+                  class="font-normal">{{ investorPreparednessScore }} %</span></p>
+            </div>
+          </div>
+
+          <!-- <h6 class="text-gray-700 font-medium mt-5 text-sm text-center">Business Feedback</h6> -->
+          <hr />
+          <h3 class="top__txt ">Business Feedback</h3>
+          <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+
+
+            <div>
+              <p><strong>How much investment the business is seeking to raise</strong></p>
+              <p>{{selectedMatchedBusiness.fundsNeeded}}</p>
+            </div>
+
+            <div>
+              <p><strong>Preferred structure for the capital raise</strong></p>
+              <p>N/A</p>
+            </div>
+
+            <div>
+              <p><strong>Use of funds</strong></p>
+              <ul *ngIf="useOfFunds.length >= 1">
+                <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
+              </ul>
+              <p *ngIf="useOfFunds.length < 1">N/A</p>
+            </div>
+
+          </div>
+
+          <hr />
+        </div>
+
+        <!-- Back Button -->
+        <div class="flex justify-end details">
+          <td class="flex space-x-2 justify-center p-2">
+            <button class="btn  px-3 py-1" (click)="showInterest(selectedMatchedBusiness.id)">Interested</button>
+            <button class="btn btn-danger px-3 py-1" (click)="openModal(selectedMatchedBusiness.id)">Decline</button>
+            <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">
+              Back to List
+            </button>
+          </td>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="right__col">
+      <app-alert [action]="showalert" className="rounded-[.5rem]" />
+      <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
+        (click)="showDialog()">
+        <p class="helper__text text__yellow">{{ matchedBusinesses.length.toString() }} perfect match</p>
+      </app-card>
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </main>
+</div>
+
+
+
+<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <div class="form_content__container">
+    <div class="input__wrapper">
+      <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+      <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason" [options]="declineReasons"
+        formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
+
+      <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
+        <div class="cta__group">
+          <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-modal>
+
+
+
+
+<!-- Advanced Search Form -->
+<app-modal [(visible)]="advanced_Search" title="Global Company Search"
+  helperText="Search for a company with various paramaters">
+  <div class="advanced-search rounded-md mb-4 mt-6">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="global_search_wrapper">
+
+        <div class="flex justify-between">
+          <div class="input__wrapper">
+            <label for="country" class="input__label">Countries</label>
+            <p-multiSelect formControlName="countries" class="input__field" [options]="countries" optionLabel="name"
+              optionValue="name" placeholder="Select countries"></p-multiSelect>
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label">Registration Structures</label>
+            <p-multiSelect formControlName="registrationStructures" class="input__field" optionValue="title"
+              [options]="registrationStructures" optionLabel="title" placeholder="Select structures"></p-multiSelect>
+          </div>
+
+
+        </div>
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label class="input__label">Years of Operation</label>
+            <p-dropdown class="input__field w-full" formControlName="yearsOfOperation" [options]="yearsOfOperation"
+              placeholder="Select years"></p-dropdown>
+          </div>
+
+          <div class="input__wrapper">
+            <label for="growthStage" class="input__label">Growth Stages</label>
+            <p-multiSelect class="input__field w-full" formControlName="growthStages" [options]="growthStages"
+              optionLabel="title" placeholder="Select stages" optionValue="title"></p-multiSelect>
+          </div>
+        </div>
+
+
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label class="input__label">Number of Employees</label>
+            <p-dropdown class="input__field w-full" formControlName="numberOfEmployees" [options]="numberOfEmployees"
+              placeholder="Select employees"></p-dropdown>
+          </div>
+
+
+          <div class="input__wrapper">
+            <label class="input__label">Use of Funds</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="useOfFunds"
+              [options]="useOfFundsOptions" optionLabel="title" optionValue="title" placeholder="Select use of funds">
+            </p-multiSelect>
+          </div>
+        </div>
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label class="input__label">Investment Structures</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="investmentStructures"
+              [options]="investmentStructureOptions" optionLabel="title" optionValue="title"
+              placeholder="Select investment structures">
+            </p-multiSelect>
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label">ESG Focus Areas</label>
+            <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="esgFocusAreas"
+              [options]="esgFocusAreaOptions" optionLabel="title" optionValue="title"
+              placeholder="Select ESG focus areas">
+            </p-multiSelect>
+          </div>
+
+
+
+        </div>
+
+        <div class="flex justifyy-between gap-3">
+          <div class="input__wrapper">
+            <label class="input__label">Funds needed USD$</label>
+            <input class="input__field" formControlName="fundsNeeded" type="number" placeholder="Enter funds needed"
+              appNumberFormat />
+          </div>
+
+          <div class="input__wrapper">
+            <label class="input__label">
+              <input type="checkbox" formControlName="fullTimeBusiness" binary="true" /> Full-Time Business</label>
+          </div>
+        </div>
+
+
+
+        <div class="sectors-container">
+          <p>Select Sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let sector of sectors$ | async" class="pill" [class.active]="isSectorSelected(sector.name)"
+              [class.selected]="selectedSectors.includes(sector.name)" (click)="toggleSector(sector)">
+              {{ sector.name }}
+            </span>
+          </div>
+        </div>
+
+        <div class="subsectors-container" *ngIf="selectedSectors.length > 0">
+          <p>Select Sub-sectors:</p>
+          <div class="pills-container">
+            <span *ngFor="let subSector of subSectors$ | async" class="pill"
+              [class.active]="isSubSectorSelected(subSector.name)"
+              [class.selected]="selectedSubSectors.includes(subSector.name)" (click)="toggleSubSector(subSector)">
+              {{ subSector.name }}
+            </span>
+          </div>
+        </div>
+
+
+
+
+
+
+      </div>
+      <div class="flex justify-end cta__group">
+        <button class="btn btn-primary w-full" type="submit">Search Companies</button>
+        <!-- <button class="btn btn-secondary ml-2" type="button" (click)="onResetSearch()">Reset</button> -->
+      </div>
+    </form>
+  </div>
+</app-modal>
+
+
+
+
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }"
+  class="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+    <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone
+      number': 'Verify your phone number' }}</label>
+    <input formControlName="field" class="border"
+      [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'" />
+    <button class="cta__btn" [disabled]="phoneUpdateForm.invalid"
+      (click)="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
+  </form>
+</p-dialog>
