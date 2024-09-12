@@ -5,7 +5,6 @@ import { FORM_TYPE, MobileNumber, Profile, UserMobileNumbersIssues } from '../in
 import { catchError, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
 import { SignalsService } from '../../../core/services/signals/signals.service';
 import { UserSubmissionsService } from '../../../core/services/storage/user-submissions.service';
-// import { OrganizationOnboardService } from '../../organization/services/organization-onboard.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
@@ -15,7 +14,6 @@ export class AuthStateService {
   private _feedBackService = inject(FeedbackService);
   private _userSubmission =inject(UserSubmissionsService);
   private _confirmationService = inject(ConfirmationService);
-  // private _organizationService =inject(OrganizationOnboardService);
   
   currentToken: WritableSignal<string> = signal(sessionStorage.getItem('token') as string) ?? null
   currentUserId: WritableSignal<number> = signal(Number(sessionStorage.getItem('userId') as string)) ?? null
@@ -151,7 +149,6 @@ export class AuthStateService {
     sessionStorage.clear();
     this._signalsService.reset();
     this._userSubmission.reset();
-    // this._organizationService.reset();
     this.currentToken.set(null as any);
     this.currentUserId.set(null as any);
     this.currentUserName.set(null as any);
