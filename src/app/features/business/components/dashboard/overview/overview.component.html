@@ -44,7 +44,7 @@
   </app-card>
 
   <app-card (click)="showConnectionRequests()"
-    [detail]="{title: 'Connection Requests', value: (stats.requests || 0).toString(), featured: true}">
+    [detail]="{title: 'Connection Requests', value: (stats.requested || 0).toString(), featured: true}">
     <p class="helper__text text__red">View</p>
   </app-card>
 
@@ -169,7 +169,7 @@
 </app-modal>
 
 
-<app-modal [(visible)]="signalService.matchedInvestorsDialogIsVisible" title="Matched Investors" [value]="matchedInvestors.length"
+<app-modal [(visible)]="signalService.matchedInvestorsDialogIsVisible" title="Matched Investors" [value]="stats.matched"
   helperText="You had a good match with this investor">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedInvestors.length">
     You have not matched with any investors yet <br /> check again later
@@ -209,7 +209,7 @@
   </div>
 </app-modal>
 
-<app-modal [(visible)]="signalService.declinedConnectionsDialogIsVisible" title="Declined Connections" [value]="declinedConnections.length"
+<app-modal [(visible)]="signalService.declinedConnectionsDialogIsVisible" title="Declined Connections" [value]="stats.declined"
   helperText="These connections were declined">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!declinedConnections.length">
     None of your conections was recalled 
@@ -239,7 +239,7 @@
   </div>
 </app-modal>
 
-<app-modal [(visible)]="signalService.connectedInvestorsDialogIsVisible" title="Connected Investors" [value]="connectedInvestors.length"
+<app-modal [(visible)]="signalService.connectedInvestorsDialogIsVisible" title="Connected Investors" [value]="stats.connected"
   helperText="You are connected to this investor">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectedInvestors.length">
     You are not connected with any investors yet <br /> check again later
@@ -280,7 +280,7 @@
   </div>
 </app-modal>
 
-<app-modal [(visible)]="signalService.connectionRequestsDialogIsVisible" title="Connection Requests" [value]="connectionRequests.length"
+<app-modal [(visible)]="signalService.connectionRequestsDialogIsVisible" title="Connection Requests" [value]="stats.requested"
   helperText="This investor requested to connect with you">
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
     You have no connections requests from any investors yet <br /> check again later
