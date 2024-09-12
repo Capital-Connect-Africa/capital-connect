@@ -7,8 +7,7 @@
 <ng-container *ngIf="addCustomQuestions$ | async"></ng-container>
 <ng-container *ngIf="createAnwer$ | async"></ng-container>
 <ng-container *ngIf="deleteConf$ | async"></ng-container>
-
-
+<ng-container *ngIf="getSpecialCriteriaCompanies$ | async"></ng-container>
 
 
 
@@ -36,6 +35,7 @@
       <div>
         <h3 class="special__criteria__title">Title : <strong>{{ specialCriteria.title }}</strong></h3>
         <p class="special__criteria__description">Description : {{ specialCriteria.description }}</p>
+        <p> <strong>{{SpecialCriteriaCompanies.length.toString()}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" (click)="scComp()"><strong>   View Companies</strong></span>
 
 
       <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
@@ -249,5 +249,28 @@
   </form>
 
 
+
+</app-modal>
+
+<app-modal [(visible)]="sc_comp" [title]='SpecialCriteriaCompanies.length.toString()' helperText="Companies that have filled this criteria.">
+  <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="false" [rows]="10">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Country</th>
+        <th>Business Sector</th>
+        <th>Business Sub Sector</th>
+        <th>Growth Stage</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-business>
+      <tr>
+        <td class="">{{ business.country ? business.country : "N/A" }}</td>
+        <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
+        <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+        <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
+      </tr>
+    </ng-template>
+  </p-table>
 
 </app-modal>
