@@ -114,4 +114,12 @@ export class OrganizationOnboardService {
     }))
   }
 
+  reset(){
+    this.resetCompanyInput();
+    this.step1isValid.set(false);
+    this.step2isValid.set(false);
+    this.step3isValid.set(false);
+    this.step4isValid.set(false);
+    this._companyStateService.resetCompany()
+  }
 }

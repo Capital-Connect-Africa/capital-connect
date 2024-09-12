@@ -40,4 +40,16 @@ export class UserSubmissionsService {
     if(submissionsCount <=step) this.impactAssessmentSubmissions.push(submissions);
     else this.impactAssessmentSubmissions[step] =submissions;
   }
+
+  reset(){
+    
+    this.impactAssessmentDraft =[];
+    this.investorEligibilityDraft =[];
+    this.businessInformationDraft =[];
+    this.investorPreparednessDraft =[];
+    this.impactAssessmentSubmissions =[];
+    this.investorEligibilitySubmissions =[];
+    this.businessInformationSubmissions =[];
+    this.investorPreparednessSubmissions =[];
+  }
 }

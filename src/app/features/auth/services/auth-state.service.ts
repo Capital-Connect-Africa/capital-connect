@@ -4,16 +4,17 @@ import { Router } from '@angular/router';
 import { FORM_TYPE, MobileNumber, Profile, UserMobileNumbersIssues } from '../interfaces/auth.interface';
 import { catchError, EMPTY, map, Observable, of, switchMap, tap } from 'rxjs';
 import { SignalsService } from '../../../core/services/signals/signals.service';
+import { UserSubmissionsService } from '../../../core/services/storage/user-submissions.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
-  private _signalsService =inject(SignalsService);
-  private _httpService =inject(BaseHttpService);
-  private _confirmationService = inject(ConfirmationService);
-  private _feedBackService = inject(FeedbackService);
   private _router = inject(Router);
+  private _httpService =inject(BaseHttpService);
+  private _signalsService =inject(SignalsService);
+  private _feedBackService = inject(FeedbackService);
+  private _userSubmission =inject(UserSubmissionsService);
+  private _confirmationService = inject(ConfirmationService);
   
-  next!:string;
   currentToken: WritableSignal<string> = signal(sessionStorage.getItem('token') as string) ?? null
   currentUserId: WritableSignal<number> = signal(Number(sessionStorage.getItem('userId') as string)) ?? null
   currentUserName: WritableSignal<string> = signal(sessionStorage.getItem('userName') as string);
@@ -63,11 +64,6 @@ export class AuthStateService {
     return !!currentUser && currentUser.roles.includes('user');
   }
 
-  removeToken() {
-    this.currentToken.set(null as any);
-    sessionStorage.clear();
-  }
-
   get isLoggedIn() {
     const token = this.currentToken();
     return !!token
@@ -87,8 +83,7 @@ export class AuthStateService {
   logout() {
     return this._confirmationService.confirm('Are you sure you want to log out?').pipe(tap(confirmation => {
       if (confirmation) {
-        this.removeToken();
-        sessionStorage.clear()
+        this.reset();
         this._feedBackService.success('Logged Out! See you soon!')
         this._router.navigateByUrl('/', { state: { mode: FORM_TYPE.SIGNIN } });
       }
@@ -141,13 +136,22 @@ export class AuthStateService {
     );
   }
 
-private _checkPhoneNumberStatus(){
-  const mobile_numbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]));
-  if (!mobile_numbers.length) return  UserMobileNumbersIssues.EMPTY;
-  const numbersVerified = mobile_numbers.some(mobile_number => mobile_number.isVerified);
-  if (!numbersVerified) return UserMobileNumbersIssues.UNVERIFIED;
-  return UserMobileNumbersIssues.VERIFIED;
-}
+  private _checkPhoneNumberStatus(){
+    const mobile_numbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]));
+    if (!mobile_numbers.length) return  UserMobileNumbersIssues.EMPTY;
+    const numbersVerified = mobile_numbers.some(mobile_number => mobile_number.isVerified);
+    if (!numbersVerified) return UserMobileNumbersIssues.UNVERIFIED;
+    return UserMobileNumbersIssues.VERIFIED;
+  }
 
 
+  reset(){
+    sessionStorage.clear();
+    this._signalsService.reset();
+    this._userSubmission.reset();
+    this.currentToken.set(null as any);
+    this.currentUserId.set(null as any);
+    this.currentUserName.set(null as any);
+    this.currentUserProfile.set(null as any);
+  }
 }

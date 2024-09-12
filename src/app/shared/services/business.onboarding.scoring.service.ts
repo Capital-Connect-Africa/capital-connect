@@ -51,6 +51,12 @@ export class BusinessOnboardingScoringService {
     }))
   }
 
+  respondToInvestorConnectionRequest(uuid: string, response: string){
+    return this._scoringService.respondToInvestorConnectionRequest(uuid, response).pipe(map(res =>{
+      return res;
+    }))
+  }
+
   getCompanyStats(){
     return this._scoringService.getCompanyStats(this._companyService.currentCompany.id).pipe(map(res => {
       return res
@@ -65,7 +71,7 @@ export class BusinessOnboardingScoringService {
 
   getConnectionRequests() {
     return this._scoringService.getConnectionRequests(this._companyService.currentCompany.id).pipe(map((investors: any[]) => {
-      return investors.map(investor =>({...investor.investorProfile}));
+      return investors.map(investor =>({uuid: investor.uuid, ...investor.investorProfile}));
     })) as Observable<MatchedInvestor[]>
   }
 
