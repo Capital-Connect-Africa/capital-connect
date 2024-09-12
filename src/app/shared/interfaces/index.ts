@@ -42,6 +42,7 @@ export interface MatchMakingStats{
 
 export interface MatchedInvestor {
   id: number,
+  uuid: string,
   matched: number,
   connected: number,
   declined: number,
