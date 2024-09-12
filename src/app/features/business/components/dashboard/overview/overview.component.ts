@@ -107,6 +107,16 @@ export class OverviewComponent {
     this.stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
       this.stats =res;
     }))
+    this.connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
+      this.connectedInvestors =res
+    }));
+  
+    this.declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
+      this.declinedConnections =res
+    }));
+    this.matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
+      this.matchedInvestors =res
+    }));
   }
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
