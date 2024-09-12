@@ -5,12 +5,14 @@ import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators'
 import { AuthStateService } from './auth-state.service';
+import { OrganizationOnboardService } from '../../organization/services/organization-onboard.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseHttpService {
 
   private _feedBackService = inject(FeedbackService);
   private _authStateService = inject(AuthStateService);
+  private _organizationService =inject(OrganizationOnboardService);
 
   constructor(private _httpClient: HttpClient) {
     super(_httpClient)
@@ -28,6 +30,8 @@ export class AuthService extends BaseHttpService {
 
   login(loginInfo: { username: string, password: string }) {
     return this.create(`${BASE_URL}/auth/login`, JSON.stringify(loginInfo)).pipe(switchMap((res) => {
+      this._authStateService.reset();
+      this._organizationService.reset()
       this._feedBackService.success('Logged In Successfully, Welcome.')
       this._authStateService.initToken((res as { access_token: string }).access_token)
       return this.getUserProfile();

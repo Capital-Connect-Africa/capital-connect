@@ -2,7 +2,7 @@ import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { OverviewSectionComponent } from "../../../../../shared/components/overview-section/overview-section.component";
 import { CardComponent } from "../../../../../shared/components/card/card.component";
 import { PhotoCollageComponent } from "../photo-collage/photo-collage.component";
-import { tap, switchMap } from "rxjs";
+import { tap, switchMap, Observable } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { CompanyStateService } from "../../../../organization/services/company-state.service";
@@ -66,7 +66,7 @@ export class OverviewComponent {
 
   eligibilityAnswers: UserSubmissionResponse[] = [];
 
-  stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requests: 0}
+  stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
 
@@ -80,7 +80,7 @@ export class OverviewComponent {
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
 
-
+  response$ =new Observable<any>()
 
   currentCompany = this._companyService.currentCompany;
   matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
@@ -102,6 +102,12 @@ export class OverviewComponent {
   stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
     this.stats =res;
   }))
+
+  reload(){
+    this.stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
+      this.stats =res;
+    }))
+  }
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {
     this.investorEligibilityScore = scores.investorEligibility;
@@ -234,17 +240,19 @@ export class OverviewComponent {
 
   viewConnectionRequest(id:number){
     this.signalService.connectionRequestsDialogIsVisible.set(false);
-    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+    this._router.navigateByUrl(`/business/my-business/investors/requested-${id}`)
   }
 
-  approveConnectionRequest(id:number){
-    this.signalService.connectionRequestsDialogIsVisible.set(false);
-    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  approveConnectionRequest(uuid: string){
+    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'approve').pipe(tap(res =>{
+      return this.reload();
+    }))
   }
 
-  declineConnectionRequest(id:number){
-    this.signalService.connectionRequestsDialogIsVisible.set(false);
-    this._router.navigateByUrl(`/business/my-business/investors/connected-${id}`)
+  declineConnectionRequest(uuid: string){
+    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'decline').pipe(tap(res =>{
+      return this.reload();
+    }))
   }
 
   revokeConnection(id:number){
@@ -257,4 +265,11 @@ export class OverviewComponent {
     this._router.navigateByUrl(`/business/my-business/investors/declined-${id}`)
   }
 
+  ngOnDestroy(): void {
+    this.eligibilityScore =0;
+    this.preparednessScore =0;
+    this.factSheetAnswers =[];
+    this.impactElementAnswers =[];
+    this.stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
+  }
 }

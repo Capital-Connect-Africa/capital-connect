@@ -15,13 +15,10 @@
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="companyDetails$ | async"></ng-container>
-
 <ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
-
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-
 <ng-container *ngIf="useOfFundsOptions$  | async"></ng-container>
 <ng-container *ngIf="investmentStructureOptions$  | async"></ng-container>
 <ng-container *ngIf="esgFocusAreaOptions$  | async"></ng-container>
@@ -37,31 +34,19 @@
     <p class="brand__name">Business Name</p>
     <div class="left__col">
       <div class="flex justify-start" *ngIf="selectedMatchedBusiness">
-        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
-          Back to List
-        </button>
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>
       </div>
 
       <div *ngIf="table" class="matched__top  search border-0">
         <div class="flex justify-between">
-          <div>
-            <h3 class="top__txt">Matched Businesses</h3>
-          </div>
-
+          <div><h3 class="top__txt">Matched Businesses</h3></div>
           <div class="flex justify-between">
             <ng-container *ngIf="downloadCSV$  | async"></ng-container>
             <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Global Company
               Search</button>
           </div>
         </div>
-
-
-
-
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
-          No matched businesses found. <br /> Check again later.
-        </div>
-
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">No matched businesses found. <br/>Check again later.</div>
       </div>
 
       <div class="flex flex-col gap-4" *ngIf="table">

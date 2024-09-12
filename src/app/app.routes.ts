@@ -95,4 +95,9 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
 
+  {
+    path: 'connection-requests/:uuid/:action', 
+    loadComponent: () => import('./features/business/pages/connection-requests/connection-requests.component').then(c => c.ConnectionRequestsComponent) ,
+  }
+
 ];
