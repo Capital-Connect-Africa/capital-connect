@@ -42,6 +42,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   add_custom_answers: boolean = false
   multiple_answers: boolean = false
   updatePage: boolean = false
+  back_btn:boolean = false
+  addQues:boolean = false
 
   // Variables
   specialCriteriaId!: number;
@@ -125,6 +127,13 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.patchForm()
   }
 
+  onAdd(){
+    this.updatePage = true
+    this.addQuestions = true
+    this.back_btn = true
+    this.addQues = true
+  }
+
   onAddQuestions() {
     this.addQuestions = true
     this.patchForm()
@@ -185,6 +194,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   cancel() {
     this.updatePage = false
+    this.back_btn = false
+    this.addQues = false
   }
 
   onQuestionsSubmit() {
