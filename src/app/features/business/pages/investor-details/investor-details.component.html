@@ -1,5 +1,5 @@
 <ng-container *ngIf="stats$ | async"></ng-container>
-
+<ng-container *ngIf="response$| async"></ng-container>
 <div class="main__content">
     <app-sidenav [links]="links"/>
     <div class="main">
@@ -22,7 +22,7 @@
               </div>
             </div>
             
-            <div class="card__item__detail_info" *ngIf="relationship ==relationship_types.CONNECTED">
+            <div class="card__item__detail_info" *ngIf="relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
               <div>
                 <label>Investor Type:</label>
                 <p>{{investor.investorType}}</p>
@@ -43,25 +43,25 @@
             </div>
           
             <div class="card__item__detail">
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Sectors of investment</label>
                 <ul class="chips">
                   <li *ngFor="let sector of investor.sectors" class="chip">{{sector.name}}</li>
                 </ul>
               </div>
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Sub-sectors</label>
                 <ul class="chips">
                   <li *ngFor="let subSector of investor.subSectors" class="chip">{{subSector.name}}</li>
                 </ul>
               </div>
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>ESG Focus Areas:</label>
                 <ul class="chips">
                   <li *ngFor="let esg of investor.esgFocusAreas" class="chip">{{esg}}</li>
                 </ul>
               </div>
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Business Stages the investor focuses on:</label>
                 <ul class="chips">
                   <li *ngFor="let stage of investor.businessGrowthStages" class="chip">{{stage}}</li>
@@ -70,19 +70,19 @@
             </div>
 
             <div class="card__item__detail">
-              <div *ngIf="relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Registration Structures:</label>
                 <ul class="chips">
                   <li *ngFor="let registration of investor.registrationStructures" class="chip">{{registration}}</li>
                 </ul>
               </div>
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Investment Structures:</label>
                 <ul class="chips">
                   <li *ngFor="let investiment of investor.investmentStructures" class="chip">{{investiment}}</li>
                 </ul>
               </div>
-              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED">
+              <div *ngIf="relationship ==relationship_types.MATCHED || relationship ==relationship_types.CONNECTED || relationship ==relationship_types.REQUESTED">
                 <label>Countries of investment focus:</label>
                 <ul class="chips">
                   <li *ngFor="let country of investor.countriesOfInvestmentFocus" class="chip">{{country}}</li>
@@ -96,13 +96,19 @@
               <i class="pi pi-angle-left"></i>
               <span class="btn-text">Back</span>
             </button>
-            <button class="btn__cta text-teal-600" *ngIf="relationship ==relationship_types.MATCHED">
-              <i class="pi pi-check"></i>
-              <span class="btn-text">Connect</span>
-            </button>
+            <div class="flex items-center justify-end">
+              <button class="btn__cta text-teal-600" (click)="approveConnectionRequest(investor.uuid)" *ngIf="relationship ==relationship_types.REQUESTED">
+                <i class="pi pi-check"></i>
+                <span class="btn-text">Approve</span>
+              </button>
+              <button class="btn__cta text-rose-600" (click)="declineConnectionRequest(investor.uuid)" *ngIf="relationship ==relationship_types.REQUESTED">
+                <i class="pi pi-times"></i>
+                <span class="btn-text">Decline</span>
+              </button>
+            </div>
             <button class="btn__cta text-rose-600" *ngIf="relationship ==relationship_types.CONNECTED">
               <i class="pi pi-times"></i>
-              <span class="btn-text">Decline</span>
+              <span class="btn-text">Revoke</span>
             </button>
           </div>
       </main>
