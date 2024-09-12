@@ -35,7 +35,7 @@
       <div>
         <h3 class="special__criteria__title">Title : <strong>{{ specialCriteria.title }}</strong></h3>
         <p class="special__criteria__description">Description : {{ specialCriteria.description }}</p>
-        <p> <strong>{{SpecialCriteriaCompanies.length.toString()}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" (click)="scComp()"><strong>   View Companies</strong></span>
+        <p> <strong>{{SpecialCriteriaCompanies.length.toString()}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" style="cursor: pointer;" (click)="scComp()"><strong>   View Companies</strong></span>
 
 
       <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
