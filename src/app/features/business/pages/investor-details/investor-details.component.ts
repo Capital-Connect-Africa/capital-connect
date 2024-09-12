@@ -3,7 +3,7 @@ import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.co
 import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
 import { MatchedInvestor } from '../../../../shared/interfaces';
-import { EMPTY, switchMap, tap } from 'rxjs';
+import { EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviation.pipe";
 import { ActivatedRoute, Router } from '@angular/router';
@@ -37,6 +37,7 @@ export class InvestorDetailsComponent {
   canViewDeclineReasons =false;
   canViewInvestorDetails =false;
   declineReasons:string[] =[];
+  response$ =new Observable<any>();
   stats$ = this._activatedRoute.paramMap.pipe(
     switchMap(params => {
       const parts = `${params.get('id')}`.split('-');
@@ -48,6 +49,15 @@ export class InvestorDetailsComponent {
           tap(res => {
             this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
             this.specialCriteria =this.investor.specialCriteria || [];
+            this.checkIfUserCanViewPage();
+          })
+        );
+      }
+      else if(this.relationship ==CompanyInvestorRelationsShip.REQUESTED){
+        return this._scoringService.getConnectionRequests().pipe(
+          tap(res => {
+            this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            debugger
             this.checkIfUserCanViewPage();
           })
         );
@@ -77,17 +87,30 @@ export class InvestorDetailsComponent {
   
   checkIfUserCanViewPage(){
     this.canViewDeclineReasons =!!this.declineReasons.length && (this.relationship ===CompanyInvestorRelationsShip.DECLINED)
-    this.canViewInvestorDetails =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED)
-
+    this.canViewInvestorDetails =!!this.investor && (this.relationship ===CompanyInvestorRelationsShip.CONNECTED || this.relationship ===CompanyInvestorRelationsShip.MATCHED || this.relationship ===CompanyInvestorRelationsShip.REQUESTED)
   }
   goBack(){
     if(this.relationship ===CompanyInvestorRelationsShip.MATCHED) this._signalService.matchedInvestorsDialogIsVisible.set(true);
     else if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED) this._signalService.connectedInvestorsDialogIsVisible.set(true);
     else if(this.relationship ===CompanyInvestorRelationsShip.DECLINED) this._signalService.declinedConnectionsDialogIsVisible.set(true);
+    else if(this.relationship ===CompanyInvestorRelationsShip.REQUESTED) this._signalService.connectionRequestsDialogIsVisible.set(true);
     this._router.navigateByUrl('/business')
   }
 
   takeSpecialCriteria(investorId:number){
     this._router.navigateByUrl(`/business/my-business/special-criteria/${this.relationship}-${investorId}`)
+  }
+
+
+  approveConnectionRequest(uuid: string){
+    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'approve').pipe(tap(res =>{
+    return this.goBack();
+    }))
+  }
+
+  declineConnectionRequest(uuid: string){
+    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'decline').pipe(tap(res =>{
+      return this.goBack();
+    }))
   }
 }
