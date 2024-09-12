@@ -14,13 +14,16 @@ import { ModalComponent } from '../../../../../shared/components/modal/modal.com
 import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsService } from '../../../../questions/services/questions/questions.service';
 import { AngularMaterialModule } from '../../../../../shared';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule,
+    RouterModule
+  ]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;

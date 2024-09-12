@@ -15,6 +15,10 @@
           
           <div class="flex flex-col bg-white  bio_info">
             <h2>{{userProfile.name}}</h2>
+            <p> <button mat-button [routerLink]="['/investor/onboarding']" style="color: green; margin-top: 1rem;">
+              <mat-icon>edit</mat-icon> Update Profile
+            </button></p>
+
             <p><mat-icon>call</mat-icon>{{userProfile.mobileNumber || 'Add phone'}}</p>
             <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
             <p>
@@ -24,6 +28,7 @@
               alt="company logo"/>
               <mat-icon *ngIf="!userProfile.company.companyLogo">location_city</mat-icon> 
               <span>{{userProfile.company.name}}, {{userProfile.company.country}} . <span>{{userProfile.company.fullTimeBusiness}}</span></span></p>
+
           </div>
           
         </div>

@@ -21,12 +21,12 @@
       <ul>
 
         @if(!isAdmin) {
-        <li *ngIf="investorProfileExists">
+        <!-- <li *ngIf="investorProfileExists">
           <a mat-button [routerLink]="['/investor/onboarding']">
             <mat-icon>person</mat-icon>
             <span>Profile</span>
           </a>
-        </li>
+        </li> -->
 
         <li *ngIf="!investorProfileExists">
           <a mat-button [routerLink]="['/business']">

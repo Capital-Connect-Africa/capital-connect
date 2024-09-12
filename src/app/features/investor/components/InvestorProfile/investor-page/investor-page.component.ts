@@ -8,6 +8,7 @@ import { ProfileService } from '../../../../profile/services/profile.service';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { tap } from 'rxjs';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -19,8 +20,8 @@ import { SignalsService } from '../../../../../core/services/signals/signals.ser
     NavbarComponent,  
     CommonModule,
     AlertComponent,
-    AlertCardComponent
-
+    AlertCardComponent,
+    RouterModule
   ]
 })
 export class InvestorPageComponent implements OnInit {

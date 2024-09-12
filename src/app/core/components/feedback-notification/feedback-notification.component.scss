@@ -14,7 +14,7 @@
 }
 
 .message.success {
-  background-color: $success-color-alt;
+  background-color: $success-color;
   outline-color: $secondary-color;
   border-left-color: $secondary-color ;
 }
@@ -32,7 +32,7 @@
 }
 
 .message.error {
-  background-color: $danger-color-alt;
+  background-color: $danger-color;
   outline-color: $danger-color;
   border-left-color: $danger-color
 }
