@@ -257,4 +257,11 @@ export class OverviewComponent {
     this._router.navigateByUrl(`/business/my-business/investors/declined-${id}`)
   }
 
+  ngOnDestroy(): void {
+    this.eligibilityScore =0;
+    this.preparednessScore =0;
+    this.factSheetAnswers =[];
+    this.impactElementAnswers =[];
+    this.stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
+  }
 }
