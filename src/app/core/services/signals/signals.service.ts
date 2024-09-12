@@ -23,4 +23,17 @@ export class SignalsService {
   declinedConnectionsDialogIsVisible: WritableSignal<boolean> =signal(false);
   userSectionSubmissions: WritableSignal<SectionSubmissions | null> =signal(null);
 
+  reset(){
+    this.showDialog.set(false);
+    this.showInAppAlert.set(false);
+    this.pageTitle.set('Dashboard')
+    this.userSectionSubmissions.set(null);
+    this.actionOnMobileNumbers.set(false);
+    this.businessInvestorPageSignal.set('');
+    this.matchedInvestorsDialogIsVisible.set(false);
+    this.connectionRequestsDialogIsVisible.set(false);
+    this.connectedInvestorsDialogIsVisible.set(false);
+    this.declinedConnectionsDialogIsVisible.set(false);
+    this.actionBody.set({ issue: UserMobileNumbersIssues.EMPTY, title: 'Action Required', message: 'Please add your mobile phone number', command: 'Add' })
+  }
 }

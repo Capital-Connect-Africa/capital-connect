@@ -28,6 +28,7 @@ export class AuthService extends BaseHttpService {
 
   login(loginInfo: { username: string, password: string }) {
     return this.create(`${BASE_URL}/auth/login`, JSON.stringify(loginInfo)).pipe(switchMap((res) => {
+      this._authStateService.reset();
       this._feedBackService.success('Logged In Successfully, Welcome.')
       this._authStateService.initToken((res as { access_token: string }).access_token)
       return this.getUserProfile();
