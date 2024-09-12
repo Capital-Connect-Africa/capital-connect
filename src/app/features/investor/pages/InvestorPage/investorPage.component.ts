@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {SidenavComponent} from "../../../../core";
+import { SidenavComponent } from "../../../../core";
 import { InvestorPageComponent } from '../../components/InvestorProfile/investor-page/investor-page.component';
 
 
@@ -13,12 +13,14 @@ import { InvestorPageComponent } from '../../components/InvestorProfile/investor
   templateUrl: './investorPage.component.html',
   styleUrl: './investorPage.component.scss'
 })
-export class InvestorPage{
-    links =[
-      {label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view'},
-      {label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune'},
-      {label: 'Profile', href: '/investor/onboarding', exact: false, icon: 'settings'},
+export class InvestorPage {
+  links = [
+    { label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view' },
+    { label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune' },
+    { label: 'Global Search', href: '/investor/global-search', exact: false, icon: 'public' },
+    { label: 'Profile', href: '/investor/investor-page', exact: false, icon: 'settings' },
 
-      // {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
-    ]
+
+    // {label: 'Settings', href: '/investor', exact: false, icon: 'settings'}
+  ]
 }
