@@ -11,6 +11,7 @@
 <ng-container *ngIf="esgSubmissions$ | async"></ng-container>
 <ng-container *ngIf="factSheetSubmissions$ | async"></ng-container>
 <ng-container *ngIf="nextRoute$ | async"></ng-container>
+<ng-container *ngIf="response$ | async"></ng-container>
 
 <app-overview-section>
   <app-card [detail]="{title: 'Investor/Funder Eligibility', icon: eligibilityAnswers.length>0? '' :'question_mark', value: eligibilityAnswers.length > 0?investorEligibilityScore+' %': '', featured: true}"
@@ -289,21 +290,30 @@
     <p-table [value]="connectionRequests" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
       <ng-template pTemplate="header">
           <tr>
-              <th>Name</th>
-              <th>Email</th>
+              <th>Investor Type</th>
+              <th>Min Funding</th>
+              <th>Max Funding</th>
               <th>Action</th>
           </tr>
       </ng-template>
       <ng-template pTemplate="body" let-connectionRequest>
           <tr>
-              <td>{{ connectionRequest.organizationName }}</td>
-              <td>{{ connectionRequest.emailAddress }}</td>
+            <td>{{ connectionRequest.investorType }}</td>
+              <td>${{ connectionRequest.minimumFunding | numberabbreviation}}</td>
+              <td>
+                <ng-container *ngIf="connectionRequest.noMaximumFunding; else withMaxFunding">
+                  Unlimited
+                </ng-container>
+                <ng-template #withMaxFunding>
+                  ${{ connectionRequest.maximumFunding | numberabbreviation }}
+                </ng-template>
+              </td>
               
               <td>
                 <div class="cta__wrap">
                   <button class="btn__cta text-blue-600" (click)="viewConnectionRequest(connectionRequest.id)">View</button>
-                  <button class="btn__cta text-teal-600" (click)="approveConnectionRequest(connectionRequest.id)">Approve</button>
-                  <button class="btn__cta text-rose-600" (click)="declineConnectionRequest(connectionRequest.id)">Decline</button>
+                  <button class="btn__cta text-teal-600" (click)="approveConnectionRequest(connectionRequest.uuid)">Approve</button>
+                  <button class="btn__cta text-rose-600" (click)="declineConnectionRequest(connectionRequest.uuid)">Decline</button>
                 </div>
               </td>
           </tr>
