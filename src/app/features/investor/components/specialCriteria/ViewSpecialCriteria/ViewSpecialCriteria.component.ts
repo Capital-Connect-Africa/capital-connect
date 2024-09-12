@@ -15,6 +15,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsService } from '../../../../questions/services/questions/questions.service';
 import { AngularMaterialModule } from '../../../../../shared';
 import { RouterModule } from '@angular/router';
+import { TableModule } from 'primeng/table';
+import { Company } from '../../../../organization/interfaces';
 
 @Component({
   standalone: true,
@@ -22,7 +24,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
   imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule,
-    RouterModule
+    RouterModule,TableModule
   ]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
@@ -42,6 +44,9 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   add_custom_answers: boolean = false
   multiple_answers: boolean = false
   updatePage: boolean = false
+  back_btn:boolean = false
+  addQues:boolean = false
+  sc_comp: boolean = false
 
   // Variables
   specialCriteriaId!: number;
@@ -51,6 +56,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   questionsRemoveForm!: FormGroup
   customQuestionsForm!: FormGroup
   customAnswersForm!: FormGroup
+  SpecialCriteriaCompanies!: Company[]
 
   customQuestionResponse!: CustomQuestion
   questions!: UserSubmissionResponse[];
@@ -64,16 +70,22 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
   deleteConf$ = new Observable<boolean>();
+  getSpecialCriteriaCompanies$ = new Observable<Company[]>
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
   }))
+
+
 
   constructor(private route: ActivatedRoute) {
     this.specialCriteriaId$ = this.route.params.pipe(
       map(params => Number(params['id'])),
       tap(id => {
         this.specialCriteriaId = id;
+        this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+          this.SpecialCriteriaCompanies = res
+        }))
         this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
           this.specialCriteria = res
         }))
@@ -123,6 +135,17 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.update = true
     this.updatePage = true
     this.patchForm()
+  }
+
+  onAdd(){
+    this.updatePage = true
+    this.addQuestions = true
+    this.back_btn = true
+    this.addQues = true
+  }
+
+  scComp(){
+    this.sc_comp= true
   }
 
   onAddQuestions() {
@@ -185,6 +208,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   cancel() {
     this.updatePage = false
+    this.back_btn = false
+    this.addQues = false
   }
 
   onQuestionsSubmit() {
