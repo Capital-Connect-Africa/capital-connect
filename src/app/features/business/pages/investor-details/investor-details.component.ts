@@ -57,7 +57,6 @@ export class InvestorDetailsComponent {
         return this._scoringService.getConnectionRequests().pipe(
           tap(res => {
             this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
-            debugger
             this.checkIfUserCanViewPage();
           })
         );

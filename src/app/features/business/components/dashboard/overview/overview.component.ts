@@ -88,7 +88,6 @@ export class OverviewComponent {
   }));
 
   connectionRequests$ =this._scoringService.getConnectionRequests().pipe(tap(res =>{
-    debugger
     this.connectionRequests =res
   }));
 

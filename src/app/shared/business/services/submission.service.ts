@@ -46,7 +46,6 @@ export class SubmissionService extends BaseHttpService {
       }
       return this.update(`${BASE_URL}/submissions`, submission.id, {text: submission.text, answerId: submission.answerId})
     });
-    debugger
     return forkJoin(requests).pipe(map(res =>{
       return res;
     })) as Observable<SubmissionResponse[]>
