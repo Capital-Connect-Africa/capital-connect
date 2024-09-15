@@ -92,6 +92,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     );
   }
 
+  getConnectionRequestsStats(){
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+    return this.read(`${BASE_URL}/connection-requests/investor/${investorProfileId}`).pipe(
+      map(res => res as unknown as MatchMakingStats)
+    )
+  }
+
   getMatchMakingStatistics(): Observable<MatchMakingStats>{
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/statistics/matchmaking/${investorProfileId}?role=investor`).pipe(
