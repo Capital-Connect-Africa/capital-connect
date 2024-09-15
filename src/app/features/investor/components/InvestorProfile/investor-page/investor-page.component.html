@@ -1,3 +1,7 @@
+
+<ng-container *ngIf="investorProfile$ | async as investorProfile">
+
+
 <div class="main">
   <div class="navbar">
     <app-navbar [showBanner]="showBanner" onDashboard="true" />
@@ -14,9 +18,10 @@
           </section>
           
           <div class="flex flex-col bg-white  bio_info">
+            <!-- {{investorProfile | json}} -->
             <h2>{{userProfile.name}}</h2>
-            <p> <button mat-button [routerLink]="['/investor/onboarding']" style="color: green; margin-top: 1rem;">
-              <mat-icon>edit</mat-icon> Update Profile
+            <p> <button class="text-blue-600 font-bold" mat-button [routerLink]="['/investor/onboarding']" style="margin-top: 1rem;">
+              <mat-icon >edit</mat-icon> Update Profile
             </button></p>
 
             <p><mat-icon>call</mat-icon>{{userProfile.mobileNumber || 'Add phone'}}</p>
@@ -27,7 +32,102 @@
               [src]="userProfile.company.companyLogo"
               alt="company logo"/>
               <mat-icon *ngIf="!userProfile.company.companyLogo">location_city</mat-icon> 
-              <span>{{userProfile.company.name}}, {{userProfile.company.country}} . <span>{{userProfile.company.fullTimeBusiness}}</span></span></p>
+              <span>{{investorProfile.organizationName}}, {{investorProfile.headOfficeLocation}} </span></p>
+
+              <section>
+                <h2>Investor</h2>
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Fund Description:</label>
+                      <p>{{investorProfile.fundDescription}}</p>
+                    </div>
+                    <div>
+                      <label>Available Funding:</label>
+                      <p>{{getLocalized(investorProfile.availableFunding)}} $(USD)</p>
+                    </div>
+                    <div>
+                      <label>Investor Type:</label>
+                      <p>{{investorProfile.investorType}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Maximum Funding:</label>
+                      <p>{{getLocalized(investorProfile.maximumFunding)}} $(USD)</p>
+                    </div>
+                    <div>
+                      <label>Minimum Funding:</label>
+                      <p>{{getLocalized(investorProfile.minimumFunding)}} $(USD)</p>
+                    </div>
+                    <div>
+                      <label>No maximum funding</label>
+                      <p>{{investorProfile.noMaximumFunding}}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Sectors Of Investment:</label>
+                      <p>{{getItems(investorProfile.sectors)}}</p>
+                    </div>
+                    <div>
+                      <label>Sub Sectors Of investment:</label>
+                      <p>{{getItems(investorProfile.subSectors)}}</p>
+                    </div>
+                    <div>
+                      <label>ESG focus areas</label>
+                      <p>{{investorProfile.esgFocusAreas}}</p>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Registration Structures:</label>
+                      <p>{{investorProfile.registrationStructures}}</p>
+                    </div>
+                    <div>
+                      <label>Business Growth Stages:</label>
+                      <p>{{investorProfile.businessGrowthStages}}</p>
+                    </div>
+                    <div>
+                      <label>ESG focus areas</label>
+                      <p>{{investorProfile.esgFocusAreas}}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Different Funding Vehicles:</label>
+                      <p>{{investorProfile.differentFundingVehicles}}</p>
+                    </div>                  
+                  
+                  </div>
+                </div>
+
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Countries Of Investment Focus:</label>
+                      <p>{{investorProfile.countriesOfInvestmentFocus}}</p>
+                    </div>
+                  
+                  </div>
+                </div>
+              </section>
+
+
+
 
           </div>
           

@@ -3,6 +3,10 @@
 <ng-container *ngIf="connectWithCompany$ | async"></ng-container>
 <ng-container *ngIf="cancelInterestWithCompany$ | async"></ng-container>
 <ng-container *ngIf="cancelConnectWithCompany$ | async"></ng-container>
+<ng-container *ngIf="conReqStats$  | async"></ng-container>
+
+
+
 
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
@@ -17,9 +21,9 @@
     <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting</p>
   </app-card>
 
-  <app-card [detail]="{title: 'Connection Requests', value: MatchMakingStats.requested.toString() , featured: true}"
+  <app-card [detail]="{title: 'Connection Requests', value: conReqStats.toString() , featured: true}"
     (click)="showDialog('connection_requests')">
-    <p class="helper__text text__yellow">{{ MatchMakingStats.requested.toString() }} Connection Requests</p>
+    <p class="helper__text text__yellow">{{ conReqStats.toString() }} Connection Requests</p>
   </app-card>
 
   <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"
