@@ -42,6 +42,7 @@ export class OverviewComponent {
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
+  conReqStats:number = 0 
 
 
   matchMakingStats: MatchMakingStats | undefined 
@@ -58,7 +59,6 @@ export class OverviewComponent {
   cancelInterestWithCompany$ = new Observable<unknown>()
   companyDetails$ = new Observable<unknown>()
 
-
   investorEligibilityScore: Score | undefined;
   investorPreparednessScore: Score | undefined;
   impactAssessmentScore: Score | undefined;
@@ -73,6 +73,10 @@ export class OverviewComponent {
   matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res  }));
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
     this.matchMakingStats = res as MatchMakingStats
+  }))
+
+  conReqStats$ = this._businessMatchingService.getConnectionRequestsStats().pipe(tap(res=>{
+    
   }))
 
 
