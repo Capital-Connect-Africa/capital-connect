@@ -65,7 +65,7 @@
       </div>
 
       <div class="flex flex-col gap-4" *ngIf="table">
-        <p-table [value]="matchedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="false" [rows]="10">
+        <p-table [value]="matchedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
           <ng-template pTemplate="header">
             <tr>
               <th>Country</th>
@@ -203,39 +203,6 @@
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="right__col">
       <app-alert [action]="showalert" className="rounded-[.5rem]" />
       <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
@@ -245,25 +212,6 @@
       <app-advertisement-space [title]="'Advertise Here'"
         [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   </main>
 </div>

@@ -17,6 +17,12 @@ import { AngularMaterialModule } from '../../../../../shared';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { Company } from '../../../../organization/interfaces';
+import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
+import * as fs from 'file-saver';
+import { ConnectionRequestBody } from '../../../../../shared/interfaces';
+import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
+
 
 @Component({
   standalone: true,
@@ -35,6 +41,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
   private _answer = inject(QuestionsService)
   private _confirmationService = inject(ConfirmationService);
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
 
   //boolean
@@ -71,10 +78,19 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   createAnwer$!: Observable<unknown>
   deleteConf$ = new Observable<boolean>();
   getSpecialCriteriaCompanies$ = new Observable<Company[]>
+  markAsInteresting$ = new Observable<unknown>()
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
   }))
+
+  showInterest(id: number) {
+    this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
+      tap(() => {
+        this._feedBackService.success('Company marked as interesting successfully.');
+      })
+    );
+  }
 
 
 
@@ -255,18 +271,30 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     }))
 
     
- 
-
-
-    // if (this.questionsRemoveForm) {
-    //   const formData = this.questionsRemoveForm.value
-
-    //   let body = {
-    //     specialCriteriaId: this.specialCriteriaId,
-    //     questionIds: [id]
-    //   }
-    // }
   }
+
+
+
+  exportToCSV() {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Companies');
+
+    worksheet.columns = [
+      { header: 'Country', key: 'country', width: 20 },
+      { header: 'Business Sector', key: 'businessSector', width: 20 },
+      { header: 'Business Sub Sector', key: 'businessSubsector', width: 20 },
+      { header: 'Growth Stage', key: 'growthStage', width: 20 }
+    ];
+
+    this.SpecialCriteriaCompanies.forEach(business => {
+      worksheet.addRow(business);
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      fs.saveAs(new Blob([buffer]), 'Special Criteria Companies.xlsx');
+    });
+  }
+
 
   onSubmit() {
     if (this.specialCriteriaForm.valid) {
