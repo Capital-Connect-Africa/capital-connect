@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BASE_URL, BaseHttpService } from "../../../core";
-import { forkJoin, map, Observable } from "rxjs";
+import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
 import { Stats } from "../interfaces/stats.interface";
+import { zip } from "../../../core/utils/zip";
 
 @Injectable({providedIn: 'root'})
 
@@ -23,5 +24,22 @@ export class UserStatisticsService extends BaseHttpService{
                 }
             
         })) as Observable<Stats>
+    }
+
+    fetchCountryBusinessStats(){
+        return this.read(`${BASE_URL}/countries`).pipe(switchMap((countries: any[]) =>{
+            const requests =countries.flat().map((country: {name: string}) =>this.read(`${BASE_URL}/statistics/businesses?country=${country.name}`))
+            return forkJoin(requests).pipe(map(res =>{
+                return zip(countries.map((country: {name: string}) =>({country: country.name})), res)
+            })) as Observable<any>
+        }),
+        map((stats: [{ country: string }, { totalBusinesses: number }][]) =>{
+            return stats.filter((items:[{country: string}, {totalBusinesses: number}]) =>items[1].totalBusinesses >0)
+            .map((items:[{country: string}, {totalBusinesses: number}]) =>({country: items[0].country, totalBusinesses: items[1].totalBusinesses})) as {country: string, totalBusinesses: number}[]
+        }),
+        catchError(err =>{
+            debugger
+            return EMPTY
+        }))
     }
 }
