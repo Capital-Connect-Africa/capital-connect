@@ -342,12 +342,6 @@ export class InterestingBusinessComponent {
         this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
       })
     )
-    // this.connectWithCompany$ = this._businessMatchingService.connectWithCompany(companyId).pipe(
-    //   tap(() => { 
-    //     this._feedBackService.success('Connected with company successfully.');
-    //     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
-    //   })
-    // );
   }
 
   downloadCSV$ = new Observable<Blob>
