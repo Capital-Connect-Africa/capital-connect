@@ -12,7 +12,10 @@ export class UsersHttpService extends BaseHttpService {
   }
 
   getAllUsers() {
-    return this.read(`${BASE_URL}/users`) as Observable<User[]>;
+    return this.read(`${BASE_URL}/users`).pipe(map(users =>{
+      debugger
+      return users;
+    })) as Observable<User[]>;
   }
 
   getInvestorMatchedBusinesses(investorId: number){
