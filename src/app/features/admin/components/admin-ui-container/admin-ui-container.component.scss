@@ -3,7 +3,7 @@
 .main__content{
   display: grid;
   min-height: 100svh;
-
+  background-color: #e0e0e04d;
 }
 
 @include when-screen-is-atleast(medium){
