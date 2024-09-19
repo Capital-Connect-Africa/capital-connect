@@ -99,7 +99,6 @@ export class BubbleChartComponent implements OnInit {
   }
 
   transformData(data: { label: string; value: number }[]): { x: number; y: number; r: number; }[] {
-    debugger
     return data.map((item, index) => ({
       x: index * 10,
       y: item.value, 
