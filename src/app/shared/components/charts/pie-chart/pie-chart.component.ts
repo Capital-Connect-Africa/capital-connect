@@ -1,53 +1,45 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BaseChartDirective } from 'ng2-charts';
-import { ChartOptions } from 'chart.js';
-
+import { Component, Input, OnInit } from '@angular/core';
+import { GoogleChartsModule, ChartType } from 'angular-google-charts';
 
 @Component({
   selector: 'app-pie-chart',
   standalone: true,
-  imports: [BaseChartDirective, CommonModule],
+  imports: [GoogleChartsModule],
   templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss'] 
+  styleUrls: ['./pie-chart.component.scss'],
 })
-export class PieChartComponent {
-  @Input() data!: Record<string, number>;
-  @Input() pieChartLegend = true;
-  @Input() legendPosition: 'top' | 'left' | 'bottom' | 'right' = 'top';
+export class PieChartComponent implements OnInit {
+  @Input() data!: Record<string, number>; // Input for pie chart data
+  @Input() pieChartLegend = true; // Show/hide legend
+  @Input() legendPosition: 'top' | 'left' | 'bottom' | 'right' = 'right'; // Legend position
 
-  pieChartPlugins = [];
-
-  public pieChartOptions: ChartOptions<'pie'> = {
-    responsive: true,
-    plugins: {
-      legend: {
-        align: 'start',
-        display: this.pieChartLegend,
-        position: this.legendPosition,
-      },
-    },
-  };
-
-  pieChartLabels: any[] = [];
-  pieChartDatasets: any[] = [];
+  chartType: ChartType = ChartType.PieChart;
+  pieChartData: (string | number)[][] = [];
+  pieChartOptions: any = {};
+  pieChartColumns: string[] = ['Sector', 'Businesses'];
 
   ngOnInit(): void {
-    if (this.data) {
-      // Populate labels and datasets
-      this.pieChartLabels = [...Object.keys(this.data)];
-      this.pieChartDatasets = [{
-        data: [...Object.values(this.data)],
-        backgroundColor: this.generateColors(Object.keys(this.data).length), // Custom background colors
-      }];
-    }
+    // Pie chart options
+    this.pieChartOptions = {
+      width: 300,
+      height: 300,
+      
+      backgroundColor: 'transparent',
+      fontName: 'Arial',
+      fontSize: 12,
+      legend: {
+        position: this.legendPosition,
+      },
+      chartArea: { width: '100%',},
+      is3D: true, 
+    };
+
+    this.transformData(); // Transform input data for pie chart
   }
 
-  // Generate custom colors for pie chart segments
-  generateColors(count: number): string[] {
-    const colors = [
-      '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
-    ];
-    return Array.from({ length: count }, (_, i) => colors[i % colors.length]);
+  // Convert input data object to the array format needed by Google Charts
+  transformData(): void {
+    this.pieChartData = Object.entries(this.data);
+    this.pieChartData.sort((a, b) => (b[1] as number) - (a[1] as number)); // Sort by values in descending order
   }
 }

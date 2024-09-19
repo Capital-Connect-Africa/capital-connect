@@ -9,14 +9,13 @@ import { GoogleChartsModule, ChartType } from 'angular-google-charts';
   templateUrl: './geo-chart.component.html',
   styleUrls: ['./geo-chart.component.scss']
 })
-export class GeoChartComponent implements OnInit {
+export class GeoChartComponent{
   @Input() chartData: { country: string, value: number }[] = [];
-  @Input() chartTitle = 'World Population';
+  @Input() chartTitle = '';
   chartType:ChartType =ChartType.GeoChart
-  public geoChartData: (string | number)[][] = [];
-  public geoChartOptions: any = {};
-  public geoChartColumns: string[] = ['Country', 'Value'];
-  public geoChartType: 'GeoChart' = 'GeoChart';
+  geoChartData: (string | number)[][] = [];
+  geoChartOptions: any = {};
+  geoChartColumns: string[] = ['Country', 'Businesses'];
 
   ngOnInit(): void {
     this.geoChartOptions = {
@@ -30,10 +29,6 @@ export class GeoChartComponent implements OnInit {
       position: 'bottom',
       alignment: 'center'
     },
-    enableRegionInteractivity: true,
-    regionClickability: 'enabled',
-    width: 800,
-    height: 600
   };
     this.transformData();
   }
