@@ -83,40 +83,41 @@ export class OverviewComponent {
   response$ =new Observable<any>()
 
   currentCompany = this._companyService.currentCompany;
-  matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
-    this.matchedInvestors =res
-  }));
+  // matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
+  //   this.matchedInvestors =res
+  // }));
 
-  connectionRequests$ =this._scoringService.getConnectionRequests().pipe(tap(res =>{
-    this.connectionRequests =res
-  }));
+  // connectionRequests$ =this._scoringService.getConnectionRequests().pipe(tap(res =>{
+  //   debugger
+  //   this.connectionRequests =res
+  // }));
 
-  connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
-    this.connectedInvestors =res
-  }));
+  // connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
+  //   this.connectedInvestors =res
+  // }));
 
-  declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
-    this.declinedConnections =res
-  }));
+  // declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
+  //   this.declinedConnections =res
+  // }));
 
   stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
     this.stats =res;
   }))
 
+investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
+  this.matchedInvestors =res.matches;
+  this.connectionRequests =res.requests;
+  this.declinedConnections =res.declines;
+  this.connectedInvestors =res.connections;
+}))
+
   reload(){
-    this.stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
-      this.stats =res;
+    this.investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
+      this.matchedInvestors =res.matches;
+      this.connectionRequests =res.requests;
+      this.declinedConnections =res.declines;
+      this.connectedInvestors =res.connections;
     }))
-    this.connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
-      this.connectedInvestors =res
-    }));
-  
-    this.declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
-      this.declinedConnections =res
-    }));
-    this.matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
-      this.matchedInvestors =res
-    }));
   }
 
   scoring$ = this._scoringService.getOnboardingScores().pipe(tap(scores => {

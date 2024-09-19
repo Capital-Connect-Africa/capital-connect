@@ -1,8 +1,6 @@
 <ng-container *ngIf="stats$ | async"></ng-container>
-<ng-container *ngIf="matchedInvestors$ | async"></ng-container>
-<ng-container *ngIf="connectionRequests$ | async"></ng-container>
-<ng-container *ngIf="connectedInvestors$ | async"></ng-container>
-<ng-container *ngIf="declinedInvestors$ | async"></ng-container>
+<ng-container *ngIf="investorBusinessRelations$ | async"></ng-container>
+
 <ng-container *ngIf="scoring$ | async"></ng-container>
 <ng-container *ngIf="submissions$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
