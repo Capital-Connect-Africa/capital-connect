@@ -15,6 +15,8 @@ import { TableModule } from 'primeng/table';
 import { User } from '../../../users/models';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
+import { HorizontalBarchartComponent } from "../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
+import { ColumnChartComponent } from "../../../../shared/components/charts/column-chart/column-chart.component";
 
 
 @Component({
@@ -29,6 +31,8 @@ import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe
     GeoChartComponent,
     TableModule,
     UserRoleFormatPipe,
+    HorizontalBarchartComponent,
+    ColumnChartComponent
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

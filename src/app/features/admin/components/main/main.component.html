@@ -56,12 +56,7 @@
           <div class="grid__container">
             <h3>Businesses per sector</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart />
             </div>
           </div>
           <div class="grid__container">
@@ -73,18 +68,19 @@
           <div class="grid__container">
             <h3>Businesses per Stage</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart ylabel="Use"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Use of funds</h3>
             <div class="">
-              <app-geo-chart />
+              <app-horizontal-barchart [ylabel]="'Use'"/>
+            </div>
+          </div>
+          <div class="grid__container col-span-2">
+            <h3>Businesses per Fund Raise</h3>
+            <div class="">
+              <app-column-chart />
             </div>
           </div>
         </div>
@@ -96,35 +92,25 @@
           <div class="grid__container">
             <h3>Investors per sector</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart ylabel="Use"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per funding type</h3>
             <div class="">
-              <app-geo-chart />
+              <app-horizontal-barchart ylabel="Use"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per minimum funding</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-column-chart />
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per maximum funding</h3>
             <div class="">
-              <app-geo-chart />
+              <app-column-chart />
             </div>
           </div>
         </div>
