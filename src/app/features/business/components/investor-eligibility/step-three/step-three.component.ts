@@ -74,11 +74,13 @@ export class StepThreeComponent {
     this.questions.forEach(question => {
       if (question.type === this.fieldType.MULTIPLE_CHOICE) {
         const selectedAnswers = formValues['question_' + question.id];
+        const prevSubmissions =question.defaultValues;
         selectedAnswers.forEach((answerId: number) => {
+          const sub =prevSubmissions?.find(s =>s.answerId ===answerId);
           submissionData.push({
-            id: question.submissionId,
             questionId: question.id,
             answerId: answerId,
+            id: sub?.submissionId,
             text: ''
           });
         });
