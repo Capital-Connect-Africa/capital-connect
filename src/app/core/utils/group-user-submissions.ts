@@ -4,7 +4,7 @@ export const groupUserSubmissions =(submissions: UserSubmissionResponse[]) =>{
     const groupedData:UserSubmissionResponse[] = Object.values(submissions.reduce((acc:any, current) => {
         const questionId = current.question.id;
         if (!acc[questionId]) acc[questionId] = { ...current, answers: [] };
-        acc[questionId].answers.push(current.answer);
+        acc[questionId].answers.push({...current.answer, submissionId: current.id});
         return acc;
     }, {}));
     return groupedData;
