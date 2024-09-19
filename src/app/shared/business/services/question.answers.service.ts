@@ -5,7 +5,6 @@ import { SubMissionStateService } from "./submission-state.service";
 import { Submission, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { UserSubmissionsService } from "../../../core/services/storage/user-submissions.service";
 import { groupUserDraft, groupUserSubmissions } from "../../../core/utils/group-user-submissions";
-import { Answer } from "../../interfaces/Investor";
 
 @Injectable({providedIn: 'root'})
 
@@ -22,7 +21,7 @@ export class QuestionsAnswerService{
                     questionsSubmitted[index] ={
                         ...q,
                         submissionId: submission.id,
-                        defaultValues: submission.answers?.map(answer =>({ answerId: answer.id, text: submission.text??answer.text }))
+                        defaultValues: submission.answers?.map(answer =>({ answerId: answer.id, submissionId: answer.submissionId, text: submission.text??answer.text }))
                     }
                 }
             })
