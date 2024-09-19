@@ -82,6 +82,7 @@ export class ConnectionRequestsComponent {
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
   eligibilityScore: number = 0;
   connectionRequests!: ConnectionRequest[]
+  filteredConnectionRequests!: ConnectionRequest[]
   connectionRequestDetails!: ConnectionRequest
 
 
@@ -103,7 +104,6 @@ export class ConnectionRequestsComponent {
   viewConnectionRequest$ = new Observable<ConnectionRequest>()
   deleteConf$ = new Observable<boolean>();
   updateConnectionRequest$ = new Observable<unknown>()
- 
 
 
 
@@ -117,6 +117,8 @@ export class ConnectionRequestsComponent {
 
   connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
     this.connectionRequests = res
+    this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
   }))
 
 
@@ -146,6 +148,8 @@ export class ConnectionRequestsComponent {
         this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage + 1, this.pageSize).pipe(
           tap(res => {
             this.connectionRequests = res;
+            this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
           })
         );
       })
@@ -182,6 +186,8 @@ export class ConnectionRequestsComponent {
     
     this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
       this.connectionRequests = res
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
     }))
   }
 
