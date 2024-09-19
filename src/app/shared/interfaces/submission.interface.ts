@@ -5,6 +5,7 @@ export interface Submission {
   userId?: number;
   questionId: number;
   answerId: number;
+  answerIds?: number[];
   text?:string;
 }
 
@@ -29,6 +30,7 @@ export interface SubmissionResponse {
 export interface UserSubmissionResponse {
   id: number;
   answer: Answer;
+  answers?: Answer[];
   question: Question;
   text: string;
   explanation : string;
