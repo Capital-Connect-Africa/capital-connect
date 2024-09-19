@@ -3,6 +3,7 @@ import { BASE_URL, BaseHttpService } from "../../../core";
 import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
 import { Stats } from "../interfaces/stats.interface";
 import { zip } from "../../../core/utils/zip";
+import { Sector } from "../../sectors/interfaces";
 
 @Injectable({providedIn: 'root'})
 
@@ -38,8 +39,14 @@ export class UserStatisticsService extends BaseHttpService{
             .map((items:[{country: string}, {totalBusinesses: number}]) =>({country: items[0].country, totalBusinesses: items[1].totalBusinesses})) as {country: string, totalBusinesses: number}[]
         }),
         catchError(err =>{
-            debugger
             return EMPTY
+        }))
+    }
+
+    fetchSectors(){
+        return this.read(`${BASE_URL}/sectors?page=1&limit=50`).pipe(map(res =>{
+            
+            return res;
         }))
     }
 }
