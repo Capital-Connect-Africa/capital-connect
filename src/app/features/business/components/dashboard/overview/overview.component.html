@@ -84,7 +84,13 @@
         <ul class="responses">
           <li *ngFor="let submission of (currentModal === 'eligibility' ? eligibilityAnswers : preparednessAnswers)">
             <h3>{{ submission.question.text | removeQuotes }}</h3>
-            <h4>{{ submission.answer.text | removeQuotes }}</h4>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
             <p>{{ submission.explanation | removeQuotes }}</p>
           </li>
         </ul>
@@ -339,7 +345,13 @@
         <ul class="responses">
           <li *ngFor="let submission of  factSheetAnswers ">
             <h3>{{ submission.question.text | removeQuotes }}</h3>
-            <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
             <p>{{ submission.explanation | removeQuotes }}</p>
           </li>
         </ul>
@@ -409,7 +421,13 @@
         <ul class="responses">
           <li *ngFor="let submission of  impactElementAnswers ">
             <h3>{{ submission.question.text | removeQuotes }}</h3>
-            <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
             <p>{{ submission.explanation | removeQuotes }}</p>
           </li>
         </ul>
