@@ -198,6 +198,26 @@ img{
   color: #000;
   line-height: 14px;
 }
+.responses .list{
+  gap: .5rem;
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  h4{
+    position: relative;
+    &::before{
+      content: '';
+      top: 50%;
+      left: -1rem;
+      width: 5px;
+      height: 5px;
+      position: absolute;
+      border-radius: 50%;
+      background-color: black;
+      transform: translateY(-50%);
+    }
+  }
+}
 footer{
   text-align: center;
   background-color: #064635;

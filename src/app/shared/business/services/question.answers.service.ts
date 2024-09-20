@@ -4,6 +4,7 @@ import { Question } from "../../../features/questions/interfaces";
 import { SubMissionStateService } from "./submission-state.service";
 import { Submission, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { UserSubmissionsService } from "../../../core/services/storage/user-submissions.service";
+import { groupUserDraft, groupUserSubmissions } from "../../../core/utils/group-user-submissions";
 
 @Injectable({providedIn: 'root'})
 
@@ -13,13 +14,14 @@ export class QuestionsAnswerService{
 
     private _searchAnswersFromSubmissions(submissionResponse:UserSubmissionResponse[], questions: Question[]){
         const questionsSubmitted:Question[] =questions;
-        submissionResponse.forEach(submission =>{
+        const responses =groupUserSubmissions(submissionResponse);
+        responses.forEach(submission =>{
             questions.forEach((q, index) =>{
                 if(q.id ===submission.question.id) {
                     questionsSubmitted[index] ={
                         ...q,
                         submissionId: submission.id,
-                        defaultValues:[ { answerId: submission.answer.id, text: submission.text??submission.answer.text } ]
+                        defaultValues: submission.answers?.map(answer =>({ answerId: answer.id, submissionId: answer.submissionId, text: submission.text??answer.text }))
                     }
                 }
             })
@@ -30,13 +32,14 @@ export class QuestionsAnswerService{
     private _searchAnswersFromDrafts(draft:Submission[], questions:Question[]){
         const questionsSubmitted:Question[] =questions;
         let responsesFound =0;
-        draft.forEach(submission =>{
+        const draftResponses =groupUserDraft(draft)
+        draftResponses.forEach(submission =>{
             questions.forEach((q, index) =>{
                 if(q.id ===submission.questionId) {
                     questionsSubmitted[index] ={
                         ...q,
                         submissionId: submission.id,
-                        defaultValues:[ { answerId: submission.answerId, text: submission.text } ]
+                        defaultValues: submission.answerIds?.map(answer =>({ answerId: answer, text: submission.text }))
                     }
                 responsesFound++;
                 }

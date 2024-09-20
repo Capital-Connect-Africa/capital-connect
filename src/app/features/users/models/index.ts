@@ -2,9 +2,10 @@ export interface User {
   id: number;
   username: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   roles: Role;
+  name?: string,
   resetPasswordToken: string | null;
   resetPasswordExpires: string | null;
   isEmailVerified: boolean;

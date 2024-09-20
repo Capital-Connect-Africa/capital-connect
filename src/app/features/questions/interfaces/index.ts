@@ -55,6 +55,7 @@ export interface Answer {
   text: string;
   weight: number;
   id: number;
+  submissionId?: number,
   recommendation?: string,
   order?: number;
   question: {
