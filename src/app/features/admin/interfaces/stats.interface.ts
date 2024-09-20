@@ -7,3 +7,8 @@ export interface Stats{
         interesting: number,
         declined: number,
 }
+
+export interface SharedStats {
+        companies: Record<string, number>,
+        investors: Record<string, number>
+}
