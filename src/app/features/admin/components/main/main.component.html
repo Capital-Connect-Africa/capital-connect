@@ -1,7 +1,7 @@
 <ng-container *ngIf="users$ | async"></ng-container>
 <ng-container *ngIf="analytics$ | async"></ng-container>
 
-<app-admin-ui-container [title]="'Analytics'">
+<app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
   <div class="main">
     <main class="stats">
       <ng-container *ngIf="stats$ | async as stats">
