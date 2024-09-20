@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { SidenavComponent } from "../../../../core";
 import { InterestingBusinessComponent } from '../../components/InterestingBusiness/interestingBusiness.component';
+import { ConnectionRequestsComponent } from "../../components/ConnectionRequests/ConnectionRequests.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     SidenavComponent,
-    InterestingBusinessComponent
-
+    InterestingBusinessComponent,
+    ConnectionRequestsComponent
   ],
-  templateUrl: './interestingBusiness.component.html',
-  styleUrl: './interestingBusiness.component.scss'
+  templateUrl: './ConnectionRequests.component.html',
+  styleUrl: './ConnectionRequests.component.scss'
 })
-export class InterstingBusinesComponent {
+export class ConnectionRequests {
   links = [
     { label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view' },
     { label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune' },

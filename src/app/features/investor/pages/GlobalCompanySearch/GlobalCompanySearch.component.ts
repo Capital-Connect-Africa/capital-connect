@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import { SidenavComponent } from "../../../../core";
-import { InterestingBusinessComponent } from '../../components/InterestingBusiness/interestingBusiness.component';
+import { MatchedBusinessComponent } from '../../components/MatchedBusiness/matchedBusiness.component';
+import { GlobalSearchComponent } from "../../components/GlobalSearch/globalSearch.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [
     SidenavComponent,
-    InterestingBusinessComponent
-
+    MatchedBusinessComponent,
+    GlobalSearchComponent
   ],
-  templateUrl: './interestingBusiness.component.html',
-  styleUrl: './interestingBusiness.component.scss'
+  templateUrl: './GlobalCompanySearch.component.html',
+  styleUrl: './GlobalCompanySearch.component.scss'
 })
-export class InterstingBusinesComponent {
+export class GlobalCompanySearchComponnent {
   links = [
     { label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view' },
     { label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune' },

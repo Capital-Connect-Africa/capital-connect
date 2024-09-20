@@ -42,6 +42,7 @@ export class OverviewComponent {
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
+  conReqStats:number = 0 
 
 
   matchMakingStats: MatchMakingStats | undefined 
@@ -57,7 +58,6 @@ export class OverviewComponent {
   cancelConnectWithCompany$ = new Observable<unknown>()
   cancelInterestWithCompany$ = new Observable<unknown>()
   companyDetails$ = new Observable<unknown>()
-
 
   investorEligibilityScore: Score | undefined;
   investorPreparednessScore: Score | undefined;
@@ -75,6 +75,10 @@ export class OverviewComponent {
     this.matchMakingStats = res as MatchMakingStats
   }))
 
+  conReqStats$ = this._businessMatchingService.getConnectionRequestsStats().pipe(tap(res=>{
+    
+  }))
+
 
 
   showDialog(current_modal: string) {
@@ -87,6 +91,9 @@ export class OverviewComponent {
     }
     else if(current_modal === 'rejected_businesses'){
       this._router.navigate(['/investor/rejected-businesess']);
+    }
+    else if(current_modal === 'connection_requests'){
+      this._router.navigate(['/investor/connection-requests']);
     }
 
     // this.visible = true

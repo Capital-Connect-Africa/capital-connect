@@ -1,5 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FeedbackService, NavbarComponent } from '../../../../../core';
+import { ConfirmationService, FeedbackService, NavbarComponent } from '../../../../../core';
 import { ActivatedRoute } from '@angular/router';
 import { map, tap } from 'rxjs/operators';
 import { Observable, pipe } from 'rxjs';
@@ -13,13 +13,25 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ModalComponent } from '../../../../../shared/components/modal/modal.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { QuestionsService } from '../../../../questions/services/questions/questions.service';
+import { AngularMaterialModule } from '../../../../../shared';
+import { RouterModule } from '@angular/router';
+import { TableModule } from 'primeng/table';
+import { Company } from '../../../../organization/interfaces';
+import * as XLSX from 'xlsx';
+import { Workbook } from 'exceljs';
+import * as fs from 'file-saver';
+import { ConnectionRequestBody } from '../../../../../shared/interfaces';
+import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
+
 
 @Component({
   standalone: true,
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule,
+    RouterModule,TableModule
+  ]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
@@ -28,6 +40,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   private _feedBackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
   private _answer = inject(QuestionsService)
+  private _confirmationService = inject(ConfirmationService);
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
 
   //boolean
@@ -37,6 +51,9 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   add_custom_answers: boolean = false
   multiple_answers: boolean = false
   updatePage: boolean = false
+  back_btn:boolean = false
+  addQues:boolean = false
+  sc_comp: boolean = false
 
   // Variables
   specialCriteriaId!: number;
@@ -46,6 +63,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   questionsRemoveForm!: FormGroup
   customQuestionsForm!: FormGroup
   customAnswersForm!: FormGroup
+  SpecialCriteriaCompanies!: Company[]
 
   customQuestionResponse!: CustomQuestion
   questions!: UserSubmissionResponse[];
@@ -58,16 +76,32 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   update$!: Observable<unknown>;
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
+  deleteConf$ = new Observable<boolean>();
+  getSpecialCriteriaCompanies$ = new Observable<Company[]>
+  markAsInteresting$ = new Observable<unknown>()
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
   }))
+
+  showInterest(id: number) {
+    this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
+      tap(() => {
+        this._feedBackService.success('Company marked as interesting successfully.');
+      })
+    );
+  }
+
+
 
   constructor(private route: ActivatedRoute) {
     this.specialCriteriaId$ = this.route.params.pipe(
       map(params => Number(params['id'])),
       tap(id => {
         this.specialCriteriaId = id;
+        this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+          this.SpecialCriteriaCompanies = res
+        }))
         this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
           this.specialCriteria = res
         }))
@@ -117,6 +151,17 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.update = true
     this.updatePage = true
     this.patchForm()
+  }
+
+  onAdd(){
+    this.updatePage = true
+    this.addQuestions = true
+    this.back_btn = true
+    this.addQues = true
+  }
+
+  scComp(){
+    this.sc_comp= true
   }
 
   onAddQuestions() {
@@ -179,6 +224,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   cancel() {
     this.updatePage = false
+    this.back_btn = false
+    this.addQues = false
   }
 
   onQuestionsSubmit() {
@@ -202,28 +249,52 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     }
   }
 
-  onQuestionsRemove() {
-    if (this.questionsRemoveForm) {
-      const formData = this.questionsRemoveForm.value
-
-      let body = {
-        specialCriteriaId: this.specialCriteriaId,
-        questionIds: formData.questionIds
-      }
-
-      this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
-        this._feedBackService.success('Questions Removed From Special Criteria Successfully')
-
-        this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
-          this.specialCriteria = res
-        }))
-
-        this.questionsRemoveForm.reset()
-
-      }))
-
+  onQuestionsRemove(id:number) {
+    let body = {
+      specialCriteriaId: this.specialCriteriaId,
+      questionIds: [id]
     }
+
+    this.deleteConf$ = this._confirmationService.confirm('Are you sure you want to delete this special criteria question?').pipe(tap(conf =>{
+      if(conf){
+        this.removeQuestions$ = this.sc.removeQuestionsFromSpecialCriteria(body).pipe(tap(res => {
+          this._feedBackService.success('Questions Removed From Special Criteria Successfully')
+    
+          this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
+            this.specialCriteria = res
+          }))
+    
+          this.questionsRemoveForm.reset()
+    
+        }))      
+      }
+    }))
+
+    
   }
+
+
+
+  exportToCSV() {
+    const workbook = new Workbook();
+    const worksheet = workbook.addWorksheet('Companies');
+
+    worksheet.columns = [
+      { header: 'Country', key: 'country', width: 20 },
+      { header: 'Business Sector', key: 'businessSector', width: 20 },
+      { header: 'Business Sub Sector', key: 'businessSubsector', width: 20 },
+      { header: 'Growth Stage', key: 'growthStage', width: 20 }
+    ];
+
+    this.SpecialCriteriaCompanies.forEach(business => {
+      worksheet.addRow(business);
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      fs.saveAs(new Blob([buffer]), 'Special Criteria Companies.xlsx');
+    });
+  }
+
 
   onSubmit() {
     if (this.specialCriteriaForm.valid) {

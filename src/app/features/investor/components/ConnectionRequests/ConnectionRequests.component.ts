@@ -5,8 +5,8 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody } from '../../../../shared/interfaces';
-import { FeedbackService } from '../../../../core';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, ConnectionRequest, updateConnectionRequestBody } from '../../../../shared/interfaces';
+import { ConfirmationService, FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
@@ -26,7 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
 
 @Component({
-  selector: 'app-interesting-business',
+  selector: 'app-connection-requests',
   standalone: true,
   imports: [
     CommonModule,
@@ -41,17 +41,18 @@ import { DebouncedSearchComponent } from "../../../../core/components/debounced-
     MultiSelectModule, ReactiveFormsModule,
     DebouncedSearchComponent
 ],
-  templateUrl: './interestingBusiness.component.html',
-  styleUrl: './interestingBusiness.component.scss',
+  templateUrl: './ConnectionRequests.component.html',
+  styleUrl: './ConnectionRequests.component.scss',
   providers: [PaginationService]
 })
-export class InterestingBusinessComponent {
+export class ConnectionRequestsComponent {
   //services
-  private _feedBackService = inject(FeedbackService)
+
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
   private _company = inject(CompanyHttpService)
   private _scoringService = inject(BusinessOnboardingScoringService);
-  private _router = inject(Router)
+  private _confirmationService = inject(ConfirmationService);
+  private _feedBackService = inject(FeedbackService)
 
   //booleans
   visible = false;
@@ -65,12 +66,11 @@ export class InterestingBusinessComponent {
   pageSize: number = 10;
   totalItems: number = 0; // Set total items
   currentModal = '';
-  selectedBusiness: InterestingBusinesses | null = null;
+  selectedBusiness: ConnectionRequest | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
-  interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: ConnectedBusiness[] = [];
   declineReasons: String[] = [];
-  companyDetails: CompanyResponse | undefined;
+  companyDetails: ConnectionRequest | undefined;
   business__id: number = 0;
   declineForm!: FormGroup;
   investorEligibilityScore: string = '0';
@@ -81,16 +81,15 @@ export class InterestingBusinessComponent {
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
   eligibilityScore: number = 0;
+  connectionRequests!: ConnectionRequest[]
+  filteredConnectionRequests!: ConnectionRequest[]
+  connectionRequestDetails!: ConnectionRequest
 
 
-  dataSource = new MatTableDataSource<ConnectedBusiness>([]);
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   //streams
-  markAsInteresting$ = new Observable<unknown>()
-  connectWithCompany$ = new Observable<unknown>()
-  cancelConnectWithCompany$ = new Observable<unknown>()
-  cancelInterestWithCompany$ = new Observable<unknown>()
   companyDetails$ = new Observable<unknown>()
   public scoring$ = new Observable<Scoring>;
   submissions$ = new Observable<UserSubmissionResponse[]>
@@ -101,7 +100,11 @@ export class InterestingBusinessComponent {
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
   useOfFunds: string[] = [];
   matchMakingStats: MatchMakingStats | undefined;
-  search$ = new Observable<InterestingBusinesses[]>()
+  deleteConnectionRequest$ = new Observable<unknown>()
+  viewConnectionRequest$ = new Observable<ConnectionRequest>()
+  deleteConf$ = new Observable<boolean>();
+  updateConnectionRequest$ = new Observable<unknown>()
+
 
 
 
@@ -112,15 +115,16 @@ export class InterestingBusinessComponent {
   }
 
 
-  
-  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
-    tap(res => {
-      this.interestingBusinesses = res;
-    })
-  );
+  connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
+    this.connectionRequests = res
+    this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
+  }))
+
+
 
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
-    this.totalItems = res?.interesting
+    this.totalItems = res?.requested
   }))
 
 
@@ -129,35 +133,66 @@ export class InterestingBusinessComponent {
     this.declineReasons = reasons
   }))
 
+  updateConnectionRequest(connectionRequest:ConnectionRequest){
+    let investorProfileId = Number(sessionStorage.getItem('profileId'))
+
+    let payload:updateConnectionRequestBody ={
+      investorProfileId: investorProfileId,
+      companyId: connectionRequest.company.id,
+      isApproved: connectionRequest.isApproved
+    }
+
+    this.updateConnectionRequest$ = this._businessMatchingService.updateConnectionRequest(payload).pipe(
+      tap(() => {
+        this._feedBackService.success("Connection Request updated successfully")
+        this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage + 1, this.pageSize).pipe(
+          tap(res => {
+            this.connectionRequests = res;
+            this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
+          })
+        );
+      })
+    );
+    
+
+  }
+
+  viewConnectionRequest(id:number){
+    this.viewConnectionRequest$ = this._businessMatchingService.getConnectionRequestById(id).pipe(tap(res =>{
+      this.connectionRequestDetails = res
+    }))
+  }
+  
+
+
+
+  deleteConnectionRequest(id:number){
+    this.deleteConf$ = this._confirmationService.confirm('Are you sure you want to delete this connection request?').pipe(tap(conf =>{
+      if(conf){
+        this.deleteConnectionRequest$ = this._businessMatchingService.deleteConnectionRequest(id).pipe(tap(res => {
+          this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
+            this.connectionRequests = res
+          }))    
+        }))           
+      }
+    }))
+  }
+
   pageChange(event: PageEvent): void {
-    console.log("The event is",event)
     this.currentPage = event.pageIndex; 
     this.pageSize = event.pageSize;
-    this.pageSize = event.pageSize;    
-    this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage+1, this.pageSize).pipe(
-       tap(res => {
-        this.interestingBusinesses = res;
-       })
-   );
+    this.pageSize = event.pageSize;  
+    
+    this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
+      this.connectionRequests = res
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
+
+    }))
   }
 
   onPageChange(page: number) {
     this.currentPage = page;
-  }
-
-  
-  showDialog(current_modal: string) {
-    if(current_modal === 'matched_businesses' ){
-      this._router.navigate(['/investor/matched-business']);
-    }else if(current_modal === 'interesting_businesses'){
-      this._router.navigate(['/investor/matched-business']);
-    }else if(current_modal === 'connected_businesses'){
-      this._router.navigate(['/investor/matched-business']);
-    }
-    else if(current_modal === 'rejected_businesses'){
-      this._router.navigate(['/investor/matched-business']);
-    }
-
   }
 
 
@@ -181,34 +216,25 @@ export class InterestingBusinessComponent {
 
 
 
-  showDetails(business: InterestingBusinesses): void {
+  showDetails(business: ConnectionRequest): void {
     this.table = !this.table
     this.selectedBusiness = business;
-
-
-    // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
 
-
-     //get the company details
-    this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(
+    this.companyDetails$ = this._businessMatchingService.getConnectionRequestById(business.id).pipe(
       tap(res => {
         this.companyDetails = res
-        this.useOfFunds = res.useOfFunds
+        this.useOfFunds = this.companyDetails.company.useOfFunds
 
+        // this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
+        //   this.submissions =  submissions
+        // }))
 
-        //get the questions
-        this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
-          this.submissions =  submissions
-        }))
-
-
-        // Get the summaries
-        this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
-          this.impactAssessmentScore =scores.impactAssessment;
-          this.investorEligibilityScore = scores.investorEligibility;
-          this.investorPreparednessScore = scores.investorPreparedness;
-        }))
+        // this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
+        //   this.impactAssessmentScore =scores.impactAssessment;
+        //   this.investorEligibilityScore = scores.investorEligibility;
+        //   this.investorPreparednessScore = scores.investorPreparedness;
+        // }))
         
         
         this.investorPreparednessGeneralSummary$ = this.scoring$.pipe(
@@ -234,13 +260,8 @@ export class InterestingBusinessComponent {
         );
      
       })
-    )
-
-   
+    )   
   }
-
-
-
 
 
   hideDetails(): void {
@@ -250,100 +271,15 @@ export class InterestingBusinessComponent {
   }
 
 
-  onSearch(query: string): void {
-    if (query){
-      this.search$ = this._businessMatchingService.searchCompany('interesting', query).pipe(tap(res=>{
-        this.interestingBusinesses = res
-      }))
-    }else{
-      this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
-        tap(res => {
-          this.interestingBusinesses = res;
-        })
-      );
-    }
-  }
-
-
-
-
-
-
   trackByIndex(index: number): number {
     return index;
   }
-
-  cancelConnection(businessId: number): void {
-    this.cancelConnectWithCompany$ = this._businessMatchingService.cancelConnectWithCompany(businessId,[]).pipe(
-      tap(() => {
-        this._feedBackService.success('Connection cancelled successfully.');
-
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(
-          tap(res => {this.interestingBusinesses = res;})
-        );
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));   
-       })
-    );
-  }
-
- 
 
   openModal(businessId: number){
     this.business__id = businessId
     this.decline = true
   }
   
-  submit(){
-    this.cancelInterest(this.business__id)
-  }
-
-  cancelInterest(businessId: number): void {   
-
-    if (this.declineForm.valid) {
-      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
-      this.cancelInterestWithCompany$ = this._businessMatchingService
-        .cancelInterestWithCompany(businessId, selectedReasons).pipe(
-          tap(() => {
-            this._feedBackService.success('Interest cancelled successfully.');
-            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
-
-            this.declineForm.reset();
-            this.declineForm.updateValueAndValidity();
-
-            this.decline = false;
-          })
-        );
-    }
-
-  }
-
-
-
-  showInterest(id: number) {
-    this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
-      tap(() => { 
-        this._feedBackService.success('Company marked as interesting successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;})); 
-      })        
-    );
-  }
-
-  connect(companyId: number) {
-    let investorProfileId = Number(sessionStorage.getItem('profileId'))
-
-    let payload : ConnectionRequestBody = {
-      investorProfileId: investorProfileId,
-      companyId: companyId
-    }
-
-    this.connectWithCompany$ = this._businessMatchingService.createAConnectionRequest(payload).pipe(
-      tap(()=>{
-        this._feedBackService.success('Connection Request Created Succesfully');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
-      })
-    )
-  }
-
   downloadCSV$ = new Observable<Blob>
   downloadCSV(status:string){this.downloadCSV$ = this._businessMatchingService.matchMakingCsv(status).pipe(tap(res=>{ })) }
 }

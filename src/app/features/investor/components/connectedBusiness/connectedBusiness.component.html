@@ -28,10 +28,17 @@
 
   <main>
     <div class="left__col">
+      <div class="flex justify-start" *ngIf="selectedBusiness">
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
+      </div>
+
+
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
           <div>
-          <h5><strong>Connected Businesses</strong></h5>
+          <h5 class="top__txt">Connected Businesses</h5>
           <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
           <ng-container *ngIf="downloadCSV$  | async"></ng-container>
           <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('connected')">Download List</button>
@@ -86,7 +93,7 @@
             <!-- Company Details -->
             <div class="mb-6 details company__info">
               <!-- <hr /> -->
-              <h6 class="text-xl font-semib old mb-2"><strong>Connected Businesses Information</strong></h6>
+              <h6  class="top__txt">Connected Businesses Information</h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
                   <p class="font-bold" ><strong>Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name
@@ -143,7 +150,7 @@
 
               <!-- <h6 class="text-gray-700 font-mediu m mt-5 text-sm text-center">Business Feedback</h6> -->
               <hr />
-              <h6 class="text-xl font-semib old mb-2"><strong>Business Feedback</strong></h6>
+              <h6 class="top__txt">Business Feedback</h6>
               <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <p><strong>Annual Revenue for the last three years</strong></p>
@@ -229,7 +236,7 @@
               </div>
 
               <hr />
-              <h6 class="text-xl font-semib old mb-2 "><strong>Eligibility Results</strong></h6>
+              <h6 class="top__txt">Eligibility Results</h6>
               <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
                 <div class="executive-summary">
                   <section class="score-section">
@@ -247,7 +254,7 @@
               </ng-container>
 
               <hr />
-              <h6 class="text-xl font-semib old mb-2"><strong>Preparedness Results</strong></h6>
+              <h6  class="top__txt">Preparedness Results</h6>
               <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
                 <div class="executive-summary">
                   <section class="score-section">
@@ -266,7 +273,7 @@
 
 
               <hr>
-              <h6 class="text-xl font-semib old mb-2"><strong>Impact Results</strong></h6>
+              <h6 class="top__txt">Impact Results</h6>
               <div *ngIf="(impactElementAnswers.length > 0)" class="feed_back">
                 <ul class="">
                   <li *ngFor="let submission of  impactElementAnswers ">

@@ -38,7 +38,7 @@ import { TableModule } from 'primeng/table';
 
 
 @Component({
-  selector: 'app-matched-business',
+  selector: 'app-global-search',
   standalone: true,
   imports: [
     AdvertisementSpaceComponent, AssessmentSummaryComponent,
@@ -49,12 +49,12 @@ import { TableModule } from 'primeng/table';
     RemoveQuotesPipe, 
     MultiSelectModule, ReactiveFormsModule,DropdownModule,TableModule
   ],
-  templateUrl: './matchedBusiness.component.html',
-  styleUrl: './matchedBusiness.component.scss'
+  templateUrl: './globalSearch.component.html',
+  styleUrl: './globalSearch.component.scss'
 })
 
 
-export class MatchedBusinessComponent {
+export class GlobalSearchComponent {
   matchedBusinesses: MatchedBusiness[] = []
   selectedMatchedBusiness: MatchedBusiness | null = null; 
   business__id: number = 0

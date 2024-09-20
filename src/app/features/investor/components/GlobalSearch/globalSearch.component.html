@@ -15,10 +15,13 @@
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="companyDetails$ | async"></ng-container>
+
 <ng-container *ngIf="investorEligibilityScore$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessScore$  | async"></ng-container>
+
 <ng-container *ngIf="submissions$  | async"></ng-container>
 <ng-container *ngIf="downloadCSV$  | async"></ng-container>
+
 <ng-container *ngIf="useOfFundsOptions$  | async"></ng-container>
 <ng-container *ngIf="investmentStructureOptions$  | async"></ng-container>
 <ng-container *ngIf="esgFocusAreaOptions$  | async"></ng-container>
@@ -34,19 +37,31 @@
     <p class="brand__name">Business Name</p>
     <div class="left__col">
       <div class="flex justify-start" *ngIf="selectedMatchedBusiness">
-        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
+          Back to List
+        </button>
       </div>
 
       <div *ngIf="table" class="matched__top  search border-0">
         <div class="flex justify-between">
-          <div><h3 class="top__txt">Matched Businesses</h3></div>
+          <div>
+            <h3 class="top__txt">Companies</h3>
+          </div>
+
           <div class="flex justify-between">
             <ng-container *ngIf="downloadCSV$  | async"></ng-container>
             <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Global Company
               Search</button>
           </div>
         </div>
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">No matched businesses found. <br/>Check again later.</div>
+
+
+
+
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+          No companies found. <br /> Check again later.
+        </div>
+
       </div>
 
       <div class="flex flex-col gap-4" *ngIf="table">
@@ -89,7 +104,7 @@
         <!-- Company Details -->
         <div class="mb-6 details company__info">
           <!-- <hr /> -->
-          <h3 class="top__txt ">Matched Busineses Information</h3>
+          <h3 class="top__txt ">Company Information</h3>
           <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
 
             <div>
@@ -188,39 +203,6 @@
     </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div class="right__col">
       <app-alert [action]="showalert" className="rounded-[.5rem]" />
       <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
@@ -230,25 +212,6 @@
       <app-advertisement-space [title]="'Advertise Here'"
         [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   </main>
 </div>
@@ -394,7 +357,8 @@
       </div>
       <div class="flex justify-end cta__group">
         <button class="btn btn-secondary ml-2" type="button" (click)="onResetSearch()">Reset Form</button>
-        <button class="btn btn-primary" type="submit">Search Companies</button>
+        <button class="btn btn-primary " type="submit">Search Companies</button>
+
       </div>
     </form>
   </div>

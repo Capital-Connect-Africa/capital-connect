@@ -8,6 +8,9 @@ import { ProfileService } from '../../../../profile/services/profile.service';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { tap } from 'rxjs';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
+import { RouterModule } from '@angular/router';
+import { InvestorProfile } from '../../../../../shared/interfaces/Investor';
+import { InvestorScreensService } from '../../../services/investor.screens.service';
 
 @Component({
   standalone: true,
@@ -19,19 +22,25 @@ import { SignalsService } from '../../../../../core/services/signals/signals.ser
     NavbarComponent,  
     CommonModule,
     AlertComponent,
-    AlertCardComponent
-
+    AlertCardComponent,
+    RouterModule
   ]
 })
 export class InvestorPageComponent implements OnInit {
   @Input() showBanner =false;
   private _profileService =inject(ProfileService);
   private _routingService =inject(RoutingService)
+  investorProfile: InvestorProfile | null = null;
+  private _screenService = inject(InvestorScreensService)
 
   constructor() { }
 
   ngOnInit() {
   }
+
+  investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
+    this.investorProfile = investorProfile ;
+  }))
 
   signalsService =inject(SignalsService);
   showDialog(){
@@ -41,5 +50,20 @@ export class InvestorPageComponent implements OnInit {
   userProfile$ =this._profileService.get().pipe(tap(res =>{
     return res;
   }))
+
+  getLocalized(number: number): string {
+    return Number(number).toLocaleString();
+  }
+
+  getItems(items: unknown): string {
+    if (Array.isArray(items)) {
+      return items
+        .filter(item => typeof item === 'object' && item !== null && 'name' in item) // Ensure each item has 'id'
+        .map((item: any) => item.name.toString()) // Convert the id to string
+        .join(', '); // Join with commas
+    }
+    return '';
+  }
+  
 
 }
