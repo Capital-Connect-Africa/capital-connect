@@ -18,6 +18,7 @@ import { RoutingService } from '../../../../../shared/business/services/routing.
 import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
+import { groupUserSubmissions } from '../../../../../core/utils/group-user-submissions';
 
 @Component({
   selector: 'app-overview',
@@ -83,29 +84,24 @@ export class OverviewComponent {
   response$ =new Observable<any>()
 
   currentCompany = this._companyService.currentCompany;
-  matchedInvestors$ =this._scoringService.getMatchedInvestors().pipe(tap(res =>{
-    this.matchedInvestors =res
-  }));
-
-  connectionRequests$ =this._scoringService.getConnectionRequests().pipe(tap(res =>{
-    this.connectionRequests =res
-  }));
-
-  connectedInvestors$ =this._scoringService.getConnectedInvestors().pipe(tap(res =>{
-    this.connectedInvestors =res
-  }));
-
-  declinedInvestors$ =this._scoringService.getDecliningInvestors().pipe(tap(res =>{
-    this.declinedConnections =res
-  }));
 
   stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
     this.stats =res;
   }))
 
+investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
+  this.matchedInvestors =res.matches;
+  this.connectionRequests =res.requests;
+  this.declinedConnections =res.declines;
+  this.connectedInvestors =res.connections;
+}))
+
   reload(){
-    this.stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
-      this.stats =res;
+    this.investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
+      this.matchedInvestors =res.matches;
+      this.connectionRequests =res.requests;
+      this.declinedConnections =res.declines;
+      this.connectedInvestors =res.connections;
     }))
   }
 
@@ -115,20 +111,20 @@ export class OverviewComponent {
   }))
 
   submissions$ = this._submissionStateService.getUserSubmissionsPerSection().pipe(tap(submissions => {
-    this.eligibilityAnswers = submissions
+    this.eligibilityAnswers = groupUserSubmissions(submissions)
   }))
 
   preparednessSubmissions$ = this._submissionStateService.getUserPreparednessSubmissionsPerSection().pipe(tap(submissions => {
-    this.preparednessAnswers = submissions
+    this.preparednessAnswers = groupUserSubmissions(submissions)
   }))
 
 
   esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
-    this.impactElementAnswers = submissions
+    this.impactElementAnswers = groupUserSubmissions(submissions)
   }))
 
   factSheetSubmissions$ = this._submissionStateService.getFactSheetSubmissionsPerSection().pipe(tap(submissions => {
-    this.factSheetAnswers = submissions
+    this.factSheetAnswers = groupUserSubmissions(submissions)
   }))
 
 

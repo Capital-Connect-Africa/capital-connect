@@ -1,8 +1,165 @@
-<app-admin-ui-container [title]="'Quick Stats'">
+<ng-container *ngIf="users$ | async"></ng-container>
+
+<app-admin-ui-container [title]="'Analytics'">
   <div class="main">
-    <main>
+    <main class="stats">
       <ng-container *ngIf="stats$ | async as stats">
-        <section class="stats__section">
+        <div>
+        <h3>Overview</h3>
+        <div class="grid grid-cols-[max-content_auto] grid__wrapper">
+          <div class="grid__container">
+            <h3>Users</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                Business: stats.business,
+                Investors: stats.investors,
+                Advisors: stats.advisors,
+                Staff: stats.staff
+              }" />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Recent Signups</h3>
+            <p-table [value]="users" [paginator]="false"> 
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                    <span class="header-container">
+                      <span class="header-text">
+                        {{col.header}}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+          </ng-template>
+            <ng-template pTemplate="body" let-user>
+              <tr>
+                <td>{{user.name}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.roles | roleformat}}</td>
+                
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5">No recent signups recorded.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3>Business</h3>
+        <div class="grid grid-cols-2 grid__wrapper">
+          <div class="grid__container">
+            <h3>Businesses per sector</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                Business: stats.business,
+                Investors: stats.investors,
+                Advisors: stats.advisors,
+                Staff: stats.staff
+              }" />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Businesses per country</h3>
+            <div class="">
+              <app-geo-chart />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Businesses per Stage</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                Business: stats.business,
+                Investors: stats.investors,
+                Advisors: stats.advisors,
+                Staff: stats.staff
+              }" />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Businesses per Use of funds</h3>
+            <div class="">
+              <app-geo-chart />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3>Investors</h3>
+        <div class="grid grid-cols-2 grid__wrapper">
+          <div class="grid__container">
+            <h3>Investors per sector</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                Business: stats.business,
+                Investors: stats.investors,
+                Advisors: stats.advisors,
+                Staff: stats.staff
+              }" />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Investors per funding type</h3>
+            <div class="">
+              <app-geo-chart />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Investors per minimum funding</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                Business: stats.business,
+                Investors: stats.investors,
+                Advisors: stats.advisors,
+                Staff: stats.staff
+              }" />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Investors per maximum funding</h3>
+            <div class="">
+              <app-geo-chart />
+            </div>
+          </div>
+        </div>
+      </div>
+        
+        <!-- <div class="grid grid-cols-2">
+          <div class="">
+            <h3>Sectors</h3>
+            <div class=""> -->
+              <!-- <app-bubble-chart /> -->
+            <!-- </div>
+          </div> -->
+          <!-- <div class="">
+            <h3>Use Of Funds</h3>
+            <div class=""> -->
+              <!-- <app-bubble-chart /> -->
+            <!-- </div>
+          </div>
+        </div> -->
+        <!-- <div class="grid grid-cols-2">
+          <div class="">
+            <h3>Stages</h3>
+            <div class="">
+              <app-bar-chart />
+            </div>
+          </div>
+        </div> -->
+
+
+
+
+
+
+
+        <!-- <section class="stats__section">
           <h3 class="text-base stat__title">Business</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div class="bg-[#064635e5] h-[200px] rounded-lg stat__card">
@@ -60,7 +217,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
   
       </ng-container>
      

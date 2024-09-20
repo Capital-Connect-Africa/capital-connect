@@ -1,6 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { BusinessAndInvestorMatchingService } from "../business/services/busines.and.investor.matching.service";
-import { forkJoin, map, Observable, switchMap } from "rxjs";
+import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
 import { AuthStateService } from "../../features/auth/services/auth-state.service";
 import {
   BUSINESS_INFORMATION_SUBSECTION_IDS, getInvestorEligibilitySubsectionIds,
@@ -102,4 +102,19 @@ export class BusinessOnboardingScoringService {
     })))
   }
 
+  getBusinessInvestorRelations(){
+    const reqs =[this.getMatchedInvestors(), this.getConnectedInvestors(), this.getDecliningInvestors(), this.getConnectionRequests()]
+    return forkJoin(reqs).pipe(map(res =>{ // used forkjoin to be able to filter them appropriately
+      const matches =res[0]
+      const connections =res[1];
+      const declines =res[2];
+      const requests =res[3].filter(investor =>!matches.find(minvestor =>minvestor.id ==investor.id) && !connections.find(cinvestor =>cinvestor.id ==investor.id) && !declines.find(dinvestor =>dinvestor.id ==investor.id));
+      return {
+        matches, connections, declines, requests
+      }
+    }),
+  catchError(err =>{
+    return EMPTY
+  }));
+  }
 }

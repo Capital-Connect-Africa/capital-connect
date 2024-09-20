@@ -24,7 +24,7 @@ export class SignUpFormComponent {
 
   signUpForm = this._formBuilder.group({
     accountType: ['', Validators.required],
-    agreedToTAC: ['', Validators.required],
+    hasAcceptedTerms: ['', Validators.required],
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
@@ -114,7 +114,7 @@ export class SignUpFormComponent {
     const formValue = this.signUpForm.value;
     const input: CreateUserInput = {
       username: formValue.email as string,
-      agreedToTAC: formValue.agreedToTAC as string,
+      hasAcceptedTerms: formValue.hasAcceptedTerms as string,
       password: formValue.password as string,
       roles: formValue.accountType as USER_ROLES,
       firstName: formValue.firstName as string,
