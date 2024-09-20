@@ -10,7 +10,7 @@ import { GoogleChartsModule, ChartType } from 'angular-google-charts';
   styleUrls: ['./geo-chart.component.scss']
 })
 export class GeoChartComponent{
-  @Input() chartData: { country: string, value: number }[] = [];
+  @Input() data: Record<string, number> ={};
   @Input() chartTitle = '';
   chartType:ChartType =ChartType.GeoChart
   geoChartData: (string | number)[][] = [];
@@ -33,17 +33,12 @@ export class GeoChartComponent{
     this.transformData();
   }
   options = {
-    colors: [ '#ec8f6e', '#f3b49f', '#f6c7b6', '#e0440e', '#e6693e',],
+    colors: ['#f6c7b6', '#ec8f6e', '#f3b49f','#e0440e', '#e6693e'],
     is3D: true
   };
   transformData(): void {
-    this.geoChartData =[
-      ['Kenya', 500],
-      ['Angola', 50],
-      ['Guinea', 10],
-      ['Uganda', '30'],
-      ['South Africa', 20],
-    ]
-    // this.chartData.map(item => [item.country, item.value]);
+    this.geoChartData =[...Object.entries(this.data)].map((record: [string, number]) =>{
+      return record
+    })
   }
 }
