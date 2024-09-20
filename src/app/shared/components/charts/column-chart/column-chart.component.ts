@@ -14,6 +14,7 @@ export class ColumnChartComponent {
   @Input() ylabel!:string;
   @Input() xlabel!:string;
   @Input() data!:Record<string, number>;
+  @Input() colors: string[] =['#1b9e77'];
   chartData: (string | number)[][] = [];
   chartType: ChartType = ChartType.ColumnChart;
   options: any = {};
@@ -21,7 +22,7 @@ export class ColumnChartComponent {
   ngOnInit(): void {
     this.options = {
       bars: 'vertical',
-      colors: ['#1b9e77', '#d95f02'],
+      colors: this.colors,
       hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none' },
       vAxis: { title: this.ylabel, gridlines: { count: 0 }, baselineColor: 'none'  },
       legend: 'none',

@@ -13,7 +13,7 @@ export class HorizontalBarchartComponent {
   @Input() ylabel!:string;
   @Input() xlabel!: string;
   @Input() data!: Record<string, number>;
-  @Input() colors:string[] =['#1b9e77', '#d95f02'];
+  @Input() colors:string[] =['#1b9e77'];
   chartType:ChartType =ChartType.BarChart
   barChartData: (string | number)[][] = [];
   options: Record<string, any> = {};

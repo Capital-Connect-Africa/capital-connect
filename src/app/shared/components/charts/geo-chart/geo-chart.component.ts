@@ -33,7 +33,7 @@ export class GeoChartComponent{
     this.transformData();
   }
   options = {
-    colors: ['#f6c7b6', '#ec8f6e', '#f3b49f','#e0440e', '#e6693e'],
+    colors: ['#f6c7b6', '#f3b49f', '#ec8f6e','#e0440e', '#e6693e'],
     is3D: true
   };
   transformData(): void {

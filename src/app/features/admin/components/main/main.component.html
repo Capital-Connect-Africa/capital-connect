@@ -16,7 +16,9 @@
                 Investors: stats.investors,
                 Advisors: stats.advisors,
                 Staff: stats.staff
-              }" />
+              }" 
+              [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
+              />
             </div>
           </div>
           <div class="grid__container">
@@ -69,19 +71,19 @@
           <div class="grid__container">
             <h3>Businesses per Stage</h3>
             <div class="">
-              <app-horizontal-barchart [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats"/>
+              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Use of funds</h3>
             <div class="">
-              <app-horizontal-barchart [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats"/>
+              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Fund Raise</h3>
             <div class="">
-              <app-column-chart [data]="fundRaise" *ngIf="fundRaise"/>
+              <app-column-chart [colors]="['#064635']" [data]="fundRaise" *ngIf="fundRaise"/>
             </div>
           </div>
           <div class="grid__container">
@@ -91,7 +93,7 @@
                 Interesting: stats.interesting,
                 Connected: stats.connected,
                 Declined: stats.declined
-              }" />
+              }" [colors]="['#495057', '#654f29', '#064635', '#dc3546']"/>
             </div>
           </div>
         </div>
@@ -103,25 +105,25 @@
           <div class="grid__container">
             <h3>Investors Intresested per sector</h3>
             <div class="">
-              <app-horizontal-barchart [data]="sectorStats.investors" ylabel="Sectors" xlabel="Investors" *ngIf="sectorStats"/>
+              <app-horizontal-barchart [colors]="['#847cfb']" [data]="sectorStats.investors" ylabel="Sectors" xlabel="Investors" *ngIf="sectorStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per funding type</h3>
             <div class="">
-              <app-horizontal-barchart [data]="fundingStats.investors" ylabel="Type" xlabel="Investors" *ngIf="fundingStats"/>
+              <app-horizontal-barchart [colors]="['#e9a901']" [data]="fundingStats.investors" ylabel="Type" xlabel="Investors" *ngIf="fundingStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per minimum funding</h3>
             <div class="">
-              <app-column-chart [data]="minFunding" *ngIf="minFunding" xlabel="Band" ylabel="Investors"/>
+              <app-column-chart [colors]="['#654f29']" [data]="minFunding" *ngIf="minFunding" xlabel="Band" ylabel="Investors"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per maximum funding</h3>
             <div class="">
-              <app-column-chart [data]="maxFunding" *ngIf="maxFunding" xlabel="Band" ylabel="Investors"/>
+              <app-column-chart [colors]="['#064635']" [data]="maxFunding" *ngIf="maxFunding" xlabel="Band" ylabel="Investors"/>
             </div>
           </div>
         </div>
