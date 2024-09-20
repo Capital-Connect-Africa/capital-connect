@@ -25,7 +25,7 @@ export class InvestorDetailsComponent {
   links =[
     {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
     {label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center'},
-    {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'},
+    // {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'},
     {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
 
   ]
@@ -43,37 +43,37 @@ export class InvestorDetailsComponent {
       const parts = `${params.get('id')}`.split('-');
       if(parts.length !==2) this._router.navigateByUrl('/business');
       this.relationship =parts[0] as CompanyInvestorRelationsShip;
-      const id =parts[1];
+      const id =Number(parts[1]);
       if(this.relationship ===CompanyInvestorRelationsShip.CONNECTED){
-        return this._scoringService.getConnectedInvestors().pipe(
+        return this._scoringService.getInvestorProfile(id).pipe(
           tap(res => {
-            this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.investor = res
             this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
           })
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.REQUESTED){
-        return this._scoringService.getConnectionRequests().pipe(
+        return this._scoringService.getInvestorProfile(id).pipe(
           tap(res => {
-            this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.investor = res;
             this.checkIfUserCanViewPage();
           })
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.MATCHED){
-        return this._scoringService.getMatchedInvestors().pipe(
+        return this._scoringService.getInvestorProfile(id).pipe(
           tap(res => {
-            this.investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            this.investor = res;
             this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
           })
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.DECLINED){
-        return this._scoringService.getDecliningInvestors().pipe(
+        return this._scoringService.getInvestorProfile(id).pipe(
           tap(res => {
-            const investor = res.find(investor => `${investor.id}` === id) as MatchedInvestor;
+            const investor =res
             this.declineReasons =investor.declineReasons;
             this.checkIfUserCanViewPage();
           })
