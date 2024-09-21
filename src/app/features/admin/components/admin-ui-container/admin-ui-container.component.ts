@@ -23,6 +23,7 @@ export class AdminUiContainerComponent {
     { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' },
   ]
 
+  @Input() bg_gray:boolean =false;
   @Input({ required: true}) title = 'Dashboard';
 
   ngOnInit(): void {

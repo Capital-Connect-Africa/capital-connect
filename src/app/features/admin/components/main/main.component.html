@@ -1,6 +1,7 @@
 <ng-container *ngIf="users$ | async"></ng-container>
+<ng-container *ngIf="analytics$ | async"></ng-container>
 
-<app-admin-ui-container [title]="'Analytics'">
+<app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
   <div class="main">
     <main class="stats">
       <ng-container *ngIf="stats$ | async as stats">
@@ -15,7 +16,9 @@
                 Investors: stats.investors,
                 Advisors: stats.advisors,
                 Staff: stats.staff
-              }" />
+              }" 
+              [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
+              />
             </div>
           </div>
           <div class="grid__container">
@@ -56,35 +59,41 @@
           <div class="grid__container">
             <h3>Businesses per sector</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart [data]="sectorStats.companies" ylabel="Sectors" xlabel="Businesses" *ngIf="sectorStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per country</h3>
             <div class="">
-              <app-geo-chart />
+              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Stage</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Use of funds</h3>
             <div class="">
-              <app-geo-chart />
+              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Businesses per Fund Raise</h3>
+            <div class="">
+              <app-column-chart [colors]="['#064635']" [data]="fundRaise" *ngIf="fundRaise"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Business-Investor Engagements</h3>
+            <div class="h-full flex w-full justify-center">
+              <app-pie-chart [data]="{
+                Interesting: stats.interesting,
+                Connected: stats.connected,
+                Declined: stats.declined
+              }" [colors]="['#495057', '#654f29', '#064635', '#dc3546']"/>
             </div>
           </div>
         </div>
@@ -94,131 +103,32 @@
         <h3>Investors</h3>
         <div class="grid grid-cols-2 grid__wrapper">
           <div class="grid__container">
-            <h3>Investors per sector</h3>
+            <h3>Investors Intresested per sector</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-horizontal-barchart [colors]="['#847cfb']" [data]="sectorStats.investors" ylabel="Sectors" xlabel="Investors" *ngIf="sectorStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per funding type</h3>
             <div class="">
-              <app-geo-chart />
+              <app-horizontal-barchart [colors]="['#e9a901']" [data]="fundingStats.investors" ylabel="Type" xlabel="Investors" *ngIf="fundingStats"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per minimum funding</h3>
             <div class="">
-              <app-pie-chart [data]="{
-                Business: stats.business,
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Staff: stats.staff
-              }" />
+              <app-column-chart [colors]="['#654f29']" [data]="minFunding" *ngIf="minFunding" xlabel="Band" ylabel="Investors"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Investors per maximum funding</h3>
             <div class="">
-              <app-geo-chart />
+              <app-column-chart [colors]="['#064635']" [data]="maxFunding" *ngIf="maxFunding" xlabel="Band" ylabel="Investors"/>
             </div>
           </div>
         </div>
       </div>
         
-        <!-- <div class="grid grid-cols-2">
-          <div class="">
-            <h3>Sectors</h3>
-            <div class=""> -->
-              <!-- <app-bubble-chart /> -->
-            <!-- </div>
-          </div> -->
-          <!-- <div class="">
-            <h3>Use Of Funds</h3>
-            <div class=""> -->
-              <!-- <app-bubble-chart /> -->
-            <!-- </div>
-          </div>
-        </div> -->
-        <!-- <div class="grid grid-cols-2">
-          <div class="">
-            <h3>Stages</h3>
-            <div class="">
-              <app-bar-chart />
-            </div>
-          </div>
-        </div> -->
-
-
-
-
-
-
-
-        <!-- <section class="stats__section">
-          <h3 class="text-base stat__title">Business</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-[#064635e5] h-[200px] rounded-lg stat__card">
-              <span class="text-right"><mat-icon>handshake</mat-icon></span>
-              <div>
-                <h2 class="value">{{matches.connected}}</h2>
-                <p>Connected</p>
-              </div>
-            </div>
-            <div class="bg-[#654f29e3] h-[200px] rounded-lg stat__card">
-              <span class="text-right"><mat-icon>thumb_up</mat-icon></span>
-              <div>
-                <h2 class="value">{{matches.interesting}}</h2>
-                <p>Interesting</p>
-              </div>
-            </div>
-            <div class="bg-rose-950 h-[200px] rounded-lg stat__card">
-              <span class="text-right"><mat-icon>thumb_down</mat-icon></span>
-              <div>
-                <h2 class="value">{{matches.declined}}</h2>
-                <p>Declined</p>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="stats__section">
-          <h3 class="stat__title">Users</h3>
-          <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
-            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
-                <span class="rounded bg__icon"><mat-icon>group</mat-icon></span>
-                <div>
-                  <span>{{matches.investors}}</span>
-                  <p>Investors</p>
-                </div>
-            </div>
-            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
-              <span class="rounded bg__icon"><mat-icon>apartment</mat-icon></span>
-              <div>
-                <span>{{matches.business}}</span>
-                <p>Business</p>
-              </div>
-            </div>
-            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
-              <span class="rounded bg__icon"><mat-icon>support_agent</mat-icon></span>
-              <div>
-                <span>{{matches.advisors}}</span>
-                <p>Advisors</p>
-              </div>
-            </div>
-            <div class="bg-[#232435d7] text-white rounded flex items-center gap-4  user__card">
-              <span class="rounded bg__icon"><mat-icon>admin_panel_settings</mat-icon></span>
-              <div>
-                <span>{{matches.staff}}</span>
-                <p>Staff</p>
-              </div>
-            </div>
-          </div>
-        </section> -->
-  
       </ng-container>
      
     </main>
