@@ -29,7 +29,20 @@
         <div class="d-flex justify-between items-center">
         <h5 class="top__txt " >Connection Requests</h5>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-        <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('requested')">Download List</button>
+
+
+          
+          
+        <div class="cta__group">
+          <div class="">
+            <p-dropdown class="input__field" formControlName="questionIds" [options]="status"
+              placeholder="Select Connection Status" (onChange)="onStatusChange($event)"></p-dropdown>
+          </div>
+          <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('requested')">Download List</button>
+        </div>
+        
+        
+
 
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
           No connection requests found. <br /> Check again later.

@@ -389,6 +389,8 @@ th{
     margin-right: 20px;
     margin-left: 20px;
   }
+
+  
   
   
   
@@ -415,3 +417,27 @@ th{
     font-family: $font-family-inter;
     color: #374A62;
   }
+
+
+
+  .action-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%; // Ensure the div takes full width
+  }
+  
+  .input__wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem; // Optional: Space between button and dropdown
+  }
+  
+  .input__label {
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn {
+    margin-right: 1rem; // Optional: Extra space at the very end of the row
+  }
+  
