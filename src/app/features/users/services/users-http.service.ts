@@ -40,7 +40,7 @@ export class UsersHttpService extends BaseHttpService {
     })) as Observable<MatchedInvestor[]>
   }
   getInvestorStats(investorId: number){
-    return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}`).pipe(map(res =>{
+    return this.read(`${BASE_URL}/statistics/matchmaking/${investorId}?role=investor`).pipe(map(res =>{
       return res
     })) as Observable<any[]>
   }

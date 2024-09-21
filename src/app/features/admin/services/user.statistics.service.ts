@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
-import { Stats } from "../interfaces/stats.interface";
-import { zip } from "../../../core/utils/zip";
+import { SharedStats, Stats } from "../interfaces/stats.interface";
+import { formatBand } from "../../../core/utils/band.formating";
 
 @Injectable({providedIn: 'root'})
 
@@ -26,20 +26,118 @@ export class UserStatisticsService extends BaseHttpService{
         })) as Observable<Stats>
     }
 
-    fetchCountryBusinessStats(){
-        return this.read(`${BASE_URL}/countries`).pipe(switchMap((countries: any[]) =>{
-            const requests =countries.flat().map((country: {name: string}) =>this.read(`${BASE_URL}/statistics/businesses?country=${country.name}`))
-            return forkJoin(requests).pipe(map(res =>{
-                return zip(countries.map((country: {name: string}) =>({country: country.name})), res)
-            })) as Observable<any>
-        }),
-        map((stats: [{ country: string }, { totalBusinesses: number }][]) =>{
-            return stats.filter((items:[{country: string}, {totalBusinesses: number}]) =>items[1].totalBusinesses >0)
-            .map((items:[{country: string}, {totalBusinesses: number}]) =>({country: items[0].country, totalBusinesses: items[1].totalBusinesses})) as {country: string, totalBusinesses: number}[]
-        }),
-        catchError(err =>{
+    getBusinessCountriesStats(): Observable<Record<string, number>>{
+        return this.read(`${BASE_URL}/statistics/businesses-country`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
             debugger
             return EMPTY
         }))
     }
+
+    getFundingStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/funding-stats`).pipe(map((res: any) =>{
+            const payload:Record<string, {companies: number, investors: number}> =res;
+            const companies: Record<string, number> ={};
+            const investors: Record<string, number> ={};
+            for (const [key, value] of Object.entries(payload)) {
+                companies[key] = value.companies;
+                investors[key] = value.investors;
+            }
+            return {companies, investors}
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getStagesStats():Observable<Record<string, number>> {
+        return this.read(`${BASE_URL}/statistics/businesses-stage`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getBusinessFundRaiseStats():Observable<{min: Record<string, number>, max: Record<string, number>}> {
+        return this.read(`${BASE_URL}/statistics/businesses-fund`).pipe(map((stats: any) =>{
+            const result:any ={}
+            for(const [key, val] of Object.entries(stats)) result[formatBand(key)] =val;
+            return Object.entries(result)
+            .sort(([, a], [, b]) => Number(b) - Number(a))
+            .reduce((obj: any, [key, value]) => {
+              obj[key] = value;
+              return obj;
+            }, {});
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getInvestorMinFundingStats():Observable<Record<string, number>> {
+        return this.read(`${BASE_URL}/statistics/investors-funds?type=minimumFunding`).pipe(map((stats: any) =>{
+            const result:any ={}
+            for(const [key, val] of Object.entries(stats)) result[formatBand(key)] =val;
+            return Object.entries(result)
+            .sort(([, a], [, b]) => Number(b) - Number(a))
+            .reduce((obj: any, [key, value]) => {
+              obj[key] = value;
+              return obj;
+            }, {});
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getInvestorMaxFundingStats(): Observable<Record<string, number>> {
+        return this.read(`${BASE_URL}/statistics/investors-funds?type=maximumFunding`).pipe(map((stats: any) =>{
+            const result:any ={}
+            for(const [key, val] of Object.entries(stats)) result[formatBand(key)] =val;
+            return Object.entries(result)
+            .sort(([, a], [, b]) => Number(b) - Number(a))
+            .reduce((obj: any, [key, value]) => {
+              obj[key] = value;
+              return obj;
+            }, {});
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getSectorStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/sectors-stats`).pipe(map((stats: any) =>{
+            const payload:Record<string, {companies: number, investors: number}> =stats;
+            const companies: Record<string, number> ={};
+            const investors: Record<string, number> ={};
+            for (const [key, value] of Object.entries(payload)) {
+                companies[key] = value.companies;
+                investors[key] = value.investors;
+            }
+            return {companies, investors}
+        }), catchError(err =>{
+            debugger
+            return EMPTY
+        }))
+    }
+
+    getAnalytics(){
+        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats()]
+        return forkJoin(requests).pipe(map(stats =>{
+            return {
+                sectors: stats[0] as SharedStats,
+                funding: stats[1] as SharedStats,
+                countries: stats[2] as Record<string, number>,
+                stages: stats[3] as Record<string, number>,
+                min_funding: stats[4] as Record<string, number>,
+                max_funding: stats[5] as Record<string, number>,
+                fund_raise: stats[6] as Record<string, number>
+            }
+        }))
+    }
+
+   
 }

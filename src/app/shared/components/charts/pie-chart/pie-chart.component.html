@@ -1,7 +1,8 @@
-<canvas baseChart
-  [type]="'pie'"
-  [datasets]="pieChartDatasets"
-  [labels]="pieChartLabels"
-  [options]="pieChartOptions"
-  [plugins]="pieChartPlugins">
-</canvas>
+<div>
+  <google-chart
+    [type]="chartType"
+    [data]="pieChartData"
+    [options]="pieChartOptions"
+    [columns]="pieChartColumns"
+  ></google-chart>
+</div>
