@@ -60,8 +60,7 @@
               <td class="">{{ business.company.businessSubsector }}</td>
               <td class="flex space-x-2 justify-center p-2">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
-                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                  (click)="openModal(business.company.id)">Decline</button>
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.company.id)">Decline</button>
 
                 <div class="py-auto eye" (click)="showDetails(business)">
                   <mat-icon class="small-icon">visibility</mat-icon>
