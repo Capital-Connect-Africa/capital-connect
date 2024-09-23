@@ -7,7 +7,7 @@ import { BASE_URL, BaseHttpService } from "../../../core";
 import { CustomQuestion, CustomQuestionResponse, SpecialCriteria, SpecialCriteriaQuestions } from "../../../shared/interfaces/Investor";
 import { UserSubmissionResponse } from "../../../shared";
 import { Answer, AnswerInput } from "../../questions/interfaces";
-import { Company } from "../../organization/interfaces";
+import { Company, SpecialCriteriaCompany } from "../../organization/interfaces";
 
 @Injectable(
   {
@@ -47,9 +47,9 @@ export class SpecialCriteriasService extends BaseHttpService {
     return this.create(url, request, this.headers) as Observable<CustomQuestionResponse>;
   }
 
- getSpecialCriteriaCompanies(id:number):Observable<Company[]>{
+ getSpecialCriteriaCompanies(id:number):Observable<SpecialCriteriaCompany[]>{
   const url = `${BASE_URL}/special-criteria/criteria/${id}`;
-  return this.read(url, this.headers) as Observable<Company[]>;
+  return this.read(url, this.headers) as Observable<SpecialCriteriaCompany[]>;
  }
 
 

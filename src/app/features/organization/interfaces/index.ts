@@ -44,6 +44,12 @@ export interface CompanyInput {
   investmentStructure: string[]
 }
 
+
+export interface SpecialCriteriaCompany{
+  percentageScore: number,
+  company:Company
+}
+
  export interface CompanyResponse extends Company {
   user: User;
 }
