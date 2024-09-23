@@ -273,15 +273,17 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-business>
+      
       <tr>
-        <td class="">{{ business.country ? business.country : "N/A" }}</td>
-        <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
-        <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
-        <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
+        <!-- <td>{{business | json}}</td> -->
+        <td class="">{{ business.company.country ? business.company.country : "N/A" }}</td>
+        <td class="">{{ business.company.businessSector ? business.company.businessSector : "N/A" }}</td>
+        <td class="">{{ business.company.businessSubsector ? business.company.businessSubsector : "N/A"  }}</td>
+        <td class="">{{ business.company.growthStage ? business.company.growthStage :"N/A"}}</td>
 
         <td class="flex space-x-2 justify-center p-2">
-          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-          <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.id)">Decline</button>
+          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.company.id)">Interested</button>
+          <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.company.id)">Decline</button>
         </td>
       </tr>
     </ng-template>
