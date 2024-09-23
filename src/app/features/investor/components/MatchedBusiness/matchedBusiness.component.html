@@ -53,6 +53,7 @@
         <p-table [value]="matchedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
           <ng-template pTemplate="header">
             <tr>
+              <th>#</th>
               <th>Country</th>
               <th>Business Sector</th>
               <th>Business Sub Sector</th>
@@ -61,8 +62,9 @@
             </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-business>
+          <ng-template pTemplate="body" let-business let-i="rowIndex">
             <tr>
+              <td><strong>{{i+1}}</strong></td>
               <td class="">{{ business.country ? business.country : "N/A" }}</td>
               <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
               <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>

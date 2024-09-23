@@ -264,22 +264,25 @@
   <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
     <ng-template pTemplate="header">
       <tr>
+        <th>#</th>
         <th>Country</th>
         <th>Business Sector</th>
-        <th>Business Sub Sector</th>
+        <th>Sub Sector</th>
         <th>Growth Stage</th>
+        <th>Score</th>
         <th>Actions</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-business>
+    <ng-template pTemplate="body" let-business let-i="rowIndex">
       
       <tr>
-        <!-- <td>{{business | json}}</td> -->
+        <td><strong>{{ i + 1 }}</strong></td>
         <td class="">{{ business.company.country ? business.company.country : "N/A" }}</td>
         <td class="">{{ business.company.businessSector ? business.company.businessSector : "N/A" }}</td>
         <td class="">{{ business.company.businessSubsector ? business.company.businessSubsector : "N/A"  }}</td>
         <td class="">{{ business.company.growthStage ? business.company.growthStage :"N/A"}}</td>
+        <td class="">{{business.percentageScore}} %</td>
 
         <td class="flex space-x-2 justify-center p-2">
           <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.company.id)">Interested</button>
