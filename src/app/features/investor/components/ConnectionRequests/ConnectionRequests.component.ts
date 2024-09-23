@@ -24,6 +24,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-connection-requests',
@@ -39,7 +40,8 @@ import { DebouncedSearchComponent } from "../../../../core/components/debounced-
     DialogModule,
     NgxPaginationModule,
     MultiSelectModule, ReactiveFormsModule,
-    DebouncedSearchComponent
+    DebouncedSearchComponent,
+    DropdownModule
 ],
   templateUrl: './ConnectionRequests.component.html',
   styleUrl: './ConnectionRequests.component.scss',
@@ -84,6 +86,7 @@ export class ConnectionRequestsComponent {
   connectionRequests!: ConnectionRequest[]
   filteredConnectionRequests!: ConnectionRequest[]
   connectionRequestDetails!: ConnectionRequest
+  status: string[] = ["Pending","Accepted","Declined"]
 
 
 
@@ -104,6 +107,7 @@ export class ConnectionRequestsComponent {
   viewConnectionRequest$ = new Observable<ConnectionRequest>()
   deleteConf$ = new Observable<boolean>();
   updateConnectionRequest$ = new Observable<unknown>()
+
 
 
 
@@ -165,6 +169,17 @@ export class ConnectionRequestsComponent {
   }
   
 
+  onStatusChange(event: any): void {
+    console.log('Selected value:', event.value);
+    if(event.value == "Accepted"){
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved === true);
+    }else if(event.value == "Declined"){
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved === false);
+    }else if(event.value == "Pending"){
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved === null);
+    }
+  }
+  
 
 
   deleteConnectionRequest(id:number){

@@ -20,7 +20,7 @@ import { Company } from '../../../../organization/interfaces';
 import * as XLSX from 'xlsx';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
-import { ConnectionRequestBody } from '../../../../../shared/interfaces';
+import { ConnectionRequestBody, InterestingBusinesses } from '../../../../../shared/interfaces';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
 
 
@@ -54,6 +54,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   back_btn:boolean = false
   addQues:boolean = false
   sc_comp: boolean = false
+  decline: boolean = false;
 
   // Variables
   specialCriteriaId!: number;
@@ -64,6 +65,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   customQuestionsForm!: FormGroup
   customAnswersForm!: FormGroup
   SpecialCriteriaCompanies!: Company[]
+  business__id!:number 
+  declineReasons: String[] = [];
+  declineForm!: FormGroup;
+  interestingBusinesses: InterestingBusinesses[] = [];
+
 
   customQuestionResponse!: CustomQuestion
   questions!: UserSubmissionResponse[];
@@ -79,10 +85,21 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   deleteConf$ = new Observable<boolean>();
   getSpecialCriteriaCompanies$ = new Observable<Company[]>
   markAsInteresting$ = new Observable<unknown>()
+  cancelInterestWithCompany$ = new Observable<unknown>()
 
   questions$ = this.sc.getQuestions().pipe(tap(res => {
     this.questions = res
   }))
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
+    this.declineReasons = reasons
+  }))
+
+  interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1,10).pipe(
+    tap(res => {
+      this.interestingBusinesses = res;
+    })
+  );
 
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
@@ -94,7 +111,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
 
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute,private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+    });
+
     this.specialCriteriaId$ = this.route.params.pipe(
       map(params => Number(params['id'])),
       tap(id => {
@@ -264,13 +285,10 @@ export class ViewSpecialCriteriaComponent implements OnInit {
             this.specialCriteria = res
           }))
     
-          this.questionsRemoveForm.reset()
-    
+          this.questionsRemoveForm.reset()  
         }))      
       }
-    }))
-
-    
+    }))    
   }
 
 
@@ -294,6 +312,51 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       fs.saveAs(new Blob([buffer]), 'Special Criteria Companies.xlsx');
     });
   }
+
+
+  openModal(businessId: number){
+    this.business__id = businessId
+    // this.decline = true
+    this.cancelInterestWithCompany$ = this._businessMatchingService
+    .cancelInterestWithCompany(businessId, []).pipe(
+      tap(() => {
+        this._feedBackService.success('Business Declined Successfully.');
+        // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+
+        this.declineForm.reset();
+        this.declineForm.updateValueAndValidity();
+
+        this.decline = false;
+      })
+    );
+
+  }
+
+
+  submit(){
+    this.cancelInterest(this.business__id)
+  }
+
+  cancelInterest(businessId: number): void {   
+
+    if (this.declineForm.valid) {
+      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+      this.cancelInterestWithCompany$ = this._businessMatchingService
+        .cancelInterestWithCompany(businessId, selectedReasons).pipe(
+          tap(() => {
+            this._feedBackService.success('Interest cancelled successfully.');
+            // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+
+            this.declineForm.reset();
+            this.declineForm.updateValueAndValidity();
+
+            this.decline = false;
+          })
+        );
+    }
+
+  }
+  
 
 
   onSubmit() {
