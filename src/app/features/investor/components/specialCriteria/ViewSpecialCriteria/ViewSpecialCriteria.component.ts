@@ -16,7 +16,7 @@ import { QuestionsService } from '../../../../questions/services/questions/quest
 import { AngularMaterialModule } from '../../../../../shared';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { Company } from '../../../../organization/interfaces';
+import { Company, SpecialCriteriaCompany } from '../../../../organization/interfaces';
 import * as XLSX from 'xlsx';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
@@ -64,7 +64,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   questionsRemoveForm!: FormGroup
   customQuestionsForm!: FormGroup
   customAnswersForm!: FormGroup
-  SpecialCriteriaCompanies!: Company[]
+  SpecialCriteriaCompanies!: SpecialCriteriaCompany[]
   business__id!:number 
   declineReasons: String[] = [];
   declineForm!: FormGroup;
@@ -83,7 +83,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
   deleteConf$ = new Observable<boolean>();
-  getSpecialCriteriaCompanies$ = new Observable<Company[]>
+  getSpecialCriteriaCompanies$ = new Observable<SpecialCriteriaCompany[]>
   markAsInteresting$ = new Observable<unknown>()
   cancelInterestWithCompany$ = new Observable<unknown>()
 
@@ -305,7 +305,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     ];
 
     this.SpecialCriteriaCompanies.forEach(business => {
-      worksheet.addRow(business);
+      worksheet.addRow(business.company);
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {
