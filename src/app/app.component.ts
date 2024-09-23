@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { distinctUntilChanged } from 'rxjs';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { distinctUntilChanged, Observable, tap } from 'rxjs';
 import { SharedModule } from './shared';
 import { LoadingComponent } from './core/components/loading/loading.component';
 import { FeedbackNotificationComponent, LoadingService } from './core';
+import { DataLayerService } from './core/services/analytics/data.layer.service';
 
 @Component({
   selector: 'app-root',
@@ -15,12 +16,20 @@ import { FeedbackNotificationComponent, LoadingService } from './core';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  private _dataLayerService =inject(DataLayerService);
   private _loadingService = inject(LoadingService);
   private _cd = inject(ChangeDetectorRef);
+  private _router =inject(Router);
+
+  routerEvents$ =new Observable<any>();
 
   isLoading = true;
 
   ngOnInit(): void {
+    this.routerEvents$ =this._router.events.pipe(tap(event =>{
+        if(event instanceof NavigationEnd) 
+          this._dataLayerService.logPageView(event.urlAfterRedirects);
+    }));
     this._trackLoadingStatusSubscription();
   }
 
