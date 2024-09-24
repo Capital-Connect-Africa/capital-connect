@@ -30,7 +30,6 @@ export class UserStatisticsService extends BaseHttpService{
         return this.read(`${BASE_URL}/statistics/businesses-country`).pipe(map((stats: any) =>{
             return stats
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -46,7 +45,6 @@ export class UserStatisticsService extends BaseHttpService{
             }
             return {companies, investors}
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -55,7 +53,6 @@ export class UserStatisticsService extends BaseHttpService{
         return this.read(`${BASE_URL}/statistics/businesses-stage`).pipe(map((stats: any) =>{
             return stats
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -71,7 +68,6 @@ export class UserStatisticsService extends BaseHttpService{
               return obj;
             }, {});
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -87,7 +83,6 @@ export class UserStatisticsService extends BaseHttpService{
               return obj;
             }, {});
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -103,7 +98,6 @@ export class UserStatisticsService extends BaseHttpService{
               return obj;
             }, {});
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }
@@ -119,7 +113,6 @@ export class UserStatisticsService extends BaseHttpService{
             }
             return {companies, investors}
         }), catchError(err =>{
-            debugger
             return EMPTY
         }))
     }

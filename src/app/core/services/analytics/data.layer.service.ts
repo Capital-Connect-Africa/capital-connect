@@ -15,7 +15,6 @@ export class DataLayerService {
   }
 
   logPageView(url: string): void {
-    debugger
     const hit = {
       event: 'content-view',
       pageName: url
