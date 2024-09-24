@@ -107,22 +107,29 @@ export class ConnectionRequestsComponent {
   viewConnectionRequest$ = new Observable<ConnectionRequest>()
   deleteConf$ = new Observable<boolean>();
   updateConnectionRequest$ = new Observable<unknown>()
+  declined_requests = false
 
 
 
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private router: Router) {
     this.declineForm = this.fb.group({
       countriesOfInvestmentFocus: [[]],
     });
+
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('declined-connection-requests')) {
+      this.declined_requests = true
+    } else {
+      this.declined_requests = false
+    }
   }
 
 
   connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
     this.connectionRequests = res
-    this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
-
+    this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true && connection.isApproved !== false);
   }))
 
 
@@ -170,7 +177,6 @@ export class ConnectionRequestsComponent {
   
 
   onStatusChange(event: any): void {
-    console.log('Selected value:', event.value);
     if(event.value == "Accepted"){
       this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved === true);
     }else if(event.value == "Declined"){
