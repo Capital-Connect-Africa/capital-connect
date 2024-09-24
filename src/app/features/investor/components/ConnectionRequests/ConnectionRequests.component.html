@@ -27,16 +27,14 @@
       
       <div *ngIf="table" class="ml-5 text-start search border-0">
         <div class="d-flex justify-between items-center">
-        <h5 class="top__txt " >Connection Requests</h5>
         <ng-container *ngIf="downloadCSV$  | async"></ng-container>
 
 
           
           
         <div class="cta__group">
-          <div class="">
-            <p-dropdown class="input__field" formControlName="questionIds" [options]="status"
-              placeholder="Select Connection Status" (onChange)="onStatusChange($event)"></p-dropdown>
+          <div class="cta__title">
+            <h5 class="top__txt">{{declined_requests ? "Declined Connection Requests" : "Connection Requests"}}</h5> 
           </div>
           <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('requested')">Download List</button>
         </div>
@@ -44,14 +42,14 @@
         
 
 
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length || !filteredConnectionRequests.length">
           No connection requests found. <br /> Check again later.
         </div>
         </div>
       </div>
 
 
-      <div class="table-parent">
+      <div class="table-parent" *ngIf="filteredConnectionRequests.length">
         <table class="table" *ngIf="table">
           <tbody>
             <tr class="border-b border-gray-200">
@@ -64,12 +62,12 @@
 
             <tr *ngFor="let connection of filteredConnectionRequests; let i = index; trackBy: trackByIndex"  class="border-b border-gray-200">
               <td class="font-bold">{{ i + 1 }}</td>
-              <td class="">{{ connection.company.country }}</td>
-              <td class="">{{connection.company.fundsNeeded}}</td>
-              <td class="">{{ connection.company.businessSubsector }}</td>
+              <td class="">{{ connection.company.country ? connection.company.country  : "N/A"}}</td>
+              <td class="">{{connection.company.fundsNeeded ? connection.company.fundsNeeded : "N/A" }}</td>
+              <td class="">{{ connection.company.businessSubsector ?  connection.company.businessSubsector : "N/A"}}</td>
               <td class="flex space-x-2 justify-center p-2">
                 <!-- <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button> -->
-                <mat-icon class="small-icon" style="color: green; cursor: pointer;" (click)="updateConnectionRequest(connection)">check_circle</mat-icon>
+                <!-- <mat-icon class="small-icon" style="color: green; cursor: pointer;" (click)="updateConnectionRequest(connection)">check_circle</mat-icon> -->
                 <mat-icon class="small-icon" style="color: rgb(37, 55, 63); cursor: pointer;" (click)="showDetails(connection)">visibility</mat-icon>
               </td>
             </tr>

@@ -12,10 +12,10 @@
             <h3>Users</h3>
             <div class="">
               <app-pie-chart [data]="{
-                Business: stats.business,
                 Investors: stats.investors,
                 Advisors: stats.advisors,
-                Staff: stats.staff
+                Admins: stats.staff,
+                'Business Owners': stats.business,
               }" 
               [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
               />

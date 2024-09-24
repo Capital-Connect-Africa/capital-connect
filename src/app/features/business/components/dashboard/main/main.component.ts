@@ -17,6 +17,9 @@ import { ModalComponent } from "../../../../../shared/components/modal/modal.com
 import { CommonModule } from '@angular/common';
 import { ProBadgeComponent } from "../../../../../core/components/pro-badge/pro-badge.component";
 import { CompanyStateService } from '../../../../organization/services/company-state.service';
+import { Progress } from '../../../interfaces/progress.interface';
+import { Observable, tap } from 'rxjs';
+import { BusinessOnboardingScoringService } from '../../../../../shared/services/business.onboarding.scoring.service';
 
 
 @Component({
@@ -32,35 +35,43 @@ import { CompanyStateService } from '../../../../organization/services/company-s
   styleUrl: './main.component.scss'
 })
 export class MainComponent {
-  visible = true
+  visible = true;
   private _toggleService = inject(NavbarToggleService);
   private _companyStateService =inject(CompanyStateService);
   businessName =this._companyStateService.currentCompany.name;
-
+  private _scoringService =inject(BusinessOnboardingScoringService);
+  progress$ =new Observable<any>();
   toggleVisibility() {
     this._toggleService.toggleVisibility();
   }
 
-  progress =[
+  progress:Progress[] =[
     {
       section: 'Investor Eligibility',
-      progress: 20
+      progress: 0
     },
     {
       section: 'Investor Preparedness',
-      progress: 40
+      progress: 0
     },
     {
       section: 'Impact Assessment',
-      progress: 60
+      progress: 0
     },
     {
       section: 'Business Information',
-      progress: 80
+      progress: 0
     },
     {
       section: 'Business Profile',
-      progress: 100
+      progress: 0
     }
   ]
+
+  ngOnInit(): void {
+   this.progress$ =this._scoringService.progress.pipe(tap(res =>{
+    this.progress =res.sort((a, b) => a.progress - b.progress);
+   }))
+    
+  }
 }

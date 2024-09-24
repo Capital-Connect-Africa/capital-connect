@@ -10,32 +10,39 @@
 
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
-<app-overview-section [onInvestor]="true">
-  <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
-    (click)="showDialog('matched_businesses')">
-    <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
-  </app-card>
+  <app-overview-section [onInvestor]="true">
+    <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
+      (click)="showDialog('matched_businesses')">
+      <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
+    </app-card>
 
-  <app-card [detail]="{title: 'Businesses Interested In', value: MatchMakingStats.interesting.toString() , featured: true}"
-    (click)="showDialog('interesting_businesses')">
-    <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting</p>
-  </app-card>
+    <app-card
+      [detail]="{title: 'Businesses Interested In', value: MatchMakingStats.interesting.toString() , featured: true}"
+      (click)="showDialog('interesting_businesses')">
+      <p class="helper__text text__yellow">{{ MatchMakingStats.interesting.toString() }} Interesting</p>
+    </app-card>
 
-  <app-card [detail]="{title: 'Connection Requests', value: MatchMakingStats.requested.toString() , featured: true}"
-    (click)="showDialog('connection_requests')">
-    <p class="helper__text text__yellow">{{ MatchMakingStats.requested.toString()}} Connection Requests</p>
-  </app-card>
+    <app-card [detail]="{title: 'Connection Requests', value: MatchMakingStats.requested.toString() , featured: true}"
+      (click)="showDialog('connection_requests')">
+      <p class="helper__text text__yellow">{{ MatchMakingStats.requested.toString()}} Connection Requests</p>
+    </app-card>
 
-  <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"
-    (click)="showDialog('connected_businesses')">
-    <p class="helper__text text__yellow">{{ MatchMakingStats.connected.toString() }} Connected</p>
-  </app-card>
+    <app-card [detail]="{title: 'Connected Businesses', value: MatchMakingStats.connected.toString() , featured: true}"
+      (click)="showDialog('connected_businesses')">
+      <p class="helper__text text__yellow">{{ MatchMakingStats.connected.toString() }} Connected</p>
+    </app-card>
 
-  <app-card [detail]="{title: 'Declined Businesses', value: MatchMakingStats.declined.toString(), featured: true}"
-    (click)="showDialog('rejected_businesses')">
-    <p class="helper__text text__yellow">{{ MatchMakingStats.declined.toString() }} Declined</p>
-  </app-card>
-</app-overview-section>
+    <app-card [detail]="{title: 'Declined Businesses', value: MatchMakingStats.declined.toString(), featured: true}"
+      (click)="showDialog('rejected_businesses')">
+      <p class="helper__text text__yellow">{{ MatchMakingStats.declined.toString() }} Declined</p>
+    </app-card>
+
+    <app-card [detail]="{title: 'Declined Connection Requests', value: MatchMakingStats.requested.toString() , featured: true}"
+      (click)="showDialog('declined_connection_requests')">
+      <p class="helper__text text__yellow">{{ MatchMakingStats.requested.toString()}}Declined Connection Requests</p>
+    </app-card>
+
+  </app-overview-section>
 </ng-container>
 
 <app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length"
@@ -102,14 +109,14 @@
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="connect(business.company.id)">Connect</button>
                 <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelInterest(business.company.id)">Decline</button> -->
 
-                  <div class="py-auto eye" (click)="showDetails(business)">
-                    <mat-icon class="small-icon">visibility</mat-icon>
-                  </div>
+                <div class="py-auto eye" (click)="showDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
-  
+
       </div>
     </ng-template>
 
@@ -136,9 +143,9 @@
             <td class="flex space-x-2 justify-center p-2">
               <!-- <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="cancelConnection(business.company.id)">Decline</button> -->
 
-                <div class="py-auto eye" (click)="showDetails(business)">
-                  <mat-icon class="small-icon">visibility</mat-icon>
-                </div>
+              <div class="py-auto eye" (click)="showDetails(business)">
+                <mat-icon class="small-icon">visibility</mat-icon>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -167,17 +174,18 @@
             <td class="">{{ business.company.businessSubsector }}</td>
             <td class="">{{ business.company.growthStage }}</td>
 
-            <td  class="flex space-x-2 justify-center p-2">
-            <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.company.id)">Interested</button>
-              <div class="py-auto eye" (click)="showDetails(business)">           
+            <td class="flex space-x-2 justify-center p-2">
+              <button class="btn btn-sm text-xs px-3 py-1"
+                (click)="showInterest(business.company.id)">Interested</button>
+              <div class="py-auto eye" (click)="showDetails(business)">
                 <mat-icon class="small-icon">visibility</mat-icon>
               </div>
             </td>
-        
+
           </tr>
         </tbody>
       </table>
 
-    </div>  
+    </div>
   </div>
 </app-modal>

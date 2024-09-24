@@ -94,13 +94,10 @@ export class OverviewComponent {
     }
     else if(current_modal === 'connection_requests'){
       this._router.navigate(['/investor/connection-requests']);
+    } else if(current_modal === 'declined_connection_requests'){
+      this._router.navigate(['/investor/declined-connection-requests']);
     }
 
-    // this.visible = true
-    // this.table =true
-    // this.currentModal = current_modal;
-    // this.selectedBusiness = null;
-    // this.selectedMatchedBusiness = null;
   }
 
   showDetails(business: InterestingBusinesses): void {

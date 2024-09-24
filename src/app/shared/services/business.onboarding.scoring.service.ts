@@ -5,6 +5,7 @@ import { AuthStateService } from "../../features/auth/services/auth-state.servic
 import {
   BUSINESS_INFORMATION_SUBSECTION_IDS, getInvestorEligibilitySubsectionIds,
   IMPACT_ASSESMENT_SUBSECTION_IDS,
+  INVESTOR_ELIGIBILITY_SUBSECTION_IDS,
   INVESTOR_PREPAREDNESS_SUBSECTION_IDS
 } from "../business/services/onboarding.questions.service";
 import { CompanyStateService } from "../../features/organization/services/company-state.service";
@@ -110,7 +111,7 @@ export class BusinessOnboardingScoringService {
 
   getBusinessInvestorRelations(){
     const reqs =[this.getMatchedInvestors(), this.getConnectedInvestors(), this.getDecliningInvestors(), this.getConnectionRequests()]
-    return forkJoin(reqs).pipe(map(res =>{ // used forkjoin to be able to filter them appropriately
+    return forkJoin(reqs).pipe(map(res =>{
       const matches =res[0]
       const connections =res[1];
       const declines =res[2];
@@ -118,9 +119,52 @@ export class BusinessOnboardingScoringService {
       return {
         matches, connections, declines, requests
       }
-    }),
-  catchError(err =>{
-    return EMPTY
-  }));
+      }),
+    catchError(err =>{
+      return EMPTY
+    }));
   }
+
+  getSectionProgress(id: number){
+    return this._scoringService.getSectionSubmissionProgress(this._authStateService.currentUserId(), id);
+  }
+
+  get progress(){
+    const requests =[
+      this.getSectionProgress(getInvestorEligibilitySubsectionIds(this._companyService.currentCompany.growthStage).ID),
+      this.getSectionProgress(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID,),
+      this.getSectionProgress(BUSINESS_INFORMATION_SUBSECTION_IDS.ID),
+      this.getSectionProgress(IMPACT_ASSESMENT_SUBSECTION_IDS.ID),
+      this._scoringService.getCompanyProgress(this._companyService.currentCompany.id),
+    ];
+    return forkJoin(requests).pipe(map((res:any[]) =>{
+      
+      return [
+        {
+          section: 'Investor Eligibility',
+          progress: Math.round(res[0].completenessPercentage as number),
+        },
+
+        {
+          section: 'Investor Preparedness',
+          progress: Math.round(res[1].completenessPercentage as number),
+        },
+
+        {
+          section: 'Business Information',
+          progress: Math.round(res[2].completenessPercentage as number),
+        },
+
+        {
+          section: 'Impact Assement',
+          progress: Math.round(res[3].completenessPercentage as number),
+        },
+
+        {
+          section: 'Business Profile',
+          progress: Math.round(res[4].completeness as number),
+        }
+      ]
+    }));
+  } 
 }
