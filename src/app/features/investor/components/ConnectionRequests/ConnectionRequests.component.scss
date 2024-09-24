@@ -441,3 +441,13 @@ th{
     margin-right: 1rem; // Optional: Extra space at the very end of the row
   }
   
+  .cta__group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .cta__title {
+    flex-grow: 1; /* Optional to ensure the title takes up all available space */
+  }
+  

@@ -16,8 +16,10 @@ const routes: Routes = [
   { path: 'create-special-criteria', loadComponent: () => import('../pages/SpecialCriteria/CreateSpecialCriteriaPage/CreateSpecialCriteriaPage.component').then(c => c.CreateSpecialCriteriaPageComponent) },
   { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) },
   { path: 'connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
+  { path: 'declined-connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
   { path: 'global-search', loadComponent:()=>import('../pages/GlobalCompanySearch/GlobalCompanySearch.component').then(c=>c.GlobalCompanySearchComponnent) }
-  // /investor/global-search
+  
+
 
 ]
 @NgModule({
