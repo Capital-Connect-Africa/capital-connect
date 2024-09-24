@@ -262,4 +262,16 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     document.body.removeChild(a);
     URL.revokeObjectURL(objectUrl);
   }
+
+  getSectionSubmissionProgress(userId:number, sectionId: number){
+    return this.read(`${BASE_URL}/submissions/complete/${userId}/${sectionId}`).pipe(map(res =>{
+      return res;
+    }))
+  }
+
+  getCompanyProgress(companyId: number){
+    return this.read(`${BASE_URL}/company/complete/${companyId}`).pipe(map(res =>{
+      return res;
+    }))
+  }
 }
