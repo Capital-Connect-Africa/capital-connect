@@ -11,6 +11,7 @@ import { SignalsService } from '../../../../../core/services/signals/signals.ser
 import { RouterModule } from '@angular/router';
 import { InvestorProfile } from '../../../../../shared/interfaces/Investor';
 import { InvestorScreensService } from '../../../services/investor.screens.service';
+import { Profile } from '../../../../../shared/interfaces/profile.interface';
 
 @Component({
   standalone: true,
@@ -32,6 +33,7 @@ export class InvestorPageComponent implements OnInit {
   private _routingService =inject(RoutingService)
   investorProfile: InvestorProfile | null = null;
   private _screenService = inject(InvestorScreensService)
+  private userProfile!:Profile;
 
   constructor() { }
 
@@ -48,12 +50,28 @@ export class InvestorPageComponent implements OnInit {
   }
 
   userProfile$ =this._profileService.get().pipe(tap(res =>{
+    this.userProfile = res
     return res;
+
   }))
 
   getLocalized(number: number): string {
     return Number(number).toLocaleString();
   }
+
+
+  get uniqueMobileNumber(): string {
+    if (this.userProfile.mobileNumber) {
+      // Split the string by commas, remove duplicates with Set, and join it back into a string
+      const uniqueNumbers = Array.from(
+        new Set(this.userProfile.mobileNumber.split(',').map(num => num.trim()))
+      );
+      return uniqueNumbers.join(', ');
+    }
+    // Return 'Add phone' if no number is available
+    return 'Add phone';
+  }
+
 
   getItems(items: unknown): string {
     if (Array.isArray(items)) {

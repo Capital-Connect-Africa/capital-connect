@@ -24,7 +24,7 @@
               <mat-icon >edit</mat-icon> Update Profile
             </button></p>
 
-            <p><mat-icon>call</mat-icon>{{userProfile.mobileNumber || 'Add phone'}}</p>
+            <p><mat-icon>call</mat-icon>{{ uniqueMobileNumber }}</p>
             <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
             <p>
               <img *ngIf="userProfile.company.companyLogo"
