@@ -5,7 +5,7 @@ import { OverviewSectionComponent } from "../../../../../shared/components/overv
 import { CardComponent } from "../../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness } from '../../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, ConnectionRequestsStats } from '../../../../../shared/interfaces';
 import { FeedbackService } from '../../../../../core';
 import { AngularMaterialModule } from '../../../../../shared';
 import { CompanyHttpService } from '../../../../organization/services/company.service';
@@ -42,7 +42,7 @@ export class OverviewComponent {
   currentModal = '';
   selectedBusiness: InterestingBusinesses | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
-  conReqStats:number = 0 
+  conReqStats!:ConnectionRequestsStats 
 
 
   matchMakingStats: MatchMakingStats | undefined 
@@ -76,6 +76,7 @@ export class OverviewComponent {
   }))
 
   conReqStats$ = this._businessMatchingService.getConnectionRequestsStats().pipe(tap(res=>{
+    this.conReqStats = res
     
   }))
 
