@@ -1,5 +1,5 @@
 <ng-container *ngIf="specialCriteriaId$ | async"></ng-container>
-<ng-container *ngIf="getSpecialCriteria$ | async"></ng-container>
+
 <ng-container *ngIf="update$ | async"></ng-container>
 <ng-container *ngIf="questions$ | async"></ng-container>
 <ng-container *ngIf="addQuestions$ | async"></ng-container>
@@ -33,14 +33,13 @@
 
   <div class="flex justify-betweeen">
 
-    <div style="display: flex; align-items: center; justify-content: space-between;">
+    <ng-container *ngIf="getSpecialCriteria$ | async">
+
+    <div *ngIf="specialCriteria" style="display: flex; align-items: center; justify-content: space-between;">
       <div>
         <h3 class="special__criteria__title">Title : <strong>{{ specialCriteria.title }}</strong></h3>
         <p class="special__criteria__description">Description : {{ specialCriteria.description }}</p>
-        <p> <strong>{{SpecialCriteriaCompanies.length.toString()}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" style="cursor: pointer;" (click)="scComp()"><strong>   View Companies</strong></span>
-      <!-- <button (click)="exportToExcel()" class="btn ">Export to Excel</button> -->
-
-
+        <p> <strong>{{SpecialCriteriaCompanies.length ?  SpecialCriteriaCompanies.length.toString(): ""}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" style="cursor: pointer;" (click)="scComp()"><strong>   View Companies</strong></span>
       <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
         <strong >Edit Special Criteria</strong>
         <mat-icon style="color: green(216, 9, 9); cursor: pointer;">edit</mat-icon>            
@@ -48,6 +47,8 @@
       
       </div>
     </div>
+
+    </ng-container>
   </div>
 
 
@@ -256,7 +257,10 @@
 
 </app-modal>
 
-<app-modal [(visible)]="sc_comp" [title]='SpecialCriteriaCompanies.length.toString()' helperText="Companies that have filled this criteria.">
+
+
+
+<app-modal [(visible)]="sc_comp"  [title]='SpecialCriteriaCompanies.length ? SpecialCriteriaCompanies.length.toString() : ""' helperText="Companies that have filled this criteria.">
   <div class="cta__group">
   <button (click)="exportToCSV()" class="btn btn-sm">Export to Excel</button>
   </div>
@@ -278,24 +282,25 @@
       
       <tr>
         <td><strong>{{ i + 1 }}</strong></td>
-        <td class="">{{ business.company.country ? business.company.country : "N/A" }}</td>
-        <td class="">{{ business.company.businessSector ? business.company.businessSector : "N/A" }}</td>
-        <td class="">{{ business.company.businessSubsector ? business.company.businessSubsector : "N/A"  }}</td>
-        <td class="">{{ business.company.growthStage ? business.company.growthStage :"N/A"}}</td>
+        <td class="">{{ business.country ? business.country : "N/A" }}</td>
+        <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
+        <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+        <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
         <td class="">{{business.percentageScore}} %</td>
 
         <td class="flex space-x-2 justify-center p-2">
-          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.company.id)">Interested</button>
-          <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.company.id)">Decline</button>
+          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
+          <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.id)">Decline</button>
         </td>
       </tr>
     </ng-template>
   </p-table>
 
-</app-modal>
+</app-modal> 
 
 
 <app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <form [formGroup]="declineForm ">
   <div class="form_content__container">
     <div class="input__wrapper">
       <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
@@ -313,4 +318,5 @@
       </div>
     </div>
   </div> 
+  </form>
 </app-modal>
