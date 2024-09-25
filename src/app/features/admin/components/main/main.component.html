@@ -10,13 +10,13 @@
         <h3>Overview</h3>
         <div class="grid grid-cols-[max-content_auto] grid__wrapper">
           <div class="grid__container">
-            <h3>Users</h3>
+            <h3>User Roles</h3>
             <div class="">
-              <app-pie-chart legendPosition="bottom" [data]="{
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Admins: stats.staff,
-                'Business Owners': stats.business,
+              <app-pie-chart [data]="{
+                'Investor Roles': stats.investors,
+                'Advisor Roles': stats.advisors,
+                'Admin Roles': stats.staff,
+                'User Roles': stats.business,
               }" 
               [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
               />
