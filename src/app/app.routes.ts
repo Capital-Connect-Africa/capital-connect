@@ -96,6 +96,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'billing',
+    loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+
+  {
     path: 'connection-requests/:uuid/:action', 
     loadComponent: () => import('./features/business/pages/connection-requests/connection-requests.component').then(c => c.ConnectionRequestsComponent) ,
   }
