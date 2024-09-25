@@ -129,7 +129,11 @@ export class ConnectionRequestsComponent {
 
   connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
     this.connectionRequests = res
-    this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true && connection.isApproved !== false);
+    if(this.declined_requests){
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true && connection.isApproved !== null);
+    }else{
+      this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true && connection.isApproved !== false);
+    }
   }))
 
 
