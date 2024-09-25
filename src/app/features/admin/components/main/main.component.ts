@@ -66,6 +66,7 @@ export class MainComponent {
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
   ];
+  entities:any;
 
   analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
     this.stagesStats =analytics.stages;
@@ -85,6 +86,10 @@ export class MainComponent {
         name: `${user.firstName} ${user.lastName}`
       }
     }).slice(0, 5)
+  }))
+
+  entities$ =this._statsService.getEntityStat().pipe(tap(res =>{
+    this.entities =res;
   }))
 
   ngOnInit(): void {
