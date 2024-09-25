@@ -117,6 +117,26 @@ export class UserStatisticsService extends BaseHttpService{
         }))
     }
 
+    countBusinessProfiles(){
+        return this.read(`${BASE_URL}/statistics/businesses`).pipe(map(res =>{
+          return res;
+        }));
+      }
+    
+      countInvestorProfiles(){
+        return this.read(`${BASE_URL}/statistics/investors`).pipe(map(res =>{
+          return res;
+        }));
+      }
+    
+      getEntityStat(){
+       const requests =[this.countBusinessProfiles(), this.countInvestorProfiles()];
+       return forkJoin(requests).pipe(map(res =>{
+        return {...res[0], ...res[1]}
+       }))
+
+    }
+
     getAnalytics(){
         const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats()]
         return forkJoin(requests).pipe(map(stats =>{
