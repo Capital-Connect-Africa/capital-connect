@@ -44,10 +44,27 @@ export interface CompanyInput {
   investmentStructure: string[]
 }
 
+export interface SpecialCriteriaCompanyRes{
+  companies: SpecialCriteriaCompany[]
+}
 
 export interface SpecialCriteriaCompany{
-  percentageScore: number,
-  company:Company
+    id: number,
+    name: string,
+    country: string,
+    businessSector: string,
+    businessSubsector: string,
+    productsAndServices: string,
+    registrationStructure: string,
+    investmentStructure: string,
+    useOfFunds: string,
+    esgFocusAreas: string,
+    fundsNeeded: number,
+    yearsOfOperation: string,
+    growthStage: string,
+    numberOfEmployees: string,
+    fullTimeBusiness: boolean,
+    percentageScore: number
 }
 
  export interface CompanyResponse extends Company {
