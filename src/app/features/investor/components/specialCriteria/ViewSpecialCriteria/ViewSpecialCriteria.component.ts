@@ -16,7 +16,7 @@ import { QuestionsService } from '../../../../questions/services/questions/quest
 import { AngularMaterialModule } from '../../../../../shared';
 import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { Company, SpecialCriteriaCompany } from '../../../../organization/interfaces';
+import { Company, SpecialCriteriaCompany, SpecialCriteriaCompanyRes } from '../../../../organization/interfaces';
 import * as XLSX from 'xlsx';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
@@ -68,6 +68,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   business__id!:number 
   declineReasons: String[] = [];
   declineForm!: FormGroup;
+
   interestingBusinesses: InterestingBusinesses[] = [];
 
 
@@ -83,7 +84,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   addCustomQuestions$!: Observable<unknown>
   createAnwer$!: Observable<unknown>
   deleteConf$ = new Observable<boolean>();
-  getSpecialCriteriaCompanies$ = new Observable<SpecialCriteriaCompany[]>
+  getSpecialCriteriaCompanies$ = new Observable<SpecialCriteriaCompanyRes>
   markAsInteresting$ = new Observable<unknown>()
   cancelInterestWithCompany$ = new Observable<unknown>()
 
@@ -114,6 +115,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   constructor(private route: ActivatedRoute,private fb: FormBuilder) {
     this.declineForm = this.fb.group({
       countriesOfInvestmentFocus: [[]],
+      reasons:[[]]
     });
 
     this.specialCriteriaId$ = this.route.params.pipe(
@@ -121,7 +123,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       tap(id => {
         this.specialCriteriaId = id;
         this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-          this.SpecialCriteriaCompanies = res
+          this.SpecialCriteriaCompanies = res.companies
         }))
         this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
           this.specialCriteria = res
@@ -155,6 +157,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       title: ['', Validators.required],
       description: ['', Validators.required]
     })
+
+    
   }
 
   patchForm(): void {
@@ -305,7 +309,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     ];
 
     this.SpecialCriteriaCompanies.forEach(business => {
-      worksheet.addRow(business.company);
+      worksheet.addRow(business);
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {
