@@ -54,6 +54,13 @@ export interface MatchMakingStats{
   connected: number
 }
 
+export interface ConnectionRequestsStats{
+  requested:number,
+  approved:number,
+  declined:number
+}
+
+
 export interface MatchedInvestor {
   id: number,
   matched: number,
