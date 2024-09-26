@@ -143,7 +143,7 @@ export class ConnectionRequestsComponent {
     if(this.declined_requests){
       this.totalItems = res.declined
     }else if(!this.declined_requests){
-      this.totalItems = res.requested
+      this.totalItems = res.requested 
     }
     
   }))

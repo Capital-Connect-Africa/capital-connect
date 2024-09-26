@@ -221,6 +221,7 @@
 
 
 <app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <form [formGroup]="declineForm">
   <div class="form_content__container">
     <div class="input__wrapper">
       <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
@@ -234,6 +235,7 @@
       </div>
     </div>
   </div>
+  </form>
 </app-modal>
 
 
