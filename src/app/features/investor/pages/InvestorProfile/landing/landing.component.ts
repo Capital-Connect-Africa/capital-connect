@@ -16,8 +16,21 @@ import { RouterModule } from '@angular/router';
   styleUrl: './landing.component.scss'
 })
 export class LandingComponent {
-
+  isDisabled = false
   private _router =inject(Router);
+
+
+  constructor() {
+    const profileId = sessionStorage.getItem('profileId');
+    
+    if (profileId) {
+      this.isDisabled = false;
+    } else {
+      this.isDisabled = true;
+    }
+  }
+  
+
 
   goToProfile(): void {
     this._router.navigate(['/investor/investor-details']);
