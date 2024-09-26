@@ -23,7 +23,7 @@
     <div class="billing-items" style="margin-top: 1cm;">
       <!-- <h2>Available Subscription Tiers</h2> -->
       <div class="item" *ngFor="let tier of subscriptionTiers">
-        <span class="item-description">{{ tier.name }} - {{ tier.description }}</span>
+        <span ><strong class="item-description">{{ tier.name | uppercase }}</strong> - {{ tier.description }}</span>
         <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
         <div class="cta__group">
           <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
