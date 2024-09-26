@@ -243,21 +243,6 @@ export class GlobalSearchComponent {
   }
   
 
-
-  // onSearch() {
-  //   this.searchForm.value.sectors = this.selectedSectors
-  //   this.searchForm.value.subSectors = this.selectedSubSectors
-  
-  //   const searchCriteria = this.removeEmptyFields(this.searchForm.value);
-  
-  //   this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
-  //     tap(res => {
-  //       this.matchedBusinesses = res;
-  //       this.advanced_Search = false;
-  //     })
-  //   );
-  // }
-
   onSearch() {
     const formValue = { ...this.searchForm.value };
     formValue.sectors = this.selectedSectors;
