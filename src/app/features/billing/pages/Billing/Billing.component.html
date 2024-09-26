@@ -14,16 +14,29 @@
   <div class="billing-container">
     <div class="billing-header">
       <h1>Subscription Tiers</h1>
+      <button class="btn" (click)="createShow()">Create Subscription Tier</button>
     </div>
 
-    <form [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
-      <p-dropdown formControlName="name" [options]="subscription_names" placeholder="Subscription Type" class="dropdown"></p-dropdown>
+    <form *ngIf="create" [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
+      <div class="block">
+        <label class="input__label"><strong>Name</strong></label>
+        <p-dropdown formControlName="name" [options]="subscription_names" placeholder="Subscription Type" class="dropdown"></p-dropdown>
+      </div>
+      <div class="block">
+        <label class="input__label"><strong>Description</strong></label>
+        <input type="text" formControlName="description" placeholder="Description" required class="input-field" />
+      </div>
+      <div class="block">
+        <label class="input__label"><strong>Price</strong></label>
+        <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
+      </div>
+
     
-      <input type="text" formControlName="description" placeholder="Description" required class="input-field" />
     
-      <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
     
       <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">Create Tier</button>
+      <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+
     </form>
     
 

@@ -28,6 +28,7 @@ export class BillingComponent {
   //vars
   subscriptionTiers: SubscriptionTier[] = [];
   subscription_names = ['basic','plus', 'pro', 'elite']
+  create:boolean = false
 
   //Forms
   newTierForm!: FormGroup;
@@ -57,6 +58,10 @@ export class BillingComponent {
   }
 
 
+  createShow(){
+    this.create = true
+  }
+
 
 
   createTier() {
@@ -66,6 +71,7 @@ export class BillingComponent {
           this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
           this._fs.success("Subscription Tier Created Successfully", 'Success')
           this.newTierForm.reset()
+          this.create = false
         }
       ))
     }
@@ -81,22 +87,28 @@ export class BillingComponent {
       }))  
       
     }))
- 
-
-
-
-
-    // this.deleteTier$ = this._bs.deleteTier(id).pipe(tap(res=>{
-    //   this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
-    //   this._fs.success("Subscription Deleted Successfully")
-    // }))   
+   
   }
 
 
+  cancel(){
+    this.create = false
+  }
    
   
 
   editTier(tier: SubscriptionTier) {
-    // this.newTier = { ...tier }; // Populate the form with the tier to edit
+    this.create = true
+    this.newTierForm.patchValue({
+      name: tier.name,
+      description: tier.description,
+      price: tier.price
+    });
+
+    this._bs.updateSubscriptionTier(this.newTierForm.value, tier.id).pipe(tap(res=>{
+      this._fs.success("Subscription Tier Updated Successfully")
+      this.create = false
+    }))
   }
+  
 }
