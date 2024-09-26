@@ -1,5 +1,12 @@
 <ng-container *ngIf="createTier$  | async"></ng-container>
 <ng-container *ngIf=" subscriptionTiers$  | async"></ng-container>
+<ng-container *ngIf=" deleteTier$  | async"></ng-container>
+<ng-container *ngIf=" confirmation$ | async"></ng-container>
+
+
+
+
+ 
 
 
 
@@ -27,7 +34,7 @@
         <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
         <div class="cta__group">
           <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
-          <button class="btn btn-danger" (click)="deleteTier(8)">Delete</button>
+          <button class="btn btn-danger" (click)="deleteTier(tier.id)">Delete</button>
         </div>
 
       </div>
