@@ -97,7 +97,7 @@ export const routes: Routes = [
 
   {
     path: 'billing',
-    loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
+    loadChildren: () => import('./features/billing/modules/billing.route').then(m => m.BusinessInvestorsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },

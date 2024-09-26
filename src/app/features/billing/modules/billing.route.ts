@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: '', loadComponent: () => import('../pages/Main/Billing.component').then(c => c.ListComponent)},
+  { path: '', loadComponent: () => import('../pages/Billing/Billing.component').then(c => c.BillingComponent)},
 ];
 
 @NgModule({

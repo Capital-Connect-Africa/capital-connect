@@ -1,75 +1,77 @@
-import { Observable, tap } from 'rxjs';
-import { Router } from '@angular/router';
+// subscription-tiers.component.ts
+import { Component, inject, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AngularMaterialModule } from '../../../../shared';
+import { AdminUiContainerComponent } from '../../../admin/components/admin-ui-container/admin-ui-container.component';
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild } from '@angular/core';
-import { MatchedInvestor } from '../../../../shared/interfaces';
-import { Table, TableModule, TablePageEvent } from 'primeng/table';
-import { UsersHttpService } from '../../../users/services/users-http.service';
-import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { BillingService } from '../../services/billing.service';
+import { Observable, tap } from 'rxjs';
+import { FeedbackService } from '../../../../core';
+import { DropdownModule } from 'primeng/dropdown';
+
 
 @Component({
-  selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent, TableModule],
+  selector: 'app-subscription-tiers',
   templateUrl: './Billing.component.html',
-  styleUrl: './Billing.component.scss'
+  styleUrls: ['./Billing.component.scss'],
+  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule,DropdownModule]
 })
-export class ListComponent {
-  private _usersService = inject(UsersHttpService);
-  private _router =inject(Router)
+export class BillingComponent {
+  //vars
+  subscriptionTiers: SubscriptionTier[] = [];
+  subscription_names = ['basic','plus', 'pro', 'elite']
 
-  investors$ = new Observable<MatchedInvestor[]>();
-  usersCount:number =0;
-  usersShowingCount =0;
+  //Forms
+  newTierForm!: FormGroup;
 
 
-  investors: MatchedInvestor[] = [];
-  cols: any[] = [
-    { field: 'organizationName', header: 'Name' },
-    { field: 'emailAddress', header: 'Email' },
-    { field: 'headOfficeLocation', header: 'Country' },
-    { field: 'matched', header: 'Matched' },
-    { field: 'connected', header: 'Connected' },
-    { field: 'declined', header: 'Declined' },
-  ];
+  //services
+  _bs = inject(BillingService)
+  _fs = inject(FeedbackService)
 
-  @ViewChild('dt') table!: Table;
+  //streams
+  createTier$ = new Observable<unknown>()
+  subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
+    res => {
+      this.subscriptionTiers = res
+    }
+  ))
 
-  ngAfterViewInit(): void {
-    this._init();
-  }
-
-  private _init() {
-    this.investors$ = this._usersService.getAllInvestors().pipe(
-      tap(investors=> {
-        this.investors =investors;
-        this.usersCount =investors.length;
-        this.usersShowingCount =this.table.value.length;
-        this.updateDisplayedData();
-      })
-    );
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value.trim();
-    this.table.filterGlobal(filterValue, 'contains');
-    this.usersCount = this.table.filteredValue ? this.table.filteredValue.length : this.investors.length;
-    this.updateDisplayedData();
+  constructor(private http: HttpClient, private fb: FormBuilder) {
+    this.newTierForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      price: [0, [Validators.required, Validators.min(0)]],
+    });
   }
 
 
-  onPage(event: TablePageEvent){
-    this.updateDisplayedData()
+
+
+  createTier() {
+    if (this.newTierForm.valid) {
+      this.createTier$ = this._bs.createSubscriptionTier(this.newTierForm.value).pipe(tap(
+        res => {
+          this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
+          this._fs.success("Subscription Tier Created Successfully", 'Success')
+          this.newTierForm.reset()
+        }
+      ))
+    }
   }
 
-  updateDisplayedData() {
-    const data = this.table.filteredValue || this.investors;
-    const start = this.table.first??10;
-    const end = start + (this.table.rows??10);
-    this.usersShowingCount = data.slice(start, end).length;
+  deleteTier(id: number) {
+    // this.http.delete(`${this.apiUrl}/${id}`, {
+    //   headers: { Authorization: this.token }
+    // }).subscribe(() => this.getSubscriptionTiers());
   }
 
-  viewInvestor(investorId:number){
-    this._router.navigateByUrl(`/business-investors/${investorId}`)
+  editTier(tier: SubscriptionTier) {
+    // this.newTier = { ...tier }; // Populate the form with the tier to edit
   }
 }
