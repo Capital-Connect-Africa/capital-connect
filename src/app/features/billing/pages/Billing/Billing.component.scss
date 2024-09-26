@@ -1,0 +1,167 @@
+@import "../../../../styles/main.scss";
+
+.container {
+  color: $primary-color;
+}
+
+
+@import "../../../../styles/main.scss";
+
+// Billing Page Styles
+
+.billing-container {
+  padding: 2rem 1rem;
+  border-radius: 1rem;
+  background-color: $white;
+  border: 1px solid $gray-200;
+  box-shadow: 0 5px 1rem 0 rgba($black, 0.1);
+
+  .billing-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: $text-color;
+    }
+
+    .billing-actions {
+      display: flex;
+      gap: 1rem;
+
+      .btn {
+        @extend .btn-primary;
+      }
+    }
+  }
+
+  .billing-summary {
+    margin-bottom: 1rem;
+    
+    .summary-title {
+      font-size: 18px;
+      font-weight: 500;
+      color: $text-color;
+      margin-bottom: 0.5rem;
+    }
+
+    .summary-details {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      background-color: $gray-100;
+      border-radius: 0.5rem;
+    }
+  }
+
+  .billing-items {
+    margin-bottom: 1rem;
+    
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      border: 1px solid $gray-300;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      
+      &.highlight {
+        background-color: $yellow-500;
+      }
+      
+      .item-description {
+        color: $text-color;
+      }
+
+      .item-price {
+        font-weight: 600;
+        color: $primary-color;
+      }
+    }
+  }
+
+  .billing-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-top: 2px solid $gray-300;
+    font-weight: 600;
+
+    .total-label {
+      color: $text-muted;
+    }
+
+    .total-amount {
+      color: $success-color;
+    }
+  }
+
+  .billing-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+
+    .cta__group {
+      @extend .cta__group;
+      
+      button {
+        &.btn-primary {
+          padding: 1rem 2rem;
+        }
+      }
+
+      > a {
+        color: $primary-color;
+        font-size: $font-size-sm;
+      }
+    }
+  }
+}
+
+// Responsive Styles
+@include when-screen-is-atleast(large) {
+  .billing-container {
+    padding: 2rem 3rem;
+  }
+}
+
+
+.subscription-form {
+  display: flex; /* Aligns items in a row */
+  align-items: center; /* Vertically centers items */
+  gap: 10px; /* Adds spacing between elements */
+}
+
+.dropdown {
+  border-radius: 8px; /* Rounded corners for dropdown */
+  padding: 10px; /* Adds padding inside the dropdown */
+  border: 1px solid #ccc; /* Adds a border */
+  transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.dropdown:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Removes default outline */
+}
+
+.input-field {
+  border-radius: 8px; /* Rounded corners for inputs */
+  padding: 10px; /* Adds padding inside the input fields */
+  border: 1px solid #ccc; /* Adds a border */
+  flex: 1; /* Allows input fields to grow */
+  transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.input-field:focus {
+  border-color: #007bff; /* Change border color on focus */
+  outline: none; /* Removes default outline */
+}
+
+.btn {
+  padding: 10px 20px; /* Adds padding to buttons */
+  border-radius: 8px; /* Rounded corners for buttons */
+  cursor: pointer; /* Changes cursor on hover */
+}

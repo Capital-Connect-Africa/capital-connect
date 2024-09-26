@@ -16,6 +16,7 @@ export class AdminUiContainerComponent {
   signalService =inject(SignalsService)
   links = [
     { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
+    { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },   
     { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
     { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
     { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
