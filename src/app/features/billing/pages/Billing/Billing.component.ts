@@ -12,6 +12,8 @@ import { BillingService } from '../../services/billing.service';
 import { Observable, tap } from 'rxjs';
 import { FeedbackService } from '../../../../core';
 import { DropdownModule } from 'primeng/dropdown';
+import { ConfirmationService } from '../../../../core';
+import { Pipe } from '@angular/core';
 
 
 @Component({
@@ -19,7 +21,8 @@ import { DropdownModule } from 'primeng/dropdown';
   selector: 'app-subscription-tiers',
   templateUrl: './Billing.component.html',
   styleUrls: ['./Billing.component.scss'],
-  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule,DropdownModule]
+  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule,DropdownModule],
+  providers: [ConfirmationService],
 })
 export class BillingComponent {
   //vars
@@ -31,11 +34,14 @@ export class BillingComponent {
 
 
   //services
-  _bs = inject(BillingService)
-  _fs = inject(FeedbackService)
+  private _bs = inject(BillingService)
+  private _fs = inject(FeedbackService)
+  private _cs = inject(ConfirmationService);
 
   //streams
   createTier$ = new Observable<unknown>()
+  deleteTier$ = new Observable<unknown>()
+  confirmation$ =new Observable<any>();
   subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
     res => {
       this.subscriptionTiers = res
@@ -66,10 +72,29 @@ export class BillingComponent {
   }
 
   deleteTier(id: number) {
-    // this.http.delete(`${this.apiUrl}/${id}`, {
-    //   headers: { Authorization: this.token }
-    // }).subscribe(() => this.getSubscriptionTiers());
+    
+    return this.confirmation$ =this._cs.confirm("Do you want to delete this subscription tier ...").pipe(tap(confirmation =>{
+
+      this.deleteTier$ = this._bs.deleteTier(id).pipe(tap(res=>{
+        this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
+        this._fs.success("Subscription Deleted Successfully")
+      }))  
+      
+    }))
+ 
+
+
+
+
+    // this.deleteTier$ = this._bs.deleteTier(id).pipe(tap(res=>{
+    //   this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
+    //   this._fs.success("Subscription Deleted Successfully")
+    // }))   
   }
+
+
+   
+  
 
   editTier(tier: SubscriptionTier) {
     // this.newTier = { ...tier }; // Populate the form with the tier to edit
