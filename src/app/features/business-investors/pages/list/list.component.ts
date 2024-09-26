@@ -70,6 +70,12 @@ export class ListComponent {
   }
 
   viewInvestor(investorId:number){
-    this._router.navigateByUrl(`/business-investors/${investorId}`)
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this._router.navigateByUrl(`/business-investors-investors/${investorId}`)
+    }else{
+      this._router.navigateByUrl(`/business-investors/${investorId}`)
+    }
   }
 }

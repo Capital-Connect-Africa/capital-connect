@@ -13,6 +13,17 @@ import { OrganizationInfoContainerComponent } from "../organization-info-contain
 })
 export class OrganizationOwnerInfoComponent {
 
+  isInvestor:boolean = false
+
+  constructor(){
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this.isInvestor = true
+    }
+
+  }
+
   delete$ = new Observable();
 
   @Input({required: true}) owner!: User

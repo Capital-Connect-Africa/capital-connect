@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { isLoggedInCanActivateChildGuard, isLoggedInCanActivateGuard } from './shared/guards/isLoggedIn.guard';
 import { isAdminCanActivateChildGuard, isAdminCanActivateGuard } from './shared/guards/isAdminGuard';
+import { isInvestorChildGuard,isInvestorGuard } from './shared/guards/isInvestorGuard';
+
 
 export const routes: Routes = [
   {
@@ -70,8 +72,8 @@ export const routes: Routes = [
   {
     path: 'sectors',
     loadChildren: () => import('./features/sectors/sectors.routing').then(m => m.SectorsRoutingModule),
-    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
-    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+    canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
   },
 
   {
@@ -89,10 +91,24 @@ export const routes: Routes = [
   },
 
   {
+    path: 'dashboard-investor',
+    loadChildren: () => import('./features/admin/admin.routing.module').then(m => m.AdminRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
+  },
+
+  {
     path: 'business-investors',
     loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
-    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
-    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard,isInvestorGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard,isInvestorGuard]
+  },
+
+  {
+    path: 'business-investors-investors',
+    loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
+    canActivateChild: [isLoggedInCanActivateGuard, isInvestorGuard]
   },
 
   {

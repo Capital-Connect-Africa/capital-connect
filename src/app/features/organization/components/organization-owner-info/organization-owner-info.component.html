@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <div class="button-group" footer>
+  <div *ngIf="!isInvestor" class="button-group" footer>
     <button (click)="editUser()" class="btn btn-edit" pTooltip="Edit">
       <i class="pi pi-pencil"></i>
       <span class="btn-text">Edit</span>
