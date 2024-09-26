@@ -40,6 +40,17 @@ export class OrganizationSubmissionsInfoComponent implements OnChanges {
   impactAssessmentScore: string = '0';
   delete$ =new Observable<unknown>();
 
+  isInvestor:boolean = false
+
+  constructor(){
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this.isInvestor = true
+    }
+
+  }
+
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }

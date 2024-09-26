@@ -22,6 +22,16 @@ export class OrganizationInfoComponent {
   private _confirmationService = inject(ConfirmationService);
   private _feedbackService = inject(FeedbackService);
   private _router = inject(Router);
+  isInvestor:boolean = false
+
+  constructor(){
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this.isInvestor = true
+    }
+
+  }
   
   delete$ = new Observable<unknown>();
 

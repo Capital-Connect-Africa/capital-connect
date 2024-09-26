@@ -7,6 +7,7 @@ import { UiComponent } from '../../../sectors/components/ui/ui.component';
 import { MainComponent } from "../../components/main/main.component";
 import { SidenavComponent } from '../../../../core';
 import { SharedModule } from '../../../../shared';
+import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
 
 @Component({
   selector: 'admin-dashboard',
@@ -16,14 +17,29 @@ import { SharedModule } from '../../../../shared';
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+  isInvestor:boolean = false
+
+  constructor(){
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this.isInvestor = true
+    }
+  }
+
 
   private _router = inject(Router);
 
-  links = [
+  
+
+  links = this.isInvestor ? INVESTOR_DASHBOARD_LINKS : [
     { label: 'Sections', href: '/questions', exact: true, icon: 'grid_view' },
     { label: 'Companies', href: '/business', exact: true, icon: 'store' },
     { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' }
   ]
+
+
+
   navigateTo(path: string) {
     this._router.navigate([path]);
   }
