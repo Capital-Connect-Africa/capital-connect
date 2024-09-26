@@ -9,47 +9,7 @@
       <h1>Subscription Tiers</h1>
     </div>
 
-    <div class="billing-items">
-      <!-- <h2>Available Subscription Tiers</h2> -->
-      <div class="item" *ngFor="let tier of subscriptionTiers">
-        <span class="item-description">{{ tier.name }} - {{ tier.description }}</span>
-        <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
-        <div class="cta__group">
-          <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
-          <button class="btn btn-danger" (click)="deleteTier(8)">Delete</button>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="billing-form">
-      <h6>Add New Subscription Tier</h6>
-      <!-- <form [formGroup]="newTierForm" (ngSubmit)="createTier()" class="input__wrapper">
-        <div class="input__wrapper">
-          <p-dropdown
-          class="input__field w-full"
-          formControlName="name"
-          [options]="subscription_names"
-          placeholder="Subscription Type"
-          ></p-dropdown>
-        </div>
-
-        <div class="input__wrapper">
-          <input type="text-area" formControlName="description" placeholder="Description" class="input__field" required />
-        </div>
-
-        <div class="input__wrapper">
-          <input type="number" formControlName="price" placeholder="Price" class="input__field" required />
-        </div>
-    
-        <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">Create Tier</button>
-    </form>
-     -->
-
-
-
-
-     <form [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
+    <form [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
       <p-dropdown formControlName="name" [options]="subscription_names" placeholder="Subscription Type" class="dropdown"></p-dropdown>
     
       <input type="text" formControlName="description" placeholder="Description" required class="input-field" />
@@ -60,19 +20,17 @@
     </form>
     
 
+    <div class="billing-items" style="margin-top: 1cm;">
+      <!-- <h2>Available Subscription Tiers</h2> -->
+      <div class="item" *ngFor="let tier of subscriptionTiers">
+        <span class="item-description">{{ tier.name }} - {{ tier.description }}</span>
+        <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
+        <div class="cta__group">
+          <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteTier(8)">Delete</button>
+        </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+      </div>
     </div>
 
 
