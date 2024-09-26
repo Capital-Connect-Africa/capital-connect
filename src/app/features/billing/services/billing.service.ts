@@ -2,7 +2,7 @@ import { map, Observable } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {BASE_URL, BaseHttpService } from "../../../core";
-import { SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
 
 @Injectable({providedIn: 'root'})
 
@@ -46,7 +46,10 @@ export class BillingService extends BaseHttpService{
         )
     }
 
-
-
+    subscribe(tierId: number){
+        return this.create(`${BASE_URL}/subscriptions/subscribe`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
+            return res;
+        })) as Observable<SubscriptionResponse>
+    }
 
 }

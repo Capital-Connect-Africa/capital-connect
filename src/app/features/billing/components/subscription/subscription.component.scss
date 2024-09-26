@@ -1,0 +1,25 @@
+@import '../../../../styles/fonts.scss';
+*{
+    font-family: $font-family-inter!important;
+}
+
+h3{
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+}
+
+.action__button{
+    display: block;
+    cursor: pointer;
+    text-align: center;
+    border-radius: .1rem;
+    transition: all .2s linear;
+    border: thin solid #3b83f691;
+    &:hover,&:focus{
+        color: white;
+        border-color: transparent;
+        background-color: #3b83f6e5;
+    }
+}
+
+
