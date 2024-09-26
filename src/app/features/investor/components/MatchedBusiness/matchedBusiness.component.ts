@@ -189,6 +189,7 @@ export class MatchedBusinessComponent {
   constructor(private fb: FormBuilder) {
     this.declineForm = this.fb.group({
       countriesOfInvestmentFocus: [[]],
+      reasons:[[]]
     });
   }
 
@@ -203,7 +204,7 @@ export class MatchedBusinessComponent {
       numberOfEmployees: [''],
       fullTimeBusiness: [false],
       fundsNeeded:[''],
-      investmentStructure:[[]],
+      investmentStructures:[[]],
       useOfFunds:[[]],
       esgFocusAreas:[[]]
     });
@@ -242,13 +243,17 @@ export class MatchedBusinessComponent {
   }
   
 
-
   onSearch() {
-    this.searchForm.value.sectors = this.selectedSectors
-    this.searchForm.value.subSectors = this.selectedSubSectors
+    const formValue = { ...this.searchForm.value };
+    formValue.sectors = this.selectedSectors;
+    formValue.subSectors = this.selectedSubSectors;
   
-    const searchCriteria = this.removeEmptyFields(this.searchForm.value);
+    if (formValue.fullTimeBusiness === false) {
+      delete formValue.fullTimeBusiness;
+    }
   
+    const searchCriteria = this.removeEmptyFields(formValue);
+
     this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
       tap(res => {
         this.matchedBusinesses = res;
@@ -256,6 +261,7 @@ export class MatchedBusinessComponent {
       })
     );
   }
+  
 
   isSectorSelected(sector: string): boolean {
     return this.selectedSectors.includes(sector);
@@ -268,6 +274,12 @@ export class MatchedBusinessComponent {
 
   onResetSearch() {
     this.searchForm.reset();
+    this.searchForm.markAsPristine();
+    this.searchForm.markAsUntouched();
+    this.sectors = []
+    this.subSectors  = []
+    this.selectedSectors = []
+    this.selectedSubSectors = []
     this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies();
   }
 
