@@ -25,25 +25,29 @@ export class SubscriptionComponent {
   private _sanitizer =inject(DomSanitizer);
   private _billingService =inject(BillingService);
   subscribe$ =new Observable<SubscriptionResponse>();
-  plan:string ='';;
-  activePlan$ =new Observable()
+  plan:string ='';
   subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(switchMap(res =>{
     this.tiers =res;
-    return this._billingService.getActivePlan().pipe(tap(res =>{
-      this.activePlan =res;
-      debugger
-    }),
-    catchError(err =>{
-      debugger
-      this.activePlan =this.tiers.find((tier:SubscriptionTier) =>tier.price ==0) as SubscriptionTier;
-      return EMPTY;
-    })
-  )
+    if(!this.signalService.activePlan()){
+      return this._billingService.getActivePlan().pipe(tap(res =>{
+        this.activePlan =res;
+        this.signalService.activePlan.set(res.name);
+      }),
+      catchError(err =>{
+        this.activePlan =this.tiers.find((tier:SubscriptionTier) =>tier.price ==0) as SubscriptionTier;
+        this.signalService.activePlan.set(this.activePlan.name);
+        return EMPTY;
+      })
+    )
+  }
+  return EMPTY;
   }))
   
 
   subscribe(tierId: number){
-    this.plan =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId)?.name as string;
+    const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
+    if(selectedTier?.price ==0) return;
+    this.plan =selectedTier?.name as string;
     this.subscribe$ =this._billingService.subscribe(tierId).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);

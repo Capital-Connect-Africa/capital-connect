@@ -1,6 +1,5 @@
 <ng-container *ngIf="subscribe$ | async"/>
 <ng-container *ngIf="subscriptionTiers$ | async"/>
-<ng-container *ngIf="activePlan$ | async"/>
 
 <div class="px-8 pricing__content">
     <ul class="grid grid-cols-3 gap-8 items-center">
@@ -8,8 +7,8 @@
             <div class="">{{tier.name | titlecase}}</div>
             <h3>Ksh {{tier.price | numberabbreviation}}.00</h3>
             <div class="font-light">{{tier.description}}</div>
-            <button class="py-3 text-blue-500 rounded-full action__button" (click)="subscribe(tier.id)" *ngIf="tier.id !==activePlan?.id">Choose Plan</button>
-            <button class="py-3 text-white bg-teal-500 rounded-full action__button selected" *ngIf="tier.id ===activePlan?.id">Current Plan</button>
+            <button class="py-3 text-blue-500 rounded-full action__button" (click)="subscribe(tier.id)" *ngIf="tier.name !==signalService.activePlan()">Choose Plan</button>
+            <button class="py-3 text-white bg-teal-500 rounded-full action__button selected" *ngIf="tier.name ==signalService.activePlan()">Current Plan</button>
         </li>
     </ul>
 </div>
