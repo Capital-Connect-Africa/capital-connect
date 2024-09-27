@@ -20,6 +20,13 @@ h3{
         border-color: transparent;
         background-color: #3b83f6e5;
     }
+
+    &.selected{
+        border: thin solid #14b8a6;
+        &:hover,&:focus{
+            background-color: #14b8a6;
+        }
+    }
 }
 
 
