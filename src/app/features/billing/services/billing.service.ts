@@ -22,10 +22,12 @@ export class BillingService extends BaseHttpService{
 
     //Get all Subscription Tiers
     getSubscriptionTiers():Observable<SubscriptionTier[]> {
-        return this.read(`${BASE_URL}/subscription-tiers`).pipe(map(
-            res => res as unknown as SubscriptionTier[]
-        ))
+        return this.read(`${BASE_URL}/subscription-tiers`).pipe(map((res:any) => {
+            const tiers:SubscriptionTier[] =res
+            return tiers.sort((a:SubscriptionTier, b: SubscriptionTier) =>a.price - b.price)
+        })) as Observable<SubscriptionTier[]>
     }
+    
     //Get a single subscription tier
     getSubscriptionTier(id:number):Observable<SubscriptionTier> {
         return this.read(`${BASE_URL}/subscription-tiers`).pipe(map(
@@ -58,9 +60,6 @@ export class BillingService extends BaseHttpService{
         const userId =this._authStateService.currentUserId()
         return this.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
             return res;
-        }),
-    catchError(_ =>{
-        return EMPTY
-    })) as Observable<SubscriptionTier>
+        })) as Observable<SubscriptionTier>
     }
 }
