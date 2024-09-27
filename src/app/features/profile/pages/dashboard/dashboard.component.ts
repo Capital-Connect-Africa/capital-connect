@@ -31,6 +31,7 @@ export class DashboardComponent {
     {label: 'Dashboard', href: `${this._authStateService.userIsInvestor? '/investor': this._authStateService.userIsAdmin? '/dashboard': this._authStateService.userIsUser? '/business':''}`, exact: true, icon: 'grid_view'},
     {label: 'Plans', href: '/business/plans', exact: false, icon: 'paid'},
     {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
+    {label: 'Special Criteria', href: '/business/special-criteria', exact: false, icon: 'contact_support'},
   ]
   toggle_hidden() {
     this.hidden = !this.hidden;

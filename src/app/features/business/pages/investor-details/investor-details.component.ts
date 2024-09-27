@@ -54,9 +54,9 @@ export class InvestorDetailsComponent {
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.REQUESTED){
-        return this._scoringService.getInvestorProfile(id).pipe(
+        return this._scoringService.getConnectionRequests().pipe(
           tap(res => {
-            this.investor = res;
+            this.investor = res.find((investor:MatchedInvestor) =>investor.id ===id) as MatchedInvestor
             this.checkIfUserCanViewPage();
           })
         );
@@ -71,9 +71,9 @@ export class InvestorDetailsComponent {
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.DECLINED){
-        return this._scoringService.getInvestorProfile(id).pipe(
+        return this._scoringService.getDecliningInvestors().pipe(
           tap(res => {
-            const investor =res
+            const investor =res.find((investor:MatchedInvestor) =>investor.id ===id)
             this.declineReasons =investor.declineReasons;
             this.checkIfUserCanViewPage();
           })
