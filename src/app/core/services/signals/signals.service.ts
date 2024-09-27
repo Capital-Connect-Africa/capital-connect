@@ -14,7 +14,8 @@ export class SignalsService {
     title: 'Action Required',
     message: 'Please add your mobile phone number',
     command: 'Add'
-  })
+  });
+  activePlan:WritableSignal<string> =signal('')
   pageTitle: WritableSignal<string> =signal('Dashboard')
   businessInvestorPageSignal: WritableSignal<string> =signal('');
   userHasInitiatedPayment: WritableSignal<boolean> =signal(false);
