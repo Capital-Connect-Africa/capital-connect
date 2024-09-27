@@ -1,12 +1,14 @@
-import { map, Observable } from "rxjs";
+import { catchError, EMPTY, map, Observable } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {BASE_URL, BaseHttpService } from "../../../core";
 import { SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { AuthStateService } from "../../auth/services/auth-state.service";
 
 @Injectable({providedIn: 'root'})
 
 export class BillingService extends BaseHttpService{
+    private _authStateService =inject(AuthStateService);
     constructor(private _httpClient: HttpClient) {
         super(_httpClient);
       }
@@ -52,4 +54,13 @@ export class BillingService extends BaseHttpService{
         })) as Observable<SubscriptionResponse>
     }
 
+    getActivePlan(){
+        const userId =this._authStateService.currentUserId()
+        return this.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
+            return res;
+        }),
+    catchError(_ =>{
+        return EMPTY
+    })) as Observable<SubscriptionTier>
+    }
 }
