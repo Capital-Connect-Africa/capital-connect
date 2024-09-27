@@ -23,20 +23,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./organization-list.component.scss']
 })
 export class OrganizationListComponent {
+  isInvestor:boolean = false
 
-  private _router =inject(Router);
+  constructor(){
+    let investor = sessionStorage.getItem('profileId')
+
+    if(investor){
+      this.isInvestor = true
+    }
+  }
+
+  private _router = inject(Router);
   private _companiesService = inject(CompanyHttpService);
-  companies:CompanyResponse[] =[];
-  
+  companies: CompanyResponse[] = [];
+
   searchString = '';
-  companies$ = this._companiesService.getAllCompanies().pipe(map(res =>{
-    this.companies =res;
+  companies$ = this._companiesService.getAllCompanies().pipe(map(res => {
+    this.companies = res;
     this.updateDisplayedData();
-    this.companiesCount =res.length
+    this.companiesCount = res.length
   }))
 
-  companiesCount =0;
-  companiesShowingCount =0;
+  companiesCount = 0;
+  companiesShowingCount = 0;
 
   cols: any[] = [
     { field: 'name', header: 'Name' },
@@ -54,18 +63,25 @@ export class OrganizationListComponent {
   }
 
 
-  onPage(event: TablePageEvent){
+  onPage(event: TablePageEvent) {
     this.updateDisplayedData()
   }
 
   updateDisplayedData() {
     const data = this.table.filteredValue || this.companies;
-    const start = this.table.first??10;
-    const end = start + (this.table.rows??10);
+    const start = this.table.first ?? 10;
+    const end = start + (this.table.rows ?? 10);
     this.companiesShowingCount = data.slice(start, end).length;
   }
 
-  viewCompany(companyId:number){
-    this._router.navigateByUrl(`/organization/${companyId}`);
+  viewCompany(companyId: number) {
+    let investor = sessionStorage.getItem('profileId')
+
+    if (investor) {
+      this._router.navigateByUrl(`/organization/investor/${companyId}`);
+    }else{
+      this._router.navigateByUrl(`/organization/${companyId}`);
+    }
+
   }
 }

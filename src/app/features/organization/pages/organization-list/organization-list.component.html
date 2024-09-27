@@ -32,7 +32,7 @@
               <button class="btn__cta text-blue-600" title="Details" (click)="viewCompany(company.id)">
                 <i class="pi pi-info-circle"></i>
               </button>
-              <button class="btn__cta text-rose-600" title="Remove"><i class="pi pi-times"></i></button>
+              <button *ngIf="!isInvestor" class="btn__cta text-rose-600" title="Remove"><i class="pi pi-times"></i></button>
             </div>
           </td>
         </tr>

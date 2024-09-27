@@ -1,0 +1,58 @@
+<ng-container *ngIf="createTier$  | async"></ng-container>
+<ng-container *ngIf=" subscriptionTiers$  | async"></ng-container>
+<ng-container *ngIf=" deleteTier$  | async"></ng-container>
+<ng-container *ngIf=" confirmation$ | async"></ng-container>
+
+
+
+
+ 
+
+
+
+<app-admin-ui-container [title]="'Billing'">
+  <div class="billing-container">
+    <div class="billing-header">
+      <h1>Subscription Tiers</h1>
+      <button class="btn" (click)="createShow()">Create Subscription Tier</button>
+    </div>
+
+    <form *ngIf="create" [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
+      <div class="block">
+        <label class="input__label"><strong>Name</strong></label>
+        <p-dropdown formControlName="name" [options]="subscription_names" placeholder="Subscription Type" class="dropdown"></p-dropdown>
+      </div>
+      <div class="block">
+        <label class="input__label"><strong>Description</strong></label>
+        <input type="text" formControlName="description" placeholder="Description" required class="input-field" />
+      </div>
+      <div class="block">
+        <label class="input__label"><strong>Price</strong></label>
+        <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
+      </div>
+
+    
+    
+    
+      <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">Create Tier</button>
+      <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+
+    </form>
+    
+
+    <div class="billing-items" style="margin-top: 1cm;">
+      <!-- <h2>Available Subscription Tiers</h2> -->
+      <div class="item" *ngFor="let tier of subscriptionTiers">
+        <span ><strong class="item-description">{{ tier.name | uppercase }}</strong> - {{ tier.description }}</span>
+        <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
+        <div class="cta__group">
+          <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
+          <button class="btn btn-danger" (click)="deleteTier(tier.id)">Delete</button>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</app-admin-ui-container>

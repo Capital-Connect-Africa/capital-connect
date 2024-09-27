@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { isAdminCanActivateChildGuard, isAdminCanActivateGuard } from '../../../../shared/guards/isAdminGuard';
+import { isInvestorGuard } from '../../../../shared/guards/isInvestorGuard';
 
 
 const routes: Routes = [
@@ -17,12 +18,28 @@ const routes: Routes = [
     loadComponent: () => import('../../pages/organization-list/organization-list.component').then(c => c.OrganizationListComponent),
     canActivate: [isAdminCanActivateGuard],
     canActivateChild: [isAdminCanActivateChildGuard]
-  },   {
+  }, 
+  {
+    path: 'list-investors',
+    loadComponent: () => import('../../pages/organization-list/organization-list.component').then(c => c.OrganizationListComponent),
+    canActivate: [isInvestorGuard],
+    canActivateChild: [isInvestorGuard]
+  },
+  
+  {
     path: ':id',
     loadComponent: () => import('../../pages/single-organization/single-organization.component').then(c => c.SingleOrganizationComponent),
     canActivate: [isAdminCanActivateGuard],
     canActivateChild: [isAdminCanActivateChildGuard]
+  },
+  {
+    path: 'investor/:id',
+    loadComponent: () => import('../../pages/single-organization/single-organization.component').then(c => c.SingleOrganizationComponent),
+    canActivate: [isInvestorGuard],
+    canActivateChild: [isInvestorGuard]
   }
+
+
 ];
 
 @NgModule({

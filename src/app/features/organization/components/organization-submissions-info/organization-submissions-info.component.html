@@ -34,7 +34,7 @@
             {{investorEligibilityScore}} %
           </span>
         </div>
-        <button (click) ="deleteSubmission('investorEligibility')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+        <button *ngIf="!isInvestor" (click) ="deleteSubmission('investorEligibility')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
           <i class="pi pi-trash"></i>
         </button>
     </div>
@@ -58,7 +58,7 @@
 
     <div class="answer-container" *ngIf="activeTab === 'businessResponses'">
       <div class="flex items-center gap-4" *ngIf="businessResponses && businessResponses.length">
-        <button (click) ="deleteSubmission('businessResponses')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+        <button *ngIf="!isInvestor" (click) ="deleteSubmission('businessResponses')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
           <i class="pi pi-trash"></i>
         </button>
     </div>
@@ -88,7 +88,7 @@
             {{investorPreparednessScore}} %
           </span>
         </div>
-        <button (click) ="deleteSubmission('investorPreparedness')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+        <button *ngIf="!isInvestor" (click) ="deleteSubmission('investorPreparedness')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
           <i class="pi pi-trash"></i>
         </button>
     </div>
@@ -117,7 +117,7 @@
             {{impactAssessmentScore}} %
           </span>
         </div>
-        <button (click) ="deleteSubmission('impactAssessment')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
+        <button *ngIf="!isInvestor" (click) ="deleteSubmission('impactAssessment')" class="btn bg-transparent p-1 cta__remove text-rose-500" pTooltip="Delete">
           <i class="pi pi-trash"></i>
         </button>
     </div>

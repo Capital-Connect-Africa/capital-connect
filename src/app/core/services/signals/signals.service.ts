@@ -14,9 +14,11 @@ export class SignalsService {
     title: 'Action Required',
     message: 'Please add your mobile phone number',
     command: 'Add'
-  })
+  });
+  activePlan:WritableSignal<string> =signal('')
   pageTitle: WritableSignal<string> =signal('Dashboard')
   businessInvestorPageSignal: WritableSignal<string> =signal('');
+  userHasInitiatedPayment: WritableSignal<boolean> =signal(false);
   matchedInvestorsDialogIsVisible: WritableSignal<boolean> =signal(false);
   connectionRequestsDialogIsVisible: WritableSignal<boolean> =signal(false);
   connectedInvestorsDialogIsVisible: WritableSignal<boolean> =signal(false);
@@ -30,6 +32,7 @@ export class SignalsService {
     this.userSectionSubmissions.set(null);
     this.actionOnMobileNumbers.set(false);
     this.businessInvestorPageSignal.set('');
+    this.userHasInitiatedPayment.set(false);
     this.matchedInvestorsDialogIsVisible.set(false);
     this.connectionRequestsDialogIsVisible.set(false);
     this.connectedInvestorsDialogIsVisible.set(false);
