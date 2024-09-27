@@ -18,6 +18,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 export class SubscriptionComponent {
   tiers:SubscriptionTier[] =[];
+  activePlan!:SubscriptionTier;
   redirectURL!: SafeResourceUrl;
   subscription!:SubscriptionResponse;
   signalService =inject(SignalsService);
@@ -27,6 +28,9 @@ export class SubscriptionComponent {
   plan:string ='';
   subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(tap(res =>{
     this.tiers =res;
+  }))
+  activePlan$ =this._billingService.getActivePlan().pipe(tap(res =>{
+    this.activePlan =res;
   }))
 
   subscribe(tierId: number){
