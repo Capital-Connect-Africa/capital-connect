@@ -1,15 +1,17 @@
-import { catchError, EMPTY, map, Observable } from "rxjs";
+import { catchError, EMPTY, map, Observable, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {BASE_URL, BaseHttpService } from "../../../core";
 import { SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
 import { AuthStateService } from "../../auth/services/auth-state.service";
+import { SignalsService } from "../../../core/services/signals/signals.service";
 
 @Injectable({providedIn: 'root'})
 
 export class BillingService {
-    private _authStateService =inject(AuthStateService);
     private __http =inject(BaseHttpService);
+    private _signalService =inject(SignalsService);
+    private _authStateService =inject(AuthStateService);
 
     //Create  a subscription tier
     createSubscriptionTier(subscriptionTier:SubscriptionTier){
@@ -58,6 +60,10 @@ export class BillingService {
         const userId =this._authStateService.currentUserId()
         return this.__http.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
             return res;
-        })) as Observable<SubscriptionTier>
+        }),
+    catchError(err =>{
+        this._signalService.activePlan.set('basic')
+        return EMPTY
+    })) as Observable<SubscriptionTier>
     }
 }
