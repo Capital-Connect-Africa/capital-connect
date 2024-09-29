@@ -72,8 +72,8 @@ export const routes: Routes = [
   {
     path: 'sectors',
     loadChildren: () => import('./features/sectors/sectors.routing').then(m => m.SectorsRoutingModule),
-    canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
-    canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
+    canActivate: [isLoggedInCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard]
   },
 
   {
