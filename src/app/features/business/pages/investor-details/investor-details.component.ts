@@ -24,7 +24,9 @@ export class InvestorDetailsComponent {
   private _signalService =inject(SignalsService);
   links =[
     {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
+    {label: 'Plans', href: '/business/plans', exact: false, icon: 'paid'},
     {label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center'},
+    {label: 'Special Criteria', href: '/business/special-criteria', exact: false, icon: 'contact_support'},
     // {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'},
     {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
 
@@ -54,9 +56,9 @@ export class InvestorDetailsComponent {
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.REQUESTED){
-        return this._scoringService.getInvestorProfile(id).pipe(
+        return this._scoringService.getConnectionRequests().pipe(
           tap(res => {
-            this.investor = res;
+            this.investor = res.find((investor:MatchedInvestor) =>investor.id ===id) as MatchedInvestor
             this.checkIfUserCanViewPage();
           })
         );
@@ -71,9 +73,9 @@ export class InvestorDetailsComponent {
         );
       }
       else if(this.relationship ==CompanyInvestorRelationsShip.DECLINED){
-        return this._scoringService.getInvestorProfile(id).pipe(
+        return this._scoringService.getDecliningInvestors().pipe(
           tap(res => {
-            const investor =res
+            const investor =res.find((investor:MatchedInvestor) =>investor.id ===id)
             this.declineReasons =investor.declineReasons;
             this.checkIfUserCanViewPage();
           })
