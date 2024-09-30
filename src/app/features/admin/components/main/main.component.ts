@@ -48,6 +48,7 @@ export class MainComponent {
   maxFunding!:Record<string, number>;
   fundRaise!:Record<string, number>;
   stagesStats!:Record<string, number>;
+  subscriptions!:Record<string, number>;
 
   
   businessCountriesStats!:Record<string, number>;
@@ -66,6 +67,12 @@ export class MainComponent {
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
   ];
+  billing_cols: any[] = [
+    { field: 'subscriber', header: 'Subscriber' },
+    { field: 'tier', header: 'Package' },
+    { field: 'price', header: 'Price' },
+    { field: 'date_subscribed', header: 'Purchased' },
+  ];
   entities:any;
 
   analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
@@ -76,6 +83,7 @@ export class MainComponent {
     this.maxFunding =analytics.max_funding;
     this.minFunding =analytics.min_funding;
     this.businessCountriesStats =analytics.countries;
+    this.subscriptions =analytics.subscriptions
     return analytics
   }));
   
