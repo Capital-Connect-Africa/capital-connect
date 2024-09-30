@@ -121,24 +121,30 @@ export class UserStatisticsService extends BaseHttpService{
         return this.read(`${BASE_URL}/statistics/businesses`).pipe(map(res =>{
           return res;
         }));
-      }
+    }
     
-      countInvestorProfiles(){
+    countInvestorProfiles(){
         return this.read(`${BASE_URL}/statistics/investors`).pipe(map(res =>{
           return res;
         }));
-      }
+    }
     
-      getEntityStat(){
+    countSubscriptions(){
+        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map(res =>{
+            debugger
+          return res;
+        }));
+    }
+
+    getEntityStat(){
        const requests =[this.countBusinessProfiles(), this.countInvestorProfiles()];
        return forkJoin(requests).pipe(map(res =>{
         return {...res[0], ...res[1]}
        }))
-
     }
 
     getAnalytics(){
-        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats()]
+        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats(), this.countSubscriptions()]
         return forkJoin(requests).pipe(map(stats =>{
             return {
                 sectors: stats[0] as SharedStats,
@@ -147,7 +153,8 @@ export class UserStatisticsService extends BaseHttpService{
                 stages: stats[3] as Record<string, number>,
                 min_funding: stats[4] as Record<string, number>,
                 max_funding: stats[5] as Record<string, number>,
-                fund_raise: stats[6] as Record<string, number>
+                fund_raise: stats[6] as Record<string, number>,
+                subscriptions: stats[7] as Record<string, number>
             }
         }))
     }
