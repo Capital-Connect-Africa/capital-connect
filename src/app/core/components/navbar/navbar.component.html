@@ -1,5 +1,6 @@
-<ng-container *ngIf="phoneNumberPull$ | async"></ng-container>
-<ng-container *ngIf="savephoneNumber$ | async"></ng-container>
+<ng-container *ngIf="activePlan$ | async"/>
+<ng-container *ngIf="phoneNumberPull$ | async" />
+<ng-container *ngIf="savephoneNumber$ | async" />
 
 <header class="header" [ngClass]="{ on__dashboard: onDashboard}">
   <img src="assets/img/logo.png" alt="logo" class="logo" />
@@ -55,7 +56,7 @@
           <div class="selection">
             <span class="title">{{userFirstName}}</span>
             @if(!isAdmin) {
-            <span class="plan">Free Plan</span>
+            <span class="plan" *ngIf="signalsService.activePlan()" [ngClass]="{'free-plan': signalsService.activePlan() =='basic', 'paid-plan': signalsService.activePlan() !='basic'}">{{signalsService.activePlan()  | titlecase}} Plan</span>
             }
           </div>
         </li>

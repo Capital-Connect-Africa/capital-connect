@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
-import { Observable, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
@@ -26,15 +26,28 @@ export class SubscriptionComponent {
   private _billingService =inject(BillingService);
   subscribe$ =new Observable<SubscriptionResponse>();
   plan:string ='';
-  subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(tap(res =>{
+  subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(switchMap(res =>{
     this.tiers =res;
+    if(!this.signalService.activePlan()){
+      return this._billingService.getActivePlan().pipe(tap(res =>{
+        this.activePlan =res;
+        this.signalService.activePlan.set(res.name);
+      }),
+      catchError(err =>{
+        this.activePlan =this.tiers.find((tier:SubscriptionTier) =>tier.price ==0) as SubscriptionTier;
+        this.signalService.activePlan.set(this.activePlan.name);
+        return EMPTY;
+      })
+    )
+  }
+  return EMPTY;
   }))
-  activePlan$ =this._billingService.getActivePlan().pipe(tap(res =>{
-    this.activePlan =res;
-  }))
+  
 
   subscribe(tierId: number){
-    this.plan =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId)?.name as string;
+    const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
+    if(selectedTier?.price ==0) return;
+    this.plan =selectedTier?.name as string;
     this.subscribe$ =this._billingService.subscribe(tierId).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);

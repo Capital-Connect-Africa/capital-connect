@@ -234,8 +234,14 @@
                             }
                             .plan{
                                 font-size: .7rem;
-                                color: #FF5151;
                                 line-height: .7rem;
+                                &.free-plan{
+                                  color: #FF5151;
+                                }
+                                &.paid-plan{
+                                  color: #14b8a6;
+                                }
+                                
                             }
                         }
                     }
