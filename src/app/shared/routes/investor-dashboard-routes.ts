@@ -5,9 +5,9 @@ export const INVESTOR_DASHBOARD_LINKS = [
     { label: 'Profile', href: '/investor/investor-page', exact: false, icon: 'settings' },
 
 
-    { label: 'Analytics', href: '/dashboard-investor', exact: false, icon: 'grid_view' },
-    { label: 'Companies', href: '/organization/list-investors', exact: false, icon: 'apartment' },
-    { label: 'Investors', href: '/business-investors-investors', exact: false, icon: 'paid' },
+    // { label: 'Analytics', href: '/dashboard-investor', exact: false, icon: 'grid_view' },
+    // { label: 'Companies', href: '/organization/list-investors', exact: false, icon: 'apartment' },
+    // { label: 'Investors', href: '/business-investors-investors', exact: false, icon: 'paid' },
 
 
 
