@@ -11,11 +11,18 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'callbacks',
+    loadChildren: () => import('./features/callbacks/modules/callbacks.routing.module').then(m => m.CallbacksRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard]
+  },
+  
+  {
     path: '',
     loadChildren: () => import('./features/landing/modules/landing/landing.routing.module').then(m => m.LandingRoutingModule),
     canActivate: [isLoggedInCanActivateGuard],
     pathMatch: 'full'
   },
+
   {
     path: 'verify-email',
     loadComponent: () => import('./features/auth/pages/verify-email/verify-email.component').then(c => c.VerifyEmailComponent)
