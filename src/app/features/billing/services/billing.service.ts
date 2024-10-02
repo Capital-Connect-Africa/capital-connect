@@ -2,7 +2,7 @@ import { catchError, EMPTY, map, Observable, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import {BASE_URL, BaseHttpService } from "../../../core";
-import { SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { ActivePlan, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
 import { AuthStateService } from "../../auth/services/auth-state.service";
 import { SignalsService } from "../../../core/services/signals/signals.service";
 
@@ -61,9 +61,9 @@ export class BillingService {
         return this.__http.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
             return res;
         }),
-    catchError(err =>{
+        catchError(err =>{
         this._signalService.activePlan.set('basic')
         return EMPTY
-    })) as Observable<SubscriptionTier>
+    })) as Observable<ActivePlan>
     }
 }

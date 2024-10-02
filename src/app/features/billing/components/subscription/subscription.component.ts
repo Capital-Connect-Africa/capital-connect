@@ -30,8 +30,8 @@ export class SubscriptionComponent {
     this.tiers =res;
     if(!this.signalService.activePlan()){
       return this._billingService.getActivePlan().pipe(tap(res =>{
-        this.activePlan =res;
-        this.signalService.activePlan.set(res.name);
+        this.activePlan =res.subscriptionTier;
+        this.signalService.activePlan.set(res.subscriptionTier.name);
       }),
       catchError(err =>{
         this.activePlan =this.tiers.find((tier:SubscriptionTier) =>tier.price ==0) as SubscriptionTier;
@@ -54,4 +54,5 @@ export class SubscriptionComponent {
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
     }))
   }
+  
 }
