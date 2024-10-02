@@ -3,7 +3,7 @@ export interface SubscriptionTier{
     name: string,
     description: string,
     price: number,
-    isActive: boolean
+    isActive: boolean,
 }
 
 export interface SubscriptionResponse {
@@ -11,4 +11,12 @@ export interface SubscriptionResponse {
     orderTrackingId: string,
     redirectUrl: string,
     paymentId: number
+}
+
+export interface ActivePlan{
+    id: number,
+    expiryDate: Date,
+    isActive: boolean,
+    subscriptionDate: Date,
+    subscriptionTier: SubscriptionTier
 }
