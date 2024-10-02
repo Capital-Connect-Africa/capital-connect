@@ -45,7 +45,7 @@ export class NavbarComponent {
     if(this._permissions.canFetchActiveSubscription()){
       if(!this.signalsService.activePlan()){
         this.activePlan$ =this._billingService.getActivePlan().pipe(tap(res =>{
-          this.signalsService.activePlan.set(res.name || 'basic');
+          this.signalsService.activePlan.set(res.subscriptionTier.name || 'basic');
         }))
       }
     }

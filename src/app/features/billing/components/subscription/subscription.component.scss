@@ -22,6 +22,7 @@ h3{
     }
 
     &.selected{
+        cursor: default;
         border: thin solid #14b8a6;
         &:hover,&:focus{
             background-color: #14b8a6;
