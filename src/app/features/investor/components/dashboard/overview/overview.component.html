@@ -34,12 +34,12 @@
 
     <app-card [detail]="{title: 'Declined Matches', value: MatchMakingStats.declined.toString(), featured: true}"
       (click)="showDialog('rejected_businesses')">
-      <p class="helper__text text__yellow">{{ MatchMakingStats.declined.toString() }} Declined</p>
+      <p class="helper__text text__yellow">{{ MatchMakingStats.declined.toString() }} Declined Matches</p>
     </app-card>
 
     <app-card [detail]="{title: 'Declined Requests', value: conReqStats.declined.toString() , featured: true}"
       (click)="showDialog('declined_connection_requests')">
-      <p class="helper__text text__yellow">{{ conReqStats.declined.toString()}}Declined Connection Requests</p>
+      <p class="helper__text text__yellow">{{ conReqStats.declined.toString()}} Declined Requests</p>
     </app-card>
 
   </app-overview-section>
