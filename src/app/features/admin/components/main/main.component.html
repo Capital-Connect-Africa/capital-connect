@@ -10,13 +10,13 @@
         <h3>Overview</h3>
         <div class="grid grid-cols-[max-content_auto] grid__wrapper">
           <div class="grid__container">
-            <h3>Users</h3>
+            <h3>User Roles</h3>
             <div class="">
-              <app-pie-chart legendPosition="bottom" [data]="{
-                Investors: stats.investors,
-                Advisors: stats.advisors,
-                Admins: stats.staff,
-                'Business Owners': stats.business,
+              <app-pie-chart [data]="{
+                'Investors': stats.investors,
+                'Advisors': stats.advisors,
+                'Admins': stats.staff,
+                'Businesses': stats.business,
               }" 
               [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
               />
@@ -53,7 +53,53 @@
           </div>
         </div>
       </div>
-
+      <div>
+        <h3>Billing</h3>
+        <div class="grid grid-cols-[max-content_auto] grid__wrapper">
+          <div class="grid__container">
+            <h3>Subscriptions</h3>
+            <div class="">
+              <app-pie-chart [data]="{
+                'Basic': subscriptions['basic'],
+                'Pro': subscriptions['pro'],
+                'Elite': subscriptions['elite'],
+                'Plus': subscriptions['plus']
+              }" 
+              [colors]="['#847cfb', '#e9a901', '#762db1', '#2d7b88']"
+              />
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Recent Subscriptions</h3>
+            <p-table [value]="[]" [paginator]="false"> 
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let col of billing_cols" [pSortableColumn]="col.field">
+                    <span class="header-container">
+                      <span class="header-text">
+                        {{col.header}}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+          </ng-template>
+            <ng-template pTemplate="body" let-subscription>
+              <tr>
+                <td>{{subscription.subscriber}}</td>
+                <td>{{subscription.package}}</td>
+                <td>{{subscription.price}}</td>
+                <td>{{subscription.purchased_on}}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="5">No subscriptions recorded recently.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+          </div>
+        </div>
+      </div>
       <div>
         <h3>Business</h3>
         <div class="grid grid-cols-2 grid__wrapper">

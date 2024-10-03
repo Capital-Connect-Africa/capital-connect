@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable, tap } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody} from "../../interfaces";
+import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody, ConnectionRequestsStats} from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
 import { Company } from "../../../features/organization/interfaces";
@@ -35,6 +35,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       }
     }))
   }
+
   getDecliningInvestors(companyId:number) {
     return this.read(`${BASE_URL}/matchmaking/investors/declined/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
@@ -100,8 +101,8 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
   getConnectionRequestsStats(){
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/connection-requests/investor/${investorProfileId}`).pipe(
-      map(res => res as unknown as MatchMakingStats)
+    return this.read(`${BASE_URL}/statistics/requests/${investorProfileId}`).pipe(
+      map(res => res as unknown as ConnectionRequestsStats)
     )
   }
 

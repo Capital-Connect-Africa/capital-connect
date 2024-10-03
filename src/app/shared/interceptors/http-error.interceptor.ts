@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { EMPTY, throwError } from 'rxjs';
+import { EMPTY, of, throwError } from 'rxjs';
 import { FeedbackService } from '../../core';
 
 export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -21,6 +21,13 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           router.navigateByUrl('/organization/setup')
         }
         feedbackService.info('Kindly add your company details.')
+        return EMPTY;
+      }
+
+      if (isGettingActiveSubscription(error.url as string)) {
+        if (error.error.statusCode === 404) {
+          return throwError(() =>error.error.message || error.error);
+        }
         return EMPTY;
       }
 
@@ -57,6 +64,11 @@ function isValidCompanyOwnerPath(path: string): boolean {
 
 function isValidInvestorProfilePath(path: string): boolean {
   const regex = /^.+\/investor-profiles\/by-user\/\d+$/;
+  return regex.test(path);
+}
+
+function isGettingActiveSubscription(path: string): boolean{
+  const regex = /^.+\/subscriptions\/\d+$/;
   return regex.test(path);
 }
 

@@ -5,7 +5,7 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, ConnectionRequest, updateConnectionRequestBody } from '../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, ConnectionRequest, updateConnectionRequestBody, ConnectionRequestsStats } from '../../../../shared/interfaces';
 import { ConfirmationService, FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -109,6 +109,8 @@ export class ConnectionRequestsComponent {
   updateConnectionRequest$ = new Observable<unknown>()
   declined_requests = false
 
+  conReqStats!:ConnectionRequestsStats 
+
 
 
 
@@ -136,10 +138,20 @@ export class ConnectionRequestsComponent {
     }
   }))
 
+  conReqStats$ = this._businessMatchingService.getConnectionRequestsStats().pipe(tap(res=>{
+    this.conReqStats = res
+    if(this.declined_requests){
+      this.totalItems = res.declined
+    }else if(!this.declined_requests){
+      this.totalItems = res.requested 
+    }
+    
+  }))
+
 
 
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
-    this.totalItems = res?.requested
+    // this.totalItems = res?.requested
   }))
 
 

@@ -189,6 +189,7 @@ export class GlobalSearchComponent {
   constructor(private fb: FormBuilder) {
     this.declineForm = this.fb.group({
       countriesOfInvestmentFocus: [[]],
+      reasons:[[]]
     });
   }
 
@@ -203,7 +204,7 @@ export class GlobalSearchComponent {
       numberOfEmployees: [''],
       fullTimeBusiness: [false],
       fundsNeeded:[''],
-      investmentStructure:[[]],
+      investmentStructures:[[]],
       useOfFunds:[[]],
       esgFocusAreas:[[]]
     });
@@ -242,13 +243,17 @@ export class GlobalSearchComponent {
   }
   
 
-
   onSearch() {
-    this.searchForm.value.sectors = this.selectedSectors
-    this.searchForm.value.subSectors = this.selectedSubSectors
+    const formValue = { ...this.searchForm.value };
+    formValue.sectors = this.selectedSectors;
+    formValue.subSectors = this.selectedSubSectors;
   
-    const searchCriteria = this.removeEmptyFields(this.searchForm.value);
+    if (formValue.fullTimeBusiness === false) {
+      delete formValue.fullTimeBusiness;
+    }
   
+    const searchCriteria = this.removeEmptyFields(formValue);
+
     this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
       tap(res => {
         this.matchedBusinesses = res;
@@ -256,6 +261,7 @@ export class GlobalSearchComponent {
       })
     );
   }
+  
 
   isSectorSelected(sector: string): boolean {
     return this.selectedSectors.includes(sector);
@@ -268,6 +274,13 @@ export class GlobalSearchComponent {
 
   onResetSearch() {
     this.searchForm.reset();
+    this.searchForm.markAsPristine();
+    this.searchForm.markAsUntouched();
+    this.sectors = []
+    this.subSectors  = []
+    this.selectedSectors = []
+    this.selectedSubSectors = []
+    
     this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies();
   }
 
@@ -295,21 +308,15 @@ export class GlobalSearchComponent {
 
 
 
-
-
   toggleSector(sector: any): void {
     const index = this.selectedSectors.indexOf(sector.name);
     if (index > -1) {
       this.selectedSectors.splice(index, 1);
     } else {
       this.selectedSectors.push(sector.name);
-      // this.loadSubSectors(sector.id); // Fetch subsectors based on selected sector ID
       this.subSectors$ = this._sectorService.getSubSectorOfaSector(sector.id).pipe(tap(sectors => {
         this.subSectors = sectors
-        console.log("The current sub sectors are", this.selectedSectors)
-
       }))
-
     }
   }
 
