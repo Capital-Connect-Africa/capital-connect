@@ -31,10 +31,14 @@ export class BillingService extends BaseHttpService{
         ))
     }
 
+    // assignSubscriptionToUser(userId:number,subscriptionId:number){
+    //     return this.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`)
+    // }
+
 
     //Update a subscription tier
     updateSubscriptionTier(subscriptionTier:SubscriptionTier,id:number){
-        return this.update(`${BASE_URL}/subscription-tiers`,id,subscriptionTier).pipe(
+        return this.updatePatch(`${BASE_URL}/subscription-tiers`,id,subscriptionTier).pipe(
             map((res=>{}))
         )
     }
