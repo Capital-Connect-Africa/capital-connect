@@ -37,6 +37,7 @@ export class AdminUiContainerComponent implements OnInit {
     this.links = !this.isInvestor
       ? [
           { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
+          { label: 'Analytics', href: '/analytics', exact: false, icon: 'show_chart' },
           { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },
           { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
           { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
