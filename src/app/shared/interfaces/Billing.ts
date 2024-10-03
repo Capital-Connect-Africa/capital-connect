@@ -1,22 +1,46 @@
+import { User } from "../../features/users/models";
+
 export interface SubscriptionTier{
-    id:number;
-    name: string,
-    description: string,
-    price: number,
-    isActive: boolean,
+    description: string
+    isActive: boolean
+    price: number
+    name: string
+    id:number
 }
 
 export interface SubscriptionResponse {
-    subscriptionId: number,
-    orderTrackingId: string,
-    redirectUrl: string,
+    orderTrackingId: string
+    subscriptionId: number
+    redirectUrl: string
     paymentId: number
 }
 
 export interface ActivePlan{
-    id: number,
-    expiryDate: Date,
-    isActive: boolean,
-    subscriptionDate: Date,
     subscriptionTier: SubscriptionTier
+    subscriptionDate: Date
+    isActive: boolean
+    expiryDate: Date
+    id: number
 }
+
+
+export interface Plan extends ActivePlan{
+    isActive: boolean
+    user: User
+}
+
+export interface Payment{
+    description: string
+    currency: string
+    createdAt: Date
+    amount: number
+    status: string
+    id: number
+}
+
+export interface Booking {
+    calendlyEventId: number
+    payment: Payment
+    createdAt: Date
+}
+
