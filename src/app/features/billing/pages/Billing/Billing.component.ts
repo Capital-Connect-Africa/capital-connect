@@ -60,6 +60,7 @@ export class BillingComponent {
   createShow() {
     this.create = true
     this.editMode = false
+    this.newTierForm.reset()
   }
 
   createTier() {
@@ -105,6 +106,7 @@ export class BillingComponent {
 
   cancel() {
     this.create = false
+    this.newTierForm.reset()
   }
 
   editTier(tier: SubscriptionTier) {
@@ -116,7 +118,7 @@ export class BillingComponent {
     // this.editor.setValue(existingDetails.description);
     // this.editor.value = "Halooo";
 
-    this.text = this.tier.description
+    this.text = "This is an update test"
 
     this.newTierForm.patchValue({
       name: this.tier.name,
