@@ -115,12 +115,12 @@ tr {
   height: 3rem !important;
 }
 
-td {
-  padding: 0 .5rem;
-}
 
 :host ::ng-deep .p-datatable{
   tr{
+    td {
+      padding: 0 .5rem;
+    }
     transition: all .2s linear;
     cursor: default;
     &:nth-child(even){
@@ -132,7 +132,7 @@ td {
     th{
       background-color: #f4f4f5;
      span{
-        padding: 0 .5rem;
+        padding: 0 .4rem;
         justify-content: flex-start;
         background-color: transparent!important;
      }
