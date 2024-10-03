@@ -33,7 +33,7 @@ export class BillingComponent {
   create:boolean = false
   editMode:boolean = false
   tier!:SubscriptionTier
-  text!:string 
+  text:string = "Hello Meltus"
 
 
   //Forms
@@ -58,17 +58,20 @@ export class BillingComponent {
   ))
 
   constructor(private http: HttpClient, private fb: FormBuilder) {
+
     this.newTierForm = this.fb.group({
       name: ['', Validators.required],
-      description: ['', Validators.required],
+      description: ['Test description', Validators.required],
       price: [0, [Validators.required]],
     });
+
   }
 
 
   createShow(){
     this.create = true
     this.editMode = false
+    this.newTierForm.reset()
   }
 
 
@@ -115,6 +118,7 @@ export class BillingComponent {
 
   cancel(){
     this.create = false
+    this.newTierForm.reset()
   }
    
   
@@ -128,7 +132,7 @@ export class BillingComponent {
     // this.editor.setValue(existingDetails.description);
     // this.editor.value = "Halooo";
 
-    this.text = this.tier.description
+    this.text = "This is an update test"
 
     this.newTierForm.patchValue({
       name: this.tier.name,
