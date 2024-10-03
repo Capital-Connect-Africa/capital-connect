@@ -43,7 +43,9 @@
             <strong>Description</strong> <sup>*</sup>
           </label>
           <p-editor
-          #editor formControlName="description" placeholder="Enter description" [style]="{'height':'200px'}" class="input-field">
+          #editor 
+          [(ngModel)]="text"
+          formControlName="description" placeholder="Enter description" [style]="{'height':'200px'}" class="input-field">
           </p-editor>
         </div>
 

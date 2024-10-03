@@ -33,6 +33,8 @@ export class BillingComponent {
   create:boolean = false
   editMode:boolean = false
   tier!:SubscriptionTier
+  text!:string 
+
 
   //Forms
   newTierForm!: FormGroup;
@@ -66,6 +68,7 @@ export class BillingComponent {
 
   createShow(){
     this.create = true
+    this.editMode = false
   }
 
 
@@ -125,7 +128,7 @@ export class BillingComponent {
     // this.editor.setValue(existingDetails.description);
     // this.editor.value = "Halooo";
 
-    
+    this.text = this.tier.description
 
     this.newTierForm.patchValue({
       name: this.tier.name,
