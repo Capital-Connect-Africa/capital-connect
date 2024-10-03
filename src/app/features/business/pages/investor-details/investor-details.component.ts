@@ -9,6 +9,7 @@ import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviati
 import { ActivatedRoute, Router } from '@angular/router';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { CompanyInvestorRelationsShip } from '../../../../shared/interfaces/relationship.enum';
+import { BusinessLinks } from '../../../../core/utils/business.links';
 
 
 @Component({
@@ -19,18 +20,10 @@ import { CompanyInvestorRelationsShip } from '../../../../shared/interfaces/rela
   styleUrl: './investor-details.component.scss'
 })
 export class InvestorDetailsComponent {
+  links =BusinessLinks;
   private _router =inject(Router);
   private _activatedRoute =inject(ActivatedRoute);
   private _signalService =inject(SignalsService);
-  links =[
-    {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
-    {label: 'Plans', href: '/business/plans', exact: false, icon: 'paid'},
-    {label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center'},
-    {label: 'Special Criteria', href: '/business/special-criteria', exact: false, icon: 'contact_support'},
-    // {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'},
-    {label: 'My Profile', href: '/user-profile', exact: true, icon: 'person'},
-
-  ]
   specialCriteria:any[] =[]
   relationship_types =CompanyInvestorRelationsShip;
   relationship =CompanyInvestorRelationsShip.MATCHED;

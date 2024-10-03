@@ -1,14 +1,22 @@
 <ng-container *ngIf="subscribe$ | async"/>
 <ng-container *ngIf="subscriptionTiers$ | async"/>
 
-<div class="px-8 pricing__content">
-    <ul class="grid grid-cols-3 gap-8 items-center">
-        <li *ngFor="let tier of tiers" class="bg-white p-8 rounded-xl flex flex-col gap-4">
-            <div class="">{{tier.name | titlecase}}</div>
-            <h3>Ksh {{tier.price | numberabbreviation}}.00</h3>
-            <div class="font-light">{{tier.description}}</div>
-            <button class="py-3 text-blue-500 rounded-full action__button" (click)="subscribe(tier.id)" *ngIf="tier.name !==signalService.activePlan()">Choose Plan</button>
-            <button class="py-3 text-white bg-teal-500 rounded-full action__button selected" *ngIf="tier.name ==signalService.activePlan()">Current Plan</button>
+<div class="px-8 pb-16 pt-10 bg-[#f7f5f5] rounded-xl shadow-lg">
+    <div class="top__bar">
+        <h2 class="uppercase">Choose your plan</h2>
+        <p class="text-[14px] font-thin">Choose a plan that best suits your business</p>
+    </div>
+    <ul class="grid grid-cols-4 gap-4 items-center">
+        <li *ngFor="let tier of tiers" class="bg-white p-4 rounded-xl flex flex-col justify-between gap-4 h-full tier">
+            <div class="w-full flex flex-col gap-4">
+                <div class="">{{tier.name | titlecase}} Plan</div>
+                <h3>Ksh {{tier.price | numberabbreviation}}.00</h3>
+                <div class="font-light inner__html" [innerHTML]="tier.description | safe_html"></div>
+            </div>
+            <div class="w-full">
+                <button class="py-3 block w-full text-[#064635] rounded action__button" (click)="subscribe(tier.id)" *ngIf="tier.name !==signalService.activePlan()">Get Plan</button>
+                <button class="py-3 block w-full text-white bg-[#064635] rounded action__button selected" *ngIf="tier.name ==signalService.activePlan()">Current Plan</button>
+            </div>
         </li>
     </ul>
 </div>

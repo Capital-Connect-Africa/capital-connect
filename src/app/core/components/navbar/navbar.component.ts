@@ -42,10 +42,10 @@ export class NavbarComponent {
 
   ngOnInit() {
     this.investorProfileExists = !!sessionStorage.getItem('profileId');
-    if(this._permissions.canFetchActiveSubscription(this._authStateService.currentUserProfile().roles as USER_ROLES)){
+    if(this._permissions.canFetchActiveSubscription()){
       if(!this.signalsService.activePlan()){
         this.activePlan$ =this._billingService.getActivePlan().pipe(tap(res =>{
-          this.signalsService.activePlan.set(res.name || 'basic');
+          this.signalsService.activePlan.set(res.subscriptionTier.name || 'basic');
         }))
       }
     }

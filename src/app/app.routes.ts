@@ -11,11 +11,18 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'callbacks',
+    loadChildren: () => import('./features/callbacks/modules/callbacks.routing.module').then(m => m.CallbacksRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard]
+  },
+  
+  {
     path: '',
     loadChildren: () => import('./features/landing/modules/landing/landing.routing.module').then(m => m.LandingRoutingModule),
     canActivate: [isLoggedInCanActivateGuard],
     pathMatch: 'full'
   },
+
   {
     path: 'verify-email',
     loadComponent: () => import('./features/auth/pages/verify-email/verify-email.component').then(c => c.VerifyEmailComponent)
@@ -51,7 +58,8 @@ export const routes: Routes = [
 
   {
     path: 'calendly-booking',
-    loadChildren: () => import('./features/booking/modules/booking.routing').then(m => m.BookingRoutingModule),
+    // loadChildren: () => import('./features/booking/modules/booking.routing').then(m => m.BookingRoutingModule),
+    loadChildren: () => import('./features/callbacks/modules/callbacks.routing.module').then(m => m.CallbacksRoutingModule),
     canActivate: [isLoggedInCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard]
   },
@@ -86,6 +94,12 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./features/admin/admin.routing.module').then(m => m.AdminRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
+    path: 'analytics',
+    loadChildren: () => import('./features/admin/analytics.routing.module').then(m => m.AnalyticsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },

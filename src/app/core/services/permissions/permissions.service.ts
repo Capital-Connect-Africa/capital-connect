@@ -1,12 +1,15 @@
-import { Injectable } from "@angular/core";
 import { USER_ROLES } from "../../../shared";
+import { inject, Injectable } from "@angular/core";
+import { AuthStateService } from "../../../features/auth/services/auth-state.service";
 
 @Injectable({providedIn: 'root'})
 
 export class PermissionsService{
+    private _authStateService =inject(AuthStateService)
 
-    canFetchActiveSubscription(role: USER_ROLES){
-        return this._userIs(role)
+    canFetchActiveSubscription(){
+        const role:USER_ROLES =this._authStateService.currentUserProfile().roles as USER_ROLES
+        return role ==USER_ROLES.USER;
     }
 
     private _userIs(role: USER_ROLES): boolean{

@@ -3,6 +3,7 @@ import { BASE_URL, BaseHttpService } from "../../../core";
 import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
 import { SharedStats, Stats } from "../interfaces/stats.interface";
 import { formatBand } from "../../../core/utils/band.formating";
+import { Booking, Payment, Plan } from "../../../shared/interfaces/Billing";
 
 @Injectable({providedIn: 'root'})
 
@@ -130,10 +131,9 @@ export class UserStatisticsService extends BaseHttpService{
     }
     
     countSubscriptions(){
-        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map(res =>{
-            debugger
+        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map((res:any) =>{
           return res;
-        }));
+        })) as Observable<Record<string, number>>;
     }
 
     getEntityStat(){
@@ -144,7 +144,7 @@ export class UserStatisticsService extends BaseHttpService{
     }
 
     getAnalytics(){
-        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats(), this.countSubscriptions()]
+        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats()]
         return forkJoin(requests).pipe(map(stats =>{
             return {
                 sectors: stats[0] as SharedStats,
@@ -154,10 +154,53 @@ export class UserStatisticsService extends BaseHttpService{
                 min_funding: stats[4] as Record<string, number>,
                 max_funding: stats[5] as Record<string, number>,
                 fund_raise: stats[6] as Record<string, number>,
-                subscriptions: stats[7] as Record<string, number>
+                
             }
         }))
     }
 
-   
+    getSubscriptions(page: number =1, limit:number =5){
+        return this.read(`${BASE_URL}/subscriptions?page=${page}&limit=${limit}`).pipe(map((subscriptions: any[]) =>{
+          return subscriptions;
+        })) as Observable<Plan[]>
+    }
+
+    getPayments(page: number =1, limit:number =5){
+        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any[]) =>{
+          return payments
+        })) as Observable<Payment[]>
+    }
+
+    getBookings(page: number =1, limit:number =5){
+        return this.read(`${BASE_URL}/bookings?page=${page}&limit=${limit}`).pipe(map((bookings: any[]) =>{
+          return bookings.map((booking: any) =>{
+            const payment =booking.payments.reduce((curr: Payment, acc:Payment) =>{
+                return {
+                    id: curr.id || acc.id,
+                    createdAt: curr.createdAt || acc.createdAt,
+                    currency: curr.currency || acc.currency,
+                    amount: curr.amount + acc.amount,
+                    description: curr.description || acc.description,
+                    status: curr.status.length && acc.status.length? curr.status === acc.status? acc.status: 'partial': (curr.status || acc.status) || 'initited'
+                }
+            }, {id: null, amount: 0, currency: '', status: '', createdAt: '', description: ''});
+            return {
+                ...booking,
+                payment: payment
+            }
+          })
+        })) as Observable<Booking[]>
+    }
+
+    getSummary(){
+        const requests =[this.getSubscriptions(), this.countSubscriptions(), this.getPayments(), this.getBookings()]
+        return forkJoin(requests).pipe(map(res =>{
+            return {
+                recent_subscriptions: res[0] as Plan[],
+                subscription_counts: res[1] as Record<string, number>,
+                payments: res[2] as Payment[],
+                bookings: res[3] as Booking[]
+            }
+        }))
+    }
 }

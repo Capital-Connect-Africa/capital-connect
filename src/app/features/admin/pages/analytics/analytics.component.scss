@@ -64,10 +64,10 @@
 
 .grid__wrapper{
   gap: 3rem;
-  padding: 2rem 1rem;
+  padding: 1rem 0;
   align-items: flex-start;
   border-radius: .8rem;
-  background-color: rgba(255, 255, 255, 0.603);
+  background-color: rgba(255, 255, 255, 0.616);
 }
 .stats{
   display: flex;
@@ -82,7 +82,13 @@
   .grid__container{
     h3{
       font-size: .9rem;
+      
     }
+    &:nth-child(odd){
+        h3{
+            padding: 0 1rem;
+        }
+      }
   }
 
   .chart__wrapper{
