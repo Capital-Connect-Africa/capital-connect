@@ -2,13 +2,7 @@
 <ng-container *ngIf=" subscriptionTiers$  | async"></ng-container>
 <ng-container *ngIf=" deleteTier$  | async"></ng-container>
 <ng-container *ngIf=" confirmation$ | async"></ng-container>
-
-
-
-
- 
-
-
+<ng-container *ngIf=" updateTier$ | async"></ng-container>
 
 <app-admin-ui-container [title]="'Billing'">
   <div class="billing-container">
@@ -17,41 +11,66 @@
       <button class="btn" (click)="createShow()">Create Subscription Tier</button>
     </div>
 
-    <form *ngIf="create" [formGroup]="newTierForm" (ngSubmit)="createTier()" class="subscription-form">
-      <div class="block">
-        <label class="input__label"><strong>Name</strong></label>
-        <p-dropdown formControlName="name" [options]="subscription_names" placeholder="Subscription Type" class="dropdown"></p-dropdown>
-      </div>
-      <div class="block">
-        <label class="input__label"><strong>Description</strong></label>
-        <input type="text" formControlName="description" placeholder="Description" required class="input-field" />
-      </div>
-      <div class="block">
-        <label class="input__label"><strong>Price</strong></label>
-        <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
-      </div>
 
-    
-    
-    
-      <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">Create Tier</button>
-      <button class="btn btn-danger" (click)="cancel()">Cancel</button>
 
-    </form>
-    
+    <app-modal [(visible)]="create" [title]="editMode ? 'Edit Subscription' : 'New Subscription'"
+      [helperText]="editMode ? 'Edit Subscription':'Create  A new Subscription'">
 
-    <div class="billing-items" style="margin-top: 1cm;">
-      <!-- <h2>Available Subscription Tiers</h2> -->
-      <div class="item" *ngFor="let tier of subscriptionTiers">
-        <span ><strong class="item-description">{{ tier.name | uppercase }}</strong> - {{ tier.description }}</span>
-        <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
-        <div class="cta__group">
-          <button class="btn btn-secondary" (click)="editTier(tier)">Edit</button>
-          <button class="btn btn-danger" (click)="deleteTier(tier.id)">Delete</button>
+
+      <form [formGroup]="newTierForm" (ngSubmit)="createTier()" class="">
+
+        <div class="">
+          <div class="input__wrapper w-full">
+            <label class="input__label"><strong>Name</strong> <sup>*</sup></label>
+            <p-dropdown formControlName="name" styleClass="w-full gap-4" [options]="subscription_names"
+              placeholder="Name" class="input__field p-6"></p-dropdown>
+          </div>
+
+
+          <div class="input__wrapper" style="margin-top: 15px;">
+            <label class="input__label">
+              <strong>Description</strong> <sup>*</sup>
+            </label>
+            <p-editor #editor formControlName="description" placeholder="Enter description" [style]="{'height':'200px'}"
+              class="input-field">
+            </p-editor>
+          </div>
+
+
+          <div class="input__wrapper" style="margin-top: 15px;">
+            <label class="input__label"><strong>Price</strong> <sup>*</sup> $(USD)</label>
+            <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
+          </div>
+
+          <div class="cta__group">
+            <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">{{editMode ? 'Update Tier' :
+              'Create Tier'}}</button>
+            <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+          </div>
         </div>
+      </form>
+    </app-modal>
 
+
+    <div class="billing-items" style="margin-top: 1cm; display: flex; flex-wrap: wrap; gap: 20px;">
+      <div class="card" *ngFor="let tier of subscriptionTiers">
+        <span class="item-description">
+          <strong>{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
+        </span>
+        <p>
+          <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
+          <span class="monthly">/monthly</span>
+        </p>
+        <div class="inner__html" [innerHTML]="tier.description"></div>
+
+        <div class="d-flex">
+          <button class="btn-sm btn p-button-outline" (click)="editTier(tier)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteTier(tier.id)">Delete</button>
+        </div>
       </div>
     </div>
+
+
 
 
   </div>
