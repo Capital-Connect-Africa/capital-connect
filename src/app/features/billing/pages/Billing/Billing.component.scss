@@ -1,4 +1,10 @@
 @import "../../../../styles/main.scss";
+@import '../../../business/styles/business.components.steps.scss';
+@import 'quill/dist/quill.snow.css';
+
+
+
+
 
 .container {
   color: $primary-color;
@@ -186,4 +192,160 @@
 
 .block, .input__label{
   padding: 5px;
+}
+
+.cta__group{
+  margin-top: 1cm;
+}
+
+
+.input__field{
+  padding: 2cm;
+}
+
+
+.custom-dropdown .p-dropdown {
+  padding: 0.5rem; /* Adjust padding for the dropdown itself */
+}
+
+.custom-dropdown .p-dropdown-item {
+  padding: 0.75rem 1rem; /* Add padding to dropdown items */
+  margin: 0.25rem 0; /* Add margin between dropdown items */
+}
+
+
+
+
+.item-price{
+  font-size: .7cm;
+  font-weight: bolder;
+  
+}
+
+.monthly{
+  font-size: .3cm;
+  color: $primary-color;
+}
+
+
+
+.item-description{
+  color: $primary-color;
+} 
+
+
+
+$primary-color: $primary-color;; /* Your primary color */
+$shadow-color: rgba(0, 0, 0, 0.15); /* Light shadow for the cards */
+$hover-shadow: rgba(0, 0, 0, 0.3); /* Shadow for hover effect */
+$border-color: #e4e0e0; /* Border color */
+$button-hover-color: $primary-color; /* Button hover color */
+
+.item-price {
+  font-size: 1.2rem; /* Increased font size for better visibility */
+  font-weight: 600;
+  color: #424141; /* Darker text for clarity */
+  margin-right: 5px;
+  transition: color 0.3s ease-in-out;
+}
+
+.monthly {
+  font-size: 0.9rem; /* Slightly smaller for a cleaner look */
+  color: $primary-color;
+  font-weight: 400;
+  transition: color 0.3s ease-in-out;
+}
+
+.card {
+  // line-height: 1.5;
+  flex: 1 1 300px;
+  padding: 20px;
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px $shadow-color;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  cursor: pointer; /* Makes the card feel clickable */
+  // height: 7cm;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px $hover-shadow;
+  }
+}
+
+.item-description {
+  color: $primary-color;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  transition: color 0.3s ease-in-out;
+  
+  strong {
+    text-transform: capitalize;
+  }
+}
+
+.d-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+button {
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;  /* Ensures vertical alignment */
+  justify-content: center;  /* Centers content horizontally */
+  gap: 8px;  /* Space between icon and text */
+  min-width: 100px;  /* Ensures buttons have a minimum width */
+  
+  mat-icon {
+    font-size: 1.2rem;  /* Icon size */
+    margin-right: 5px;  /* Optional: Adds some spacing between the icon and the text */
+  }
+
+  &.p-button-outline {
+    border: 1px solid $primary-color;
+    color: $primary-color;
+    background-color: transparent;
+    padding: 6px 16px;
+
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: white;
+    padding: 6px 16px;
+
+    &:hover {
+      background-color: #c82333;
+      transform: scale(1.05);
+    }
+  }
+}
+
+.inner__html{
+  color: #000000;
+  font-size: .9rem;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-family: $font-family-sans-serif;
+  // max-height: 150px;
+  // overflow: hidden;
 }

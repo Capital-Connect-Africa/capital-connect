@@ -35,10 +35,14 @@ export class BillingService {
         ))
     }
 
+    // assignSubscriptionToUser(userId:number,subscriptionId:number){
+    //     return this.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`)
+    // }
+
 
     //Update a subscription tier
     updateSubscriptionTier(subscriptionTier:SubscriptionTier,id:number){
-        return this.__http.update(`${BASE_URL}/subscription-tiers`,id,subscriptionTier).pipe(
+        return this.__http.updatePatch(`${BASE_URL}/subscription-tiers`,id,subscriptionTier).pipe(
             map((res=>{}))
         )
     }

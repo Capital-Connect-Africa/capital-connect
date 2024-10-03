@@ -1,5 +1,5 @@
 // subscription-tiers.component.ts
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AngularMaterialModule } from '../../../../shared';
@@ -14,6 +14,8 @@ import { FeedbackService } from '../../../../core';
 import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmationService } from '../../../../core';
 import { Pipe } from '@angular/core';
+import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { Editor, EditorModule } from 'primeng/editor';
 
 
 @Component({
@@ -21,7 +23,7 @@ import { Pipe } from '@angular/core';
   selector: 'app-subscription-tiers',
   templateUrl: './Billing.component.html',
   styleUrls: ['./Billing.component.scss'],
-  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule,DropdownModule],
+  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule,DropdownModule,ModalComponent,EditorModule],
   providers: [ConfirmationService],
 })
 export class BillingComponent {
@@ -29,9 +31,14 @@ export class BillingComponent {
   subscriptionTiers: SubscriptionTier[] = [];
   subscription_names = ['basic','plus', 'pro', 'elite']
   create:boolean = false
+  editMode:boolean = false
+  tier!:SubscriptionTier
+  text!:string 
+
 
   //Forms
   newTierForm!: FormGroup;
+  @ViewChild('editor') editor!: Editor;
 
 
   //services
@@ -42,6 +49,7 @@ export class BillingComponent {
   //streams
   createTier$ = new Observable<unknown>()
   deleteTier$ = new Observable<unknown>()
+  updateTier$ = new Observable<unknown>()
   confirmation$ =new Observable<any>();
   subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
     res => {
@@ -53,28 +61,42 @@ export class BillingComponent {
     this.newTierForm = this.fb.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: [0, [Validators.required]],
     });
   }
 
 
   createShow(){
     this.create = true
+    this.editMode = false
   }
 
 
 
   createTier() {
-    if (this.newTierForm.valid) {
-      this.createTier$ = this._bs.createSubscriptionTier(this.newTierForm.value).pipe(tap(
-        res => {
-          this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
-          this._fs.success("Subscription Tier Created Successfully", 'Success')
-          this.newTierForm.reset()
-          this.create = false
-        }
-      ))
-    }
+    if(this.editMode){
+      this.newTierForm.value.price = parseInt(this.newTierForm.value.price)
+      this.updateTier$  = this._bs.updateSubscriptionTier(this.newTierForm.value, this.tier.id).pipe(tap(res=>{
+        this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
+        this._fs.success("Subscription Tier Updated Successfully")
+        this.create = false
+        this.editMode = false
+        this.newTierForm.reset()
+      }))
+    }else if(!this.editMode){
+      if (this.newTierForm.valid) {
+        this.createTier$ = this._bs.createSubscriptionTier(this.newTierForm.value).pipe(tap(
+          res => {
+            this.subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(res => {this.subscriptionTiers = res } ))          
+            this._fs.success("Subscription Tier Created Successfully", 'Success')
+            this.newTierForm.reset()
+            this.create = false
+            this.editMode = false
+            this.newTierForm.reset()
+          }
+        ))
+      }
+    }   
   }
 
   deleteTier(id: number) {
@@ -98,17 +120,25 @@ export class BillingComponent {
   
 
   editTier(tier: SubscriptionTier) {
+    this.tier = tier
+    this.editMode = true
     this.create = true
+
+    // this.editor?.editorService.setContent(existingDetails.description);
+    // this.editor.setValue(existingDetails.description);
+    // this.editor.value = "Halooo";
+
+    this.text = this.tier.description
+
     this.newTierForm.patchValue({
-      name: tier.name,
-      description: tier.description,
-      price: tier.price
+      name: this.tier.name,
+      description: this.tier.description,
+      price: this.tier.price
     });
 
-    this._bs.updateSubscriptionTier(this.newTierForm.value, tier.id).pipe(tap(res=>{
-      this._fs.success("Subscription Tier Updated Successfully")
-      this.create = false
-    }))
+
+    this.newTierForm.updateValueAndValidity()
+ 
   }
   
 }
