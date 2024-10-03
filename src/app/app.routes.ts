@@ -97,6 +97,12 @@ export const routes: Routes = [
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
+  {
+    path: 'analytics',
+    loadChildren: () => import('./features/admin/analytics.routing.module').then(m => m.AnalyticsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
 
   {
     path: 'dashboard-investor',
