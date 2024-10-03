@@ -93,20 +93,31 @@ export const routes: Routes = [
 
   {
     path: 'dashboard',
-    loadChildren: () => import('./features/admin/admin.routing.module').then(m => m.AdminRoutingModule),
+    loadChildren: () => import('./features/admin/modules/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
     path: 'analytics',
-    loadChildren: () => import('./features/admin/analytics.routing.module').then(m => m.AnalyticsRoutingModule),
+    loadChildren: () => import('./features/admin/modules/analytics.routing.module').then(m => m.AnalyticsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
-
+  {
+    path: 'bookings',
+    loadChildren: () => import('./features/admin/modules/bookings.routing.module').then(m => m.BookingsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
+    path: 'payments',
+    loadChildren: () => import('./features/admin/modules/payments.routing.module').then(m => m.PaymentsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
   {
     path: 'dashboard-investor',
-    loadChildren: () => import('./features/admin/admin.routing.module').then(m => m.AdminRoutingModule),
+    loadChildren: () => import('./features/admin/modules/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
   },

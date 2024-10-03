@@ -39,6 +39,8 @@ export class AdminUiContainerComponent implements OnInit {
           { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
           { label: 'Analytics', href: '/analytics', exact: false, icon: 'show_chart' },
           { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },
+          { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' },
+          { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' },
           { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
           { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
           { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
