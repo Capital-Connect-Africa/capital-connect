@@ -115,7 +115,8 @@ export class GlobalSearchComponent {
   
   //streams
   markAsInteresting$ = new Observable<unknown>()
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+  // matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+  matchedCompanies$ = new Observable<MatchedBusiness[]>
   cancelInterestWithCompany$ = new Observable<unknown>();
   companyDetails$ = new Observable<unknown>()
   userResponses$ = new Observable<unknown>()
@@ -258,6 +259,14 @@ export class GlobalSearchComponent {
       tap(res => {
         this.matchedBusinesses = res;
         this.advanced_Search = false;
+
+        this.searchForm.reset();
+        this.searchForm.markAsPristine();
+        this.searchForm.markAsUntouched();
+        this.sectors = []
+        this.subSectors  = []
+        this.selectedSectors = []
+        this.selectedSubSectors = []
       })
     );
   }

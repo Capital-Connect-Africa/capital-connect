@@ -1,38 +1,32 @@
 import { Component, inject } from '@angular/core';
-import { ButtonModule } from "primeng/button";
 import { SharedModule } from '../../../../shared';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminUiContainerComponent } from "../admin-ui-container/admin-ui-container.component";
 import { UserStatisticsService } from '../../services/user.statistics.service';
 import { Observable, tap } from 'rxjs';
-import { SharedStats, Stats } from '../../interfaces/stats.interface';
+import { Stats } from '../../interfaces/stats.interface';
 import { PieChartComponent } from "../../../../shared/components/charts/pie-chart/pie-chart.component";
-import { BubbleChartComponent } from "../../../../shared/components/charts/bubble-chart/bubble-chart.component";
-import { BarChartComponent } from "../../../../shared/components/charts/bar-chart/bar-chart.component";
-import { GeoChartComponent } from "../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
 import { User } from '../../../users/models';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
-import { HorizontalBarchartComponent } from "../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
-import { ColumnChartComponent } from "../../../../shared/components/charts/column-chart/column-chart.component";
+import { Booking, Payment, Plan } from '../../../../shared/interfaces/Billing';
+import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
+import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 
 
 @Component({
   selector: 'app-admin-main',
   standalone: true,
   imports: [
-    SharedModule, CommonModule, ButtonModule,
+    SharedModule, CommonModule,
     AdminUiContainerComponent,
     PieChartComponent,
-    BubbleChartComponent,
-    BarChartComponent,
-    GeoChartComponent,
     TableModule,
     UserRoleFormatPipe,
-    HorizontalBarchartComponent,
-    ColumnChartComponent
+    NumberAbbriviationPipe,
+    TimeAgoPipe
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
@@ -42,14 +36,9 @@ export class MainComponent {
   private _router = inject(Router);
   private _userServices =inject(UsersHttpService);
   private _statsService =inject(UserStatisticsService);
-  sectorStats!:SharedStats;
-  fundingStats!:SharedStats;
-  minFunding!:Record<string, number>;
-  maxFunding!:Record<string, number>;
-  fundRaise!:Record<string, number>;
-  stagesStats!:Record<string, number>;
   subscriptions!:Record<string, number>;
-
+  payments:Payment[] =[];
+  bookings: Booking[] =[];
   
   businessCountriesStats!:Record<string, number>;
   matches!:Stats;
@@ -58,33 +47,43 @@ export class MainComponent {
     this._router.navigate([path]);
   }
 
+  recentSubscriptions: Plan[] =[]
   stats$ =new Observable<Stats>();
-  countryStats$ =new Observable();
-  countriesStats:{country: string, value: number}[] =[];
   users: User[] = [];
-  cols: any[] = [
+  cols =[
     { field: 'firstName', header: 'Name' },
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
   ];
-  billing_cols: any[] = [
+  billing_cols =[
     { field: 'subscriber', header: 'Subscriber' },
     { field: 'tier', header: 'Package' },
     { field: 'price', header: 'Price' },
+    { field: 'status', header: 'Active' },
     { field: 'date_subscribed', header: 'Purchased' },
   ];
-  entities:any;
 
-  analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
-    this.stagesStats =analytics.stages;
-    this.sectorStats =analytics.sectors;
-    this.fundingStats =analytics.funding;
-    this.fundRaise =analytics.fund_raise;
-    this.maxFunding =analytics.max_funding;
-    this.minFunding =analytics.min_funding;
-    this.businessCountriesStats =analytics.countries;
-    this.subscriptions =analytics.subscriptions
-    return analytics
+  payment_cols = [
+    { field: 'id', header: 'PID' },
+    { field: 'amount', header: 'Amount' },
+    { field: 'status', header: 'Status' },
+    { field: 'createdAt', header: 'Date' },
+    { field: 'description', header: 'Reason' },
+  ];
+
+  booking_cols =[
+    { field: 'id', header: 'Event ID' },
+    { field: 'amount', header: 'Amount' },
+    { field: 'status', header: 'Status' },
+    { field: 'createdAt', header: 'Date' }
+  ]
+  
+
+  summary$ =this._statsService.getSummary().pipe(tap(summary =>{
+    this.payments =summary.payments;
+    this.bookings =summary.bookings;
+    this.subscriptions =summary.subscription_counts;
+    this.recentSubscriptions =summary.recent_subscriptions;
   }));
   
   users$ =this._userServices.getAllUsers().pipe(tap(res =>{
@@ -93,12 +92,9 @@ export class MainComponent {
         ...user,
         name: `${user.firstName} ${user.lastName}`
       }
-    }).slice(0, 5)
+    }).reverse().slice(0, 5)
   }))
 
-  entities$ =this._statsService.getEntityStat().pipe(tap(res =>{
-    this.entities =res;
-  }))
 
   ngOnInit(): void {
     this.stats$ =this._statsService.fetchUserStats().pipe(tap(res =>{

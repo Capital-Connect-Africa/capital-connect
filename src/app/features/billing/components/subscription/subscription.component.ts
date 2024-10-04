@@ -7,11 +7,12 @@ import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviati
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 
 @Component({
   selector: 'billing-subscription',
   standalone: true,
-  imports: [CommonModule, NumberAbbriviationPipe, DialogModule],
+  imports: [CommonModule, NumberAbbriviationPipe, DialogModule, SafeHtmlPipe],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.scss'
 })

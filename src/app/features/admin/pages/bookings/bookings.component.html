@@ -1,0 +1,29 @@
+<ng-container *ngIf="bookings$ | async" />
+<app-admin-ui-container [title]="'Bookings'">
+    <p-table [value]="bookings" [paginator]="false"> 
+        <ng-template pTemplate="header">
+        <tr>
+            <th *ngFor="let col of cols">
+            <span class="header-container">
+                <span class="header-text">
+                {{col.header}}
+                </span>
+            </span>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-booking>
+        <tr>
+        <td>{{booking.calendlyEventId}}</td>
+        <td>{{booking.payment.currency}} {{booking.payment.amount | numberabbreviation}}</td>
+        <td>{{booking.payment.status | titlecase}}</td>
+        <td>{{booking.createdAt | time_ago}}</td> 
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+        <td colspan="5">No bookins yet.</td>
+        </tr>
+    </ng-template>
+    </p-table>
+</app-admin-ui-container>

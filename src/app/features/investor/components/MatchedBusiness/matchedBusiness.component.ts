@@ -258,6 +258,11 @@ export class MatchedBusinessComponent {
       tap(res => {
         this.matchedBusinesses = res;
         this.advanced_Search = false;
+        this.searchForm.reset();
+        this.searchForm.markAsPristine();
+        this.searchForm.markAsUntouched();
+        this.selectedSectors = []
+        this.selectedSubSectors = []
       })
     );
   }
