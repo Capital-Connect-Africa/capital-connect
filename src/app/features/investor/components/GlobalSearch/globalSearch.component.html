@@ -58,9 +58,9 @@
 
 
 
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+        <!-- <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
           No companies found. <br /> Check again later.
-        </div>
+        </div> -->
 
       </div>
 
@@ -82,7 +82,7 @@
               <td><strong>{{i+1}}</strong></td>
               <td class="">{{ business.country ? business.country : "N/A" }}</td>
               <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
-              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A" }}</td>
               <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
               <td class="flex space-x-1 items-center gap-2 ">
                 <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
@@ -98,6 +98,19 @@
           </ng-template>
 
         </p-table>
+
+      </div>
+
+
+      <div *ngIf="table" class="matched__top  search border-0">
+
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">
+          <!-- <p>No companies found. <br /> Check again later.</p> -->
+          <p></p>
+
+
+          <button class="btn btn-primary submit__btn" type="submit" (click)="showSearch()">Find Companies</button>
+        </div>
 
       </div>
 
@@ -222,19 +235,20 @@
 
 <app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
   <form [formGroup]="declineForm">
-  <div class="form_content__container">
-    <div class="input__wrapper">
-      <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-      <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason" [options]="declineReasons"
-        formControlName="reasons" optionLabel="reason" placeholder="Select reasons"></p-multiSelect>
+    <div class="form_content__container">
+      <div class="input__wrapper">
+        <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+        <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason"
+          [options]="declineReasons" formControlName="reasons" optionLabel="reason"
+          placeholder="Select reasons"></p-multiSelect>
 
-      <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
-        <div class="cta__group">
-          <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
+        <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
+          <div class="cta__group">
+            <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </form>
 </app-modal>
 
