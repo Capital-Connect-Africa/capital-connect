@@ -28,7 +28,7 @@ export interface SubSector {
 export interface Segment{
   id?:number,
   name: string,
-  subSectorId: number,
+  subSectorId?: number,
   description: string
 }
 

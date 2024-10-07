@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 import { SegmentCardComponent } from '../../components/segment-card/segment-card.component';
 import { Router } from '@angular/router';
 import { Segment } from '../../interfaces';
+import { SectorSignalStoreService } from '../../../../store/sector-store.service';
 
 @Component({
   selector: 'app-subsector',
@@ -32,18 +33,14 @@ export class SubSectorComponent {
   private _activatedRoute = inject(ActivatedRoute);
   private _sectorsService = inject(SectorsService);
   private _router = inject(Router);
+  private _sectorSignalStore = inject(SectorSignalStoreService);
 
 
-  constructor(private location: Location) {}
 
-  goBack(): void {
-    this.location.back();
-    this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
 
-  }
 
   sector!: Sector;
-  sectorId!: number;
+  sectorId: number | null | undefined;
   subsectorName!: string;
   routeId!: string;
 
@@ -65,19 +62,30 @@ export class SubSectorComponent {
   }))
 
 
+  ngOnInit(): void {
+    // Retrieve the sectorId from the signal store
+    this.sectorId = this._sectorSignalStore.sectorId;
+
+  }
+
+  goBack(): void {
+    console.log("The sector id is", this.sectorId)
+    this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
+  }
+
+
+
   segments$ = this.getSegments();
 
   getSegments(){
-    console.log("Getting Segments ...")
+
     return this._activatedRoute.paramMap.pipe(
       switchMap(res => {
         const id = Number((res as any).params.id);
-        // console.log("The id is", id)
         this.subsectorId = id;
         return this._sectorsService.getSingleSubsector(id)
       }),
       switchMap((res) => {
-        console.log("Res id is", res.id)
         this.subsectorName = res.name;
         return this._sectorsService.getSegmentsOfaSubSector(res.id)
       }), (tap(vals => {
@@ -86,6 +94,7 @@ export class SubSectorComponent {
   }
 
   reFetchSegments() {
+    alert("Referct segmetns called")
     this.segments$ = this.getSegments();
   }
 

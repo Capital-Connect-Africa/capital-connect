@@ -8,7 +8,8 @@ import { CommonModule } from "@angular/common";
 import { Observable, tap } from "rxjs";
 import { UiComponent } from "../../components/ui/ui.component";
 import { FeedbackService } from '../../../../core';
-import { Location } from '@angular/common';
+import { Segment } from 'chart.js/dist/helpers/helpers.segment';
+import { SectorSignalStoreService } from '../../../../store/sector-store.service';
 
 @Component({
   selector: 'app-create-subsector',
@@ -16,22 +17,28 @@ import { Location } from '@angular/common';
   imports: [
     ReactiveFormsModule, CommonModule, UiComponent
   ],
-  templateUrl: './create-segment.component.html',
-  styleUrl: './create-segment.component.scss'
+  templateUrl: './edit-segment.component.html',
+  styleUrl: './edit-segment.component.scss'
 })
-export class CreateSegmentComponent {
+export class EditSegmentComponet {
   private _activatedRoute = inject(ActivatedRoute);
   private _fb = inject(FormBuilder);
   private _formStateService = inject(FormStateService);
   private _router = inject(Router);
   private _sectorService = inject(SectorsService);
   private _feedBackService = inject(FeedbackService)
+  private _sectorSignalStore = inject(SectorSignalStoreService);
 
+
+  sectorId: number | null | undefined;
 
   //streams
   submit$ = new Observable<unknown>() 
   sector!: Sector;
   subSectorId!: number;
+  segmentId!:number;
+  segment$ = new Observable<unknown>()
+  segment!:Segment;
 
   segmentForm = this._fb.group({
     name: ['', Validators.required],
@@ -41,8 +48,27 @@ export class CreateSegmentComponent {
   init$= this._activatedRoute.paramMap.pipe(tap((res) => {
     // @ts-ignore
     const id = Number(res.params['id']);
-    this.subSectorId = id;
+    this.segmentId = id;
+
+    this.segment$ = this._sectorService.getSegment(this.segmentId).pipe(tap(res=>{
+      this.segmentForm.patchValue({
+        name: res.name,
+        description: res.description
+      });
+      
+    }))
+
   }))
+
+  init2$= this._activatedRoute.paramMap.pipe(tap((res) => {
+    // @ts-ignore
+    this.subSectorId = Number(res.params['subSectorId'])
+  }))
+
+
+
+
+
 
 
 
@@ -56,19 +82,23 @@ export class CreateSegmentComponent {
     let data = {
       name : this.segmentForm.value.name as string,
       description: this.segmentForm.value.description as string,
-      subSectorId: this.subSectorId
     }
-    this.submit$ = this._sectorService.createSegment(data).pipe(tap(res=>{
-      this._feedBackService.success("Segment Created Successfully")
+    this.submit$ = this._sectorService.updateSegment(this.segmentId, data ).pipe(tap(res=>{
+      this._feedBackService.success("Segment Updated Successfully")
     }))
 
 
   }
 
-  constructor(private _location: Location) {}
+
+  ngOnInit(): void {
+    // Retrieve the sectorId from the signal store
+    this.sectorId = this._sectorSignalStore.sectorId;
+
+  }
+
 
   cancel() {
-    this._location.back();
-    // this._router.navigateByUrl(`/sectors/sub-sector/${this.subSectorId}`);
+    this._router.navigateByUrl(`/sectors/sub-sector/${this.subSectorId}`);
   }
 }

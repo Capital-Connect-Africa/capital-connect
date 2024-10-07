@@ -5,6 +5,7 @@ import { RouterLink } from "@angular/router";
 import { MatIcon } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { ConfirmationService, FeedbackService } from "../../../../core";
+import { SectorSignalStoreService } from '../../../../store/sector-store.service';
 
 @Component({
   selector: 'app-subsector-card',
@@ -26,7 +27,14 @@ export class SubsectorCardComponent {
   private _sectorService = inject(SectorsService);
   private _confirmationService = inject(ConfirmationService);
   private _feedBackService = inject(FeedbackService);
+  private _sectorSignalStore = inject(SectorSignalStoreService);
 
+  ngOnInit() {
+    // Store the sectorId when the component initializes
+    this._sectorSignalStore.setSectorId(this.sectorId);
+  }
+
+  
   delete$ = new Observable();
 
   deleteSubsector(sectorId: number) {

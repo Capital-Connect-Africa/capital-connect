@@ -1,0 +1,37 @@
+<ng-container *ngIf="submit$ | async"></ng-container>
+<ng-container *ngIf="segment$ | async"></ng-container>
+<ng-container *ngIf="init$ | async"></ng-container>
+<ng-container *ngIf="init2$ | async"></ng-container>
+
+
+
+
+
+
+
+
+<app-ui>
+  <div class="form__card">
+
+  <h6><strong>Edit Segment</strong></h6>
+
+    <form [formGroup]="segmentForm" class="user__auth__form">
+      <div class="input__wrapper">
+            <label class="input__label">Name<sup>*</sup></label>
+            <input formControlName="name" class="input__field" placeholder="enter name" />
+      </div>
+      <div class="input__wrapper">
+        <label class="input__label">Description<sup>*</sup></label>
+        <textarea formControlName="description" class="input__field" placeholder="Write something..."
+          rows="5"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="action__buttons">
+    <button (click)="cancel()" class="btn__outline">Back</button>
+    <div class="inline__cta">
+      <button [ngClass]="{'disabled-btn': !segmentForm.valid}" [disabled]="!segmentForm.valid" (click)="submit()"
+        class="btn__primary">Update Segment</button>
+    </div>
+  </div>
+</app-ui>

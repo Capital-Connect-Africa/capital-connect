@@ -66,5 +66,17 @@ export class SectorsService extends BaseHttpService {
     return this.create(`${BASE_URL}/segments`, segment) as Observable<unknown>
   }
 
+  deleteSegment(segmentId:number){
+    return this.delete(`${BASE_URL}/segments`,segmentId) as Observable<unknown>
+  }
+
+  getSegment(id:number): Observable<Segment>{
+    return this.readById(`${BASE_URL}/segments`, id) as Observable<Segment>
+  }
+
+  updateSegment(segmentId:number, body:Segment){
+    return this.update(`${BASE_URL}/segments`,segmentId,body) as Observable<unknown>
+
+  }
 
 }
