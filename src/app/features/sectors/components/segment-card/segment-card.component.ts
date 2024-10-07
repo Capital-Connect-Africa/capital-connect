@@ -29,10 +29,10 @@ export class SegmentCardComponent {
 
   delete$ = new Observable();
 
-  deleteSubsector(sectorId: number) {
-    this.delete$ = this._confirmationService.confirm('Are you sure to delete this subsector?').pipe(switchMap(confirmation => {
+  deleteSegment(segmentId: number) {
+    this.delete$ = this._confirmationService.confirm('Are you sure to delete this segment?').pipe(switchMap(confirmation => {
       if (confirmation) {
-        return this._sectorService.removeSubSector(sectorId);
+        return this._sectorService.deleteSegment(segmentId);
       }
       return of(null);
     }), tap(confirmation => {

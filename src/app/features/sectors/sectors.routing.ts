@@ -18,11 +18,12 @@ const routes: Routes = [
   { path: 'sub-sector/:id/edit', loadComponent: () => import('./pages/edit-subsector/edit-subsector.component').then(c => c.EditSubSectorComponet) },
   { path: 'sector/:id/add-segment', loadComponent: () => import('./pages/create-segment/create-segment.component').then(c => c.CreateSegmentComponent) },
 
+  
 
   //Segment
   { path: 'segment', loadComponent: () => import('./pages/subsector/subsector.component').then(c => c.SubSectorComponent) },
   { path: 'segment/:id', loadComponent: () => import('./pages/segment/segment.component').then(c => c.SegmentComponent) },
-  { path: 'segment/:id/edit', loadComponent: () => import('./pages/edit-subsector/edit-subsector.component').then(c => c.EditSubSectorComponet) }
+  { path: 'segment/:subSectorId/:id/edit', loadComponent: () => import('./pages/edit-segment/edit-segment.component').then(c => c.EditSegmentComponet) }
 
 ]
 
