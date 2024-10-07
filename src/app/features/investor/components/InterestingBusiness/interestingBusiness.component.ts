@@ -130,10 +130,10 @@ export class InterestingBusinessComponent {
   }))
 
   pageChange(event: PageEvent): void {
-    console.log("The event is",event)
     this.currentPage = event.pageIndex; 
     this.pageSize = event.pageSize;
-    this.pageSize = event.pageSize;    
+    this.pageSize = event.pageSize;   
+     
     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage+1, this.pageSize).pipe(
        tap(res => {
         this.interestingBusinesses = res;
