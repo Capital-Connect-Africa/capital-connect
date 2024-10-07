@@ -7,7 +7,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UiComponent } from "../../components/ui/ui.component";
 import { SectorsService } from '../../services/sectors/sectors.service';
 import { QuestionCardComponent } from '../../../questions/components/question-card/question-card.component';
-import { Sector } from '../../interfaces';
+import { Sector, SubSector } from '../../interfaces';
+import { Location } from '@angular/common';
+import { SegmentCardComponent } from '../../components/segment-card/segment-card.component';
+import { Router } from '@angular/router';
+import { Segment } from '../../interfaces';
 
 @Component({
   selector: 'app-subsector',
@@ -18,19 +22,34 @@ import { Sector } from '../../interfaces';
     SharedModule,
     UiComponent,
     QuestionCardComponent,
-    RouterLink
+    RouterLink,
+    SegmentCardComponent
   ],
   templateUrl: './subsector.component.html',
   styleUrl: './subsector.component.scss'
 })
 export class SubSectorComponent {
+  private _activatedRoute = inject(ActivatedRoute);
+  private _sectorsService = inject(SectorsService);
+  private _router = inject(Router);
+
+
+  constructor(private location: Location) {}
+
+  goBack(): void {
+    this.location.back();
+    this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
+
+  }
+
   sector!: Sector;
   sectorId!: number;
   subsectorName!: string;
   routeId!: string;
 
-  private _activatedRoute = inject(ActivatedRoute);
-  private _sectorsService = inject(SectorsService);
+  segments!: Segment[]
+  subsectorId!: number;
+
 
   sectionId!: number;
 
@@ -44,5 +63,30 @@ export class SubSectorComponent {
   }), tap((subsectorInfo) => {
     this.subsectorName = subsectorInfo.name;
   }))
+
+
+  segments$ = this.getSegments();
+
+  getSegments(){
+    console.log("Getting Segments ...")
+    return this._activatedRoute.paramMap.pipe(
+      switchMap(res => {
+        const id = Number((res as any).params.id);
+        // console.log("The id is", id)
+        this.subsectorId = id;
+        return this._sectorsService.getSingleSubsector(id)
+      }),
+      switchMap((res) => {
+        console.log("Res id is", res.id)
+        this.subsectorName = res.name;
+        return this._sectorsService.getSegmentsOfaSubSector(res.id)
+      }), (tap(vals => {
+        this.segments = vals;
+      })))
+  }
+
+  reFetchSegments() {
+    this.segments$ = this.getSegments();
+  }
 
 }

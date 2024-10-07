@@ -1,10 +1,5 @@
 @import '../../styles/layout';
 @import '../../../../styles/main.scss';
-.btn-grp{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
 
 a{
   width: max-content !important;
@@ -29,10 +24,4 @@ a{
   outline: none;
   cursor: not-allowed !important;
   background-color: $gray-550 !important ;
-}
-
-.cards__grid{
-  gap: 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
 }

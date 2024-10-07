@@ -4,11 +4,8 @@
   <div class="card__item__header">
     <h2>{{name}}</h2>
     <span>
-      <a [routerLink]="'/sectors/sub-sector/'+sectorId+'-'+id+'/edit'" class="btn-warning"><mat-icon>edit</mat-icon></a>
+      <a [routerLink]="'/sectors/sub-sector/'+segmentId+'-'+id+'/edit'" class="btn-warning"><mat-icon>edit</mat-icon></a>
       <button class="btn-danger"><mat-icon (click)="deleteSubsector(id)">close</mat-icon></button>
     </span>
   </div>
-
-  <a [routerLink]="'/sectors/sub-sector/'+id" class="link">Open</a>
-
 </div>

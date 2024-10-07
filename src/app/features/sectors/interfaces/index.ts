@@ -25,4 +25,10 @@ export interface SubSector {
   sector?: { id: number }
 }
 
+export interface Segment{
+  id?:number,
+  name: string,
+  subSectorId: number,
+  description: string
+}
 

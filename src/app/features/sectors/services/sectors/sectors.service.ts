@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { BASE_URL, BaseHttpService } from '../../../../core';
-import { Sector, SectorInput, SubSector, SubSectorInput } from '../../interfaces';
+import { Sector, SectorInput, SubSector, SubSectorInput, Segment } from '../../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -53,5 +53,18 @@ export class SectorsService extends BaseHttpService {
   removeSubSector(subSectorId: number) {
     return this.delete(`${BASE_URL}/subsectors`, subSectorId).pipe(map(res => true));
   }
+
+
+
+  // Segments
+  getSegmentsOfaSubSector(subSectorId: number) {
+    return this.read(`${BASE_URL}/segments/sub-sectors/${subSectorId}`) as Observable<Segment[]>
+  }
+
+  //Create a segment
+  createSegment(segment: Segment) {
+    return this.create(`${BASE_URL}/segments`, segment) as Observable<unknown>
+  }
+
 
 }
