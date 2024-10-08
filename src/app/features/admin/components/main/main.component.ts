@@ -14,6 +14,7 @@ import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe
 import { Booking, Payment, Plan } from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
+import { PaymentsService } from '../../services/payments.service';
 
 
 @Component({
@@ -35,6 +36,7 @@ import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviati
 export class MainComponent {
   private _router = inject(Router);
   private _userServices =inject(UsersHttpService);
+  private _paymentsService =inject(PaymentsService);
   private _statsService =inject(UserStatisticsService);
   subscriptions!:Record<string, number>;
   payments:Payment[] =[];
@@ -78,9 +80,11 @@ export class MainComponent {
     { field: 'createdAt', header: 'Date' }
   ]
   
-
+  payments$ =this._paymentsService.getPayments().pipe(tap(payments =>{
+    this.payments =payments
+  }))
+  
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
-    this.payments =summary.payments;
     this.bookings =summary.bookings;
     this.subscriptions =summary.subscription_counts;
     this.recentSubscriptions =summary.recent_subscriptions;
