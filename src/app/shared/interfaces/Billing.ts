@@ -8,6 +8,12 @@ export interface SubscriptionTier{
     id:number
 }
 
+export enum PAYMENT_STATUS{
+    FAILED ='failed',
+    COMPLETED ='completed',
+    INITIATED ='initiated',
+}
+
 export interface SubscriptionResponse {
     orderTrackingId: string
     subscriptionId: number
@@ -33,9 +39,11 @@ export interface Payment{
     description: string
     currency: string
     createdAt: Date
+    updatedAt: Date
     amount: number
-    status: string
+    status: PAYMENT_STATUS
     id: number
+    user: User
 }
 
 export interface Booking {
@@ -44,3 +52,8 @@ export interface Booking {
     createdAt: Date
 }
 
+export interface PaymentPlan extends Payment{
+    userSubscription: ActivePlan,
+    orderTrackingId: string,
+    booking: Booking | null,
+}

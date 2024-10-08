@@ -7,7 +7,7 @@ import { formatCurrency } from '../utils/format.currency';
 })
 export class NumberAbbriviationPipe implements PipeTransform {
 
-  transform(value: number,): string {
+  transform(value: number | any): string {
     return formatCurrency(value);
   }
 

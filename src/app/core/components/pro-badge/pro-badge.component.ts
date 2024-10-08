@@ -1,20 +1,14 @@
 import { Component,inject } from '@angular/core';
 import { ModalComponent } from '../../../shared/components/modal/modal.component';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from "@angular/common";
-import { Observable , interval,Subscription} from 'rxjs';
+import { Observable ,Subscription} from 'rxjs';
 import { PaymentService } from '../../../shared/services/payment.service';
-import { switchMap ,take, takeWhile } from 'rxjs/operators';
-import { BookingService } from '../../../shared/services/booking.service';
 import { FeedbackService } from '../../services/feedback/feedback.service';
 import { TransactionStatus } from '../../../shared/interfaces/payment';
-import { tap, catchError,mergeMap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { CALENDLYEVENTID } from '../../http/base/constants';
-import { CreateBookingResponse } from '../../../shared/interfaces/booking';
 import { Router } from '@angular/router';
-
-
 
 @Component({
   selector: 'app-pro-badge',
@@ -28,8 +22,6 @@ export class ProBadgeComponent {
   orderTrackingId: string = ''
   createBooking$ = new Observable<TransactionStatus | null>();
   transactionStatusSubscription$ = new Observable<unknown>();
-  private _bookingService = inject(BookingService)
-  private _sanitizer = inject(DomSanitizer); 
   private _paymentService = inject(PaymentService)
   private _feedbackService = inject(FeedbackService)
   private _router = inject(Router)
@@ -51,9 +43,6 @@ export class ProBadgeComponent {
     this.message$ = this._feedbackService.message$;
   }
 
-
-
-
   checkPaymentStatus() {
     this.transactionStatus$ = this._paymentService.getTransactionStatus(this.orderTrackingId).pipe(
       tap((status: TransactionStatus) => {
@@ -73,16 +62,9 @@ export class ProBadgeComponent {
       }),
     );
   }
- 
-
-
-
 
   createBooking() {
     this._router.navigate(['/payment-instructions']);
   }
-
-
-
 
 }

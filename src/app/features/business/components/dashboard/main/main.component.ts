@@ -20,6 +20,7 @@ import { CompanyStateService } from '../../../../organization/services/company-s
 import { Progress } from '../../../interfaces/progress.interface';
 import { Observable, tap } from 'rxjs';
 import { BusinessOnboardingScoringService } from '../../../../../shared/services/business.onboarding.scoring.service';
+import { UserTransactionHistoryComponent } from "../../../../../shared/components/user-transaction-history/user-transaction-history.component";
 
 
 @Component({
@@ -29,7 +30,8 @@ import { BusinessOnboardingScoringService } from '../../../../../shared/services
     CommonModule, NavbarComponent, ProfileStatusComponent, NotificationsComponent,
     AssessmentSummaryComponent, AdvertisementSpaceComponent, OverviewSectionComponent,
     SchedulesSectionComponent, ScoreSectionComponent, SharedModule, OverviewComponent, Button, DialogModule, InputTextModule, ModalComponent,
-    ProBadgeComponent
+    ProBadgeComponent,
+    UserTransactionHistoryComponent
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

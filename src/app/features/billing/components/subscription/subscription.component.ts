@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
-import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
-import { SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { catchError, EMPTY, map, Observable, switchMap, tap } from 'rxjs';
+import { PAYMENT_STATUS, PaymentPlan, SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
@@ -23,8 +23,11 @@ export class SubscriptionComponent {
   redirectURL!: SafeResourceUrl;
   subscription!:SubscriptionResponse;
   signalService =inject(SignalsService);
+  paymentAttempt: PaymentPlan | undefined
   private _sanitizer =inject(DomSanitizer);
   private _billingService =inject(BillingService);
+  recentPayment$ =new Observable();
+  upgradablePlansList:string[] =[]
   subscribe$ =new Observable<SubscriptionResponse>();
   plan:string ='';
   subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(switchMap(res =>{
@@ -32,6 +35,7 @@ export class SubscriptionComponent {
     if(!this.signalService.activePlan()){
       return this._billingService.getActivePlan().pipe(tap(res =>{
         this.activePlan =res.subscriptionTier;
+        this.upgradablePlansList =this.upgradablePlans;
         this.signalService.activePlan.set(res.subscriptionTier.name);
       }),
       catchError(err =>{
@@ -44,16 +48,28 @@ export class SubscriptionComponent {
   return EMPTY;
   }))
   
+  getRecentPayments(){
+    this.recentPayment$ =this._billingService.getRecentPayments().pipe(map(res =>{
+      this.paymentAttempt =res.find((plan: PaymentPlan) =>(plan.status.toLowerCase()) !==PAYMENT_STATUS.COMPLETED)
+    }))
+  }
 
   subscribe(tierId: number){
     const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
     if(selectedTier?.price ==0) return;
     this.plan =selectedTier?.name as string;
-    this.subscribe$ =this._billingService.subscribe(tierId).pipe(tap(res =>{
+    this.subscribe$ =this._billingService.subscribe(tierId, this.plan.toLowerCase() !=this.signalService.activePlan().toLowerCase()).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
     }))
   }
   
+  ngOnInit(): void {
+    this.getRecentPayments()
+  }
+
+  get upgradablePlans(){
+    return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
+  }
 }
