@@ -10,6 +10,7 @@ import { EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { ConfirmationService } from '../../../../core/services/confirmation/confirmation.service';
 import { BookingsService } from '../../services/booking.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bookings',
@@ -26,10 +27,12 @@ export class BookingsComponent {
   delete$ =new Observable();
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
+  private _router =inject(Router);
   private _bookingService =inject(BookingsService);;
   private _statsService =inject(UserStatisticsService);
   private _confirmationService =inject(ConfirmationService);
   bookings: Booking[] =[];
+
   cols =[
     { field: 'id', header: 'Event ID' },
     { field: 'amount', header: 'Amount' },
@@ -71,6 +74,11 @@ export class BookingsComponent {
       return EMPTY;
     }))
   
+  }
+
+
+  openBooking(bookingId:number){
+    this._router.navigateByUrl(`/bookings/${bookingId}`)
   }
 
   updateDisplayedData() {
