@@ -30,9 +30,3 @@ a{
   cursor: not-allowed !important;
   background-color: $gray-550 !important ;
 }
-
-.cards__grid{
-  gap: 1.5rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-}

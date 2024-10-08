@@ -7,7 +7,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UiComponent } from "../../components/ui/ui.component";
 import { SectorsService } from '../../services/sectors/sectors.service';
 import { QuestionCardComponent } from '../../../questions/components/question-card/question-card.component';
-import { Sector } from '../../interfaces';
+import { Sector, SubSector } from '../../interfaces';
+import { Location } from '@angular/common';
+import { SegmentCardComponent } from '../../components/segment-card/segment-card.component';
+import { Router } from '@angular/router';
+import { Segment } from '../../interfaces';
+import { SectorSignalStoreService } from '../../../../store/sector-store.service';
 
 @Component({
   selector: 'app-subsector',
@@ -18,19 +23,30 @@ import { Sector } from '../../interfaces';
     SharedModule,
     UiComponent,
     QuestionCardComponent,
-    RouterLink
+    RouterLink,
+    SegmentCardComponent
   ],
   templateUrl: './subsector.component.html',
   styleUrl: './subsector.component.scss'
 })
 export class SubSectorComponent {
+  private _activatedRoute = inject(ActivatedRoute);
+  private _sectorsService = inject(SectorsService);
+  private _router = inject(Router);
+  private _sectorSignalStore = inject(SectorSignalStoreService);
+
+
+
+
+
   sector!: Sector;
-  sectorId!: number;
+  sectorId: number | null | undefined;
   subsectorName!: string;
   routeId!: string;
 
-  private _activatedRoute = inject(ActivatedRoute);
-  private _sectorsService = inject(SectorsService);
+  segments!: Segment[]
+  subsectorId!: number;
+
 
   sectionId!: number;
 
@@ -44,5 +60,42 @@ export class SubSectorComponent {
   }), tap((subsectorInfo) => {
     this.subsectorName = subsectorInfo.name;
   }))
+
+
+  ngOnInit(): void {
+    // Retrieve the sectorId from the signal store
+    this.sectorId = this._sectorSignalStore.sectorId;
+
+  }
+
+  goBack(): void {
+    console.log("The sector id is", this.sectorId)
+    this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
+  }
+
+
+
+  segments$ = this.getSegments();
+
+  getSegments(){
+
+    return this._activatedRoute.paramMap.pipe(
+      switchMap(res => {
+        const id = Number((res as any).params.id);
+        this.subsectorId = id;
+        return this._sectorsService.getSingleSubsector(id)
+      }),
+      switchMap((res) => {
+        this.subsectorName = res.name;
+        return this._sectorsService.getSegmentsOfaSubSector(res.id)
+      }), (tap(vals => {
+        this.segments = vals;
+      })))
+  }
+
+  reFetchSegments() {
+    alert("Referct segmetns called")
+    this.segments$ = this.getSegments();
+  }
 
 }

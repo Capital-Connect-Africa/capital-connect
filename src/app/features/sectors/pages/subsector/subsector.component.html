@@ -1,5 +1,14 @@
+<!-- <ng-container *ngIf="init$ | async"></ng-container> -->
+
+<ng-container *ngIf="segments$ | async"></ng-container>
+
 <app-ui [title]="subsectorName">
   <div class="btn-grp">
-    <a [routerLink]="'/sectors/sector/'+sectorId" class="btn btn-success"><mat-icon>arrow_left</mat-icon> Back</a>
+    <a  (click)="goBack()" class="btn btn-success"><mat-icon>arrow_left</mat-icon> Back</a>
+    <a [routerLink] ="'/sectors/sector/'+subsectorId+'/add-segment'" class="btn btn-primary">Add Segment<mat-icon>add</mat-icon></a>
+  </div>
+  
+  <div class="cards__grid">
+    <app-segment-card *ngFor="let segment of segments" (refreshSegmentEvent)="reFetchSegments()"   [name] ="segment.name" [id]="segment.id ? segment.id : 0" [segmentId]="subsectorId"/>
   </div>
 </app-ui>

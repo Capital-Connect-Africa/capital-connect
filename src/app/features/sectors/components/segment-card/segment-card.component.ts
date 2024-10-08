@@ -5,48 +5,40 @@ import { RouterLink } from "@angular/router";
 import { MatIcon } from "@angular/material/icon";
 import { CommonModule } from "@angular/common";
 import { ConfirmationService, FeedbackService } from "../../../../core";
-import { SectorSignalStoreService } from '../../../../store/sector-store.service';
 
 @Component({
-  selector: 'app-subsector-card',
+  selector: 'app-segment-card',
   standalone: true,
   imports: [
     MatIcon,
     RouterLink,
     CommonModule
   ],
-  templateUrl: './subsector-card.component.html',
-  styleUrl: './subsector-card.component.scss'
+  templateUrl: './segment-card.component.html',
+  styleUrl: './segment-card.component.scss'
 })
-export class SubsectorCardComponent {
+export class SegmentCardComponent {
   @Input() id!: number;
   @Input() name!: string;
-  @Input() sectorId!: number;
-  @Output() refreshSubSectorEvent = new EventEmitter();
+  @Input() segmentId!: number;
+  @Output() refreshSegmentEvent = new EventEmitter();
 
   private _sectorService = inject(SectorsService);
   private _confirmationService = inject(ConfirmationService);
   private _feedBackService = inject(FeedbackService);
-  private _sectorSignalStore = inject(SectorSignalStoreService);
 
-  ngOnInit() {
-    // Store the sectorId when the component initializes
-    this._sectorSignalStore.setSectorId(this.sectorId);
-  }
-
-  
   delete$ = new Observable();
 
-  deleteSubsector(sectorId: number) {
-    this.delete$ = this._confirmationService.confirm('Are you sure to delete this subsector?').pipe(switchMap(confirmation => {
+  deleteSegment(segmentId: number) {
+    this.delete$ = this._confirmationService.confirm('Are you sure to delete this segment?').pipe(switchMap(confirmation => {
       if (confirmation) {
-        return this._sectorService.removeSubSector(sectorId);
+        return this._sectorService.deleteSegment(segmentId);
       }
       return of(null);
     }), tap(confirmation => {
       if (confirmation) {
         this._feedBackService.success('Subsector was removed successfully!');
-        this.refreshSubSectorEvent.emit(true);
+        this.refreshSegmentEvent.emit(true);
       }
     }))
 

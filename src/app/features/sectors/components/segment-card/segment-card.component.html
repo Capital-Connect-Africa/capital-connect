@@ -1,0 +1,11 @@
+<ng-container *ngIf="delete$ | async"></ng-container>
+
+<div class="card__item">
+  <div class="card__item__header">
+    <h2>{{name}}</h2>
+    <span>
+      <a [routerLink]="'/sectors/segment/'+segmentId+'/'+id+'/edit'" class="btn-warning"><mat-icon>edit</mat-icon></a>
+      <button class="btn-danger"><mat-icon (click)="deleteSegment(id)">close</mat-icon></button>
+    </span>
+  </div>
+</div>
