@@ -43,6 +43,7 @@ export interface Payment{
     amount: number
     status: PAYMENT_STATUS
     id: number
+    user: User
 }
 
 export interface Booking {
