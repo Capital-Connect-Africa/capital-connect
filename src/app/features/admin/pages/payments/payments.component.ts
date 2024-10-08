@@ -10,6 +10,7 @@ import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviati
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { PaymentsService } from '../../services/payments.service';
 import { ConfirmationService } from '../../../../core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payments',
@@ -27,6 +28,7 @@ export class PaymentsComponent {
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
   filteredPayments: Payment[] = [];
+  private _router =inject(Router);
   private _paymentsService =inject(PaymentsService);
   private _statsService =inject(UserStatisticsService);
   private _confirmationService =inject(ConfirmationService);
@@ -85,5 +87,9 @@ export class PaymentsComponent {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.table.filterGlobal(filterValue.toLowerCase(), 'contains');
     this.updateDisplayedData();
+  }
+
+  openPayment(paymentId:number){
+    this._router.navigateByUrl(`/payments/${paymentId}`)
   }
 }
