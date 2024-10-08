@@ -27,9 +27,9 @@ export class PaymentsComponent {
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
   filteredPayments: Payment[] = [];
-  private _confirmationService =inject(ConfirmationService)
   private _paymentsService =inject(PaymentsService);
   private _statsService =inject(UserStatisticsService);
+  private _confirmationService =inject(ConfirmationService);
   payments: Payment[] =[];
   cols =[
     { field: 'id', header: 'PID' },
@@ -64,9 +64,9 @@ export class PaymentsComponent {
   }
 
   removePayment(paymentId:number){
-    this.delete$ =this._confirmationService.confirm(`Remove payment ${paymentId}?`).pipe(switchMap(confirmation =>{
+    this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
       if(confirmation){
-        return this._paymentsService.deletePayment(paymentId).pipe(tap(res =>{
+        return this._paymentsService.deletePayment(paymentId).pipe(tap(_ =>{
           this.getPayments(this.currentPage, this.rows);
         }))
       }
