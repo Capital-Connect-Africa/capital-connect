@@ -1,0 +1,50 @@
+
+
+
+  .p-datatable {
+    margin-top: 1rem;
+  }
+  
+  .p-datatable-tbody > tr > td {
+    padding: 15px 20px;
+    text-align: left;
+    height: 50px; /* Increase row height */
+  }
+  
+  .full-width-table {
+    width: 100%;
+  }
+  
+
+  
+  tr {
+    height: 3rem !important;
+  }
+  
+  .header-container {
+    display: flex;
+  }
+  
+  td {
+    padding: 0 .5rem;
+  }
+  
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      th{
+        background-color: rgba(255, 255, 255, 0.664);
+        padding: 0 .5rem;
+       span{
+          background-color: transparent!important;
+       }
+      }
+    }
+}
