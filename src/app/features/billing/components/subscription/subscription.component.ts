@@ -25,6 +25,8 @@ export class SubscriptionComponent {
   signalService =inject(SignalsService);
   private _sanitizer =inject(DomSanitizer);
   private _billingService =inject(BillingService);
+  recentPayment$ =new Observable();
+  upgradablePlansList:string[] =[]
   subscribe$ =new Observable<SubscriptionResponse>();
   plan:string ='';
   subscriptionTiers$ =this._billingService.getSubscriptionTiers().pipe(switchMap(res =>{
@@ -32,6 +34,7 @@ export class SubscriptionComponent {
     if(!this.signalService.activePlan()){
       return this._billingService.getActivePlan().pipe(tap(res =>{
         this.activePlan =res.subscriptionTier;
+        this.upgradablePlansList =this.upgradablePlans;
         this.signalService.activePlan.set(res.subscriptionTier.name);
       }),
       catchError(err =>{
@@ -44,16 +47,27 @@ export class SubscriptionComponent {
   return EMPTY;
   }))
   
+  getRecentPayments(){
+    this.recentPayment$ =this._billingService.getRecentPayments();
+  }
 
   subscribe(tierId: number){
     const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
     if(selectedTier?.price ==0) return;
     this.plan =selectedTier?.name as string;
-    this.subscribe$ =this._billingService.subscribe(tierId).pipe(tap(res =>{
+    // const activePlan =
+    this.subscribe$ =this._billingService.subscribe(tierId, this.plan.toLowerCase() !=this.signalService.activePlan().toLowerCase()).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
     }))
   }
   
+  ngOnInit(): void {
+    this.getRecentPayments()
+  }
+
+  get upgradablePlans(){
+    return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
+  }
 }

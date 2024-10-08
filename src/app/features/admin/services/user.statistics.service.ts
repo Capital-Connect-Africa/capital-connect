@@ -165,14 +165,14 @@ export class UserStatisticsService extends BaseHttpService{
         })) as Observable<Plan[]>
     }
 
-    getPayments(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any[]) =>{
-          return payments
-        })) as Observable<Payment[]>
-    }
 
+    getPaymentStats(){
+        return this.read(`${BASE_URL}/statistics/payments`).pipe(map((res: any) =>{
+            return res
+        })) as Observable<{initiated: number, completed: number, failed: number,}>
+    }
     getBookings(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/bookings?page=${page}&limit=${limit}`).pipe(map((bookings: any[]) =>{
+        return this.read(`${BASE_URL}/bookings?page=${page}&count=${limit}`).pipe(map((bookings: any[]) =>{
           return bookings.map((booking: any) =>{
             const payment =booking.payments.reduce((curr: Payment, acc:Payment) =>{
                 return {
@@ -193,12 +193,11 @@ export class UserStatisticsService extends BaseHttpService{
     }
 
     getSummary(){
-        const requests =[this.getSubscriptions(), this.countSubscriptions(), this.getPayments(), this.getBookings()]
+        const requests =[this.getSubscriptions(), this.countSubscriptions(), this.getBookings()]
         return forkJoin(requests).pipe(map(res =>{
             return {
                 recent_subscriptions: res[0] as Plan[],
                 subscription_counts: res[1] as Record<string, number>,
-                payments: res[2] as Payment[],
                 bookings: res[3] as Booking[]
             }
         }))

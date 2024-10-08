@@ -37,21 +37,9 @@
     border: 1px solid #ccc;
   }
   
-  .mat-elevation-z8 {
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .08);
-    padding: 2rem;
-    border-radius: 8px;
-    background-color: #fff;
-  }
-  
   .p-datatable {
     margin-top: 1rem;
   }
-  
-  // .p-datatable-thead > tr > th {
-  //   padding: 15px 20px;
-  //   text-align: left;
-  // }
   
   .p-datatable-tbody > tr > td {
     padding: 15px 20px;
@@ -132,4 +120,19 @@
        }
       }
     }
+}
+
+.search{
+  display: block;
+  padding: .5rem 1rem;
+  border-radius: .3rem;
+  border: 1px solid rgba(0, 0, 0, .4);
+}
+
+.cta__btns{
+  button{
+    display: block;
+    padding: .4rem;
+    border-radius: .3rem;
   }
+}

@@ -28,6 +28,7 @@ export class SignUpFormComponent {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
+    hasAcceptedPrivacyPolicy: ['', Validators.required],
     password: ['', Validators.required],
     confirmPassword: ['']
   })
@@ -115,6 +116,7 @@ export class SignUpFormComponent {
     const input: CreateUserInput = {
       username: formValue.email as string,
       hasAcceptedTerms: formValue.hasAcceptedTerms as string,
+      hasAcceptedPrivacyPolicy: formValue.hasAcceptedPrivacyPolicy as string,
       password: formValue.password as string,
       roles: formValue.accountType as USER_ROLES,
       firstName: formValue.firstName as string,

@@ -69,9 +69,15 @@
     </ng-container>
   </div>
   </div>
-  <div class="flex items-center gap-2">
-    <input type="checkbox" class="inline-block cursor-pointer" formControlName ='hasAcceptedTerms'/>
-    <label class="text-[#8C8C8C] inline-block text-[1rem] font-[400] accept-text">Accept our <a href="https://corporate.capitalconnect.africa/terms-and-conditions" class="text-[#064635]" target="_blank">terms and conditions</a></label>
+  <div class="flex md:items-center flex-col md:flex-row gap-2 justify-between">
+    <div class="flex items-center gap-2">
+      <input type="checkbox" class="inline-block cursor-pointer" formControlName ='hasAcceptedTerms'/>
+      <label class="text-[#8C8C8C] inline-block text-[1rem] font-[400] accept-text">Accept our <a href="https://capitalconnect.africa/terms-and-conditions" class="text-[#064635]" target="_blank">terms and conditions</a></label>
+    </div>
+    <div class="flex items-center gap-2">
+      <input type="checkbox" class="inline-block cursor-pointer" formControlName ='hasAcceptedPrivacyPolicy'/>
+      <label class="text-[#8C8C8C] inline-block text-[1rem] font-[400] accept-text">Accept our <a href="https://capitalconnect.africa/privacy-policy-2" class="text-[#064635]" target="_blank">privacy policy</a></label>
+    </div>
   </div>
   <button [ngClass]="{'disabled-btn': signUpForm.invalid || !passwordIsValid}"
     [disabled]="signUpForm.invalid || !passwordIsValid" (click)="submitForm()" class="btn btn-primary">Create

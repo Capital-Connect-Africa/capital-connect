@@ -1,8 +1,7 @@
 import { catchError, EMPTY, map, Observable, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import {BASE_URL, BaseHttpService } from "../../../core";
-import { ActivePlan, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { ActivePlan, Payment, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
 import { AuthStateService } from "../../auth/services/auth-state.service";
 import { SignalsService } from "../../../core/services/signals/signals.service";
 
@@ -12,7 +11,7 @@ export class BillingService {
     private __http =inject(BaseHttpService);
     private _signalService =inject(SignalsService);
     private _authStateService =inject(AuthStateService);
-
+    private _userId =this._authStateService.currentUserId();
     //Create  a subscription tier
     createSubscriptionTier(subscriptionTier:SubscriptionTier){
         return this.__http.create(`${BASE_URL}/subscription-tiers`,subscriptionTier).pipe(
@@ -54,8 +53,9 @@ export class BillingService {
         )
     }
 
-    subscribe(tierId: number){
-        return this.__http.create(`${BASE_URL}/subscriptions/subscribe`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
+    subscribe(tierId: number, upgrade:boolean =false){
+        const url =upgrade? 'upgrade' : 'subscribe';
+        return this.__http.create(`${BASE_URL}/subscriptions/${url}`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
             return res;
         })) as Observable<SubscriptionResponse>
     }
@@ -69,5 +69,17 @@ export class BillingService {
         this._signalService.activePlan.set('basic')
         return EMPTY
     })) as Observable<ActivePlan>
+    }
+
+    getPaymentHistory(page:number, limit:number){
+        return this.__http.read(`${BASE_URL}/payments/user/${this._userId}?page=${page}&limit=${limit}`).pipe(map(res => {
+          return res as Payment[]
+        }))
+    }
+    
+    getRecentPayments(page:number =1, limit:number =5){
+        return this.__http.read(`${BASE_URL}/payments/user/${this._userId}/recent?page=${page}&limit=${limit}`).pipe(map(res => {
+            return res as Payment[]
+        }))
     }
 }
