@@ -1,6 +1,7 @@
 <ng-container *ngIf="users$ | async" />
 <ng-container *ngIf="summary$ | async" />
 <ng-container *ngIf="payments$ | async"/>
+<ng-container *ngIf="bookings$ | async"/>
 <app-admin-ui-container [bg_gray]="true" [title]="'Overview'">
   <div class="main">
     <main class="stats">
