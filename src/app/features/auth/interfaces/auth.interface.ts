@@ -5,6 +5,7 @@ export interface CreateUserInput {
   lastName: string;
   roles: string;
   hasAcceptedTerms: string;
+  hasAcceptedPrivacyPolicy: string,
 }
 
 export enum PASSWORD_STRENGTH {
