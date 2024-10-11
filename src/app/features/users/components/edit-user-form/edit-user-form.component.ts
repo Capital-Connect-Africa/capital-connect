@@ -6,6 +6,8 @@ import { SharedModule } from '../../../../shared';
 import { Role, User } from '../../models';
 import { UsersHttpService } from '../../services/users-http.service';
 import { Observable, tap } from 'rxjs';
+import { BillingService } from '../../../billing/services/billing.service';
+import { SubscriptionTier } from '../../../../shared/interfaces/Billing';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -19,6 +21,8 @@ export class EditUserFormComponent {
   private _fb = inject(FormBuilder);
   private _userService = inject(UsersHttpService);
   private _router = inject(Router);
+  private readonly _bs = inject(BillingService)
+
 
   updateUser$ = new Observable();
 
@@ -26,6 +30,17 @@ export class EditUserFormComponent {
   roles = Object.values(Role);
 
   @Input({ required: true }) user!: User;
+
+  subscription_names = ['basic', 'plus', 'pro', 'elite']
+
+  subscriptionTiers: SubscriptionTier[] = [];
+
+
+  subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
+    res => {
+      this.subscriptionTiers = res
+    }
+  ))
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['user'] && changes['user'].currentValue) {
@@ -35,6 +50,7 @@ export class EditUserFormComponent {
         firstName: [user.firstName, Validators.required],
         lastName: [user.lastName, Validators.required],
         roles: [user.roles, Validators.required],
+        subscription:[this.user.subscriptions[0].id],
       });
     }
   }
@@ -57,7 +73,11 @@ export class EditUserFormComponent {
 
   submitForm() {
     if (this.editUserForm.valid) {
-      const updatedUser = { ...this.editUserForm.value };
+      const updatedUser = { 
+       firstName : this.editUserForm.value.firstName,
+       lastName: this.editUserForm.value.lastName,
+       roles: this.editUserForm.value.roles
+       };
       this.updateUser$ =
         this._userService.updateUserByAdmin(updatedUser, this.user.id).pipe(tap(() => {
           this._router.navigateByUrl('/users');

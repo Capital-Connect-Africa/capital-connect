@@ -33,6 +33,7 @@ export interface CompanyInput {
   useOfFunds:string[],
   esgFocusAreas: string[],
   fundsNeeded: number,
+  segments:string[],
   businessSector: string;
   businessSubsector: string;
   productsAndServices: string;

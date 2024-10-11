@@ -2,6 +2,12 @@
 <ng-container *ngIf="company$ | async"></ng-container>
 <ng-container *ngIf="subsectors$ | async"></ng-container>
 <ng-container *ngIf="countries$ | async"></ng-container>
+<ng-container *ngIf="segments$ | async"></ng-container>
+
+
+
+
+
 <form [formGroup]="stepOneForm" class="form__grid">
   <div class="input__wrapper">
     <label class="input__label">What is the name of your business?<sup>*</sup></label>
@@ -30,7 +36,7 @@
 
   <div class="input__wrapper">
     <label class="input__label">In which subsector does the business operate is?<sup>*</sup></label>
-    <select formControlName="businessSubsector" class="input__field">
+    <select formControlName="businessSubsector" class="input__field" (change)="onSubSectorSelected($event.target)">
       @for (subsector of subsectors; track $index) {
       <option [value]="subsector.name" [selected]="userCompany.businessSubsector === subsector.name">{{ subsector.name | titlecase }}
       </option>
@@ -38,9 +44,27 @@
     </select>
   </div>
 
+
+
   <div class="input__wrapper">
     <label class="input__label">What products and services are you offering?<sup>*</sup></label>
     <input formControlName="productsAndServices" class="input__field" placeholder="Enter your products and services"
       [value]="userCompany.productsAndServices || ''" />
   </div>
+
+
+  <div class="input__wrapper">
+    <label class="input__label">Which segments belong to the above sector?<sup>*</sup></label>
+    <p-multiSelect 
+      formControlName="segments" 
+      [options]="segments" 
+      [showToggleAll]="true" 
+      class="input__field"
+      styleClass="w-full"
+      optionLabel="name" 
+      optionValue="name"
+      [placeholder]="'Select segments'">
+    </p-multiSelect>
+  </div>
+  
 </form>

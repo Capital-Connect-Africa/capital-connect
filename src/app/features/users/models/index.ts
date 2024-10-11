@@ -11,6 +11,7 @@ export interface User {
   isEmailVerified: boolean;
   emailVerificationToken: string;
   emailVerificationExpires: string;
+  subscriptions: Subscription[];
 }
 
 export enum Role {
@@ -18,4 +19,21 @@ export enum Role {
   USER = 'user',
   INVESTOR = 'investor',
   ADVISOR = 'advisor'
+}
+
+export interface SubscriptionTier {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  isActive: boolean;
+}
+
+export interface Subscription {
+  id: number;
+  subscriptionDate: string;
+  expiryDate: string;
+  isActive: boolean;
+  updatedAt: string;
+  subscriptionTier: SubscriptionTier;
 }

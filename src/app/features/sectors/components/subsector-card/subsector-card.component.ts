@@ -37,10 +37,10 @@ export class SubsectorCardComponent {
   
   delete$ = new Observable();
 
-  deleteSubsector(sectorId: number) {
+  deleteSubsector(id: number) {
     this.delete$ = this._confirmationService.confirm('Are you sure to delete this subsector?').pipe(switchMap(confirmation => {
       if (confirmation) {
-        return this._sectorService.removeSubSector(sectorId);
+        return this._sectorService.removeSubSector(id);
       }
       return of(null);
     }), tap(confirmation => {

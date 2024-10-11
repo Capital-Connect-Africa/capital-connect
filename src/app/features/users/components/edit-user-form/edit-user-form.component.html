@@ -1,4 +1,7 @@
 <ng-container *ngIf="updateUser$ | async"></ng-container>
+<ng-container *ngIf="subscriptionTiers$ | async"></ng-container>
+
+
 
 <ng-container *ngIf="user">
   <form [formGroup]="editUserForm" class="user__auth__form">
@@ -29,6 +32,17 @@
         <span *ngIf="!isValid('roles')" class="error-text">Role is required</span>
       </ng-container>
     </div>
+
+    <div class="input__wrapper">
+      <label class="input__label">Subscription</label>
+      <select formControlName="subscription" class="input__field">
+        <option *ngFor="let subscriptionTier of subscriptionTiers" [value]="subscriptionTier.id">{{ subscriptionTier.name }}</option>
+      </select>
+    </div>
+
+
+    
+
 
     <div class="btn-container">
       <button type="button" (click)="cancelEdit()" class="btn btn-secondary">Cancel</button>
