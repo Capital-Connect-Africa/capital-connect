@@ -8,6 +8,7 @@ import { UsersHttpService } from '../../services/users-http.service';
 import { Observable, tap } from 'rxjs';
 import { BillingService } from '../../../billing/services/billing.service';
 import { SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { FeedbackService } from '../../../../core';
 
 @Component({
   selector: 'app-edit-user-form',
@@ -22,9 +23,11 @@ export class EditUserFormComponent {
   private _userService = inject(UsersHttpService);
   private _router = inject(Router);
   private readonly _bs = inject(BillingService)
+  private _fs = inject(FeedbackService)
 
 
   updateUser$ = new Observable();
+  assignsub$ = new Observable()
 
   editUserForm!: FormGroup;
   roles = Object.values(Role);
@@ -38,7 +41,7 @@ export class EditUserFormComponent {
 
   subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
     res => {
-      this.subscriptionTiers = res
+      this.subscriptionTiers = res      
     }
   ))
 
@@ -46,11 +49,18 @@ export class EditUserFormComponent {
     if (changes['user'] && changes['user'].currentValue) {
       const user = changes['user'].currentValue;
       this.user = user;
+
+      console.log("The user object is", this.user)
+
+      const activeSubscription = user.subscriptions.filter((subscription: { isActive: any; }) => subscription.isActive);
+
+      console.log("The active subscription is",activeSubscription);
+
       this.editUserForm = this._fb.group({
         firstName: [user.firstName, Validators.required],
         lastName: [user.lastName, Validators.required],
         roles: [user.roles, Validators.required],
-        subscription:[this.user.subscriptions[0].id],
+        subscription:[activeSubscription],
       });
     }
   }
@@ -72,6 +82,12 @@ export class EditUserFormComponent {
   }
 
   submitForm() {
+    this.assignsub$ = this._bs.assignSubscriptionToUser(this.user.id,this.editUserForm.value.subscription).pipe(tap(res=>{
+      this._fs.success("Subscription Assigned to User Successfully")
+    }))
+
+
+
     if (this.editUserForm.valid) {
       const updatedUser = { 
        firstName : this.editUserForm.value.firstName,

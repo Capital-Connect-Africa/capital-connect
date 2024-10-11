@@ -35,9 +35,9 @@ export class BillingService {
         ))
     }
 
-    // assignSubscriptionToUser(userId:number,subscriptionId:number){
-    //     return this.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`)
-    // }
+    assignSubscriptionToUser(userId:number,subscriptionId:number){
+        return this.__http.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`,{})
+    }
 
 
     //Update a subscription tier
