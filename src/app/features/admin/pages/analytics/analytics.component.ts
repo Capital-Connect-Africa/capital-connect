@@ -12,7 +12,6 @@ import { BubbleChartComponent } from "../../../../shared/components/charts/bubbl
 import { BarChartComponent } from "../../../../shared/components/charts/bar-chart/bar-chart.component";
 import { GeoChartComponent } from "../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
-import { User } from '../../../users/models';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
 import { HorizontalBarchartComponent } from "../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
@@ -43,7 +42,6 @@ import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 
 export class AnalyticsComponent {
   private _router = inject(Router);
-  private _userServices =inject(UsersHttpService);
   private _statsService =inject(UserStatisticsService);
   sectorStats!:SharedStats;
   fundingStats!:SharedStats;
@@ -67,10 +65,7 @@ export class AnalyticsComponent {
   countriesStats:{country: string, value: number}[] =[];
   entities:any;
   
-  recentSubscriptions$ =this._statsService.getSubscriptions().pipe(tap(res =>{
-    debugger
-    this.recentSubscriptions =res;
-  }))
+
 
   analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
     this.stagesStats =analytics.stages;
