@@ -1,0 +1,34 @@
+<ng-container *ngIf="plan$ | async"/>
+
+<div class="card__item__details" details>
+    <div class="card__item__detail">
+      <div>
+        <label>User name:</label>
+        <p>{{ plan?.user?.firstName }} {{ plan?.user?.lastName }}</p>
+      </div>
+      <div>
+        <label>User email:</label>
+        <p>{{ plan?.user?.username }}</p>
+      </div>
+    </div>
+    <div class="card__item__detail">
+      <div>
+        <label>Amount:</label>
+        <!-- <p>{{plan?.currency}} {{ plan?.amount | numberabbreviation}}</p> -->
+      </div>
+      
+      <div>
+        <label>Status:</label>
+        <!-- <p>{{ plan?.status }}</p> -->
+      </div>
+      <div>
+        <label>Date:</label>
+        <!-- <p>{{ plan?.createdAt | time_ago}}</p> -->
+      </div>
+    </div>
+    <div class="card__item__detail single__col">
+        <div>
+            <label>Description:</label>
+        </div>
+    </div>
+</div>
