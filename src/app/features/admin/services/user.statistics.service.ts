@@ -129,12 +129,6 @@ export class UserStatisticsService extends BaseHttpService{
           return res;
         }));
     }
-    
-    countSubscriptions(){
-        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map((res:any) =>{
-          return res;
-        })) as Observable<Record<string, number>>;
-    }
 
     getEntityStat(){
        const requests =[this.countBusinessProfiles(), this.countInvestorProfiles()];
@@ -159,10 +153,10 @@ export class UserStatisticsService extends BaseHttpService{
         }))
     }
 
-    getSubscriptions(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/subscriptions?page=${page}&limit=${limit}`).pipe(map((subscriptions: any[]) =>{
+    getSubscriptionstats(){
+        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map((subscriptions: any) =>{
           return subscriptions;
-        })) as Observable<Plan[]>
+        })) as Observable<{basic: number, pro: number, elite: number, plus: number, subscriptions: number}>
     }
 
 
@@ -200,12 +194,10 @@ export class UserStatisticsService extends BaseHttpService{
     }
 
     getSummary(){
-        const requests =[this.getSubscriptions(), this.countSubscriptions(), this.getBookings()]
+        const requests =[this.getSubscriptionstats(),]
         return forkJoin(requests).pipe(map(res =>{
             return {
-                recent_subscriptions: res[0] as Plan[],
-                subscription_counts: res[1] as Record<string, number>,
-                bookings: res[3] as Booking[]
+                subscription_counts: res[0] as Record<string, number>,
             }
         }))
     }
