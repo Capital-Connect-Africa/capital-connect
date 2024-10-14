@@ -1,0 +1,18 @@
+<app-admin-ui-container [title]="'Payments'">
+    <div class="tab-view">
+      <div class="tab-headers">
+        <div class="tab-header" [class.active]="activeTab === tabs.DETAILS" (click)="setActiveTab(tabs.DETAILS)">
+          Details
+        </div>
+        
+      </div>
+
+      <div class="tab-content" [@tabChange]="activeTab">
+        <div *ngIf="activeTab === tabs.DETAILS">
+          <app-subscription-details />
+        </div>
+        <div *ngIf="activeTab === tabs.EDIT">
+        </div>
+      </div>
+    </div>
+</app-admin-ui-container>
