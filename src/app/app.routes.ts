@@ -115,6 +115,12 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
+    path: 'subscriptions',
+    loadChildren: () => import('./features/admin/modules/subscriptions.routing.module').then(m => m.SubscriptionsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
     path: 'dashboard-investor',
     loadChildren: () => import('./features/admin/modules/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],

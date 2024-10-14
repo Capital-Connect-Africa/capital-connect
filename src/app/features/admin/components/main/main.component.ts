@@ -16,6 +16,7 @@ import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { PaymentsService } from '../../services/payments.service';
 import { BookingsService } from '../../services/booking.service';
+import { SubscriptionsService } from '../../services/subscriptions.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class MainComponent {
   private _paymentsService =inject(PaymentsService);
   private _bookingsService =inject(BookingsService);
   private _statsService =inject(UserStatisticsService);
+  private _subscriptionsService =inject(SubscriptionsService);
   subscriptions!:Record<string, number>;
   payments:Payment[] =[];
   bookings: Booking[] =[];
@@ -92,10 +94,12 @@ export class MainComponent {
     this.bookings =bookings
   }))
 
+  subscriptions$ =this._subscriptionsService.getSubscriptions().pipe(tap(res =>{
+    this.recentSubscriptions =res
+  }))
+
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
-    this.bookings =summary.bookings;
     this.subscriptions =summary.subscription_counts;
-    this.recentSubscriptions =summary.recent_subscriptions;
   }));
   
   users$ =this._userServices.getAllUsers().pipe(tap(res =>{
