@@ -45,14 +45,6 @@
   </div>
 
 
-
-  <div class="input__wrapper">
-    <label class="input__label">What products and services are you offering?<sup>*</sup></label>
-    <input formControlName="productsAndServices" class="input__field" placeholder="Enter your products and services"
-      [value]="userCompany.productsAndServices || ''" />
-  </div>
-
-
   <div class="input__wrapper">
     <label class="input__label">Which segments belong to the above sub sector?<sup>*</sup></label>
     <p-multiSelect 
@@ -66,5 +58,13 @@
       [placeholder]="'Select segments'">
     </p-multiSelect>
   </div>
-  
+
+
+  <div class="input__wrapper">
+    <label class="input__label">What products and services are you offering?<sup>*</sup></label>
+    <input formControlName="productsAndServices" class="input__field" placeholder="Enter your products and services"
+      [value]="userCompany.productsAndServices || ''" />
+  </div>
+
+
 </form>

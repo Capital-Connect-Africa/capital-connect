@@ -8,10 +8,10 @@
     .main__content{
         gap: 2rem;
         display: grid;
-        padding: 0 2rem 2rem 2rem;
+        padding: 0 0rem 2rem 2rem;
         height: max-content;
-        background-color: #fafafae5;
-        grid-template-columns: auto 300px;
+        // background-color: #fafafae5;
+        grid-template-columns: auto 350px;
         .col__right{
             gap: 2rem;
             height: 100%;
@@ -46,6 +46,19 @@
               padding-left: .7cm;
               padding-right: .8cm;
           }
+        }
+
+        .left__col{
+        background-color: #faf8f8e5;
+        padding: 0 30px 0 30px;
+
+        }
+
+        .right__col{
+          width: 100%;
+          gap: 1rem;
+          display: flex;
+          flex-direction: column;
         }
         .cover__background{
             height: 200px;
@@ -88,6 +101,40 @@
 
 
 
+:host ::ng-deep .p-paginator{
+  // padding-top: 2rem;
+  justify-content: flex-start!important;
+}
+
+:host ::ng-deep .p-datatable{
+  tr{
+    transition: all .2s linear;
+    cursor: default;
+    &:nth-child(even){
+      background-color: #f9f9f9;
+    }
+    &:hover{
+      background-color: #654f291a;
+    }
+    td, th{
+      padding: 1rem 0 1rem .5rem;
+    }
+    th{
+      background-color: #f4f4f5;
+     span{
+        padding: 0 .5rem;
+        justify-content: flex-start;
+        background-color: transparent!important;
+     }
+    }
+  }
+}
+
+
+.cta__link__txt{
+  font-weight: bold;
+  color: gray
+}
 
 
 
@@ -379,10 +426,22 @@
 
   .ques{
     color: $primary-color;
+    
   }
   
   .special__criteria__description {
     font-size: 16px;
+    color: black;
     margin-bottom: 20px;
   }
   
+
+  .question__container {
+    margin-bottom: 16px; /* Space between questions */
+}
+
+.question-separator {
+    border: none; /* Remove default border */
+    border-top: 1px solid #ccc; /* Add line above */
+    margin: 10px 0; /* Spacing above and below the line */
+}
