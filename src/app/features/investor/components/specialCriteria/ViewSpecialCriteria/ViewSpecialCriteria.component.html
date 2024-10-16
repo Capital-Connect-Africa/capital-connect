@@ -19,148 +19,186 @@
     <app-navbar [showBanner]="showBanner" onDashboard="true"></app-navbar>
   </div>
 
-  <div style="display: flex; align-items: center; justify-content: space-between;">
-    <p>
-      <button [routerLink]="['/investor/special-criteria']" class="btn btn-primary btn-sm" style="display: flex; align-items: center;">
-        <mat-icon 
-          style="color: rgb(255, 255, 255); cursor: pointer; margin-right: 5px;">
-          arrow_back
-        </mat-icon>
-      </button>
-    </p>
-  </div>
-  
-
-  <div class="flex justify-betweeen">
-
-    <ng-container *ngIf="getSpecialCriteria$ | async">
-
-    <div *ngIf="specialCriteria" style="display: flex; align-items: center; justify-content: space-between;">
-      <div>
-        <h3 class="special__criteria__title">Title : <strong>{{ specialCriteria.title }}</strong></h3>
-        <p class="special__criteria__description">Description : {{ specialCriteria.description }}</p>
-        <p> <strong>{{SpecialCriteriaCompanies.length ?  SpecialCriteriaCompanies.length.toString(): ""}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" style="cursor: pointer;" (click)="scComp()"><strong>   View Companies</strong></span>
-      <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
-        <strong >Edit Special Criteria</strong>
-        <mat-icon style="color: green(216, 9, 9); cursor: pointer;">edit</mat-icon>            
-      </p>
-      
-      </div>
-    </div>
-
-    </ng-container>
-  </div>
-
+<main>
+  <p>Special Criteria Details</p>
 
   <div class="main__content">
-    <section class="col__right ">
-      <div *ngIf="!updatePage">
+
+    <section class="left__col ">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <p>
+          <!-- <button [routerLink]="['/investor/special-criteria']" class="" style="display: flex; align-items: center;">
+            <mat-icon 
+            [routerLink]="['/investor/special-criteria']"
+              style="color: rgb(7, 32, 2); cursor: pointer; margin-right: 5px;">
+              arrow_back
+            </mat-icon> <strong>Back</strong>
+          </button> -->
+
+          <button (click)="goToSpecialCriteria()" class="" style="display: flex; align-items: center;">
+            <mat-icon style="color: rgb(7, 32, 2); cursor: pointer; margin-right: 5px;">
+              arrow_back
+            </mat-icon>
+            <strong>Back</strong>
+          </button>
+          
+        </p>
+
+        <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
+          <mat-icon style="color: green(216, 9, 9); cursor: pointer;">edit</mat-icon>            
+          <strong >Edit Criteria</strong>
+        </p>
+      </div>
+      
+    
+      <div class="flex justify-betweeen">
+    
+        <ng-container *ngIf="getSpecialCriteria$ | async">
+    
+        <div *ngIf="specialCriteria" style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <h3 class="special__criteria__title">{{ specialCriteria.title }} <span *ngIf="special__criteria__companies">Companies</span>  <span *ngIf="!special__criteria__companies " class="special__criteria__description"> : {{ specialCriteria.description }} </span></h3>
+            <!-- <p class="special__criteria__description">{{ specialCriteria.description }}</p> -->
+            <!-- <p> <strong>{{SpecialCriteriaCompanies.length ?  SpecialCriteriaCompanies.length.toString(): ""}}</strong> companies  have filled this special criteria.   <span class="text-blue-600" style="cursor: pointer;" (click)="scComp()"><strong>   View Companies</strong></span> -->
+          <!-- <p style="display: inline-flex; align-items: center; cursor: pointer;margin-top: 1cm; margin-bottom: 1cm;" (click)="onUpdate()">
+            <strong >Edit Special Criteria</strong>
+            <mat-icon style="color: green(216, 9, 9); cursor: pointer;">edit</mat-icon>            
+          </p>
+           -->
+          </div>
+
+        </div>
+    
+        </ng-container>
+      </div>
+
+
+      <div *ngIf="loading; else showQuestions">
+        <p-skeleton height="8rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="8rem" styleClass="mb-2"></p-skeleton>
+        <p-skeleton height="8rem" styleClass="mb-2"></p-skeleton>
+      </div>
+      
+      <!-- Original div displayed after loading -->
+      <ng-template #showQuestions>      
+      <div *ngIf="!special__criteria__companies">
+        <hr class="question-separator" /> <!-- Line separator -->
+
 
         <div class="flex justify-between">
-          <p class="ques"><strong>{{ specialCriteria.title }} questions</strong></p>
+          <p class="ques">Questions</p>
           <p style="display: inline-flex; align-items: center; cursor: pointer;" (click)="onAdd()">
-            <strong>Add Questions</strong><mat-icon style="color: green(216, 9, 9); cursor: pointer;">add</mat-icon>            
+           <mat-icon style="color: green(216, 9, 9); cursor: pointer;">add</mat-icon> <strong>Add Questions</strong>     
           </p>
           
         </div>
     
 
-
-        <div *ngFor="let question of specialCriteria.questions" class="question__card card">
+        <div *ngFor="let question of specialCriteria.questions; let i = index" class="question__container">
           <div class="flex justify-between">
             <div>
-              <p class="question__text"><strong class="ques">{{ question.text }}</strong></p>
+              <p class="question__text">
+                <strong class="ques">{{ i + 1 }}. {{ question.text }}</strong>
+              </p>
             </div>
             <div class="action__icons">
-              <button mat-icon-button>                
+              <button mat-icon-button>
                 <mat-icon style="color: rgb(216, 9, 9); cursor: pointer;"
                   (click)="onQuestionsRemove(question.id)">delete</mat-icon>
               </button>
             </div>
           </div>
-
+        
           <div *ngIf="question.type === 'TRUE_FALSE'">
             <label *ngFor="let answer of question.answers">
               <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />
               {{ answer.text }}
             </label>
           </div>
-
+        
           <div *ngIf="question.type === 'SHORT_ANSWER'">
             <input type="text" placeholder="OPEN" name="question_{{ question.id }}" class="input__field" />
           </div>
-
+        
           <div *ngIf="question.type === 'SINGLE_CHOICE'">
             <label *ngFor="let answer of question.answers">
-              <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}</label>
+              <input type="radio" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}
+            </label>
           </div>
-
+        
           <div *ngIf="question.type === 'MULTIPLE_CHOICE'">
             <label *ngFor="let answer of question.answers">
-              <input type="checkbox" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}</label>
+              <input type="checkbox" name="question_{{ question.id }}" [value]="answer.text" />{{ answer.text }}
+            </label>
           </div>
+        
         </div>
+        
       </div>
+      </ng-template>
 
-      <div *ngIf="updatePage && !addQues" class="form__section">
-        <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
-          <div class="form_content__container">
-            <div class="input__wrapper">
-              <label class="input__label">Title<sup>*</sup></label>
-              <input class="input__field" formControlName="title" type="text" placeholder="Enter Criteria Title" />
-            </div>
 
-            <div class="input__wrapper">
-              <label class="input__label">Description<sup>*</sup></label>
-              <input class="input__field" formControlName="description" type="text"
-                placeholder="Enter Criteria Description" />
-            </div>
 
-            <div class="cta__group">
-              <a></a>
-              <button class="btn btn-primary" [disabled]="!specialCriteriaForm.valid">Update</button>
-            </div>
-          </div>
-        </form>
-      </div>
 
-      <!-- Add and remove questions sections -->
-      <div *ngIf="addQues" class="form__section">
-        <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
-          <div class="form_content__container">
-            <div class="input__wrapper">
-              <label class="input__label">Add Questions To Special Criteria</label>
-              <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions" optionValue="id"
-                optionLabel="text" placeholder="Select questions"></p-multiSelect>
-            </div>
-            <div class="cta__group">
-              <a class="cta__link" (click)="addCustomQues()">Did not find the question? 
-                <button class="btn">Add Custom Questions Here</button>
-                </a>
-              <button class="btn btn-primary" [disabled]="!questionsForm.valid">Add Selected Questions</button>
-            </div>
-          </div>
-        </form>
-      </div>
+
+      <div *ngIf="special__criteria__companies" class="special__criteria__companies flex flex-col gap-4">
+      <!-- <div class="cta__group">
+        <button (click)="exportToCSV()" class="btn btn-sm">Export to Excel</button>
+        </div>
+       -->
+        <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>Country</th>
+              <th>Business Sector</th>
+              <th>Sub Sector</th>
+              <th>Growth Stage</th>
+              <th>Score</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+      
+          <ng-template pTemplate="body" let-business let-i="rowIndex">
+            
+            <tr>
+              <td><strong>{{ i + 1 }}</strong></td>
+              <td class="">{{ business.country ? business.country : "N/A" }}</td>
+              <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
+              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
+              <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
+              <td class="">{{business.percentageScore}} %</td>
+      
+              <td class="flex space-x-1 items-center gap-2">
+                <button class="btn btn-sm text-xs " (click)="showInterest(business.id)"
+                [disabled]="business.id % 2 === 0"
+                >Interested</button>
+                <button class="btn btn-danger btn-sm text-xs " 
+                [disabled]="business.id % 2 !== 0"
+                (click)="openModal(business.id)">Decline</button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        </div>
+      
 
 
     </section>
 
-    <section class="left__col flex justify-between ">
-      <div *ngIf="!updatePage">
-       <!-- <p style="display: inline-flex; align-items: center; cursor: pointer;">
-        Edit Criteria<mat-icon style="color: green(216, 9, 9); cursor: pointer;">edit</mat-icon>            
-      </p> -->
-
-        <!-- <button (click)="onUpdate()" class="btn btn-primary">Update Criteria</button> -->
-      </div>
-
-      <div *ngIf="updatePage">
-        <button (click)="cancel()" class="btn btn-secondary">Back</button>
-      </div>
+    <section class="right__col">
+    <app-card [detail]="{title: 'Special Criteria Companies', value: SpecialCriteriaCompanies.length ? SpecialCriteriaCompanies.length.toString() : '', featured: true}"
+    (click)="scComp()"
+    >
+      <p class="helper__text text__yellow">{{ SpecialCriteriaCompanies.length ? SpecialCriteriaCompanies.length.toString() : '' }} companies have filled this criteria</p>
+    </app-card>
+    
+    <app-advertisement-space [title]="'Advertise Here'"
+      [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
 
     </section>
   </div>
+</main>
 </div>
 
 <app-modal [(visible)]="add_custom_ques" title="Custom Question" helperText="Add A custom question">
@@ -260,45 +298,6 @@
 
 
 
-<app-modal [(visible)]="sc_comp"  [title]='SpecialCriteriaCompanies.length ? SpecialCriteriaCompanies.length.toString() : ""' helperText="Companies that have filled this criteria.">
-  <div class="cta__group">
-  <button (click)="exportToCSV()" class="btn btn-sm">Export to Excel</button>
-  </div>
-
-  <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
-    <ng-template pTemplate="header">
-      <tr>
-        <th>#</th>
-        <th>Country</th>
-        <th>Business Sector</th>
-        <th>Sub Sector</th>
-        <th>Growth Stage</th>
-        <th>Score</th>
-        <th>Actions</th>
-      </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-business let-i="rowIndex">
-      
-      <tr>
-        <td><strong>{{ i + 1 }}</strong></td>
-        <td class="">{{ business.country ? business.country : "N/A" }}</td>
-        <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
-        <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
-        <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
-        <td class="">{{business.percentageScore}} %</td>
-
-        <td class="flex space-x-2 justify-center p-2">
-          <button class="btn btn-sm text-xs px-3 py-1" (click)="showInterest(business.id)">Interested</button>
-          <button class="btn btn-danger btn-sm text-xs px-3 py-1" (click)="openModal(business.id)">Decline</button>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-</app-modal> 
-
-
 <app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
   <form [formGroup]="declineForm ">
   <div class="form_content__container">
@@ -318,5 +317,82 @@
       </div>
     </div>
   </div> 
+  </form>
+</app-modal>
+
+
+<!-- Add questions Modal -->
+<app-modal [(visible)]="addQues" title="Special Criteria" helperText="Add Questions To Special Criteria">
+  <div *ngIf="addQues" class="">
+    <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
+      <div class="">
+        <div class="input__wrapper">
+          <label class="input__label">Add Questions To Special Criteria</label>
+          <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions"
+           optionValue="id"
+           styleClass="w-full gap-4"
+            optionLabel="text" placeholder="Select questions"></p-multiSelect>
+        </div>
+        <div class="cta__group">  
+          <button class="btn btn-primary" [disabled]="!questionsForm.valid">Add Selected Questions</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <a class="cta__link cta__link__txt" (click)="addCustomQues()">Did not find the question?  </a>
+
+    <a class="cta__link cta__group" (click)="addCustomQues()"> 
+      <button class="btn">Add Custom Questions Here</button>
+      </a>
+</app-modal>
+
+
+
+<!-- Update Criteria -->
+<app-modal [(visible)]="updatePage" title="Edit Special Criteria" helperText="Update Special criteria Information">
+<div  class="form__section">
+  <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
+    <div class="form_content__container">
+      <div class="input__wrapper">
+        <label class="input__label">Title<sup>*</sup></label>
+        <input class="input__field" formControlName="title" type="text" placeholder="Enter Criteria Title" />
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label">Description<sup>*</sup></label>
+        <input class="input__field" formControlName="description" type="text"
+          placeholder="Enter Criteria Description" />
+      </div>
+
+      <div class="cta__group">
+        <a></a>
+        <button class="btn btn-primary" [disabled]="!specialCriteriaForm.valid">Update</button>
+      </div>
+    </div>
+  </form>
+</div>
+</app-modal>
+
+
+
+<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
+  <form [formGroup]="declineForm">
+    <div class="form_content__container">
+      <div class="input__wrapper">
+        <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+        <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason"
+          [options]="declineReasons" formControlName="reasons" optionLabel="reason"
+          placeholder="Select reasons"></p-multiSelect>
+
+        <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
+          <div class="cta__group">
+            <button pButton type="button" class="btn btn-primary mt-5" label="Submit" 
+            [disabled]="!declineForm.valid"
+            (click)="submit()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </form>
 </app-modal>
