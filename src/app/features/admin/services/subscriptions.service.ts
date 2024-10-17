@@ -8,9 +8,9 @@ import { Payment, Plan } from "../../../shared/interfaces/Billing";
 export class SubscriptionsService extends BaseHttpService{
 
     getSubscriptions(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/subscriptions?page=${page}&limit=${limit}`).pipe(map((subscriptions: any[]) =>{
-            return subscriptions;
-        })) as Observable<Plan[]>
+        return this.read(`${BASE_URL}/subscriptions?page=${page}&limit=${limit}`).pipe(map((subscriptions: any) =>{
+            return {plans: subscriptions.data, total: subscriptions.total};
+        })) as Observable<{plans: Plan[], total: number}>
     }
 
     getSubscription(planId:number){
