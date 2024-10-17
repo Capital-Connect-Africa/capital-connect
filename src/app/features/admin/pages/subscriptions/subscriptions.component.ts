@@ -66,10 +66,10 @@ export class SubscriptionsComponent {
     this.getSubscriptions(this.currentPage , this.rows);
   }
 
-  removeSubscription(planId:number){
-    this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
+  updateSubscriptionStatus(planId:number, isActive:boolean){
+    this.delete$ =this._confirmationService.confirm(`Do you want to ${isActive? 'deactivate': 'activate'} plan?`).pipe(switchMap(confirmation =>{
       if(confirmation){
-        return this._subscriptionsService.deleteSubscription(planId).pipe(tap(_ =>{
+        return this._subscriptionsService.updateSubscriptionStatus(planId, !isActive).pipe(tap(_ =>{
           this.getSubscriptions(this.currentPage, this.rows);
         }))
       }

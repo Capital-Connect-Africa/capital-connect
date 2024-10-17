@@ -28,7 +28,7 @@
           <td>
             <div class="flex gap-1 items-center cta__btns">
               <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openSubscription(plan.id)"><i class="pi pi-info-circle"></i></button>
-              <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeSubscription(plan.id)"><i class="pi pi-trash"></i></button>
+              <button [title] ="plan.isActive? 'Deactivate': 'Activate'" class="block text-center text-blue-500 hover:teal-blue-800 transition-all"  (click)="updateSubscriptionStatus(plan.id, plan.isActive)"><i class="pi " [ngClass]="{'pi-eye': plan.isActive, 'pi-eye-slash': !plan.isActive}"></i></button>
             </div>
           </td>
         </tr>
