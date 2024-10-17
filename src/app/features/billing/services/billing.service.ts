@@ -61,8 +61,8 @@ export class BillingService {
     }
 
     getActivePlan(){
-        const userId =this._authStateService.currentUserId()
-        return this.__http.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
+        const userId =this._authStateService.currentUserId();
+        return this.__http.read(`${BASE_URL}/subscriptions/user/${userId}`).pipe(map((res: any) =>{
             return res;
         }),
         catchError(err =>{
