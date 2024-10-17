@@ -36,7 +36,6 @@ export class BookingsService extends BaseHttpService{
 
     getBooking(bookingId: number){
         return this.readById(`${BASE_URL}/bookings`, bookingId).pipe(map(res =>{
-            debugger
             return res
         })) as Observable<Booking>
     }

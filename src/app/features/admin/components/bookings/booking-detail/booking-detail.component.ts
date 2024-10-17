@@ -20,7 +20,6 @@ export class BookingDetailComponent {
 
   bookingId =Number(this._activatedRoute.snapshot.params['id']);
   booking$ =this._bookingService.getBooking(this.bookingId).pipe(tap(booking =>{
-    debugger
     this.booking =booking
   }))
 }
