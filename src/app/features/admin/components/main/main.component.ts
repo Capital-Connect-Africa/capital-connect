@@ -87,15 +87,15 @@ export class MainComponent {
   ]
   
   payments$ =this._paymentsService.getPayments().pipe(tap(payments =>{
-    this.payments =payments
+    this.payments =payments.data
   }))
 
   bookings$ =this._bookingsService.getBookings().pipe(tap(bookings =>{
-    this.bookings =bookings
+    this.bookings =bookings.data
   }))
 
   subscriptions$ =this._subscriptionsService.getSubscriptions().pipe(tap(res =>{
-    this.recentSubscriptions =res
+    this.recentSubscriptions =res.plans
   }))
 
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
