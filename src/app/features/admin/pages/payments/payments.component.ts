@@ -45,12 +45,10 @@ export class PaymentsComponent {
   payments$ =new Observable<any>()
 
   getPayments(page: number =1, limit:number =10){
-    this.payments$ =this._paymentsService.getPayments(page, limit).pipe(switchMap(payments =>{
-      return this._statsService.getPaymentStats().pipe(tap(res =>{
-        this.rowsCount =Object.values(res).reduce((acc:number, curr:number) => acc + curr, 0);
-        this.payments =payments;
-        this.updateDisplayedData();
-      }))
+    this.payments$ =this._paymentsService.getPayments(page, limit).pipe(tap(payments =>{
+      this.rowsCount =payments.total
+      this.payments =payments.data;
+      this.updateDisplayedData();
     }))
   }
 
