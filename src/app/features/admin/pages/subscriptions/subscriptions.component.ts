@@ -46,12 +46,10 @@ export class SubscriptionsComponent {
   plans$ =new Observable<any>()
 
   getSubscriptions(page: number =1, limit:number =10){
-    this.plans$ =this._subscriptionsService.getSubscriptions(page, limit).pipe(switchMap(plans =>{
-      return this._statsService.getSubscriptionstats().pipe(tap(res =>{
-        this.rowsCount =Object.values(res).reduce((acc:number, curr:number) => acc + curr, 0);
-        this.plans =plans;
-        this.updateDisplayedData();
-      }))
+    this.plans$ =this._subscriptionsService.getSubscriptions(page, limit).pipe(tap(plans =>{
+      this.plans =plans.plans;
+      this.rowsCount =plans.total
+      this.updateDisplayedData();
     }))
   }
 

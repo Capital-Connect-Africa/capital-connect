@@ -4,7 +4,7 @@
   <div class="flex flex-col gap-8">
     <div class="flex items-center justify-between">
       <input class="px-4 py-3 border search" pInputText placeholder="search ..." (input)="applyFilter($event)"/>
-      <span>{{showingRows}} of {{rowsCount}}</span>
+      <span class="text-sm font-light">{{showingRows}} of {{rowsCount}} entries</span>
     </div>
     <p-table #dt [value]="plans" [paginator]="false" [globalFilterFields]="['amount', 'status', 'description', 'createdAt']"> 
         <ng-template pTemplate="header">
