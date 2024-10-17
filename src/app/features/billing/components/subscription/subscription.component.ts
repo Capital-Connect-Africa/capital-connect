@@ -18,6 +18,7 @@ import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 })
 
 export class SubscriptionComponent {
+  paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
   redirectURL!: SafeResourceUrl;
@@ -54,7 +55,11 @@ export class SubscriptionComponent {
     }))
   }
 
-  subscribe(tierId: number){
+  subscribe(tierId: number, retry:boolean){
+    if(retry){
+      this.retryPayment()
+      return 
+    }
     const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
     if(selectedTier?.price ==0) return;
     this.plan =selectedTier?.name as string;
@@ -71,5 +76,11 @@ export class SubscriptionComponent {
 
   get upgradablePlans(){
     return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
+  }
+
+  retryPayment(){
+    this.plan ='Retry';
+    this.signalService.userHasInitiatedPayment.set(true);
+    this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}`);
   }
 }
