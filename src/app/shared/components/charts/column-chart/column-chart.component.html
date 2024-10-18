@@ -4,7 +4,9 @@
       [data]="chartData"
       [options]="options"
       [width]="600"
-      [height]="400">
+      [height]="400"
+      (select)="handleSelect($event)"
+      >
     </google-chart>
   </div>
   

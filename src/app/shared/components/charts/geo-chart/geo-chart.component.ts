@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
 import { ChartEvent } from '../../../interfaces/chart.event.interface';
 
@@ -21,6 +21,7 @@ export class GeoChartComponent{
   ngOnInit(): void {
     this.transformData();
   }
+
   options = {
     colors: ['#f6c7b6', '#f3b49f', '#ec8f6e','#e0440e', '#e6693e'],
     fontName: 'Arial',
@@ -38,10 +39,16 @@ export class GeoChartComponent{
 
   handleRegionClick(event: any){
     const selection =event.selection.at(0) as {column: number, row: number}
-    const selected =this.geoChartData[selection?.row || -1]
+    const selected =this.geoChartData[selection?.row?? -1];
     if(selected){
       const [country, value] =selected
       this.onSelect.emit({data: {label: `${country}`, value: Number(value)}})
     }
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.transformData();
+    }
+  }
+
 }
