@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, SimpleChanges } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
 
 @Component({
@@ -19,6 +19,28 @@ export class HorizontalBarchartComponent {
   options: Record<string, any> = {};
 
   ngOnInit(): void {
+    this.initializeChart()
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.transformData();
+    }
+    if (changes['colors']) {
+      this.options['colors'] = this.colors;
+    }
+  }
+  
+  transformData(): void {
+    if(this.data){
+      this.barChartData =[...Object.entries(this.data)].map((record: [string, number]) =>{
+        return record
+      })
+      this.barChartData.sort((a, b) => (b[1] as number) - (a[1] as number));
+    }
+  }
+
+  initializeChart(){
     this.options = {
       is3D: true,
       legend: 'none',
@@ -30,14 +52,8 @@ export class HorizontalBarchartComponent {
 
     this.transformData();
   }
-  
-  
-  transformData(): void {
-    if(this.data){
-      this.barChartData =[...Object.entries(this.data)].map((record: [string, number]) =>{
-        return record
-      })
-      this.barChartData.sort((a, b) => (b[1] as number) - (a[1] as number));
-    }
+
+  redrawChart(): void {
+    this.transformData();
   }
 }
