@@ -19,6 +19,7 @@ import { BookingsService } from '../../services/booking.service';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 
 
+
 @Component({
   selector: 'app-admin-main',
   standalone: true,
@@ -40,6 +41,7 @@ export class MainComponent {
   private _userServices =inject(UsersHttpService);
   private _paymentsService =inject(PaymentsService);
   private _bookingsService =inject(BookingsService);
+
   private _statsService =inject(UserStatisticsService);
   private _subscriptionsService =inject(SubscriptionsService);
   subscriptions!:Record<string, number>;
@@ -99,6 +101,8 @@ export class MainComponent {
   }))
 
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
+    this.payments =payments
+  }))
     this.subscriptions =summary.subscription_counts;
   }));
   
