@@ -6,17 +6,21 @@ import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
 import { SharedModule } from "../../../shared";
 import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.service";
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
+import { IconLink, Link } from '../../../shared/interfaces/link.interface';
+import { AsBooleanPipe } from '../../pipes/as.boolean.pipe';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [ProBadgeComponent, SharedModule, CommonModule, RouterLink, RouterLinkActive],
+  imports: [ProBadgeComponent, SharedModule, CommonModule, RouterLink, RouterLinkActive, AsBooleanPipe, PanelMenuModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
 })
 
 export class SidenavComponent {
-  @Input() links!: { label: string, href: string, exact: boolean, icon?: string }[];
+  @Input() links: Link[] | IconLink[] =[];
+  @Input() isTree:boolean =false
   private toggleService = inject(NavbarToggleService);
   private _authStateService =inject(AuthStateService)
   logOut$ = new Observable<boolean>();

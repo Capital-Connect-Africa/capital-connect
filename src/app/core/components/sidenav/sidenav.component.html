@@ -6,15 +6,24 @@
     <button class="floating__action__button" *ngIf="isHidden" (click)="hide_navbar()"><mat-icon
         *ngIf="showNav">chevron_left</mat-icon><mat-icon *ngIf="!showNav">chevron_right</mat-icon></button>
     <img src="assets/img/logo.png" alt="logo" class="logo" />
-    <ul class="links">
+    <ul class="links" *ngIf="!isTree">
       @for (link of links; track $index){
-      <li><a [routerLink]=link.href [routerLinkActiveOptions]="{exact: link.exact}" routerLinkActive='active'><mat-icon
+      <li><a [routerLink]=link.href [routerLinkActiveOptions]="{exact: link?.exact | as_boolean}" routerLinkActive='active'><mat-icon
             *ngIf="link.icon">{{link.icon}}</mat-icon> <span>{{link.label}}</span></a></li>
       }
       <li><button (click)="logOut()"><mat-icon>logout</mat-icon> <span>Logout</span></button></li>
     </ul>
-    <!-- <div *appRole="'user'">
-      <app-pro-badge *ngIf="showNav " />
-    </div> -->
+    <div>
+      <p-panelMenu [model]="links" styleClass="w-full md:w-20rem">
+        <ng-template pTemplate="item" let-link>
+            <a class="flex items-center px-3 py-4 cursor-pointer gap-4">
+                <i [class]="link.icon + ' text-primary'"></i>
+                <span class="">
+                    {{ link.label }}
+                </span>
+            </a>
+        </ng-template>
+    </p-panelMenu>
+    </div>
   </nav>
 </ng-container>
