@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
+import { ChartEvent } from '../../../interfaces/chart.event.interface';
 
 @Component({
   selector: 'app-column-chart',
@@ -15,26 +16,53 @@ export class ColumnChartComponent {
   @Input() xlabel!:string;
   @Input() data!:Record<string, number>;
   @Input() colors: string[] =['#1b9e77'];
+  @Output() onSelect = new EventEmitter<ChartEvent>()
   chartData: (string | number)[][] = [];
   chartType: ChartType = ChartType.ColumnChart;
   options: any = {};
 
   ngOnInit(): void {
-    this.options = {
-      bars: 'vertical',
-      colors: this.colors,
-      hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none' },
-      vAxis: { title: this.ylabel, gridlines: { count: 0 }, baselineColor: 'none'  },
-      legend: 'none',
-      is3D: true
-    };
-    this.transformData();
+    this.initializeChart()
   }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data']) {
+      this.transformData();
+    }
+    if (changes['colors']) {
+      this.options['colors'] = this.colors;
+    }
+  }
+  
   transformData(): void {
     if(this.data){
       this.chartData = [...Object.entries(this.data)].map((record: [string, number]) =>{
         return record
       })
     }
+  }
+
+  handleSelect(event:any){
+    const selection =event.selection.at(0) as {column: number, row: number};
+    const selected =this.chartData[selection?.row?? -1]
+    if(selected){
+      const [label, value] =selected
+      this.onSelect.emit({data: {label: `${label}`, value: Number(value)}})
+    }
+  }
+
+  redrawChart(): void {
+    this.transformData();
+  }
+
+  initializeChart(){
+    this.options = {
+      bars: 'vertical',
+      colors: this.colors,
+      hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none' },
+      vAxis: { title: this.ylabel, gridlines: { count: 0 }, baselineColor: 'none'  },
+      legend: 'none',
+    };
+    this.transformData();
   }
 }

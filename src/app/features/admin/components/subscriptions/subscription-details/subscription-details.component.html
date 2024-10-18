@@ -14,21 +14,22 @@
     <div class="card__item__detail">
       <div>
         <label>Amount:</label>
-        <!-- <p>{{plan?.currency}} {{ plan?.amount | numberabbreviation}}</p> -->
+        <p>{{plan?.payment?.currency}} {{ plan?.payment?.amount| numberabbreviation}}</p>
       </div>
       
       <div>
         <label>Status:</label>
-        <!-- <p>{{ plan?.status }}</p> -->
+        <p>{{ plan?.payment?.status | titlecase}}</p>
       </div>
       <div>
         <label>Date:</label>
-        <!-- <p>{{ plan?.createdAt | time_ago}}</p> -->
+        <p>{{ plan?.payment?.createdAt | time_ago}}</p>
       </div>
     </div>
     <div class="card__item__detail single__col">
         <div>
             <label>Description:</label>
+            <p>{{ plan?.payment?.description}}</p>
         </div>
     </div>
 </div>

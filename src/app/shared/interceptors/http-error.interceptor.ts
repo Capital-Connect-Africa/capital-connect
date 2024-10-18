@@ -68,7 +68,7 @@ function isValidInvestorProfilePath(path: string): boolean {
 }
 
 function isGettingActiveSubscription(path: string): boolean{
-  const regex = /^.+\/subscriptions\/\d+$/;
+  const regex = /^.+\/subscriptions\/user\/\d+$/;
   return regex.test(path);
 }
 

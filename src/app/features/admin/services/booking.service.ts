@@ -8,8 +8,8 @@ import { Booking, Payment } from "../../../shared/interfaces/Billing";
 export class BookingsService extends BaseHttpService{
 
     getBookings(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/bookings?page=${page}&limit=${limit}`).pipe(map((bookings: any[]) =>{
-          return bookings.map((booking: any) =>{
+        return this.read(`${BASE_URL}/bookings?page=${page}&limit=${limit}`).pipe(map((bookings: any) =>{
+          return {total: bookings.total, data: bookings.data.map((booking: any) =>{
             const payment =booking.payments.reduce((curr: Payment, acc:Payment) =>{
                 return {
                     id: curr.id || acc.id,
@@ -24,8 +24,8 @@ export class BookingsService extends BaseHttpService{
                 ...booking,
                 payment: payment
             }
-          })
-        })) as Observable<Booking[]>
+          })}
+        })) as Observable<{data: Booking[], total: number}>
     }
 
     deleteBooking(bookingId: number){
@@ -36,7 +36,6 @@ export class BookingsService extends BaseHttpService{
 
     getBooking(bookingId: number){
         return this.readById(`${BASE_URL}/bookings`, bookingId).pipe(map(res =>{
-            debugger
             return res
         })) as Observable<Booking>
     }

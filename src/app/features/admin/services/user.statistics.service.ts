@@ -165,7 +165,6 @@ export class UserStatisticsService extends BaseHttpService{
             return res
         })) as Observable<{initiated: number, completed: number, failed: number,}>
     }
-
     getBookingStats(){
         return this.read(`${BASE_URL}/statistics/bookings`).pipe(map((res: any) =>{
             return res.bookings;
@@ -198,6 +197,17 @@ export class UserStatisticsService extends BaseHttpService{
         return forkJoin(requests).pipe(map(res =>{
             return {
                 subscription_counts: res[0] as Record<string, number>,
+            }
+        }))
+    }
+
+    filterStats(country:string, key:string){
+        return this.create(`${BASE_URL}/statistics/stats-filter`, {[key]:[country]}).pipe(map((res:any) =>{
+            return {
+                sectors: res.Sectors as Record<string, number>,
+                stages: res.Stage as Record<string, number>,
+                countries: res.Countries as Record<string, number>,
+                funding: res.useOfFunds as Record<string, number>,
             }
         }))
     }

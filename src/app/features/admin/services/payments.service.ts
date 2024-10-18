@@ -8,9 +8,9 @@ import { Payment } from "../../../shared/interfaces/Billing";
 export class PaymentsService extends BaseHttpService{
 
     getPayments(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any[]) =>{
-          return payments
-        })) as Observable<Payment[]>
+        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any) =>{
+          return {data: payments.data, total: payments.total}
+        })) as Observable<{data: Payment[], total: number}>
     }
 
     getPayment(paymentId: number){

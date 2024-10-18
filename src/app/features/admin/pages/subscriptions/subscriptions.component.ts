@@ -46,12 +46,10 @@ export class SubscriptionsComponent {
   plans$ =new Observable<any>()
 
   getSubscriptions(page: number =1, limit:number =10){
-    this.plans$ =this._subscriptionsService.getSubscriptions(page, limit).pipe(switchMap(plans =>{
-      return this._statsService.getSubscriptionstats().pipe(tap(res =>{
-        this.rowsCount =Object.values(res).reduce((acc:number, curr:number) => acc + curr, 0);
-        this.plans =plans;
-        this.updateDisplayedData();
-      }))
+    this.plans$ =this._subscriptionsService.getSubscriptions(page, limit).pipe(tap(plans =>{
+      this.plans =plans.plans;
+      this.rowsCount =plans.total
+      this.updateDisplayedData();
     }))
   }
 
@@ -66,10 +64,10 @@ export class SubscriptionsComponent {
     this.getSubscriptions(this.currentPage , this.rows);
   }
 
-  removeSubscription(planId:number){
-    this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
+  updateSubscriptionStatus(planId:number, isActive:boolean){
+    this.delete$ =this._confirmationService.confirm(`Do you want to ${isActive? 'deactivate': 'activate'} plan?`).pipe(switchMap(confirmation =>{
       if(confirmation){
-        return this._subscriptionsService.deleteSubscription(planId).pipe(tap(_ =>{
+        return this._subscriptionsService.updateSubscriptionStatus(planId, !isActive).pipe(tap(_ =>{
           this.getSubscriptions(this.currentPage, this.rows);
         }))
       }

@@ -18,6 +18,7 @@ import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 })
 
 export class SubscriptionComponent {
+  paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
   redirectURL!: SafeResourceUrl;
@@ -50,15 +51,21 @@ export class SubscriptionComponent {
   
   getRecentPayments(){
     this.recentPayment$ =this._billingService.getRecentPayments().pipe(map(res =>{
-      this.paymentAttempt =res.find((plan: PaymentPlan) =>(plan.status.toLowerCase()) !==PAYMENT_STATUS.COMPLETED)
+      this.paymentAttempt =res.find((plan: PaymentPlan) =>(plan.status.toLowerCase()) !==PAYMENT_STATUS.COMPLETED);
     }))
   }
 
-  subscribe(tierId: number){
+  subscribe(tierId: number, retry:boolean){
     const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
     if(selectedTier?.price ==0) return;
     this.plan =selectedTier?.name as string;
-    this.subscribe$ =this._billingService.subscribe(tierId, this.plan.toLowerCase() !=this.signalService.activePlan().toLowerCase()).pipe(tap(res =>{
+    if(retry){
+      this.retryPayment();
+      return 
+    }
+    const currentPlan =this.signalService.activePlan().toLowerCase();
+    const upgrade =(this.plan.toLowerCase() !==currentPlan) && this.activePlan?.price >0;
+    this.subscribe$ =this._billingService.subscribe(tierId, upgrade).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
@@ -71,5 +78,10 @@ export class SubscriptionComponent {
 
   get upgradablePlans(){
     return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
+  }
+
+  retryPayment(){
+    this.signalService.userHasInitiatedPayment.set(true);
+    this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}`);
   }
 }

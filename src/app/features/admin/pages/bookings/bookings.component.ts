@@ -44,12 +44,10 @@ export class BookingsComponent {
   bookings$ =new Observable<any>();
 
   getBookings(page: number =1, limit:number =10){
-    this.bookings$ =this._bookingService.getBookings(page, limit).pipe(switchMap(bookings =>{
-      return this._statsService.getBookingStats().pipe(tap(res =>{
-        this.rowsCount =res;
-        this.bookings =bookings;
-        this.updateDisplayedData();
-      }))
+    this.bookings$ =this._bookingService.getBookings(page, limit).pipe(tap(bookings =>{
+      this.bookings =bookings.data;
+      this.updateDisplayedData();
+      this.rowsCount =bookings.total;
     }))
   }
 

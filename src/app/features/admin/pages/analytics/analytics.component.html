@@ -1,36 +1,39 @@
 <ng-container *ngIf="analytics$ | async" />
 <ng-container *ngIf="entities$ | async" />
-
+<ng-container *ngIf="filterStats$ | async" />
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
   <div class="main">
     <main class="stats">
       <ng-container *ngIf="stats$ | async as stats">
       <div>
-        <h3>Business</h3>
+        <div class="flex items-center justify-between">
+          <h3>Business <span *ngIf="heading"> - {{heading}}</span></h3>
+          <button title="close" *ngIf="heading" (click)="close()" class="text-sm text-blue-400 outline-none bg-white w-[32px] rounded-full h-[32px] shadow flex items-center justify-center hover:bg-red-200 hover:text-red-400 transition-all"><i class="pi pi-times"></i></button>
+        </div>
         <div class="grid grid-cols-2 grid__wrapper">
           <div class="grid__container">
             <h3>Businesses per sector</h3>
             <div class="">
-              <app-horizontal-barchart [data]="sectorStats.companies" ylabel="Sectors" xlabel="Businesses" *ngIf="sectorStats"/>
+              <app-horizontal-barchart [data]="sectorStats.companies" ylabel="Sectors" xlabel="Businesses" *ngIf="sectorStats" (onSelect)="filterStats($event, 'businessSectors')"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per country</h3>
             <div class="">
-              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats"/>
+              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats" (onSelect)="filterStats($event, 'countries')"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Stage</h3>
             <div class="">
-              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats"/>
+              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats" (onSelect)="filterStats($event, 'growthStages')"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Use of funds</h3>
             <div class="">
-              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats"/>
+              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats" (onSelect)="filterStats($event, 'useOfFunds')"/>
             </div>
           </div>
           <div class="grid__container">

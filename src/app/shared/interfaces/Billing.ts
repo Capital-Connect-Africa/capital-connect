@@ -24,6 +24,7 @@ export interface SubscriptionResponse {
 export interface ActivePlan{
     subscriptionTier: SubscriptionTier
     subscriptionDate: Date
+    payment: Payment,
     isActive: boolean
     expiryDate: Date
     id: number
@@ -32,7 +33,7 @@ export interface ActivePlan{
 
 export interface Plan extends ActivePlan{
     isActive: boolean
-    user: User
+    user: User,
 }
 
 export interface Payment{
