@@ -112,6 +112,10 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => {
         this._feedBackService.success('Company marked as interesting successfully.');
+
+        this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+          this.SpecialCriteriaCompanies = res.companies
+        }))
       })
     );
   }
@@ -372,10 +376,12 @@ export class ViewSpecialCriteriaComponent implements OnInit {
         .cancelInterestWithCompany(businessId, selectedReasons).pipe(
           tap(() => {
             this._feedBackService.success('Business Declined Successfully.');
-            // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
 
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
+            this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+              this.SpecialCriteriaCompanies = res.companies
+            }))
 
             this.decline = false;
           })
