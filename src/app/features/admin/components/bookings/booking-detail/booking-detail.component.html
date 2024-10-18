@@ -1,0 +1,36 @@
+<ng-container *ngIf="booking$ | async"/>
+
+<div class="card__item__details" details>
+    <div class="card__item__detail">
+      <div>
+        <label>User name:</label>
+        <p>{{ 'Name'}}</p>
+      </div>
+      <div>
+        <label>User email:</label>
+        <p>{{ 'email' }}</p>
+      </div>
+    </div>
+    <div class="card__item__detail">
+      <div>
+        <label>Amount paid:</label>
+        <p>{{0.00}}</p>
+      </div>
+      
+      <div>
+        <label>Status:</label>
+        <p>{{ 'completed'}}</p>
+      </div>
+    </div>
+    <div class="card__item__detail">
+        <div>
+            <label>Event Id:</label>
+            <p>{{ booking?.calendlyEventId}}</p>
+        </div>
+
+        <div>
+            <label>Date:</label>
+            <p>{{ booking?.createdAt | time_ago}}</p>
+          </div>
+    </div>
+</div>

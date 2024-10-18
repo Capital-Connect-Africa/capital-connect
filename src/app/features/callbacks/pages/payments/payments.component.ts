@@ -25,7 +25,6 @@ export class PaymentsComponent {
   private _params =this._activatedRoute.snapshot.queryParams;
 
   ngOnInit(): void {
-    debugger
     const redirectUrl:string =this._params['RedirectUrl']
     const orderTrackingId:string =this._params['OrderTrackingId'];
     const orderMerchantReference:string =this._params['OrderMerchantReference'];
