@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
-import { catchError, EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, Subscription, switchMap, tap } from 'rxjs';
 import { SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
+import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
 
 @Component({
   selector: 'billing-subscription',
@@ -18,6 +19,16 @@ import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 })
 
 export class SubscriptionComponent {
+  //Services
+  private _ff = inject(FeatureFlagsService)
+
+  //booleans
+  billing_enabled: boolean = false
+
+  //vars
+  private flagSubscription: Subscription | undefined;
+
+
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
   redirectURL!: SafeResourceUrl;
@@ -65,9 +76,25 @@ export class SubscriptionComponent {
   
   ngOnInit(): void {
     this.getRecentPayments()
+    this._ff.initializeClient('671094e62eeceb0829ce8eb2')
+
+    this.billing_enabled = this._ff.getFeatureFlag('sample_feature',false)
+
+    console.log("Billing enabled is", this.billing_enabled)
+
+    this.flagSubscription = this._ff.getFeatureFlagObservable().subscribe((flagValue) => {
+      this.billing_enabled = flagValue;
+    });
   }
 
   get upgradablePlans(){
     return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe to avoid memory leaks
+    if (this.flagSubscription) {
+      this.flagSubscription.unsubscribe();
+    }
   }
 }
