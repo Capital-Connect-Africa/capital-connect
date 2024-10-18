@@ -5,6 +5,7 @@ import { NavbarComponent } from '../../../../core';
 import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
+import { IconLink } from '../../../../shared/interfaces/link.interface';
 
 @Component({
   selector: 'app-admin-ui-container',
@@ -15,7 +16,7 @@ import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-das
 })
 export class AdminUiContainerComponent implements OnInit {
   isInvestor: boolean = false;
-  links: Array<{ label: string; href: string; exact: boolean; icon: string }> = [];
+  links: IconLink[] = [];
 
   constructor() {
     let investor = sessionStorage.getItem('profileId');
@@ -35,19 +36,33 @@ export class AdminUiContainerComponent implements OnInit {
 
     // Initialize links based on the isInvestor check
     this.links = !this.isInvestor
-      ? [
-          { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
-          { label: 'Analytics', href: '/analytics', exact: false, icon: 'show_chart' },
-          { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },
-          { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' },
-          { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' },
-          { label: 'Subscriptions', href: '/subscriptions', exact: false, icon: 'hotel_class' },
-          { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
-          { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
-          { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
-          { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' },
-          { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' }
-        ]
+      ? 
+      [
+        { label: 'Dashboard', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+        { label: 'Analytics', icon: 'pi pi-chart-line', href: '/analytics', exact: false },
+        { label: 'Payments', icon: 'pi pi-credit-card', children: [
+          { label: 'Billing', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+          { label: 'Transactions', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+          { label: 'Subscriptions', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+        ]},
+        { label: 'Users', icon: 'pi pi-users', children: [
+          { label: 'Companies', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+          { label: 'Investors', icon: 'pi pi-th-large', href: '/dashboard', exact: false },
+        ]},
+      ]
+      // [
+      //     { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
+      //     { label: 'Analytics', href: '/analytics', exact: false, icon: 'show_chart' },
+      //     { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },
+      //     { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' },
+      //     { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' },
+      //     { label: 'Subscriptions', href: '/subscriptions', exact: false, icon: 'hotel_class' },
+      //     { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
+      //     { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
+      //     { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
+      //     { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' },
+      //     { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' }
+      //   ]
       : INVESTOR_DASHBOARD_LINKS;
   }
 }

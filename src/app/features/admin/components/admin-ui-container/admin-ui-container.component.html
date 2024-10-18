@@ -1,5 +1,5 @@
 <div class="main__content" [ngClass]="{bg_gray}">
-  <app-sidenav [links]="links"/>  
+  <app-sidenav [links]="links" [isTree]="true"/>  
   <section>
     <div class="navbar">
       <app-navbar [showBanner]="false" [title]="signalService.pageTitle()" [isAdmin]="true" onDashboard="true" />
