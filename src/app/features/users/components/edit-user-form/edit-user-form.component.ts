@@ -26,13 +26,24 @@ export class EditUserFormComponent {
   private _fs = inject(FeedbackService)
 
 
+
   updateUser$ = new Observable();
   assignsub$ = new Observable()
+  assignSubscription$ = new Observable()
 
   editUserForm!: FormGroup;
   roles = Object.values(Role);
 
   @Input({ required: true }) user!: User;
+
+  // active_subscription = this.user.activeSubscription.subscriptionTier.name ? this.user.activeSubscription.subscriptionTier.name : "basic"
+
+  active_subscription = this.user?.activeSubscription?.subscriptionTier?.name || "basic";
+
+  ngOnInit() {
+    this.active_subscription = this.getActiveSubscription(this.user)
+  }
+
 
   subscription_names = ['basic', 'plus', 'pro', 'elite']
 
@@ -41,7 +52,7 @@ export class EditUserFormComponent {
 
   subscriptionTiers$ = this._bs.getSubscriptionTiers().pipe(tap(
     res => {
-      this.subscriptionTiers = res      
+      this.subscriptionTiers = res
     }
   ))
 
@@ -54,15 +65,20 @@ export class EditUserFormComponent {
 
       const activeSubscription = user.subscriptions.filter((subscription: { isActive: any; }) => subscription.isActive);
 
-      console.log("The active subscription is",activeSubscription);
+      console.log("The active subscription is", activeSubscription);
 
       this.editUserForm = this._fb.group({
         firstName: [user.firstName, Validators.required],
         lastName: [user.lastName, Validators.required],
         roles: [user.roles, Validators.required],
-        subscription:[activeSubscription],
+        active_subscription: [this.active_subscription, Validators.required],
       });
     }
+  }
+
+  getActiveSubscription(user: User): string {
+    const activeSubscription = user.subscriptions.find((subscription: { isActive: boolean }) => subscription.isActive);
+    return activeSubscription?.subscriptionTier?.name || 'basic';
   }
 
   isTouched(formControlName: string) {
@@ -82,22 +98,33 @@ export class EditUserFormComponent {
   }
 
   submitForm() {
-    this.assignsub$ = this._bs.assignSubscriptionToUser(this.user.id,this.editUserForm.value.subscription).pipe(tap(res=>{
-      this._fs.success("Subscription Assigned to User Successfully")
-    }))
 
 
 
     if (this.editUserForm.valid) {
-      const updatedUser = { 
-       firstName : this.editUserForm.value.firstName,
-       lastName: this.editUserForm.value.lastName,
-       roles: this.editUserForm.value.roles
-       };
+      const updatedUser = {
+        firstName: this.editUserForm.value.firstName,
+        lastName: this.editUserForm.value.lastName,
+        roles: this.editUserForm.value.roles
+      };
+
+      this.assignsub$ = this._bs.assignSubscriptionToUser(this.user.id, this.editUserForm.value.active_subscription.toString()).pipe(tap(res => {
+        this._fs.success("Subscription Assigned to User Successfully")
+
+      }))
+
+
+
       this.updateUser$ =
         this._userService.updateUserByAdmin(updatedUser, this.user.id).pipe(tap(() => {
           this._router.navigateByUrl('/users');
         }))
+    } else {
+      this.assignSubscription$ = this._userService.assignSubscriptionToUser(this.user.id, this.editUserForm.value.active_subscription.toString()).pipe(tap(res => {
+        this._fs.success("Subscription Assigned to User Successfully")
+        this._router.navigateByUrl('/users');
+
+      }))
     }
   }
 
