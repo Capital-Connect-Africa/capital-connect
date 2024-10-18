@@ -17,7 +17,7 @@ import { HorizontalBarchartComponent } from "../../../../shared/components/chart
 import { ColumnChartComponent } from "../../../../shared/components/charts/column-chart/column-chart.component";
 import { Plan } from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
-import { GeoSelectEvent } from '../../../../shared/interfaces/geo.event.data.interface';
+import { ChartEvent } from '../../../../shared/interfaces/chart.event.interface';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -92,10 +92,10 @@ export class AnalyticsComponent {
     }))
   }
 
-  handleGeoSelect(event: GeoSelectEvent){
-    const { data: {country}} =event;
-    this.heading =country;
-    this.countryStats$ =this._statsService.getCountryStats(country).pipe(tap(res =>{
+  handleGeoSelect(event: ChartEvent){
+    const { data: {label}} =event;
+    this.heading =label;
+    this.countryStats$ =this._statsService.getCountryStats(label).pipe(tap(res =>{
       this.stagesStats =res.stages;
       this.sectorStats ={...this.sectorStats, companies: res.sectors}
       this.fundingStats ={...this.fundingStats, companies: res.funding}

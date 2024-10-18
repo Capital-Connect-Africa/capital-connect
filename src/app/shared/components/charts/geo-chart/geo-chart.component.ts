@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
-import { GeoSelectEvent } from '../../../interfaces/geo.event.data.interface';
+import { ChartEvent } from '../../../interfaces/chart.event.interface';
 
 @Component({
   selector: 'app-geo-chart',
@@ -13,7 +13,7 @@ import { GeoSelectEvent } from '../../../interfaces/geo.event.data.interface';
 export class GeoChartComponent{
   @Input() data: Record<string, number> ={};
   @Input() chartTitle = '';
-  @Output() onSelect = new EventEmitter<GeoSelectEvent>()
+  @Output() onSelect = new EventEmitter<ChartEvent>()
   chartType:ChartType =ChartType.GeoChart
   geoChartData: (string | number)[][] = [];
 
@@ -38,10 +38,10 @@ export class GeoChartComponent{
 
   handleRegionClick(event: any){
     const selection =event.selection.at(0) as {column: number, row: number}
-    const selected =this.geoChartData[selection.row || -1]
+    const selected =this.geoChartData[selection?.row || -1]
     if(selected){
       const [country, value] =selected
-      this.onSelect.emit({data: {country: `${country}`, value: Number(value)}})
+      this.onSelect.emit({data: {label: `${country}`, value: Number(value)}})
     }
   }
 }
