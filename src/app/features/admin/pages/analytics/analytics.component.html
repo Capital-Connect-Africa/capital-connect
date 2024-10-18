@@ -1,5 +1,6 @@
 <ng-container *ngIf="analytics$ | async" />
 <ng-container *ngIf="entities$ | async" />
+<ng-container *ngIf="countryStats$ | async" />
 
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
@@ -7,7 +8,7 @@
     <main class="stats">
       <ng-container *ngIf="stats$ | async as stats">
       <div>
-        <h3>Business</h3>
+        <h3>Business <span *ngIf="heading"> - {{heading}}</span></h3>
         <div class="grid grid-cols-2 grid__wrapper">
           <div class="grid__container">
             <h3>Businesses per sector</h3>
@@ -18,7 +19,7 @@
           <div class="grid__container">
             <h3>Businesses per country</h3>
             <div class="">
-              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats"/>
+              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats" (onSelect)="handleGeoSelect($event)"/>
             </div>
           </div>
           <div class="grid__container">

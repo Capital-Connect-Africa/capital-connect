@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { ButtonModule } from "primeng/button";
 import { SharedModule } from '../../../../shared';
 import { Router } from '@angular/router';
@@ -12,13 +12,13 @@ import { BubbleChartComponent } from "../../../../shared/components/charts/bubbl
 import { BarChartComponent } from "../../../../shared/components/charts/bar-chart/bar-chart.component";
 import { GeoChartComponent } from "../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
-import { UsersHttpService } from '../../../users/services/users-http.service';
 import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
 import { HorizontalBarchartComponent } from "../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
 import { ColumnChartComponent } from "../../../../shared/components/charts/column-chart/column-chart.component";
 import { Plan } from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
-
+import { GeoSelectEvent } from '../../../../shared/interfaces/geo.event.data.interface';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-admin-main',
@@ -42,6 +42,7 @@ import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 
 export class AnalyticsComponent {
   private _router = inject(Router);
+  private _cdr =inject(ChangeDetectorRef);
   private _statsService =inject(UserStatisticsService);
   sectorStats!:SharedStats;
   fundingStats!:SharedStats;
@@ -50,7 +51,9 @@ export class AnalyticsComponent {
   fundRaise!:Record<string, number>;
   stagesStats!:Record<string, number>;
   subscriptions!:Record<string, number>;
+  @ViewChild(HorizontalBarchartComponent) barChart!: HorizontalBarchartComponent;
 
+  heading:string ='';
   
   businessCountriesStats!:Record<string, number>;
   matches!:Stats;
@@ -64,7 +67,7 @@ export class AnalyticsComponent {
   countryStats$ =new Observable();
   countriesStats:{country: string, value: number}[] =[];
   entities:any;
-  
+
 
 
   analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
@@ -89,4 +92,14 @@ export class AnalyticsComponent {
     }))
   }
 
+  handleGeoSelect(event: GeoSelectEvent){
+    const { data: {country}} =event;
+    this.heading =country;
+    this.countryStats$ =this._statsService.getCountryStats(country).pipe(tap(res =>{
+      this.stagesStats =res.stages;
+      this.sectorStats ={...this.sectorStats, companies: res.sectors}
+      this.fundingStats ={...this.fundingStats, companies: res.funding}
+      this.barChart.redrawChart()
+    }))
+  }
 }
