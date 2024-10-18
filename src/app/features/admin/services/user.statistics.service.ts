@@ -171,11 +171,6 @@ export class UserStatisticsService extends BaseHttpService{
         })) as Observable<number>
     }
 
-    getPaymentStats(){
-        return this.read(`${BASE_URL}/statistics/payments`).pipe(map((res: any) =>{
-            return res
-        })) as Observable<{initiated: number, completed: number, failed: number,}>
-    }
     getBookings(page: number =1, limit:number =5){
         return this.read(`${BASE_URL}/bookings?page=${page}&count=${limit}`).pipe(map((bookings: any[]) =>{
           return bookings.map((booking: any) =>{
