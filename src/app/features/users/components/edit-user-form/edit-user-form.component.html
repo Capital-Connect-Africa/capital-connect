@@ -1,7 +1,7 @@
 <ng-container *ngIf="updateUser$ | async"></ng-container>
 <ng-container *ngIf="subscriptionTiers$ | async"></ng-container>
 <ng-container *ngIf="assignsub$ | async"></ng-container>
-
+<ng-container *ngIf="assignSubscription$ | async"></ng-container>
 
 
 
@@ -39,13 +39,13 @@
 
     <div class="input__wrapper">
       <label class="input__label">Subscription</label>
-      <select formControlName="subscription" class="input__field">
-        <option *ngFor="let subscriptionTier of subscriptionTiers" [value]="subscriptionTier.id">{{ subscriptionTier.name }}</option>
+      <select formControlName="active_subscription" class="input__field">
+        <option *ngFor="let subscriptionTier of subscriptionTiers" [value]="subscriptionTier.id">{{subscriptionTier.name}}</option>
       </select>
     </div>
 
+    <!-- <p>The active subscription is {{this.active_subscription}}</p> -->
 
-    
 
 
     <div class="btn-container">

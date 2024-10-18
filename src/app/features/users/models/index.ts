@@ -12,6 +12,7 @@ export interface User {
   emailVerificationToken: string;
   emailVerificationExpires: string;
   subscriptions: Subscription[];
+  activeSubscription: ActiveSubscription;
 }
 
 export enum Role {
@@ -36,4 +37,13 @@ export interface Subscription {
   isActive: boolean;
   updatedAt: string;
   subscriptionTier: SubscriptionTier;
+}
+
+export interface ActiveSubscription { 
+      id: number,
+      subscriptionDate:string,
+      expiryDate: string,
+      isActive: boolean,
+      updatedAt: string,
+      subscriptionTier: SubscriptionTier  
 }

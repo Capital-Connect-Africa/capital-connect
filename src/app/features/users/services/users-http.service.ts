@@ -87,4 +87,8 @@ export class UsersHttpService extends BaseHttpService {
     return this.delete(`${BASE_URL}/users`, id);
   }
 
+  assignSubscriptionToUser(userid:number, subsscriptionId:number){
+    return this.create(`${BASE_URL}/subscriptions/${userid}/${subsscriptionId}`,{}) as Observable<any>;
+  }
+
 }
