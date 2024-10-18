@@ -101,10 +101,9 @@ export class MainComponent {
   }))
 
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
-    this.payments =payments
-  }))
     this.subscriptions =summary.subscription_counts;
-  }));
+  }))
+
   
   users$ =this._userServices.getAllUsers().pipe(tap(res =>{
     this.users =res.map(user =>{
