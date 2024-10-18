@@ -1,4 +1,4 @@
-import { Component, inject, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ButtonModule } from "primeng/button";
 import { SharedModule } from '../../../../shared';
 import { Router } from '@angular/router';
@@ -51,7 +51,6 @@ export class AnalyticsComponent {
   fundRaise!:Record<string, number>;
   stagesStats!:Record<string, number>;
   subscriptions!:Record<string, number>;
-  @ViewChild(HorizontalBarchartComponent) barChart!: HorizontalBarchartComponent;
 
   heading:string ='';
   
@@ -64,42 +63,53 @@ export class AnalyticsComponent {
 
   recentSubscriptions: Plan[] =[]
   stats$ =new Observable<Stats>();
-  countryStats$ =new Observable();
+  filterStats$ =new Observable();
+  sectorStats$ =new Observable();
+  analytics$ =new Observable();
   countriesStats:{country: string, value: number}[] =[];
   entities:any;
 
+  getAnalytics(){
+    this.heading ='';
+    this.analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
+      this.stagesStats =analytics.stages;
+      this.sectorStats =analytics.sectors;
+      this.fundingStats =analytics.funding;
+      this.fundRaise =analytics.fund_raise;
+      this.maxFunding =analytics.max_funding;
+      this.minFunding =analytics.min_funding;
+      this.businessCountriesStats =analytics.countries
+      return analytics
+    }));
+
+  }
 
 
-  analytics$ =this._statsService.getAnalytics().pipe(tap(analytics =>{
-    this.stagesStats =analytics.stages;
-    this.sectorStats =analytics.sectors;
-    this.fundingStats =analytics.funding;
-    this.fundRaise =analytics.fund_raise;
-    this.maxFunding =analytics.max_funding;
-    this.minFunding =analytics.min_funding;
-    this.businessCountriesStats =analytics.countries
-    return analytics
-  }));
   
   entities$ =this._statsService.getEntityStat().pipe(tap(res =>{
     this.entities =res;
   }))
 
   ngOnInit(): void {
+    this.getAnalytics()
     this.stats$ =this._statsService.fetchUserStats().pipe(tap(res =>{
       this.matches =res;
       return res
     }))
   }
 
-  handleGeoSelect(event: ChartEvent){
+  filterStats(event: ChartEvent, q:string){
     const { data: {label}} =event;
     this.heading =label;
-    this.countryStats$ =this._statsService.getCountryStats(label).pipe(tap(res =>{
+    this.filterStats$ =this._statsService.filterStats(label, q).pipe(tap(res =>{
       this.stagesStats =res.stages;
+      this.businessCountriesStats =res.countries;
       this.sectorStats ={...this.sectorStats, companies: res.sectors}
       this.fundingStats ={...this.fundingStats, companies: res.funding}
-      this.barChart.redrawChart()
     }))
+  }
+  
+  close(){
+    this.getAnalytics()
   }
 }
