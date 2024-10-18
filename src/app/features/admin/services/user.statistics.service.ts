@@ -201,11 +201,12 @@ export class UserStatisticsService extends BaseHttpService{
         }))
     }
 
-    getCountryStats(country:string){
-        return this.create(`${BASE_URL}/statistics/stats-filter`, {countries:[country]}).pipe(map((res:any) =>{
+    filterStats(country:string, key:string){
+        return this.create(`${BASE_URL}/statistics/stats-filter`, {[key]:[country]}).pipe(map((res:any) =>{
             return {
                 sectors: res.Sectors as Record<string, number>,
                 stages: res.Stage as Record<string, number>,
+                countries: res.Countries as Record<string, number>,
                 funding: res.useOfFunds as Record<string, number>,
             }
         }))
