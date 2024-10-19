@@ -22,6 +22,10 @@ import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import { ConnectionRequestBody, InterestingBusinesses } from '../../../../../shared/interfaces';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
+import { CardComponent } from "../../../../../shared/components/card/card.component";
+import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
+import { Router } from '@angular/router';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @Component({
@@ -29,9 +33,8 @@ import { BusinessAndInvestorMatchingService } from '../../../../../shared/busine
   selector: 'app-view-special-criteria',
   templateUrl: './ViewSpecialCriteria.component.html',
   styleUrls: ['./ViewSpecialCriteria.component.scss'],
-  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule,AngularMaterialModule,
-    RouterModule,TableModule
-  ]
+  imports: [NavbarComponent, CommonModule, ReactiveFormsModule, MultiSelectModule, ModalComponent, DropdownModule, AngularMaterialModule,
+    RouterModule, TableModule, CardComponent, AdvertisementSpaceComponent,SkeletonModule]
 })
 export class ViewSpecialCriteriaComponent implements OnInit {
   @Input() showBanner = false;
@@ -42,6 +45,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   private _answer = inject(QuestionsService)
   private _confirmationService = inject(ConfirmationService);
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
+  private _router = inject(Router)
 
 
   //boolean
@@ -55,6 +59,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   addQues:boolean = false
   sc_comp: boolean = false
   decline: boolean = false;
+  special__criteria__companies: boolean = false
+  loading: boolean = true;
 
   // Variables
   specialCriteriaId!: number;
@@ -106,6 +112,10 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => {
         this._feedBackService.success('Company marked as interesting successfully.');
+
+        this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+          this.SpecialCriteriaCompanies = res.companies
+        }))
       })
     );
   }
@@ -115,7 +125,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   constructor(private route: ActivatedRoute,private fb: FormBuilder) {
     this.declineForm = this.fb.group({
       countriesOfInvestmentFocus: [[]],
-      reasons:[[]]
+      reasons:[[], Validators.required]
     });
 
     this.specialCriteriaId$ = this.route.params.pipe(
@@ -137,6 +147,11 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       text: ['', Validators.required],
       weight: ['', Validators.required],
     })
+
+
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000);
 
     this.customQuestionsForm = this._formBuilder.group({
       text: ['', Validators.required],
@@ -179,14 +194,22 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   }
 
   onAdd(){
-    this.updatePage = true
     this.addQuestions = true
     this.back_btn = true
     this.addQues = true
   }
 
   scComp(){
-    this.sc_comp= true
+    // this.sc_comp= true
+    this.special__criteria__companies = true
+  }
+
+  goToSpecialCriteria() {
+    if(this.special__criteria__companies){
+      this.special__criteria__companies = false
+    }else{
+      this._router.navigate(['/investor/special-criteria']);
+    }
   }
 
   onAddQuestions() {
@@ -196,7 +219,8 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   addCustomQues() {
     this.add_custom_ques = true
-  }
+    // this.addQues = false
+   }
 
   onCustomQuestionsSubmit() {
     if (this.customQuestionsForm) {
@@ -320,9 +344,12 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   openModal(businessId: number){
     this.business__id = businessId
-    // this.decline = true
+    this.decline = true
+
+    if (this.declineForm.valid) {
+      const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
     this.cancelInterestWithCompany$ = this._businessMatchingService
-    .cancelInterestWithCompany(businessId, []).pipe(
+    .cancelInterestWithCompany(businessId,selectedReasons).pipe(
       tap(() => {
         this._feedBackService.success('Business Declined Successfully.');
         // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
@@ -330,9 +357,9 @@ export class ViewSpecialCriteriaComponent implements OnInit {
         this.declineForm.reset();
         this.declineForm.updateValueAndValidity();
 
-        this.decline = false;
+        // this.decline = false;
       })
-    );
+    );}
 
   }
 
@@ -348,11 +375,13 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       this.cancelInterestWithCompany$ = this._businessMatchingService
         .cancelInterestWithCompany(businessId, selectedReasons).pipe(
           tap(() => {
-            this._feedBackService.success('Interest cancelled successfully.');
-            // this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+            this._feedBackService.success('Business Declined Successfully.');
 
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
+            this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
+              this.SpecialCriteriaCompanies = res.companies
+            }))
 
             this.decline = false;
           })
