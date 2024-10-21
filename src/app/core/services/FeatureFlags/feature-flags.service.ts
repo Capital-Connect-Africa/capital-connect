@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as LDClient from 'launchdarkly-js-client-sdk';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { getEnvironmentName } from '../../utils/check_environment';
+import { LAUNCH_DARKLY_PROD_CLIENT_ID,LAUNCH_DARKLY_TEST_CLIENT_ID } from '../../http/base/constants';
 
 
 @Injectable({
@@ -9,28 +11,34 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class FeatureFlagsService {
   private ldClient: LDClient.LDClient | undefined;
   private featureFlagSubject = new BehaviorSubject<boolean>(false);
+  private environment!: string
+  private clientSideId!:string
 
-  constructor() { }
+  constructor() { 
+    this.environment = getEnvironmentName()
+  }
 
 
-  initializeClient(userKey: string) {
-    const clientSideId = '671094e62eeceb0829ce8eb2'; // replace with your actual client-side ID from LaunchDarkly
+  initializeClient() {
+
+    if(this.environment === "test"){
+      this.clientSideId = LAUNCH_DARKLY_TEST_CLIENT_ID;
+    }else{
+      this.clientSideId  = LAUNCH_DARKLY_PROD_CLIENT_ID;
+    }
 
     const user = {
-      key: userKey,  // Unique identifier for your user
+      key: "cc",  
       anonymous: false,
-      name: "User Name",  // Add more attributes based on your use case
     };
 
-    this.ldClient = LDClient.initialize(clientSideId, user);
-
+    this.ldClient = LDClient.initialize(this.clientSideId, user);
+   
+    //TO DO - check all flags when ready
     this.ldClient.on('ready', () => {
-      console.log('LaunchDarkly client initialized');
-    });
+      this.checkFlag('sample-feature'); 
+      this.checkFlag('subscription-businesses'); 
 
-    this.ldClient.on('ready', () => {
-      console.log('LaunchDarkly client initialized');
-      this.checkFlag('sample-feature'); // Initial flag check
     });
   }
 

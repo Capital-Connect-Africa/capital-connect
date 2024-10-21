@@ -76,11 +76,9 @@ export class SubscriptionComponent {
   
   ngOnInit(): void {
     this.getRecentPayments()
-    this._ff.initializeClient('671094e62eeceb0829ce8eb2')
+    this._ff.initializeClient()
 
-    this.billing_enabled = this._ff.getFeatureFlag('sample_feature',false)
-
-    console.log("Billing enabled is", this.billing_enabled)
+    this.billing_enabled = this._ff.getFeatureFlag('subscription-businesses',false)
 
     this.flagSubscription = this._ff.getFeatureFlagObservable().subscribe((flagValue) => {
       this.billing_enabled = flagValue;
