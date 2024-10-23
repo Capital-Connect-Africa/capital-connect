@@ -16,7 +16,7 @@ import { AuthStateService } from '../../../features/auth/services/auth-state.ser
 })
 
 export class SidenavComponent {
-  @Input() links!: { label: string, href: string, exact: boolean, icon?: string }[];
+  @Input() links!: { label: string, href: string, exact: boolean, icon?: string ,display?:boolean}[];
   private toggleService = inject(NavbarToggleService);
   private _authStateService =inject(AuthStateService)
   logOut$ = new Observable<boolean>();
