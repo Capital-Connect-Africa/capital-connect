@@ -19,7 +19,7 @@ export class FeatureFlagsService {
   }
 
 
-  initializeClient() {
+  initializeClient(key:string) {
 
     if(this.environment === "test"){
       this.clientSideId = LAUNCH_DARKLY_TEST_CLIENT_ID;
@@ -36,9 +36,8 @@ export class FeatureFlagsService {
    
     //TO DO - check all flags when ready
     this.ldClient.on('ready', () => {
-      this.checkFlag('sample-feature'); 
-      this.checkFlag('subscription-businesses'); 
-
+      this.checkFlag(key); 
+      // this.checkFlag('subscription-businesses'); 
     });
   }
 
@@ -53,6 +52,27 @@ export class FeatureFlagsService {
       });
     }
   }
+
+
+  // getAllFeatureFlags() {
+  //   if (this.ldClient) {
+  //     try {
+  //       const allFlags = this.ldClient.allFlags();  // Retrieve all feature flags
+  //      
+  //       // Check if any flags are missing
+  //       if (!allFlags || Object.keys(allFlags).length === 0) {
+  //         console.warn('No feature flags were returned. Ensure the flags are available for client-side SDKs.');
+  //       }
+  
+  //       // this.featureFlagSubject.next(allFlags);  // Push the flags into the BehaviorSubject
+  //     } catch (error) {
+  //       console.error('Error fetching all feature flags:', error);
+  //     }
+  //   } else {
+  //     console.error('LaunchDarkly client not initialized');
+  //   }
+  // }
+  
 
   getFeatureFlagObservable(): Observable<boolean> {
     return this.featureFlagSubject.asObservable();

@@ -69,7 +69,6 @@ export class SubSectorComponent {
   }
 
   goBack(): void {
-    console.log("The sector id is", this.sectorId)
     this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
   }
 

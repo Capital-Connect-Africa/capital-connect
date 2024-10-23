@@ -66,8 +66,6 @@ export class SuccessScreenComponent implements OnInit {
 
   // Submit the form
   onSubmit(): void {
-    console.log("The investor profile is", this.investorProfile)
-
     this.formGroup.value.investorProfileId = this.investorProfile.id
     
     const countryCode = this.formGroup.value.countryCode;

@@ -22,7 +22,6 @@ function hasProfileId(): boolean {
 }
 
 function checkIsInvestor() {
-  console.log("Check investor guard called .....")
   const location = inject(Location);
   const feedBackService = inject(FeedbackService);
 
