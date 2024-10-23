@@ -12,6 +12,7 @@ export class PieChartComponent implements OnInit {
   @Input() data!: Record<string, number>;
   @Input() colors:string[] =[];
   @Input() pieChartLegend = true;
+  @Input() is3d:boolean =false;
   @Input() legendPosition: 'top' | 'left' | 'bottom' | 'right' = 'right';
 
   chartType: ChartType = ChartType.PieChart;
@@ -32,7 +33,7 @@ export class PieChartComponent implements OnInit {
         position: this.legendPosition,
       },
       chartArea: { width: '100%',},
-      is3D: true, 
+      is3D: this.is3d, 
     };
 
     this.transformData();

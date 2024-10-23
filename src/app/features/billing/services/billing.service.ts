@@ -1,7 +1,7 @@
 import { catchError, EMPTY, map, Observable, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import {BASE_URL, BaseHttpService } from "../../../core";
-import { ActivePlan, Payment, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { ActivePlan, Payment, PaymentPlan, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
 import { AuthStateService } from "../../auth/services/auth-state.service";
 import { SignalsService } from "../../../core/services/signals/signals.service";
 
@@ -34,9 +34,9 @@ export class BillingService {
         ))
     }
 
-    // assignSubscriptionToUser(userId:number,subscriptionId:number){
-    //     return this.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`)
-    // }
+    assignSubscriptionToUser(userId:number,subscriptionId:number){
+        return this.__http.create(`${BASE_URL}/subscriptions/${userId}/${subscriptionId}`,{})
+    }
 
 
     //Update a subscription tier
@@ -61,8 +61,8 @@ export class BillingService {
     }
 
     getActivePlan(){
-        const userId =this._authStateService.currentUserId()
-        return this.__http.read(`${BASE_URL}/subscriptions/${userId}`).pipe(map((res: any) =>{
+        const userId =this._authStateService.currentUserId();
+        return this.__http.read(`${BASE_URL}/subscriptions/user/${userId}`).pipe(map((res: any) =>{
             return res;
         }),
         catchError(err =>{
@@ -79,7 +79,7 @@ export class BillingService {
     
     getRecentPayments(page:number =1, limit:number =5){
         return this.__http.read(`${BASE_URL}/payments/user/${this._userId}/recent?page=${page}&limit=${limit}`).pipe(map(res => {
-            return res as Payment[]
+            return res as PaymentPlan[]
         }))
     }
 }

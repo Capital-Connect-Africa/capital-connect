@@ -10,6 +10,7 @@ import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviati
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { PaymentsService } from '../../services/payments.service';
 import { ConfirmationService } from '../../../../core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-payments',
@@ -27,9 +28,10 @@ export class PaymentsComponent {
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
   filteredPayments: Payment[] = [];
-  private _confirmationService =inject(ConfirmationService)
+  private _router =inject(Router);
   private _paymentsService =inject(PaymentsService);
   private _statsService =inject(UserStatisticsService);
+  private _confirmationService =inject(ConfirmationService);
   payments: Payment[] =[];
   cols =[
     { field: 'id', header: 'PID' },
@@ -43,12 +45,10 @@ export class PaymentsComponent {
   payments$ =new Observable<any>()
 
   getPayments(page: number =1, limit:number =10){
-    this.payments$ =this._paymentsService.getPayments(page, limit).pipe(switchMap(payments =>{
-      return this._statsService.getPaymentStats().pipe(tap(res =>{
-        this.rowsCount =Object.values(res).reduce((acc:number, curr:number) => acc + curr, 0);
-        this.payments =payments;
-        this.updateDisplayedData();
-      }))
+    this.payments$ =this._paymentsService.getPayments(page, limit).pipe(tap(payments =>{
+      this.rowsCount =payments.total
+      this.payments =payments.data;
+      this.updateDisplayedData();
     }))
   }
 
@@ -64,9 +64,9 @@ export class PaymentsComponent {
   }
 
   removePayment(paymentId:number){
-    this.delete$ =this._confirmationService.confirm(`Remove payment ${paymentId}?`).pipe(switchMap(confirmation =>{
+    this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
       if(confirmation){
-        return this._paymentsService.deletePayment(paymentId).pipe(tap(res =>{
+        return this._paymentsService.deletePayment(paymentId).pipe(tap(_ =>{
           this.getPayments(this.currentPage, this.rows);
         }))
       }
@@ -85,5 +85,9 @@ export class PaymentsComponent {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.table.filterGlobal(filterValue.toLowerCase(), 'contains');
     this.updateDisplayedData();
+  }
+
+  openPayment(paymentId:number){
+    this._router.navigateByUrl(`/payments/${paymentId}`)
   }
 }

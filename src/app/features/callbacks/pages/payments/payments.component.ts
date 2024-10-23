@@ -1,4 +1,4 @@
-import { Observable, tap } from 'rxjs';
+import { catchError, EMPTY, Observable, tap } from 'rxjs';
 import { Router } from "@angular/router";
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -25,7 +25,6 @@ export class PaymentsComponent {
   private _params =this._activatedRoute.snapshot.queryParams;
 
   ngOnInit(): void {
-    debugger
     const redirectUrl:string =this._params['RedirectUrl']
     const orderTrackingId:string =this._params['OrderTrackingId'];
     const orderMerchantReference:string =this._params['OrderMerchantReference'];
@@ -33,6 +32,9 @@ export class PaymentsComponent {
       this._feedbackService.success(res.message, 'Payments');
       if(redirectUrl) this._router.navigateByUrl(redirectUrl);
       else this._location.back();
+    }), catchError(err =>{
+      this._location.back();
+      return EMPTY
     }))
   }
 

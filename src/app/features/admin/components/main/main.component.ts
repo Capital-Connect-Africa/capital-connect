@@ -15,6 +15,9 @@ import { Booking, Payment, Plan } from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { PaymentsService } from '../../services/payments.service';
+import { BookingsService } from '../../services/booking.service';
+import { SubscriptionsService } from '../../services/subscriptions.service';
+
 
 
 @Component({
@@ -37,7 +40,10 @@ export class MainComponent {
   private _router = inject(Router);
   private _userServices =inject(UsersHttpService);
   private _paymentsService =inject(PaymentsService);
+  private _bookingsService =inject(BookingsService);
+
   private _statsService =inject(UserStatisticsService);
+  private _subscriptionsService =inject(SubscriptionsService);
   subscriptions!:Record<string, number>;
   payments:Payment[] =[];
   bookings: Booking[] =[];
@@ -52,11 +58,13 @@ export class MainComponent {
   recentSubscriptions: Plan[] =[]
   stats$ =new Observable<Stats>();
   users: User[] = [];
+
   cols =[
     { field: 'firstName', header: 'Name' },
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
   ];
+
   billing_cols =[
     { field: 'subscriber', header: 'Subscriber' },
     { field: 'tier', header: 'Package' },
@@ -81,14 +89,21 @@ export class MainComponent {
   ]
   
   payments$ =this._paymentsService.getPayments().pipe(tap(payments =>{
-    this.payments =payments
+    this.payments =payments.data
   }))
-  
+
+  bookings$ =this._bookingsService.getBookings().pipe(tap(bookings =>{
+    this.bookings =bookings.data
+  }))
+
+  subscriptions$ =this._subscriptionsService.getSubscriptions().pipe(tap(res =>{
+    this.recentSubscriptions =res.plans
+  }))
+
   summary$ =this._statsService.getSummary().pipe(tap(summary =>{
-    this.bookings =summary.bookings;
     this.subscriptions =summary.subscription_counts;
-    this.recentSubscriptions =summary.recent_subscriptions;
-  }));
+  }))
+
   
   users$ =this._userServices.getAllUsers().pipe(tap(res =>{
     this.users =res.map(user =>{

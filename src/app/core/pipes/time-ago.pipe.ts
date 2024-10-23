@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 
 export class TimeAgoPipe implements PipeTransform {
-  transform(value: Date | string | number): string {
+  transform(value: Date | string | number | any): string {
     return formatDistanceToNow(new Date(value),{addSuffix: true});
   }
 }

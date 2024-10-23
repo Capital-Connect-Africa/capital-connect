@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
-import { catchError, EMPTY, Observable, Subscription, switchMap, tap } from 'rxjs';
-import { SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { catchError, EMPTY, map, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { PAYMENT_STATUS, PaymentPlan, SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
@@ -29,11 +29,13 @@ export class SubscriptionComponent {
   private flagSubscription: Subscription | undefined;
 
 
+  paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
   redirectURL!: SafeResourceUrl;
   subscription!:SubscriptionResponse;
   signalService =inject(SignalsService);
+  paymentAttempt: PaymentPlan | undefined
   private _sanitizer =inject(DomSanitizer);
   private _billingService =inject(BillingService);
   recentPayment$ =new Observable();
@@ -59,15 +61,22 @@ export class SubscriptionComponent {
   }))
   
   getRecentPayments(){
-    this.recentPayment$ =this._billingService.getRecentPayments();
+    this.recentPayment$ =this._billingService.getRecentPayments().pipe(map(res =>{
+      this.paymentAttempt =res.find((plan: PaymentPlan) =>(plan.status.toLowerCase()) !==PAYMENT_STATUS.COMPLETED);
+    }))
   }
 
-  subscribe(tierId: number){
+  subscribe(tierId: number, retry:boolean){
     const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
     if(selectedTier?.price ==0) return;
     this.plan =selectedTier?.name as string;
-    // const activePlan =
-    this.subscribe$ =this._billingService.subscribe(tierId, this.plan.toLowerCase() !=this.signalService.activePlan().toLowerCase()).pipe(tap(res =>{
+    if(retry){
+      this.retryPayment();
+      return 
+    }
+    const currentPlan =this.signalService.activePlan().toLowerCase();
+    const upgrade =(this.plan.toLowerCase() !==currentPlan) && this.activePlan?.price >0;
+    this.subscribe$ =this._billingService.subscribe(tierId, upgrade).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
@@ -94,5 +103,9 @@ export class SubscriptionComponent {
     if (this.flagSubscription) {
       this.flagSubscription.unsubscribe();
     }
+  }
+  retryPayment(){
+    this.signalService.userHasInitiatedPayment.set(true);
+    this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}`);
   }
 }

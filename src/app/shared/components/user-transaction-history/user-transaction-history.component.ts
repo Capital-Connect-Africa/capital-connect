@@ -19,7 +19,6 @@ export class UserTransactionHistoryComponent {
   payments$ =new Observable<any>();
   payments: Payment[] =[];
   cols =[
-    { field: 'id', header: 'PID' },
     { field: 'amount', header: 'Amount' },
     { field: 'status', header: 'Status' },
     { field: 'createdAt', header: 'Date' },

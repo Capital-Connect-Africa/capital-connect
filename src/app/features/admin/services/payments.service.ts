@@ -1,18 +1,22 @@
+import { map, Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { BASE_URL, BaseHttpService } from "../../../core";
-import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
-import { SharedStats, Stats } from "../interfaces/stats.interface";
-import { formatBand } from "../../../core/utils/band.formating";
-import { Booking, Payment, Plan } from "../../../shared/interfaces/Billing";
+import { Payment } from "../../../shared/interfaces/Billing";
 
 @Injectable({providedIn: 'root'})
 
 export class PaymentsService extends BaseHttpService{
 
     getPayments(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any[]) =>{
-          return payments
-        })) as Observable<Payment[]>
+        return this.read(`${BASE_URL}/payments?page=${page}&limit=${limit}`).pipe(map((payments: any) =>{
+          return {data: payments.data, total: payments.total}
+        })) as Observable<{data: Payment[], total: number}>
+    }
+
+    getPayment(paymentId: number){
+        return this.readById(`${BASE_URL}/payments`, paymentId).pipe(map((payment: any) =>{
+            return payment
+        })) as Observable<Payment>
     }
 
     deletePayment(paymentId: number){
