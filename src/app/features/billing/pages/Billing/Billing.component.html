@@ -68,8 +68,8 @@
               <strong class="text-[#7953dc] bold">{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
             </span>
             <div class="flex items-center flex-end">
-              <button class="hover:bg-[#7a53dc2c] p-1 rounded-full" (click)="editTier(tier)"><i class="pi pi-pencil text-[#7953dc] text-[12px] font-bold"></i></button>
-              <button class="hover:bg-[#7a53dc2c] p-1 rounded-full" (click)="deleteTier(tier.id)"><i class="pi pi-trash text-[#7953dc] text-[12px] font-bold"></i></button>
+              <button class="hover:bg-[#7a53dc2c] p-1 rounded-full" (click)="editTier(tier)"><i class="pi pi-pencil text-[#7953dc] text-[12px] font-medium"></i></button>
+              <button class="hover:bg-[#dc354634] p-1 rounded-full" (click)="deleteTier(tier.id)"><i class="pi pi-trash text-[#dc3545] text-[12px] font-medium"></i></button>
             </div>
           </div>
           <span class="item-price">${{ tier.price | number }}/month</span>
