@@ -1,0 +1,141 @@
+@import "../../../../../styles/main.scss";
+
+.main{
+    display: grid;
+    height: 100%;
+    font-family: $font-family-sans-serif;
+    grid-template-rows: max-content auto;
+
+    .main__content{
+        gap: 2rem;
+        display: grid;
+        height: max-content;
+        padding: 0 2rem 2rem 2rem;
+        background-color: #fafafae5;
+        grid-template-columns: auto 300px;
+        .h2{
+            font-weight: 500;
+            font-size: 1rem;
+            padding-top: 1rem;
+            text-transform: uppercase;
+        }
+        .col__right{
+            gap: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            h2{
+                gap: 1rem;
+                display: flex;
+                padding: 1rem;
+                color: white;
+                font-size: 1rem;
+                line-height: 1rem;
+                font-weight: bold;
+                border-radius: .5rem;
+                align-items: center;
+                background-color: $primary-color;
+            }
+        }
+    }
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+  
+.p-input-icon-left {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+  
+.p-input-icon-left i {
+    position: absolute;
+    left: 10px;
+    color: #999;
+}
+  
+::ng-deep .p-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+.p-datatable {
+    margin-top: 1rem;
+}
+  
+.p-datatable-tbody > tr > td {
+    padding: 15px 20px;
+    text-align: left;
+    height: 50px; /* Increase row height */
+}
+  
+.full-width-table {
+    width: 100%;
+}
+  
+.input-error {
+    border-color: red;
+}
+  
+.error-text {
+    color: red;
+    font-size: 0.875rem;
+}
+  
+tr {
+    height: 3rem !important;
+}
+  
+@include when-screen-is-atleast(large) {
+    ::ng-deep main {
+      .grid__area {
+        width: 95% !important;
+      }
+    }
+}
+  
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+td {
+    padding: 0 .5rem;
+}
+  
+:host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .25rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
+    }
+}
+
+.cta__btns{
+    padding: .5rem 0;
+}
+
+.access_cta{
+    padding: .75rem 1rem!important;
+    border-radius: .5rem!important;
+}
