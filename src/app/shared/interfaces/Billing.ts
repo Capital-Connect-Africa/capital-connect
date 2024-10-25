@@ -5,7 +5,8 @@ export interface SubscriptionTier{
     isActive: boolean
     price: number
     name: string
-    id:number
+    id:number,
+    features: string[]
 }
 
 export enum PAYMENT_STATUS{
