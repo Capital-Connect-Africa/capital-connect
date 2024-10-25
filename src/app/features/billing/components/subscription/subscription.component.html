@@ -12,7 +12,11 @@
             <div class="w-full flex flex-col gap-4">
                 <div class="">{{tier.name | titlecase}} Plan</div>
                 <h3>Ksh {{tier.price | numberabbreviation}}.00</h3>
-                <div class="font-light inner__html" [innerHTML]="tier.description | safe_html"></div>
+                    <div class="font-light inner__html" [innerHTML]="tier.description | safe_html"></div>
+             
+                    <ul class="feature-list">
+                        <li *ngFor="let feature of tier.features">{{ feature }}</li>
+                    </ul>
             </div>
             <div class="w-full">
                 <button class="py-3 block w-full text-[#064635] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">

@@ -6,6 +6,7 @@ export interface SubscriptionTier{
     price: number
     name: string
     id:number
+    features:string[]
 }
 
 export enum PAYMENT_STATUS{
