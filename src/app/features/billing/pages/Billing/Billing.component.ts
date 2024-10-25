@@ -1,22 +1,24 @@
-import { Component, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MenuModule } from 'primeng/menu';
 import { CommonModule } from '@angular/common';
 import { Observable, switchMap, tap } from 'rxjs';
 import { DropdownModule } from 'primeng/dropdown';
 import { Editor, EditorModule } from 'primeng/editor';
 import { AngularMaterialModule } from '../../../../shared';
-import { AdminUiContainerComponent } from '../../../admin/components/admin-ui-container/admin-ui-container.component';
-import { SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { Component, inject, ViewChild } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { FeedbackService, ConfirmationService } from '../../../../core';
+import { SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
+import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminUiContainerComponent } from '../../../admin/components/admin-ui-container/admin-ui-container.component';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   standalone: true,
   selector: 'app-subscription-tiers',
   templateUrl: './Billing.component.html',
   styleUrls: ['./Billing.component.scss'],
-  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule, DropdownModule, ModalComponent, EditorModule],
+  imports: [AngularMaterialModule, AdminUiContainerComponent, CommonModule, ReactiveFormsModule, FormsModule, DropdownModule, ModalComponent, EditorModule, MenuModule],
   providers: [ConfirmationService],
 })
 export class BillingComponent {
@@ -131,5 +133,7 @@ export class BillingComponent {
     }
 
   }
-
+  actions:MenuItem[] =[
+    {label: ''}
+  ]
 }
