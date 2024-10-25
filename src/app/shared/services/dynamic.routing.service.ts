@@ -292,7 +292,40 @@ export class DynamicRoutingService {
 
 
 
+  routeContactPerson(){
+    this._loadingService.setLoading(true);
+  
+    const investorProfile$ = this._screenService.getInvestorProfileByContactPersonId().pipe(
+      map((investorProfile: InvestorProfile) => {
+        // this.investorProfile = investorProfile;
 
+        // this._route.navigateByUrl('/investor');
+        //   return true;
+          this.investorProfile = investorProfile;
+  
+          if (this.investorProfile) {
+            sessionStorage.setItem('contact_person', 'true');
+            this._authStateService.initInvestorProfile(this.investorProfile.id)
+            this._route.navigateByUrl('/investor');
+            return true;
+          } else {
+            this._route.navigateByUrl('/investor/onboarding');
+            return false;
+          }
+
+      })
+      ,
+      catchError((error: any) => {
+        this._route.navigateByUrl('/investor/onboarding');
+        return of(false);
+      }),
+      finalize(() => this._loadingService.setLoading(false))
+    );
+  
+    return investorProfile$;
+  }
+
+  
 
 
   getInvestorProfile() {
