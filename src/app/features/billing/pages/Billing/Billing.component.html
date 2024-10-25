@@ -4,11 +4,11 @@
 <ng-container *ngIf=" confirmation$ | async"></ng-container>
 <ng-container *ngIf=" updateTier$ | async"></ng-container>
 
-<app-admin-ui-container [title]="'Billing'">
+<app-admin-ui-container [title]="'Billing'" [bg_gray]="true">
   <div class="billing-container">
     <div class="billing-header">
       <h1>Subscription Tiers</h1>
-      <button class="btn" (click)="createShow()">Create Subscription Tier</button>
+      <!-- <button class="btn" (click)="createShow()"><i class="pi pi-plus"></i> Add Tier</button> -->
     </div>
 
 
@@ -52,26 +52,47 @@
     </app-modal>
 
 
-    <div class="billing-items" style="margin-top: 1cm; display: flex; flex-wrap: wrap; gap: 20px;">
-      <div class="card" *ngFor="let tier of subscriptionTiers">
-        <span class="item-description">
-          <strong>{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
-        </span>
-        <p>
-          <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
-          <span class="monthly">/monthly</span>
-        </p>
-        <div class="inner__html" [innerHTML]="tier.description"></div>
+    <ul class="billing-items">
+      <li class="card flex flex-col gap-4" *ngFor="let tier of subscriptionTiers">
+        <div class="">
+          <div class="flex items-center justify-between relative">
+            <span class="item-description flex-1">
+              <strong class="text-[#7953dc] bold">{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
+            </span>
 
-        <div class="d-flex">
-          <button class="btn-sm btn p-button-outline" (click)="editTier(tier)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteTier(tier.id)">Delete</button>
+            <p-menu #menu [model]="actions" [popup]="true" />
+            <button class="text-[#7953dc]">
+              <i class="pi pi-ellipsis-h"></i>
+            </button>
+          </div>
+          <span class="item-price">${{ tier.price | number }}/month</span>
         </div>
-      </div>
+        <div class="flex-1 flex flex-col gap-2">
+          <div class="font-normal text-base text-[#404040]">{{tier.description}}</div>
+          <ul class="flex flex-col features__list">
+            <li *ngFor="let feature of tier.features" class="flex text-sm items-start gap-2 font-light">
+              <i class="pi pi-check font-[8px] text-[#7953dc]"></i>
+              <span>{{feature}}</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <!-- <div class="card flex flex-col gap-4" *ngFor="let tier of subscriptionTiers">
+        
+        <p>
+          
+          <br />
+         
+        </p>
+        
+        
+      </div> -->
+    </ul>
+
+    <div>
+      <div class="floating__button bg-[#064635b9]" title="New subscription tier"><i class="pi pi-plus"></i></div>
+
     </div>
-
-
-
 
   </div>
 </app-admin-ui-container>

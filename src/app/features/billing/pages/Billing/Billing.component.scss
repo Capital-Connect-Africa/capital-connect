@@ -2,10 +2,6 @@
 @import '../../../business/styles/business.components.steps.scss';
 @import 'quill/dist/quill.snow.css';
 
-
-
-
-
 .container {
   color: $primary-color;
 }
@@ -14,22 +10,20 @@
 // Billing Page Styles
 
 .billing-container {
-  padding: 2rem 1rem;
-  border-radius: 1rem;
-  background-color: $gray-100;
-  border: 1px solid $gray-200;
-  box-shadow: 0 5px 1rem 0 rgba($black, 0.1);
-
+  padding: 1rem 0;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
   .billing-header {
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
     h1 {
-      font-size: 24px;
-      font-weight: 600;
-      color: $text-color;
+      line-height: 0;
+      font-size: 17px;
+      font-weight: 400;
+      color: #333;
+      text-transform: uppercase;
     }
 
     .billing-actions {
@@ -62,7 +56,10 @@
   }
 
   .billing-items {
-    margin-bottom: 1rem;
+    gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    // margin-bottom: 1rem;
     
     .item {
       display: flex;
@@ -76,10 +73,6 @@
         background-color: $yellow-500;
       }
       
-      // .item-description {
-      //   color: $text-color;
-      // }
-
       .item-price {
         font-weight: 600;
         color: $primary-color;
@@ -128,7 +121,7 @@
 // Responsive Styles
 @include when-screen-is-atleast(large) {
   .billing-container {
-    padding: 2rem 3rem;
+    // padding: 2rem 3rem;
   }
 }
 
@@ -217,7 +210,7 @@
 
 
 .item-price{
-  font-size: .7cm;
+  font-size: 1rem;
   font-weight: bolder;
   
 }
@@ -243,9 +236,9 @@ $button-hover-color: $primary-color; /* Button hover color */
 
 .item-price {
   font-size: 1.2rem; /* Increased font size for better visibility */
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
   color: #424141; /* Darker text for clarity */
-  margin-right: 5px;
   transition: color 0.3s ease-in-out;
 }
 
@@ -258,23 +251,21 @@ $button-hover-color: $primary-color; /* Button hover color */
 
 .card {
   // line-height: 1.5;
-  flex: 1 1 300px;
+  // flex: 1 1 300px;
   padding: 20px;
-  border: 1px solid $border-color;
+  // border: 1px solid #7a53dc8e;
+  color: rgba($color: #000000, $alpha: .7);
   border-radius: 10px;
   background-color: #fff;
-  box-shadow: 0 4px 8px $shadow-color;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  cursor: pointer; /* Makes the card feel clickable */
-  // height: 7cm;
-  
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px $hover-shadow;
+  position: relative;
+  cursor: pointer;
+  &:hover{
+    box-shadow: 0 4px 8px $shadow-color;;
   }
 }
 
@@ -282,11 +273,10 @@ $button-hover-color: $primary-color; /* Button hover color */
   color: $primary-color;
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 15px;
   transition: color 0.3s ease-in-out;
-  
   strong {
-    text-transform: capitalize;
+    font-size: 14px;
+    text-transform: uppercase;
   }
 }
 
@@ -299,16 +289,9 @@ $button-hover-color: $primary-color; /* Button hover color */
 }
 
 button {
-  border-radius: 5px;
-  padding: 8px 16px;
+  padding: 8px;
   font-size: 0.9rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  display: inline-flex;
-  align-items: center;  /* Ensures vertical alignment */
-  justify-content: center;  /* Centers content horizontally */
-  gap: 8px;  /* Space between icon and text */
-  min-width: 100px;  /* Ensures buttons have a minimum width */
-  
+  line-height: 0;
   mat-icon {
     font-size: 1.2rem;  /* Icon size */
     margin-right: 5px;  /* Optional: Adds some spacing between the icon and the text */
@@ -339,13 +322,53 @@ button {
     }
   }
 }
-
+.edit__btn{
+  padding: .6rem;
+  font-weight: bold;
+  border: 1px solid;
+  transition: all .2s linear;
+}
 .inner__html{
   color: #000000;
   font-size: .9rem;
-  margin: 10px 0;
-  line-height: 1.4;
+  line-height: 0;
   font-family: $font-family-sans-serif;
   // max-height: 150px;
   // overflow: hidden;
 }
+
+.features__list{
+  padding: .4rem 0 0 .4rem;
+  gap: 1rem;
+  li{
+    gap: .4rem;
+  }
+}
+
+.floating__button{
+  width: 62.5px!important;
+  height: 62.5px!important;
+  border-radius: 50%!important;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0!important;
+  cursor: pointer;
+  transition:all .2s linear;
+  box-shadow: 0 0 4px 5px rgba(0, 0, 0, 0.1);
+  i{
+    transition:all .2s linear;
+  }
+  &:hover{
+    i{
+      transform-origin: center center;
+      transform: rotate(45deg);
+    }
+    background-color: $primary-color;
+  }
+}
+
