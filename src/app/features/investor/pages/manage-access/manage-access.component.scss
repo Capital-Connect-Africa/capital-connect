@@ -1,11 +1,9 @@
-@import "../../../../styles/main.scss";
+@import '../../../../styles/main.scss';
 
 .main__content{
   display: grid;
   min-height: 100svh;
-  &.bg_gray{
-    background-color: #ebeef1;
-  }
+
 }
 
 @include when-screen-is-atleast(medium){
