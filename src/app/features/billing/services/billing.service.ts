@@ -1,4 +1,4 @@
-import { catchError, EMPTY, map, Observable, throwError } from "rxjs";
+import { catchError, EMPTY, map, Observable, switchMap, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import {BASE_URL, BaseHttpService } from "../../../core";
 import { ActivePlan, Payment, PaymentPlan, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
@@ -72,8 +72,12 @@ export class BillingService {
     }
 
     getPaymentHistory(page:number, limit:number){
-        return this.__http.read(`${BASE_URL}/payments/user/${this._userId}?page=${page}&limit=${limit}`).pipe(map(res => {
-          return res as Payment[]
+        return this.__http.read(`${BASE_URL}/payments/user/${this._userId}?page=${page}&limit=${limit}`).pipe(switchMap(payments => {
+            return this.__http.read(`${BASE_URL}/statistics/payments/${this._userId}`).pipe(map((stats:any) =>{
+                const total = [...Object.values(stats)].map(val =>Number(val)).reduce((acc:number, curr:number) =>acc +curr, 0)
+                return {payments: payments as Payment[], total}
+                
+            }))
         }))
     }
     

@@ -28,8 +28,9 @@
       </ng-template>
     </p-table>
     <p-paginator 
+      (onPageChange)="handlePageChange($event)"
       styleClass="justify-start bg-transparent px-0" 
       [first]="first"
       [rows]="rows" 
-      [totalRecords]="rows"/>
+      [totalRecords]="total"/>
   </div>
