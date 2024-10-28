@@ -12,8 +12,28 @@
     <img src="assets/img/logo.png" alt="logo" class="logo" />
     <ul class="links">
       @for (link of links; track $index) {
-        <li *ngIf="link.display"><a [routerLink]="link.href" [routerLinkActiveOptions]="{ exact: link.exact }" routerLinkActive="active">
-          <mat-icon *ngIf="link.icon">{{link.icon}}</mat-icon> <span>{{link.label}}</span></a>
+        <li *ngIf="link?.display">
+        @if(link.children && link.children.length >0){
+          <button class="label" (click)="expandTree($index, link.href)" [ngClass]="{'active': signalService.expandedLink() ===$index}">
+            <span>
+              <mat-icon *ngIf="link.icon">{{link.icon}}</mat-icon>
+              <span>{{link.label}}</span>
+            </span>
+            <i class="pi pi-angle-left" *ngIf="signalService.expandedLink() !==$index"></i>
+            <i class="pi pi-angle-down" *ngIf="signalService.expandedLink() ===$index"></i>
+          </button>
+          <div class="child__links" *ngIf="signalService.expandedLink() ===$index" >
+            <div *ngFor="let child of link.children" ngClass="">
+              <a [routerLink]="child.href" [routerLinkActiveOptions]="{ exact: !!child?.exact }" routerLinkActive="active__label">
+                <mat-icon *ngIf="child.icon">{{child.icon}}</mat-icon> <span>{{child.label}}</span>
+              </a>
+            </div>
+          </div>
+        }@else {
+            <a (click)="openPage()" [routerLink]="link.href" [routerLinkActiveOptions]="{ exact: !!link?.exact }" routerLinkActive="active" >
+            <mat-icon *ngIf="link.icon">{{link.icon}}</mat-icon> <span>{{link.label}}</span>
+          </a>
+          }
         </li>
       }
       <li><button (click)="logOut()"><mat-icon>logout</mat-icon> <span>Logout</span></button></li>
