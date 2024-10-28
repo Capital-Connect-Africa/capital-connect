@@ -1,4 +1,5 @@
 <ng-container *ngIf="access$ | async"></ng-container>
+<ng-container *ngIf="revoke$ | async"></ng-container>
 <ng-container *ngIf="investorProfile$ | async"></ng-container>
 <div class="main">
     <div class="navbar">
@@ -6,7 +7,7 @@
     </div>
     <div class="main__content">
         <div>
-            <h2 class="h2">Contact Persons</h2>
+            <h2 class="h2">Page Admins ({{contactPersons.length}})</h2>
             <p-table #dt [value]="contactPersons" > 
                 <ng-template pTemplate="header">
                   <tr>
@@ -21,13 +22,20 @@
             </ng-template>
               <ng-template pTemplate="body" let-contactPerson>
                 <tr>
-                  <td>{{contactPerson.firstName}} {{contactPerson.lastName}}</td>
-                  <td>{{contactPerson.emailAddress }}</td>
-                  <td>{{contactPerson.phoneNumber}}</td>
-                  <td>{{contactPerson.primaryContact? 'Yes': 'No' }}</td>
+                  <td>
+                    <div class="flex items-center gap-4 user__profile">
+                      <div class="profile__initials">{{contactPerson.name | get_name_initials}}</div>
+                        <div class="flex flex-col">
+                          <h2 class="text-xl">{{contactPerson.firstName}} {{contactPerson.lastName}} <span>{{contactPerson.id ===investorProfile?.investor?.id ?' - you': ''}}</span></h2>
+                          <p>{{contactPerson.emailAddress}}</p>
+                        </div>
+                    </div>
+                  </td>
+                  <td><p class="role__chip">{{contactPerson.designation}}</p></td>
                   <td>
                     <div class="flex gap-1 items-center cta__btns">
-                        <button class="block text-center bg-teal-600 text-white hover:bg-teal-800 transition-all text-sm access_cta" (click)="grantAccess(contactPerson.id)">Grant Access</button>
+                        <button class="block text-center bg-blue-600 text-white hover:bg-blue-800 transition-all text-sm access_cta" (click)="grantAccess(contactPerson.id)" *ngIf="(!contactPerson.hasAccess && contactPerson.id !=investorProfile?.investor?.id)" title="Grant access">Grant Access</button>
+                        <button class="block text-center bg-red-600 text-white  hover:bg-red-800 transition-all text-sm access_cta" (click)="revokeAccess(contactPerson.id)" *ngIf="(contactPerson.hasAccess && contactPerson.id !=investorProfile?.investor?.id)" title="Revoke">Revoke Access</button>
                     </div>
                   </td>
                 </tr>

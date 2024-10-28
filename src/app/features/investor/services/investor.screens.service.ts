@@ -63,6 +63,10 @@ export class InvestorScreensService extends BaseHttpService{
     return this.create(`${BASE_URL}/contact-persons/grant-access`, {investorProfileId, contactPersonId}, this.headers) as Observable<unknown>;
   }
 
+  revokeAccess(investorProfileId:number, contactPersonId:number): Observable<any>{
+    return this.create(`${BASE_URL}/contact-persons/revoke-access`, {investorProfileId, contactPersonId}, this.headers) as Observable<unknown>;
+  }
+
   //  Get Registration structures prod
   getRegistrationStructures(): Observable<RegistrationStructure[]> {
     return this.read(`${BASE_URL}/registration-structures`, this.headers) as unknown as Observable<RegistrationStructure[]>;
