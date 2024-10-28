@@ -66,35 +66,6 @@
         </div>
       </div>
 
-      <div>
-        <h3>Investors</h3>
-        <div class="grid grid-cols-2 grid__wrapper">
-          <div class="grid__container">
-            <h3>Investors Intresested per sector</h3>
-            <div class="">
-              <app-horizontal-barchart [colors]="['#847cfb']" [data]="sectorStats.investors" ylabel="Sectors" xlabel="Investors" *ngIf="sectorStats"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Investors per funding type</h3>
-            <div class="">
-              <app-horizontal-barchart [colors]="['#e9a901']" [data]="fundingStats.investors" ylabel="Type" xlabel="Investors" *ngIf="fundingStats"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Investors per minimum funding</h3>
-            <div class="">
-              <app-column-chart [colors]="['#654f29']" [data]="minFunding" *ngIf="minFunding" xlabel="Band" ylabel="Investors"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Investors per maximum funding</h3>
-            <div class="">
-              <app-column-chart [colors]="['#064635']" [data]="maxFunding" *ngIf="maxFunding" xlabel="Band" ylabel="Investors"/>
-            </div>
-          </div>
-        </div>
-      </div>
         
       </ng-container>
      

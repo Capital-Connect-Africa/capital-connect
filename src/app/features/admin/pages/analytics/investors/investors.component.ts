@@ -1,23 +1,23 @@
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from "primeng/button";
-import { SharedModule } from '../../../../shared';
+import { SharedModule } from '../../../../../shared';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
-import { UserStatisticsService } from '../../services/user.statistics.service';
+import { AdminUiContainerComponent } from "../../../components/admin-ui-container/admin-ui-container.component";
+import { UserStatisticsService } from '../../../services/user.statistics.service';
 import { Observable, tap } from 'rxjs';
-import { SharedStats, Stats } from '../../interfaces/stats.interface';
-import { PieChartComponent } from "../../../../shared/components/charts/pie-chart/pie-chart.component";
-import { BubbleChartComponent } from "../../../../shared/components/charts/bubble-chart/bubble-chart.component";
-import { BarChartComponent } from "../../../../shared/components/charts/bar-chart/bar-chart.component";
-import { GeoChartComponent } from "../../../../shared/components/charts/geo-chart/geo-chart.component";
+import { SharedStats, Stats } from '../../../interfaces/stats.interface';
+import { PieChartComponent } from "../../../../../shared/components/charts/pie-chart/pie-chart.component";
+import { BubbleChartComponent } from "../../../../../shared/components/charts/bubble-chart/bubble-chart.component";
+import { BarChartComponent } from "../../../../../shared/components/charts/bar-chart/bar-chart.component";
+import { GeoChartComponent } from "../../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
-import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
-import { HorizontalBarchartComponent } from "../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
-import { ColumnChartComponent } from "../../../../shared/components/charts/column-chart/column-chart.component";
-import { Plan } from '../../../../shared/interfaces/Billing';
-import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
-import { ChartEvent } from '../../../../shared/interfaces/chart.event.interface';
+import { UserRoleFormatPipe } from '../../../../../core/pipes/user-role-format.pipe';
+import { HorizontalBarchartComponent } from "../../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
+import { ColumnChartComponent } from "../../../../../shared/components/charts/column-chart/column-chart.component";
+import { Plan } from '../../../../../shared/interfaces/Billing';
+import { TimeAgoPipe } from '../../../../../core/pipes/time-ago.pipe';
+import { ChartEvent } from '../../../../../shared/interfaces/chart.event.interface';
 import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
@@ -36,11 +36,11 @@ import { ChangeDetectorRef } from '@angular/core';
     ColumnChartComponent,
     TimeAgoPipe
 ],
-  templateUrl: './analytics.component.html',
-  styleUrl: './analytics.component.scss'
+  templateUrl: './investors.component.html',
+  styleUrl: './investors.component.scss'
 })
 
-export class AnalyticsComponent {
+export class InvestorsComponent {
   private _router = inject(Router);
   private _cdr =inject(ChangeDetectorRef);
   private _statsService =inject(UserStatisticsService);
