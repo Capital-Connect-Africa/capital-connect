@@ -1,5 +1,7 @@
 <ng-container *ngIf="analytics$ | async" />
 <ng-container *ngIf="entities$ | async" />
+<ng-container *ngIf="stats$ | async"/>
+
 <ng-container *ngIf="filterStats$ | async" />
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
@@ -47,10 +49,11 @@
             <h3>Business-Investor Engagements</h3>
             <div class="h-full flex w-full justify-center">
               <app-pie-chart legendPosition="bottom" [data]="{
-                Interesting: stats.interesting,
-                Connected: stats.connected,
-                Declined: stats.declined
-              }" [colors]="['#495057', '#654f29', '#064635', '#dc3546']"/>
+                Declined: matches.declined,
+                Requested: matches.requested,
+                Connected: matches.connected,
+                Interesting: matches.interesting,
+              }" [colors]="['#dc3546', '#654f29', '#064635', '#495057',]"/>
             </div>
           </div>
           <div class="grid__container">
