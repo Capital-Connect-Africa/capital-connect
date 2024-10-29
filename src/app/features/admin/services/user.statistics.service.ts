@@ -12,6 +12,7 @@ export class UserStatisticsService extends BaseHttpService{
     fetchUserStats(){
         const requests =[this.read(`${BASE_URL}/statistics/users`), this.read(`${BASE_URL}/statistics/matchmaking`)]
         return forkJoin(requests).pipe(map((res:any) =>{
+            debugger
             const users =res[0];
             const matches =res[1];
             return {
@@ -20,6 +21,7 @@ export class UserStatisticsService extends BaseHttpService{
                     advisors: users.advisor,
                     investors: users.investor,
                     declined: matches.declined,
+                    requested: matches.requested,
                     connected: matches.connected,
                     interesting: matches.declined,
                 }

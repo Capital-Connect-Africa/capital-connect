@@ -6,6 +6,7 @@ export interface Stats{
         connected: number,
         interesting: number,
         declined: number,
+        requested: number,
 }
 
 export interface SharedStats {
