@@ -111,7 +111,7 @@ export class MainComponent {
         ...user,
         name: `${user.firstName} ${user.lastName}`
       }
-    }).reverse().slice(0, 5)
+    }).slice(0, 5)
   }))
 
 
