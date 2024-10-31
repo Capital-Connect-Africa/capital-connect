@@ -1,6 +1,10 @@
 <ng-container *ngIf="subscribe$ | async"/>
 <ng-container *ngIf="recentPayment$ | async"/>
 <ng-container *ngIf="subscriptionTiers$ | async"/>
+<div *ngIf="billing_enabled$ | async as billingEnabled">
+    <p>Billing feature is {{ billingEnabled ? 'enabled' : 'disabled' }}</p>
+  </div>
+
 
 <div *ngIf="billing_enabled" class="px-8 pb-16 pt-10 bg-[#f7f5f5] rounded-xl shadow-lg">
     <div class="top__bar">

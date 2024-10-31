@@ -9,6 +9,7 @@ import { SignalsService } from '../../../../core/services/signals/signals.servic
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
+import { FeatureFlagsStoreService } from '../../../../store/feature-flags-store.service';
 
 @Component({
   selector: 'billing-subscription',
@@ -82,16 +83,31 @@ export class SubscriptionComponent {
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
     }))
   }
+
+
+  billing_enabled$: Observable<boolean>;
+
+  private featureFlagsStore = inject(FeatureFlagsStoreService);
+
+
+  constructor() {
+    // Using tap to log the emitted value
+    this.billing_enabled$ = this.featureFlagsStore.getFlag('subscription-businesses').pipe(
+      tap((enabled) => {
+        console.log("Billing feature enabled value:", enabled);
+      })
+    );
+  }
   
   ngOnInit(): void {
     this.getRecentPayments()
-    this._ff.initializeClient('subscription-businesses')
+    // this._ff.initializeClient('subscription-businesses')
 
-    this.billing_enabled = this._ff.getFeatureFlag('subscription-businesses',false)
-    this.flagSubscription = this._ff.getFeatureFlagObservable().subscribe((flagValue) => {
-      this.billing_enabled = flagValue;
+    // this.billing_enabled = this._ff.getFeatureFlag('subscription-businesses',false)
+    // this.flagSubscription = this._ff.getFeatureFlagObservable().subscribe((flagValue) => {
+    //   this.billing_enabled = flagValue;
 
-    });
+    // });
   }
 
   get upgradablePlans(){
