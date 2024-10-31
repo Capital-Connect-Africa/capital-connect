@@ -1,4 +1,4 @@
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { SharedModule } from "../../../shared";
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { PermissionsService } from '../../services/permissions/permissions.servi
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
 import { CompanyStateService } from '../../../features/organization/services/company-state.service';
 import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
+import { FeedbackService } from '../../services/feedback/feedback.service';
 
 @Component({
   selector: 'app-navbar',
@@ -22,24 +23,25 @@ import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/in
 })
 
 export class NavbarComponent {
-  private _fb =inject(FormBuilder);
-  private _router =inject(Router)
+  @Input() showBanner =true;
   issue =UserMobileNumbersIssues;
+  private _router =inject(Router);
+  private _fb =inject(FormBuilder);
   signalsService =inject(SignalsService);
   private _billingService =inject(BillingService);
   private _permissions =inject(PermissionsService);
-  private _authStateService = inject(AuthStateService);
-  private _companyStateService = inject(CompanyStateService);
-  @Input() showBanner =true;
+  private _feedbackService =inject(FeedbackService);
+  private _authStateService =inject(AuthStateService);
+  private _companyStateService =inject(CompanyStateService);
   @Input() title =this._companyStateService.currentCompany?.name;
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
   activePlan$ =new Observable();
   savephoneNumber$ =new Observable<any>();
   phoneNumberPull$ =new Observable<any>();
   userHasNotAcceptedTerms =!this._authStateService.currentUserProfile().hasAcceptedTerms && !this._authStateService.userIsAdmin;
-  private _formBuilder =inject(FormBuilder)
 
-  userConcentForm =this._formBuilder.group({
+  consent$ =new Observable();
+  userConcentForm =this._fb.group({
     hasAcceptedTerms: ['', [Validators.required]],
     hasAcceptedPrivacyPolicy: ['', [Validators.required]],
   })
@@ -108,6 +110,13 @@ export class NavbarComponent {
   }
 
   saveUserConsent(){
-    // TODO: add logic to save this
+    const {hasAcceptedTerms, hasAcceptedPrivacyPolicy} =this.userConcentForm.value;
+    this.consent$ =this._authStateService.updateUserConsent({hasAcceptedPrivacyPolicy:!!hasAcceptedPrivacyPolicy, hasAcceptedTerms: !!hasAcceptedTerms}).pipe(switchMap(_ =>{
+      return this._authStateService.reload().pipe(tap((res:any) =>{
+        this._feedbackService.success(res.message, 'Thank you')
+        this.userHasNotAcceptedTerms =false;
+      }))
+    }));
   }
+  
 }
