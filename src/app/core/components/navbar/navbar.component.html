@@ -62,7 +62,7 @@
     header="User consent" 
     [modal]="true"
     position="bottom"
-    [(visible)]="userHasNotAcceptedTerms" 
+    [visible]="userHasNotAcceptedTerms" 
     [style]="{ width: '80%' }">
       <p class="">To continue using our platform, please review and accept our policies. Click below to read the full terms and conditions and privacy policy.</p>
       <form class="flex flex-col gap-4" [formGroup]="userConcentForm" (ngSubmit)="saveUserConsent()">
