@@ -30,6 +30,13 @@ export class AuthStateService {
     sessionStorage.setItem('userProfile', JSON.stringify(user));
     this.currentUserProfile.set(user);
   }
+  
+  reload(){
+    return this._httpService.read(`${BASE_URL}/users/profile`).pipe(map((user:any) =>{
+      this._setUserProfile(user);
+      return user
+    }))
+  }
 
   initToken(token: string) {
     sessionStorage.setItem('token', token);
@@ -153,5 +160,9 @@ export class AuthStateService {
     this.currentUserId.set(null as any);
     this.currentUserName.set(null as any);
     this.currentUserProfile.set(null as any);
+  }
+
+  updateUserConsent(payload: {hasAcceptedTerms: boolean, hasAcceptedPrivacyPolicy:boolean}){
+    return this._httpService.create(`${BASE_URL}/users/${this.currentUserId()}/accept-terms`, payload)
   }
 }
