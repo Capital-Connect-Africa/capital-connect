@@ -27,11 +27,12 @@ export interface MobileNumber{
 
 export interface Profile{
   id: number;
+  roles: string;
+  lastName: string;
   username: string;
   firstName: string;
-  lastName: string;
-  roles: string;
-  mobileNumbers: MobileNumber[]
+  hasAcceptedTerms: boolean;
+  mobileNumbers: MobileNumber[];
 }
 
 export enum UserMobileNumbersIssues{
