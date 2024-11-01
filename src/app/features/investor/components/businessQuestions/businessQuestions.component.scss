@@ -1,0 +1,330 @@
+@import "../../../../styles/main.scss";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+.main{
+    display: grid;
+    height: 100%;
+    font-family: $font-family-sans-serif;
+    grid-template-rows: max-content auto;
+    .main__content{
+        gap: 2rem;
+        display: grid;
+        padding: 0 2rem 2rem 2rem;
+        height: max-content;
+        background-color: #fafafae5;
+        grid-template-columns: auto 300px;
+        .col__right{
+            gap: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            h2{
+                gap: 1rem;
+                display: flex;
+                padding: 1rem;
+                color: white;
+                font-size: 1rem;
+                line-height: 1rem;
+                font-weight: bold;
+                border-radius: .5rem;
+                align-items: center;
+                background-color: $primary-color;
+            }
+        }
+        .cover__background{
+            height: 200px;
+            border-radius: .5rem .5rem 0 0;
+            background-image: linear-gradient(135deg, #f0bc62a2, #f0bc62a2, #f0bc62a2);
+            position: relative;
+            .profile__card{
+                padding: .25rem;
+                border-radius: 50%;
+                width: max-content;
+                height: max-content;
+                position: absolute;
+                bottom: -50px;
+                left: 50px;
+                background-color: white;
+                .avatar{
+                    width: 100px;
+                    height: 100px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+        }
+        .top__txt {
+            font-size: 20px;
+            font-weight: 500;
+            line-height: 1rem;
+            font-family: $font-family-inter;
+            color: #374A62;
+          }
+
+        .top__details{
+            padding-top: .5cm;
+            padding-left: .7cm;
+            padding-right: .8cm;
+        }
+
+        .table-parent{
+            margin: 20px;
+            border: 1px solid rgb(211, 211, 211);
+            border-radius: 10px;
+        }
+        .bio_info{
+            
+            padding: 50px 0 1rem 50px;
+            h2{
+                font-weight: bold;
+                font-size: 1.2rem;
+                font-family: $font-family-sans-serif;
+            }
+            p{
+                gap: .5rem;
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+}
+
+:host ::ng-deep .p-paginator{
+    // padding-top: 2rem;
+    justify-content: flex-start!important;
+  }
+  
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      td, th{
+        padding: 1rem 0 1rem .5rem;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .5rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
+    }
+  }
+  
+
+  .small-icon{
+    cursor: pointer;
+  }
+
+
+.card {
+    // background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+
+::ng-deep .p-accordion .p-accordion-header {
+  // background-color: #2e6d1e; // Example color
+  padding: 10px;
+  font-size: .9rem;
+  color: $primary-color;
+  font-family: $font-family-inter;
+}
+
+::ng-deep .p-accordion .p-accordion-content {
+  padding: 1.5rem;
+  background-color: $gray-100;
+  color: $gray-900;
+  font-size: 16px; // Example font size
+  line-height: 1.5; // 1.5 times the font size
+  letter-spacing: 0;
+  border-radius: 0;
+  font-family: $font-family-sans-serif;
+  border-radius: 10px;
+}
+
+
+::ng-deep .accordion {
+  border: 1px solid $gray-200;
+  border-radius: .5rem;
+  overflow: hidden;
+  background-color: $gray-200;
+  transition: all 0.3s ease-in-out;
+
+  .accordion-item {
+    &:not(:last-child) {
+      border-bottom: 1px solid $gray-100;
+    }
+
+    &:hover {
+      background: linear-gradient(90deg, $primary-color, $secondary-color);
+      color: $white;
+    }
+  }
+
+  .accordion-header {
+    background: $danger-color-alt;
+    color: $white;
+    cursor: pointer;
+    padding: 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-lg;
+    // font-weight: $font-weight-semibold;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+
+    &:hover {
+      color: lighten($white, 10%);
+      // box-shadow: 0 4px 12px rgba($primary-color-dark, 0.3);
+    }
+
+    .icon {
+      font-size: 1.5rem;
+      transition: transform 0.4s ease;
+    }
+
+    &.active .icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  
+
+  .accordion-body {
+    padding: 1.5rem;
+    // font-size: $font-size-md;
+    // font-weight: $font-weight-regular;
+    color: darken($gray-600, 10%);
+    // background-color: lighten($gray-50, 5%);
+    line-height: 1.6;
+    transition: background-color 0.3s ease;
+
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+}
+
+
+.accordion__btn{
+  display: flex;
+  justify-content: end;
+}
+
+p-button {
+  color: #f4f4f5;
+  background-color: $primary-color;
+  border-radius: 50%;
+  padding: 0;  // Remove padding for a true circular shape
+  width: 25px;  // Set width and height to make it a circle
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  &:hover {
+    background-color: rgb(4, 44, 4);  // Maintain original color on hover
+    box-shadow: none;  // Remove any shadow if present
+    cursor: pointer;
+  }
+
+  // Remove active (click) styles
+  &:active {
+    background-color: green;  // Maintain original color on click
+    box-shadow: none;
+    transform: none;  // Remove any scaling or movement on click
+  }
+
+  // Optional: remove focus outline for a cleaner look
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+
+  
+p-accordionTab{
+  // padding: 10px;
+}
+
+
+::ng-deep .p-accordion-header-link{
+  background-color: transparent;
+}
+
+
+#pn_id_1_header_action .p-accordion-header-link{ 
+  display: none;
+}
+
+
+
+
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+}
+
+.container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.question {
+  margin-bottom: 20px;
+}
+
+.question h2 {
+  color: #333;
+}
+
+.tooltip {
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.answers {
+  margin-top: 15px;
+}
+
+.answers ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.answers li {
+  background: #f9f9f9;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.answers li p {
+  margin: 5px 0;
+}
