@@ -46,12 +46,12 @@
                               <!-- <p><strong>Subsection ID:</strong> {{ question.subSection.id }}</p>
                               <p *ngIf="question.submissionId"><strong>Submission ID:</strong> {{ question.submissionId }}</p> -->
                               <div class="answers" *ngIf="question.answers && question.answers.length > 0">
-                                  <p>Possible Answers:</p>
+                                  <p><strong>Possible Answers:</strong></p>
                                   <ul>
                                       <li *ngFor="let answer of question.answers">
                                           <p><strong>Answer:</strong> {{ answer.text }}</p>
                                           <p><strong>Weight:</strong> {{ answer.weight }}</p>
-                                          <p><strong>Answer ID:</strong> {{ answer.id }}</p>
+                                          <!-- <p><strong>Answer ID:</strong> {{ answer.id }}</p> -->
                                           <p *ngIf="answer.recommendation"><strong>Recommendation:</strong> {{ answer.recommendation }}</p>
                                       </li>
                                   </ul>

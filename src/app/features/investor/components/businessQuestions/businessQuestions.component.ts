@@ -29,14 +29,14 @@ export class BusinessQuestionsComponent implements OnInit {
   @Input() showBanner =false;
 
   data: { [key: string]: { [key: string]: number } } = {
-    "Investor Preparedness": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
-    "Investor Eligibility (Idea)": { "Step 1": 332, "Step 2": 333, "Step 3": 334 },
-    "Investor Eligibility (Start-Up)": { "Landing": 15, "Step 1": 3, "Step 2": 1, "Step 3": 9 },
-    "Pre-Revenue": { "Step 1": 232, "Step 2": 235, "Step 3": 335 },
-    "Post-Revenue": { "Step 1": 236, "Step 2": 237, "Step 3": 336 },
-    "Investor Eligibility (Growth Stage)": { "Step 1": 35, "Step 2": 37, "Step 3": 36 },
-    "Investor Eligibility (Established)": { "Step 1": 67, "Step 2": 68, "Step 3": 69 },
-    "Investor Eligibility (Liquidation)": { "Step 1": 133, "Step 2": 136 }
+    "INVESTOR PREPAREDNESS": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
+    "INVESTOR ELIGIBILITY (IDEA)": { "Step 1": 332, "Step 2": 333, "Step 3": 334 },
+    "INVESTOR ELIGIBILITY (START-UP)": { "Landing": 15, "Step 1": 3, "Step 2": 1, "Step 3": 9 },
+    "PRE-REVENUE": { "Step 1": 232, "Step 2": 235, "Step 3": 335 },
+    "POST-REVENUE": { "Step 1": 236, "Step 2": 237, "Step 3": 336 },
+    "INVESTOR ELIGIBILTY (GROWTH STAGE)": { "Step 1": 35, "Step 2": 37, "Step 3": 36 },
+    "INVESTOR ELIGIBILTY (ESTABLISHED)": { "Step 1": 67, "Step 2": 68, "Step 3": 69 },
+    "INVESTOR ELIGIBILITY (LIQUIDATION)": { "Step 1": 133, "Step 2": 136 }
   };
 
   loadedQuestions: { [key: string]: { [key: string]: Observable<any> } } = {};
