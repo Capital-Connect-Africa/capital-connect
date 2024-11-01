@@ -19,10 +19,10 @@
                     </ul>
             </div>
             <div class="w-full">
-                <button class="py-3 block w-full text-[#064635] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
+                <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
                     {{paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id? paymentAttempt?.status?.toString()?.toLowerCase() ==paymentStatus.FAILED? 'Retry': 'Continue': 'Choose Plan'}}
                 </button>
-                <button class="py-3 block w-full text-white bg-[#064635] rounded action__button selected" *ngIf="(tier.name ==signalService.activePlan())">Current Plan</button>
+                <button class="py-3 block w-full text-white bg-[#13501B] rounded action__button selected" *ngIf="(tier.name ==signalService.activePlan())">Current Plan</button>
             </div>
         </li>
     </ul>
