@@ -17,7 +17,7 @@
           <div class="grid__container">
             <h3>Businesses per sector</h3>
             <div class="">
-              <app-horizontal-barchart [data]="sectorStats.companies" ylabel="Sectors" xlabel="Businesses" *ngIf="sectorStats" (onSelect)="filterStats($event, 'businessSectors')"/>
+              <app-horizontal-barchart [data]="sectorStats.companies" xlabel="Businesses" *ngIf="sectorStats" (onSelect)="filterStats($event, 'businessSectors')"/>
             </div>
           </div>
           <div class="grid__container">
@@ -29,13 +29,13 @@
           <div class="grid__container">
             <h3>Businesses per Stage</h3>
             <div class="">
-              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" ylabel="Stages" xlabel="Businesses" *ngIf="stagesStats" (onSelect)="filterStats($event, 'growthStages')"/>
+              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" xlabel="Businesses" *ngIf="stagesStats" (onSelect)="filterStats($event, 'growthStages')"/>
             </div>
           </div>
           <div class="grid__container">
             <h3>Businesses per Use of funds</h3>
             <div class="">
-              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" ylabel="Use" xlabel="Businesses" *ngIf="fundingStats" (onSelect)="filterStats($event, 'useOfFunds')"/>
+              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" xlabel="Businesses" *ngIf="fundingStats" (onSelect)="filterStats($event, 'useOfFunds')"/>
             </div>
           </div>
           <div class="grid__container">
@@ -44,10 +44,13 @@
               <app-column-chart [colors]="['#13501B']" [data]="fundRaise" *ngIf="fundRaise"/>
             </div>
           </div>
-          <div class ="flex ">
+          <div class ="flex overflow-hidden h-full">
+            <div>
+              
+            </div>
           <div class="grid__container">
             <h3>Business-Investor Engagements</h3>
-            <div class="h-full flex w-full justify-center">
+            <div class="h-full flex w-full justify-center bg-white">
               <app-pie-chart legendPosition="bottom" [data]="{
                 Declined: matches.declined,
                 Requested: matches.requested,
@@ -58,7 +61,7 @@
           </div>
           <div class="grid__container">
             <h3 class="text-center">Entities</h3>
-            <div class="h-full flex w-full justify-center">
+            <div class="h-full flex w-full justify-center bg-white">
               <app-pie-chart legendPosition="bottom" [data]="{
                 Businesses: entities.totalBusinesses,
                 Investors: entities.totalInvestors,
