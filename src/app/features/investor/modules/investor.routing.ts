@@ -14,6 +14,12 @@ const routes: Routes = [
   { path: 'rejected-businesess', loadComponent: () => import('../pages/rejectedBusiness/rejectedBusiness.component').then(c => c.RejectedBusinesComponent) },
   { path: 'investor-page', loadComponent: () => import('../pages/InvestorPage/investorPage.component').then(c => c.InvestorPage) },
   { path: 'special-criteria', loadComponent: () => import('../pages/SpecialCriteria/SpecialCriteriaPage.component').then(c => c.SpecialCriteriaPage) },
+  
+  
+  { path: 'business-questions', loadComponent: () => import('../pages/BusinessQuestions/BusinessQuestionsPage.component').then(c => c.BusinessQuestionsPage) },
+
+
+
   { path: 'create-special-criteria', loadComponent: () => import('../pages/SpecialCriteria/CreateSpecialCriteriaPage/CreateSpecialCriteriaPage.component').then(c => c.CreateSpecialCriteriaPageComponent) },
   { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) },
   { path: 'connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
