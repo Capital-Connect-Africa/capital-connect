@@ -20,6 +20,7 @@ export class UserStatisticsService extends BaseHttpService{
                     advisors: users.advisor,
                     investors: users.investor,
                     declined: matches.declined,
+                    requested: matches.requested,
                     connected: matches.connected,
                     interesting: matches.declined,
                 }

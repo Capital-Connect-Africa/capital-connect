@@ -28,11 +28,13 @@ export interface SubSector {
 
 export interface ContactPerson {
     id: number;
-    firstName: string;
+    name?: string;
     lastName: string;
+    firstName: string;
+    hasAccess: boolean;
     designation: string;
-    emailAddress: string;
     phoneNumber: string;
+    emailAddress: string;
     primaryContact: boolean;
 }
 

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { UiSharedComponent } from '../../../../shared/components/ui/ui.component';
 import { NavbarComponent } from '../../../../core';
-import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { Link } from '../../../../shared/interfaces/link.interface';
+import { UiSharedComponent } from '../../../../shared/components/ui/ui.component';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
+import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
 import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
 
 @Component({
@@ -15,7 +16,7 @@ import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-das
 })
 export class AdminUiContainerComponent implements OnInit {
   isInvestor: boolean = false;
-  links: Array<{ label: string; href: string; exact: boolean; icon: string }> = [];
+  links: Link[] = [];
 
   constructor() {
     let investor = sessionStorage.getItem('profileId');
@@ -30,23 +31,27 @@ export class AdminUiContainerComponent implements OnInit {
   @Input({ required: true }) title = 'Dashboard';
 
   ngOnInit(): void {
-    // Set the page title
     this.signalService.pageTitle.set(this.title);
-
-    // Initialize links based on the isInvestor check
     this.links = !this.isInvestor
       ? [
-          { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' },
-          { label: 'Analytics', href: '/analytics', exact: false, icon: 'show_chart' },
-          { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money' },
-          { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' },
-          { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' },
-          { label: 'Subscriptions', href: '/subscriptions', exact: false, icon: 'hotel_class' },
-          { label: 'Sections', href: '/questions', exact: false, icon: 'help' },
-          { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' },
-          { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' },
-          { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' },
-          { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' }
+          { label: 'Dashboard', href: '/dashboard', exact: false, icon: 'grid_view' ,display:true },
+          { label: 'Analytics', href: '/analytics', icon: 'equalizer', display:true, children: [
+            { label: 'Business', href: '/analytics', icon: 'bar_chart', exact: true },
+            { label: 'Investors', href: '/analytics/investors', icon: 'pie_chart' },
+          ]},
+          {label: 'Financials',  display: true, icon: 'account_balance_wallet', href: '/billing', children: [
+              { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money',display:true },
+              { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' ,display:true},
+              { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' ,display:true},
+              { label: 'Subscriptions', href: '/subscriptions', exact: false, icon: 'hotel_class',display:true },
+            ]},
+            {label: 'Users', display: true, href: '/organization/list', icon: 'manage_accounts', children: [
+              { label: 'Companies', href: '/organization/list', exact: false, icon: 'apartment' ,display:true},
+              { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' ,display:true},
+              { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' ,display:true}
+            ]},
+            { label: 'Sections', href: '/questions', exact: false, icon: 'help' ,display:true},
+            { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' ,display:true},
         ]
       : INVESTOR_DASHBOARD_LINKS;
   }

@@ -3,7 +3,9 @@ import { SidenavComponent } from "../../../../core";
 import { MainComponent } from "../../components/main/main/main.component";
 import { AuthStateService } from '../../../auth/services/auth-state.service';
 import { Router } from '@angular/router';
-import { BusinessLinks } from '../../../../core/utils/business.links';
+import { BusinessLinks, BusinessLinkService } from '../../../../core/utils/business.links';
+import { Subscription } from 'rxjs';
+import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
 
 @Component({
   selector: 'profile-dashboard',
@@ -17,6 +19,14 @@ import { BusinessLinks } from '../../../../core/utils/business.links';
 })
 export class DashboardComponent {
   private _router = inject(Router)
+    //Services
+    private _ff = inject(FeatureFlagsService)
+
+    //booleans
+    billing_enabled: boolean = false
+  
+    //vars
+    private flagSubscription: Subscription | undefined;
 
   constructor(){
     const profileId = sessionStorage.getItem('profileId');
@@ -26,9 +36,15 @@ export class DashboardComponent {
   }
 
 
+  private _bs = inject(BusinessLinkService)
+
   private _authStateService =inject(AuthStateService)
   hidden = true;
   links = BusinessLinks
+
+  // links = this._bs.getBusinessLinks(this.billing_enabled);
+
+
   toggle_hidden() {
     this.hidden = !this.hidden;
   }

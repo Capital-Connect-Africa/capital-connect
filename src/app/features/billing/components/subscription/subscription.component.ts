@@ -1,13 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
-import { catchError, EMPTY, map, Observable, switchMap, tap } from 'rxjs';
+import { catchError, EMPTY, map, Observable, Subscription, switchMap, tap } from 'rxjs';
 import { PAYMENT_STATUS, PaymentPlan, SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
+import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
 
 @Component({
   selector: 'billing-subscription',
@@ -18,6 +19,16 @@ import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 })
 
 export class SubscriptionComponent {
+  //Services
+  private _ff = inject(FeatureFlagsService)
+
+  //booleans
+  billing_enabled: boolean = false
+
+  //vars
+  private flagSubscription: Subscription | undefined;
+
+
   paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
@@ -74,12 +85,25 @@ export class SubscriptionComponent {
   
   ngOnInit(): void {
     this.getRecentPayments()
+    this._ff.initializeClient('subscription-businesses')
+
+    this.billing_enabled = this._ff.getFeatureFlag('subscription-businesses',false)
+    this.flagSubscription = this._ff.getFeatureFlagObservable().subscribe((flagValue) => {
+      this.billing_enabled = flagValue;
+
+    });
   }
 
   get upgradablePlans(){
     return this.tiers.filter((tier: SubscriptionTier) =>tier.price >this.activePlan?.price).map(tier =>tier.name.toLowerCase())
   }
 
+  ngOnDestroy(): void {
+    // Unsubscribe to avoid memory leaks
+    if (this.flagSubscription) {
+      this.flagSubscription.unsubscribe();
+    }
+  }
   retryPayment(){
     this.signalService.userHasInitiatedPayment.set(true);
     this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}`);

@@ -1,0 +1,41 @@
+<ng-container *ngIf="analytics$ | async" />
+
+<app-admin-ui-container [bg_gray]="true" [title]="'Analytics'">
+  <div class="main">
+    <main class="stats">
+      <ng-container *ngIf="stats$ | async as stats">
+      <div>
+        <h3>Investors</h3>
+        <div class="grid grid-cols-2 grid__wrapper">
+          <div class="grid__container">
+            <h3>Investors Intresested per sector</h3>
+            <div class="">
+              <app-horizontal-barchart [colors]="['#847cfb']" [data]="sectorStats.investors" xlabel="Investors" *ngIf="sectorStats"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Investors per funding type</h3>
+            <div class="overflow-hidden">
+              <app-horizontal-barchart [colors]="['#e9a901']" [data]="fundingStats.investors" xlabel="Investors" *ngIf="fundingStats"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3>Investors per minimum funding</h3>
+            <div class="">
+              <app-column-chart [colors]="['#654f29']" [data]="minFunding" *ngIf="minFunding" xlabel="Band"/>
+            </div>
+          </div>
+          <div class="grid__container overflow-hidden">
+            <h3>Investors per maximum funding</h3>
+            <div class="">
+              <app-column-chart [colors]="['#13501B']" [data]="maxFunding" *ngIf="maxFunding" xlabel="Band"/>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      </ng-container>
+     
+    </main>
+  </div>
+</app-admin-ui-container>

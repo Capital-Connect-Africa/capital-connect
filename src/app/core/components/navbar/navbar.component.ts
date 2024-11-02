@@ -1,41 +1,50 @@
-import { CommonModule } from '@angular/common';
-import { booleanAttribute, Component, inject, Input } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { Observable, tap } from 'rxjs';
-import { SharedModule, USER_ROLES } from "../../../shared";
-import { AuthStateService } from '../../../features/auth/services/auth-state.service';
-import { CompanyStateService } from '../../../features/organization/services/company-state.service';
-import { SignalsService } from '../../services/signals/signals.service';
-import { AlertComponent } from '../../../shared/components/alert/alert.component';
+import { Observable, switchMap, tap } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
+import { SharedModule } from "../../../shared";
+import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router';
+import { SignalsService } from '../../services/signals/signals.service';
+import { booleanAttribute, Component, inject, Input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
+import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { BillingService } from '../../../features/billing/services/billing.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
+import { AuthStateService } from '../../../features/auth/services/auth-state.service';
+import { CompanyStateService } from '../../../features/organization/services/company-state.service';
+import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
+import { FeedbackService } from '../../services/feedback/feedback.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [SharedModule, CommonModule, RouterModule, AlertComponent, DialogModule, ReactiveFormsModule],
+  imports: [SharedModule, CommonModule, RouterModule, AlertComponent, DialogModule, ReactiveFormsModule, ReactiveFormsModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
+
 export class NavbarComponent {
-  private _fb =inject(FormBuilder);
-  private _router =inject(Router)
+  @Input() showBanner =true;
   issue =UserMobileNumbersIssues;
+  private _router =inject(Router);
+  private _fb =inject(FormBuilder);
   signalsService =inject(SignalsService);
   private _billingService =inject(BillingService);
   private _permissions =inject(PermissionsService);
-  private _authStateService = inject(AuthStateService);
-  private _companyStateService = inject(CompanyStateService);
-  @Input() showBanner =true;
+  private _feedbackService =inject(FeedbackService);
+  private _authStateService =inject(AuthStateService);
+  private _companyStateService =inject(CompanyStateService);
   @Input() title =this._companyStateService.currentCompany?.name;
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
   activePlan$ =new Observable();
-
   savephoneNumber$ =new Observable<any>();
   phoneNumberPull$ =new Observable<any>();
+  userHasNotAcceptedTerms =!this._authStateService.currentUserProfile().hasAcceptedTerms && !this._authStateService.userIsAdmin;
+
+  consent$ =new Observable();
+  userConcentForm =this._fb.group({
+    hasAcceptedTerms: ['', [Validators.required]],
+    hasAcceptedPrivacyPolicy: ['', [Validators.required]],
+  })
 
 
   investorProfileExists: boolean = false;
@@ -92,11 +101,22 @@ export class NavbarComponent {
     }
   }
 
-  ngOnChanges(): void {
+  ngOnChanges(){
     this.phoneNumberPull$ =this._authStateService.checkPhoneNumberStatus().pipe(tap((res: UserMobileNumbersIssues) =>{
       this.signalsService.showInAppAlert.set(res !==UserMobileNumbersIssues.VERIFIED);
       if(res ===UserMobileNumbersIssues.UNVERIFIED)
         this.signalsService.actionBody.set({issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required'})
     }));
   }
+
+  saveUserConsent(){
+    const {hasAcceptedTerms, hasAcceptedPrivacyPolicy} =this.userConcentForm.value;
+    this.consent$ =this._authStateService.updateUserConsent({hasAcceptedPrivacyPolicy:!!hasAcceptedPrivacyPolicy, hasAcceptedTerms: !!hasAcceptedTerms}).pipe(switchMap(_ =>{
+      return this._authStateService.reload().pipe(tap((res:any) =>{
+        this._feedbackService.success(res.message, 'Thank you')
+        this.userHasNotAcceptedTerms =false;
+      }))
+    }));
+  }
+  
 }
