@@ -7,7 +7,7 @@
         <div class="cta__group">
           <button type="button" class="btn" (click)="goToProfile()">Let's Begin</button>
           <a [routerLink]="isDisabled ? null : '/investor'" (click)="isDisabled ? $event.preventDefault() : null">
-            <button type="button" class="btn" [disabled]="isDisabled"> Skip and go to dashboard</button>
+            <!-- <button type="button" class="btn" [disabled]="isDisabled"> Skip and go to dashboard</button> -->
           </a>
           
 

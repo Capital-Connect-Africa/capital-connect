@@ -79,7 +79,8 @@ export interface SpecialCriteria{
     title: string,
     description: string,
     investorProfileId: number,
-    questions: SpecialCriteriaQuestion[]
+    questions: SpecialCriteriaQuestion[],
+    globalVisible:boolean
 }
 
 export interface SpecialCriteriaQuestion {
