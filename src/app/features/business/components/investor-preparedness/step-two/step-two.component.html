@@ -57,8 +57,7 @@
     <div class="cta__group">
       <a routerLink="/business">Skip and go to dashboard</a>
       <button class="btn btn-primary outline" type="button" (click)="goBack()">Back</button>
-      <button class="btn btn-primary" [disabled]="!formGroup.valid"
-        [ngClass]="{'disabled-btn': !formGroup.valid }">Next</button>
+      <button class="btn btn-primary" [disabled]="!formGroup.valid" [ngClass]="{'disabled-btn': !formGroup.valid }">Next</button>
     </div>
 
   </form>

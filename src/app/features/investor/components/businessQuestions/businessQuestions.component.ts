@@ -15,6 +15,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { ButtonModule } from 'primeng/button';
 import { BusinessQuestionsService } from '../../services/business-questions.services';
 import { Question } from '../../../questions/interfaces';
+import { TabViewModule } from 'primeng/tabview';
 
 
 
@@ -23,13 +24,13 @@ import { Question } from '../../../questions/interfaces';
   selector: 'app-business-questions',
   templateUrl: './businessQuestions.component.html',
   styleUrls: ['./businessQuestions.component.scss'],
-  imports: [CommonModule, AccordionModule,ButtonModule,   SharedModule, NavbarComponent, AngularMaterialModule, RouterModule, TableModule, AdvertisementSpaceComponent, ModalComponent]
+  imports: [CommonModule, AccordionModule,ButtonModule,
+    TabViewModule,  SharedModule, NavbarComponent, AngularMaterialModule, RouterModule, TableModule, AdvertisementSpaceComponent, ModalComponent]
 })
 export class BusinessQuestionsComponent implements OnInit {
   @Input() showBanner =false;
 
-  data: { [key: string]: { [key: string]: number } } = {
-    "INVESTOR PREPAREDNESS": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
+  investor_eligibility: { [key: string]: { [key: string]: number } } = {
     "INVESTOR ELIGIBILITY (IDEA)": { "Step 1": 332, "Step 2": 333, "Step 3": 334 },
     "INVESTOR ELIGIBILITY (START-UP)": { "Landing": 15, "Step 1": 3, "Step 2": 1, "Step 3": 9 },
     "PRE-REVENUE": { "Step 1": 232, "Step 2": 235, "Step 3": 335 },
@@ -37,6 +38,11 @@ export class BusinessQuestionsComponent implements OnInit {
     "INVESTOR ELIGIBILTY (GROWTH STAGE)": { "Step 1": 35, "Step 2": 37, "Step 3": 36 },
     "INVESTOR ELIGIBILTY (ESTABLISHED)": { "Step 1": 67, "Step 2": 68, "Step 3": 69 },
     "INVESTOR ELIGIBILITY (LIQUIDATION)": { "Step 1": 133, "Step 2": 136 }
+  };
+
+
+  investor_preparedness: { [key: string]: { [key: string]: number } } = {
+    "INVESTOR PREPAREDNESS": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
   };
 
   loadedQuestions: { [key: string]: { [key: string]: Observable<any> } } = {};
@@ -62,14 +68,13 @@ export class BusinessQuestionsComponent implements OnInit {
   }
 
 
-  loadQuestionDetails(key: string) {
-    const steps = this.data[key];
+  loadEligibiltyQuestionDetails(key: string) {
+    const eligibility_steps = this.investor_eligibility[key];
   
     // Create an array of observables
-    const questionsObservables = Object.values(steps).map(stepId => {
+    const questionsObservables = Object.values( eligibility_steps).map(stepId => {
       return this._bqs.getBusinessQuestions(stepId).pipe(
         tap(res => {
-          console.log("The response is", res)
           this.current_questions.push(...res);
         })
       );
@@ -78,9 +83,29 @@ export class BusinessQuestionsComponent implements OnInit {
     // Combine all observables into a single observable and flatten the results
     this.question$ = forkJoin(questionsObservables).pipe(
       map((responses: any[]) => {
-        // console.log("The flat respnse is",responses)
-        // this.current_questions = responses
-        // Flatten the array if necessary, assuming responses can be arrays
+        return responses.flat(); // Adjust as needed based on the response structure
+      })
+    );
+  }
+
+
+
+
+  loadPreparednessQuestionDetails(key: string) {
+    const preparedness_steps = this.investor_preparedness[key]
+  
+    // Create an array of observables
+    const questionsObservables = Object.values(preparedness_steps).map(stepId => {
+      return this._bqs.getBusinessQuestions(stepId).pipe(
+        tap(res => {
+          this.current_questions.push(...res);
+        })
+      );
+    });
+  
+    // Combine all observables into a single observable and flatten the results
+    this.question$ = forkJoin(questionsObservables).pipe(
+      map((responses: any[]) => {
         return responses.flat(); // Adjust as needed based on the response structure
       })
     );
