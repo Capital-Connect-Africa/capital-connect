@@ -69,6 +69,7 @@ export class BusinessQuestionsComponent implements OnInit {
 
 
   loadEligibiltyQuestionDetails(key: string) {
+    this.current_questions = []
     const eligibility_steps = this.investor_eligibility[key];
   
     // Create an array of observables
@@ -92,6 +93,8 @@ export class BusinessQuestionsComponent implements OnInit {
 
 
   loadPreparednessQuestionDetails(key: string) {
+    this.current_questions = []
+
     const preparedness_steps = this.investor_preparedness[key]
   
     // Create an array of observables
