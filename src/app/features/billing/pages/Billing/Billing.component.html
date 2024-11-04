@@ -4,11 +4,10 @@
 <ng-container *ngIf=" confirmation$ | async"></ng-container>
 <ng-container *ngIf=" updateTier$ | async"></ng-container>
 
-<app-admin-ui-container [title]="'Billing'">
+<app-admin-ui-container [title]="'Billing'" [bg_gray]="true">
   <div class="billing-container">
     <div class="billing-header">
       <h1>Subscription Tiers</h1>
-      <button class="btn" (click)="createShow()">Create Subscription Tier</button>
     </div>
 
 
@@ -22,7 +21,7 @@
         <div class="">
           <div class="input__wrapper w-full">
             <label class="input__label"><strong>Name</strong> <sup>*</sup></label>
-            <p-dropdown formControlName="name" styleClass="w-full gap-4" [options]="subscription_names"
+            <p-dropdown formControlName="name" styleClass="w-full gap-4" optionLabel="label" optionValue="value" [options]="subscription_names"
               placeholder="Name" class="input__field p-6"></p-dropdown>
           </div>
 
@@ -31,47 +30,66 @@
             <label class="input__label">
               <strong>Description</strong> <sup>*</sup>
             </label>
-            <p-editor #editor formControlName="description" placeholder="Enter description" [style]="{'height':'200px'}"
-              class="input-field">
-            </p-editor>
+            <textarea rows="2" formControlName="description" placeholder="Enter description"  class="input-field resize-none"></textarea>
           </div>
+          <div class="input__wrapper" style="margin-top: 15px;">
+            <label class="input__label">
+              <div class ="flex justify-between items-center">
+                <strong class="flex-1 block">Feautures <sup>*</sup></strong> 
+                <button (click)="addFeature()" type="button"><i class="pi pi-plus text-xs"></i></button>
+              </div>
 
-
+            </label>
+            <div class="flex gap-1 items-center" *ngFor="let feature of features; let i =index">
+              <input type="text" [value]="feature" [placeholder]="'Feature '+(i+1)" required class="input-field flex-1" (change)="onValueChange(i, $event)"/>
+              <button (click)="removeFeature(i)" type="button"><i class="pi pi-times text-xs"></i></button>
+            </div>
+          </div>
           <div class="input__wrapper" style="margin-top: 15px;">
             <label class="input__label"><strong>Price</strong> <sup>*</sup> $(USD)</label>
-            <input type="number" formControlName="price" placeholder="Price" required class="input-field" />
+            <input type="number" formControlName="price" placeholder="Price" required class="input-field"/>
           </div>
 
           <div class="cta__group">
-            <button type="submit" class="btn btn-primary" [disabled]="newTierForm.invalid">{{editMode ? 'Update Tier' :
+            <button type="submit" class="btn btn-primary" [disabled]="(!newTierForm.valid || !featuresHasValues)">{{editMode ? 'Update Tier' :
               'Create Tier'}}</button>
-            <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+            <button class="btn btn-danger" type="button" (click)="cancel()">Cancel</button>
           </div>
         </div>
       </form>
     </app-modal>
 
 
-    <div class="billing-items" style="margin-top: 1cm; display: flex; flex-wrap: wrap; gap: 20px;">
-      <div class="card" *ngFor="let tier of subscriptionTiers">
-        <span class="item-description">
-          <strong>{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
-        </span>
-        <p>
-          <span class="item-price">${{ tier.price | number:'1.2-2' }}</span>
-          <span class="monthly">/monthly</span>
-        </p>
-        <div class="inner__html" [innerHTML]="tier.description"></div>
-
-        <div class="d-flex">
-          <button class="btn-sm btn p-button-outline" (click)="editTier(tier)">Edit</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteTier(tier.id)">Delete</button>
+    <ul class="billing-items">
+      <li class="card flex flex-col gap-4" *ngFor="let tier of subscriptionTiers">
+        <div class="">
+          <div class="flex items-center justify-between relative">
+            <span class="item-description flex-1">
+              <strong class="text-[#7953dc] bold">{{ tier.name | slice:0:1 | uppercase }}{{ tier.name | slice:1 }}</strong>
+            </span>
+            <div class="flex items-center flex-end">
+              <button class="hover:bg-[#7a53dc2c] p-1 rounded-full" (click)="editTier(tier)"><i class="pi pi-pencil text-[#7953dc] text-[12px] font-medium"></i></button>
+              <button class="hover:bg-[#dc354634] p-1 rounded-full" (click)="deleteTier(tier.id)"><i class="pi pi-trash text-[#dc3545] text-[12px] font-medium"></i></button>
+            </div>
+          </div>
+          <span class="item-price">${{ tier.price | number }}/Month</span>
         </div>
-      </div>
+        <div class="flex-1 flex flex-col gap-2">
+          <div class="font-normal text-base text-[#404040]">{{tier.description}}</div>
+          <ul class="flex flex-col features__list">
+            <li *ngFor="let feature of tier.features" class="flex text-sm items-start gap-2 font-light">
+              <i class="pi pi-check font-[8px] text-[#7953dc]"></i>
+              <span>{{feature}}</span>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+    <div>
+      <div class="floating__button bg-[#13501Bb9]" title="New subscription tier" (click)="createShow()"><i class="pi pi-plus"></i></div>
+
     </div>
-
-
-
 
   </div>
 </app-admin-ui-container>

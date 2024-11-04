@@ -336,7 +336,6 @@ export class GlobalSearchComponent {
       this.selectedSubSectors.splice(index, 1);
     } else {
       this.selectedSubSectors.push(subSector.name);
-      console.log("The current sub sectors are", this.selectedSubSectors)
     }
   }
 

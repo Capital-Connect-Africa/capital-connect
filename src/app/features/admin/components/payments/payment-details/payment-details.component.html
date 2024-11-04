@@ -1,0 +1,35 @@
+<ng-container *ngIf="payment$ | async"/>
+
+<div class="card__item__details" details>
+    <div class="card__item__detail">
+      <div>
+        <label>User name:</label>
+        <p>{{ payment?.user?.firstName }} {{ payment?.user?.lastName }}</p>
+      </div>
+      <div>
+        <label>User email:</label>
+        <p>{{ payment?.user?.username }}</p>
+      </div>
+    </div>
+    <div class="card__item__detail">
+      <div>
+        <label>Amount:</label>
+        <p>{{payment?.currency}} {{ payment?.amount | numberabbreviation}}</p>
+      </div>
+      
+      <div>
+        <label>Status:</label>
+        <p>{{ payment?.status }}</p>
+      </div>
+      <div>
+        <label>Date:</label>
+        <p>{{ payment?.createdAt | time_ago}}</p>
+      </div>
+    </div>
+    <div class="card__item__detail single__col">
+        <div>
+            <label>Description:</label>
+            <p>{{ payment?.description }}</p>
+        </div>
+    </div>
+</div>

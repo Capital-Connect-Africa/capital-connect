@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {SidenavComponent} from "../../../../core";
 import {MainComponent} from "../../components/main/main.component";
-import { BusinessLinks } from '../../../../core/utils/business.links';
+import { BusinessLinks, BusinessLinkService } from '../../../../core/utils/business.links';
 
 @Component({
   selector: 'booking-dashboard',
@@ -18,6 +18,8 @@ export class DashboardComponent {
   toggle_hidden() {
     this.hidden = !this.hidden;
   }
-
+  private  _bs = inject(BusinessLinkService)
   links =BusinessLinks;
+  // links = this._bs.getBusinessLinks();
+
 }

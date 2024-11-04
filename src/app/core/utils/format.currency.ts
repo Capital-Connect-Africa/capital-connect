@@ -7,9 +7,11 @@ export const formatCurrency = (num: number) => {
     if (value >= 1_000_000) 
       return (value / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M'; 
   
-    if (value >= 1_000) 
-      return (value / 1_000).toFixed(1).replace(/\.0$/, '') + 'K'; 
-  
+    if (value >= 10_000) 
+      return (value / 10_000).toFixed(1).replace(/\.0$/, '') + 'K'; 
+
+    if(value>=1000)
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return value.toString();
   };
   

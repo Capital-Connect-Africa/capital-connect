@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   { path: '', loadComponent: () => import('../pages/dashboard/dashboard.component').then(c => c.DashboardComponent) },
   { path: 'onboarding', loadComponent: () => import('../pages/InvestorProfile/landing/landing.component').then(c => c.LandingComponent) },
+  { path: 'manage-access', loadComponent: () => import('../pages/manage-access/manage-access.component').then(c => c.ManageAccessComponent) },
   { path: 'investor-details', loadComponent: () => import('../pages/InvestorProfile/InvestorProfile/InvestorProfile.component').then(c => c.InvestorProfileComponent) },
   { path: 'contact-person', loadComponent: () => import('../pages/InvestorProfile/success-screen/success-screen.component').then(c => c.SuccessScreenComponent) },
   { path: 'matched-business', loadComponent: () => import('../pages/MatchedBusiness/matchedBusiness.component').then(c => c.MatchedBusinesComponent) },
@@ -13,6 +14,12 @@ const routes: Routes = [
   { path: 'rejected-businesess', loadComponent: () => import('../pages/rejectedBusiness/rejectedBusiness.component').then(c => c.RejectedBusinesComponent) },
   { path: 'investor-page', loadComponent: () => import('../pages/InvestorPage/investorPage.component').then(c => c.InvestorPage) },
   { path: 'special-criteria', loadComponent: () => import('../pages/SpecialCriteria/SpecialCriteriaPage.component').then(c => c.SpecialCriteriaPage) },
+  
+  
+  { path: 'business-questions', loadComponent: () => import('../pages/BusinessQuestions/BusinessQuestionsPage.component').then(c => c.BusinessQuestionsPage) },
+
+
+
   { path: 'create-special-criteria', loadComponent: () => import('../pages/SpecialCriteria/CreateSpecialCriteriaPage/CreateSpecialCriteriaPage.component').then(c => c.CreateSpecialCriteriaPageComponent) },
   { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) },
   { path: 'connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },

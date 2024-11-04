@@ -6,6 +6,7 @@ import { SectionSubmissions } from '../../../shared/interfaces/section.submissio
   providedIn: 'root'
 })
 export class SignalsService {
+  expandedLink: WritableSignal<number> =signal(-1)
   showDialog: WritableSignal<boolean> =signal(false);
   showInAppAlert: WritableSignal<boolean> =signal(false);
   actionOnMobileNumbers: WritableSignal<boolean> =signal(false);

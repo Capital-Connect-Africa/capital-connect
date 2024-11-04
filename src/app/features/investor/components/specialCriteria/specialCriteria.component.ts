@@ -8,6 +8,9 @@ import { AngularMaterialModule } from '../../../../shared/angular-material.modul
 import { RouterModule } from '@angular/router';
 import { ConfirmationService, FeedbackService } from '../../../../core';
 import { SharedModule } from 'primeng/api';
+import { TableModule } from 'primeng/table';
+import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
+import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 
 
 
@@ -16,7 +19,7 @@ import { SharedModule } from 'primeng/api';
   selector: 'app-special-criteria',
   templateUrl: './specialCriteria.component.html',
   styleUrls: ['./specialCriteria.component.scss'],
-  imports: [CommonModule, SharedModule,NavbarComponent,AngularMaterialModule,RouterModule]
+  imports: [CommonModule, SharedModule, NavbarComponent, AngularMaterialModule, RouterModule, TableModule, AdvertisementSpaceComponent, ModalComponent]
 })
 export class SpecialCriteriaComponent implements OnInit {
   @Input() showBanner =false;

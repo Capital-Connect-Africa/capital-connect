@@ -1,6 +1,6 @@
-<ng-container *ngIf="specialCriteria$  | async"></ng-container>
 <ng-container *ngIf="delete$ | async"></ng-container>
 <ng-container *ngIf="deleteConf$ | async"></ng-container>
+<ng-container *ngIf="specialCriteria$  | async"></ng-container>
 
 
 <div class="main">
@@ -18,47 +18,49 @@
             </div>
 
 
-            <div class="table-parent">
-                <table class="table">
-                    <tr class="border-b border-gray-200">
-                        <td class="font-bold">#</td>
-                        <td class="font-bold">Title</td>
-                        <td class="font-bold">Description</td>
-                        <td class="font-bold">View</td>
-                        <td class="font-bold">Delete</td>
-                    </tr>
-
-
-                    <tr *ngFor="let criteria of specialCriteria; let i = index; trackBy: trackByIndex"
-                        class="border-b border-gray-200">
-                        <td class="font-bold">{{i+1}}</td>
-                        <td class="">{{criteria.title}}</td>
-                        <td class="">{{criteria.description}}</td>
-                        <td class="">
-                            <div class="py-auto eye">
-                                <a [routerLink]="['/investor/view-special-criteria', criteria.id]">
-                                    <mat-icon class="small-icon">visibility</mat-icon>
-                                    </a>
-                            </div>
-                        </td>
-
-                        <td class="">
-                            <mat-icon class="small-icon" style="color: red; cursor: pointer;"
-                            (click)="deleteCriteria(criteria.id)"
-                            >delete</mat-icon>
-                        </td>
-                    </tr>
-
-                </table>
-
-                <mat-paginator  [length]="specialCriteria.length" [pageSize]="10" [pageSizeOptions]="[5, 10]"
-                >
-              </mat-paginator>
-            </div>
+            <p-table [value]="specialCriteria" [paginator]="true" [rows]="10" [tableStyle]="{ 'width': '100%' }">
+                <!-- Table Header -->
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>View</th>
+                    <th>Delete</th>
+                  </tr>
+                </ng-template>
+              
+                <!-- Table Body -->
+                <ng-template pTemplate="body" let-criteria let-i="rowIndex">
+                  <tr>
+                    <td><strong>{{ i + 1 }}</strong></td>
+                    <td>{{ criteria.title }}</td>
+                    <td>{{ criteria.description }}</td>
+                    <td>
+                     
+                        <mat-icon
+                        [routerLink]="['/investor/view-special-criteria', criteria.id]"
+                        class="small-icon">visibility</mat-icon>
+                   
+                    </td>
+                    <td>
+                      <button class="btn btn-danger btn-sm text-xs" (click)="deleteCriteria(criteria.id)">
+                        <mat-icon class="small-icon">delete</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-template>
+              
+                <!-- Paginator -->
+                <mat-paginator [length]="specialCriteria.length" [pageSize]="10" [pageSizeOptions]="[5, 10]"></mat-paginator>
+              </p-table>
+              
         </section>
 
         <section class="col__left">
             <!-- <button class="btn btn-primary">Create Special Criteria</button> -->
+            <app-advertisement-space [title]="'Advertise Here'"
+            [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
         </section>
 
     </div>
@@ -67,3 +69,7 @@
 
 
 </div>
+
+
+
+

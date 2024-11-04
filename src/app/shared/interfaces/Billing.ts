@@ -6,6 +6,13 @@ export interface SubscriptionTier{
     price: number
     name: string
     id:number
+    features:string[]
+}
+
+export enum PAYMENT_STATUS{
+    FAILED ='failed',
+    COMPLETED ='completed',
+    INITIATED ='initiated',
 }
 
 export interface SubscriptionResponse {
@@ -18,6 +25,7 @@ export interface SubscriptionResponse {
 export interface ActivePlan{
     subscriptionTier: SubscriptionTier
     subscriptionDate: Date
+    payment: Payment,
     isActive: boolean
     expiryDate: Date
     id: number
@@ -26,16 +34,18 @@ export interface ActivePlan{
 
 export interface Plan extends ActivePlan{
     isActive: boolean
-    user: User
+    user: User,
 }
 
 export interface Payment{
     description: string
     currency: string
     createdAt: Date
+    updatedAt: Date
     amount: number
-    status: string
+    status: PAYMENT_STATUS
     id: number
+    user: User
 }
 
 export interface Booking {
@@ -44,3 +54,8 @@ export interface Booking {
     createdAt: Date
 }
 
+export interface PaymentPlan extends Payment{
+    userSubscription: ActivePlan,
+    orderTrackingId: string,
+    booking: Booking | null,
+}

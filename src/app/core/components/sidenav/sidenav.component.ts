@@ -1,11 +1,13 @@
 import { Component, HostListener, inject, Input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { Observable, tap } from "rxjs";
 import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
 import { SharedModule } from "../../../shared";
 import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.service";
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
+import { Link } from '../../../shared/interfaces/link.interface';
+import { SignalsService } from '../../services/signals/signals.service';
 
 @Component({
   selector: 'app-sidenav',
@@ -16,9 +18,11 @@ import { AuthStateService } from '../../../features/auth/services/auth-state.ser
 })
 
 export class SidenavComponent {
-  @Input() links!: { label: string, href: string, exact: boolean, icon?: string }[];
+  @Input() links!: Link[];
+  private _router =inject(Router);
+  signalService =inject(SignalsService);
   private toggleService = inject(NavbarToggleService);
-  private _authStateService =inject(AuthStateService)
+  private _authStateService =inject(AuthStateService);
   logOut$ = new Observable<boolean>();
 
   logOut() {
@@ -63,5 +67,15 @@ export class SidenavComponent {
     else {
       this.toggleService.toggleVisibility();
     }
+  }
+
+  expandTree(index:number, url:string | undefined){
+    const expanded =this.signalService.expandedLink();
+    this.signalService.expandedLink.set(index);
+    if(url) this._router.navigateByUrl(url);
+  }
+
+  openPage(){
+    this.signalService.expandedLink.set(-1)
   }
 }

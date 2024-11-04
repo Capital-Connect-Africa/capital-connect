@@ -31,7 +31,7 @@ export class ScoreSectionComponent {
       data: {
         datasets: [{
           data: [300, 300, 300],
-          backgroundColor: ['#064635', '#f0bb62', '#519259'],
+          backgroundColor: ['#13501B', '#f0bb62', '#519259'],
         }]
       },
       options: {

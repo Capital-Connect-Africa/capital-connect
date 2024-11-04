@@ -323,7 +323,6 @@ export class MatchedBusinessComponent {
       // this.loadSubSectors(sector.id); // Fetch subsectors based on selected sector ID
       this.subSectors$ = this._sectorService.getSubSectorOfaSector(sector.id).pipe(tap(sectors => {
         this.subSectors = sectors
-        console.log("The current sub sectors are", this.selectedSectors)
 
       }))
 
@@ -337,7 +336,6 @@ export class MatchedBusinessComponent {
       this.selectedSubSectors.splice(index, 1);
     } else {
       this.selectedSubSectors.push(subSector.name);
-      console.log("The current sub sectors are", this.selectedSubSectors)
     }
   }
 

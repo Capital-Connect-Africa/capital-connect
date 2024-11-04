@@ -27,6 +27,33 @@ h3{
     }
 }
 
+.feature-list {
+    list-style-type: disc !important;  /* Adds bullet points */
+    padding-left: 20px;     /* Adds padding to align bullets */
+    font-size: 0.9em;       /* Adjust font size to be a bit smaller */
+    color: #333;            /* Optional: change text color for styling */
+}
+
+.feature-list li {
+    margin-bottom: 4px;     /* Adds space between each list item */
+}
+
+.feature-list li {
+    // list-style-type: lower-alpha !important;  /* Force bullet display on each item */
+    margin-bottom: 4px;                
+    padding-left: 20px;                /* Adds padding for each list item */
+    font-size: 0.9em;
+    color: #333;
+}
+
+.feature-list li::before {
+    content: "➤"; /* Right arrow pointer */
+    margin-right: 8px;
+    color: #333; /* Optional: Customize color */
+    font-size: 0.9em; /* Optional: Customize size */
+}
+
+
 .action__button{
     display: block;
     cursor: pointer;

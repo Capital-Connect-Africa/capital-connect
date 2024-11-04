@@ -59,6 +59,13 @@ export class InvestorScreensService extends BaseHttpService{
     return this.create(url, request, this.headers) as Observable<unknown>;
   }
 
+  grantAccess(investorProfileId:number, contactPersonId:number): Observable<any>{
+    return this.create(`${BASE_URL}/contact-persons/grant-access`, {investorProfileId, contactPersonId}, this.headers) as Observable<unknown>;
+  }
+
+  revokeAccess(investorProfileId:number, contactPersonId:number): Observable<any>{
+    return this.create(`${BASE_URL}/contact-persons/revoke-access`, {investorProfileId, contactPersonId}, this.headers) as Observable<unknown>;
+  }
 
   //  Get Registration structures prod
   getRegistrationStructures(): Observable<RegistrationStructure[]> {
@@ -93,10 +100,39 @@ export class InvestorScreensService extends BaseHttpService{
   }
 
   //get Investor Profile By Id
-  getInvestorProfileById(): Observable<InvestorProfile>{
+  // getInvestorProfileById(): Observable<InvestorProfile>{
+  //   const userId = sessionStorage.getItem('userId')
+  //   const id = Number(userId)
+
+  //   const contactPerson = JSON.parse(sessionStorage.getItem('contact_person'));
+
+  //   if(contactPerson){
+  //     return this.read(`${BASE_URL}/investor-profiles/contacts/${id}`,this.headers) as unknown as Observable<InvestorProfile>;
+  //   }
+  //   return this.read(`${BASE_URL}/investor-profiles/by-user/${id}`,this.headers) as unknown as Observable<InvestorProfile>;
+  // }
+
+  getInvestorProfileById(): Observable<InvestorProfile> {
+    const userId = sessionStorage.getItem('userId');
+    const id = Number(userId);
+  
+    // Check if 'contact_person' exists and is a valid JSON string
+    const contactPerson = sessionStorage.getItem('contact_person');
+    const isContactPerson = contactPerson ? JSON.parse(contactPerson) : false;
+  
+    if (isContactPerson) {
+      return this.read(`${BASE_URL}/investor-profiles/contacts/${id}`, this.headers) as unknown as Observable<InvestorProfile>;
+    }
+    return this.read(`${BASE_URL}/investor-profiles/by-user/${id}`, this.headers) as unknown as Observable<InvestorProfile>;
+  }
+  
+
+
+  getInvestorProfileByContactPersonId(): Observable<InvestorProfile>{
     const userId = sessionStorage.getItem('userId')
     const id = Number(userId)
 
-    return this.read(`${BASE_URL}/investor-profiles/by-user/${id}`,this.headers) as unknown as Observable<InvestorProfile>;
+    // GET https://capitalconnect-0060e0fb0eb4.herokuapp.com/investor-profiles/contacts/1132
+    return this.read(`${BASE_URL}/investor-profiles/contacts/${id}`,this.headers) as unknown as Observable<InvestorProfile>;
   }
 }

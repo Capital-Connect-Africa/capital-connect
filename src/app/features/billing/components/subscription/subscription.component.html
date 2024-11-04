@@ -2,7 +2,7 @@
 <ng-container *ngIf="recentPayment$ | async"/>
 <ng-container *ngIf="subscriptionTiers$ | async"/>
 
-<div class="px-8 pb-16 pt-10 bg-[#f7f5f5] rounded-xl shadow-lg">
+<div *ngIf="billing_enabled" class="px-8 pb-16 pt-10 bg-[#f7f5f5] rounded-xl shadow-lg">
     <div class="top__bar">
         <h2 class="uppercase">Choose your plan</h2>
         <p class="text-[14px] font-thin">Choose a plan that best suits your business</p>
@@ -12,11 +12,17 @@
             <div class="w-full flex flex-col gap-4">
                 <div class="">{{tier.name | titlecase}} Plan</div>
                 <h3>Ksh {{tier.price | numberabbreviation}}.00</h3>
-                <div class="font-light inner__html" [innerHTML]="tier.description | safe_html"></div>
+                    <div class="font-light inner__html" [innerHTML]="tier.description | safe_html"></div>
+             
+                    <ul class="feature-list">
+                        <li *ngFor="let feature of tier.features">{{ feature }}</li>
+                    </ul>
             </div>
             <div class="w-full">
-                <button class="py-3 block w-full text-[#064635] rounded action__button" (click)="subscribe(tier.id)" *ngIf="tier.name !==signalService.activePlan()">{{upgradablePlansList.includes(tier.name.toLocaleLowerCase())? 'Upgrade': 'Get'}} Plan</button>
-                <button class="py-3 block w-full text-white bg-[#064635] rounded action__button selected" *ngIf="tier.name ==signalService.activePlan()">Current Plan</button>
+                <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
+                    {{paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id? paymentAttempt?.status?.toString()?.toLowerCase() ==paymentStatus.FAILED? 'Retry': 'Continue': 'Choose Plan'}}
+                </button>
+                <button class="py-3 block w-full text-white bg-[#13501B] rounded action__button selected" *ngIf="(tier.name ==signalService.activePlan())">Current Plan</button>
             </div>
         </li>
     </ul>

@@ -63,13 +63,10 @@ export class SubSectorComponent {
 
 
   ngOnInit(): void {
-    // Retrieve the sectorId from the signal store
     this.sectorId = this._sectorSignalStore.sectorId;
-
   }
 
   goBack(): void {
-    console.log("The sector id is", this.sectorId)
     this._router.navigateByUrl(`/sectors/sector/${this.sectorId}`);
   }
 
@@ -94,7 +91,6 @@ export class SubSectorComponent {
   }
 
   reFetchSegments() {
-    alert("Referct segmetns called")
     this.segments$ = this.getSegments();
   }
 

@@ -20,6 +20,7 @@ export class UserStatisticsService extends BaseHttpService{
                     advisors: users.advisor,
                     investors: users.investor,
                     declined: matches.declined,
+                    requested: matches.requested,
                     connected: matches.connected,
                     interesting: matches.declined,
                 }
@@ -129,12 +130,6 @@ export class UserStatisticsService extends BaseHttpService{
           return res;
         }));
     }
-    
-    countSubscriptions(){
-        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map((res:any) =>{
-          return res;
-        })) as Observable<Record<string, number>>;
-    }
 
     getEntityStat(){
        const requests =[this.countBusinessProfiles(), this.countInvestorProfiles()];
@@ -159,10 +154,10 @@ export class UserStatisticsService extends BaseHttpService{
         }))
     }
 
-    getSubscriptions(page: number =1, limit:number =5){
-        return this.read(`${BASE_URL}/subscriptions?page=${page}&limit=${limit}`).pipe(map((subscriptions: any[]) =>{
+    getSubscriptionstats(){
+        return this.read(`${BASE_URL}/statistics/subscription`).pipe(map((subscriptions: any) =>{
           return subscriptions;
-        })) as Observable<Plan[]>
+        })) as Observable<{basic: number, pro: number, elite: number, plus: number, subscriptions: number}>
     }
 
 
@@ -171,6 +166,12 @@ export class UserStatisticsService extends BaseHttpService{
             return res
         })) as Observable<{initiated: number, completed: number, failed: number,}>
     }
+    getBookingStats(){
+        return this.read(`${BASE_URL}/statistics/bookings`).pipe(map((res: any) =>{
+            return res.bookings;
+        })) as Observable<number>
+    }
+
     getBookings(page: number =1, limit:number =5){
         return this.read(`${BASE_URL}/bookings?page=${page}&count=${limit}`).pipe(map((bookings: any[]) =>{
           return bookings.map((booking: any) =>{
@@ -193,12 +194,21 @@ export class UserStatisticsService extends BaseHttpService{
     }
 
     getSummary(){
-        const requests =[this.getSubscriptions(), this.countSubscriptions(), this.getBookings()]
+        const requests =[this.getSubscriptionstats(),]
         return forkJoin(requests).pipe(map(res =>{
             return {
-                recent_subscriptions: res[0] as Plan[],
-                subscription_counts: res[1] as Record<string, number>,
-                bookings: res[3] as Booking[]
+                subscription_counts: res[0] as Record<string, number>,
+            }
+        }))
+    }
+
+    filterStats(country:string, key:string){
+        return this.create(`${BASE_URL}/statistics/stats-filter`, {[key]:[country]}).pipe(map((res:any) =>{
+            return {
+                sectors: res.Sectors as Record<string, number>,
+                stages: res.Stage as Record<string, number>,
+                countries: res.Countries as Record<string, number>,
+                funding: res.useOfFunds as Record<string, number>,
             }
         }))
     }

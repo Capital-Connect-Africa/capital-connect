@@ -1,0 +1,55 @@
+<ng-container *ngIf="access$ | async"></ng-container>
+<ng-container *ngIf="revoke$ | async"></ng-container>
+<ng-container *ngIf="investorProfile$ | async"></ng-container>
+<div class="main">
+    <div class="navbar">
+        <app-navbar title="Access control" [showBanner]="false" onDashboard="true" />
+    </div>
+    <div class="main__content">
+        <div>
+            <h2 class="h2">Page Admins ({{contactPersons.length}})</h2>
+            <p-table #dt [value]="contactPersons" > 
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th *ngFor="let col of cols">
+                      <span class="header-container">
+                        <span class="header-text">
+                          {{col.header}}
+                        </span>
+                      </span>
+                    </th>
+                  </tr>
+            </ng-template>
+              <ng-template pTemplate="body" let-contactPerson>
+                <tr>
+                  <td>
+                    <div class="flex items-center gap-4 user__profile">
+                      <div class="profile__initials">{{contactPerson.name | get_name_initials}}</div>
+                        <div class="flex flex-col">
+                          <h2 class="text-xl">{{contactPerson.firstName}} {{contactPerson.lastName}} <span>{{contactPerson.id ===investorProfile?.investor?.id ?' - you': ''}}</span></h2>
+                          <p>{{contactPerson.emailAddress}}</p>
+                        </div>
+                    </div>
+                  </td>
+                  <td><p class="role__chip">{{contactPerson.designation}}</p></td>
+                  <td>
+                    <div class="flex gap-1 items-center cta__btns">
+                        <button class="block text-center bg-blue-600 text-white hover:bg-blue-800 transition-all text-sm access_cta" (click)="grantAccess(contactPerson.id)" *ngIf="(!contactPerson.hasAccess && contactPerson.id !=investorProfile?.investor?.id)" title="Grant access">Grant Access</button>
+                        <button class="block text-center bg-red-600 text-white  hover:bg-red-800 transition-all text-sm access_cta" (click)="revokeAccess(contactPerson.id)" *ngIf="(contactPerson.hasAccess && contactPerson.id !=investorProfile?.investor?.id)" title="Revoke">Revoke Access</button>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5">No contact persons added yet.</td>
+                </tr>
+              </ng-template>
+            </p-table>
+        </div>
+    <div class="col__right">
+        <app-alert onDashboard="true" className="rounded-[.5rem]"/>
+        <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+</div>
+</div>

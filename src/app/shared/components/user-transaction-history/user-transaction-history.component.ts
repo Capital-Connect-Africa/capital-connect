@@ -3,7 +3,7 @@ import { Component, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TimeAgoPipe } from "../../../core/pipes/time-ago.pipe";
 import { NumberAbbriviationPipe } from '../../../core/pipes/number-abbreviation.pipe';
-import { PaginatorModule } from 'primeng/paginator';
+import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Payment } from '../../interfaces/Billing';
 import { Observable, tap } from 'rxjs';
 import { BillingService } from '../../../features/billing/services/billing.service';
@@ -19,24 +19,32 @@ export class UserTransactionHistoryComponent {
   payments$ =new Observable<any>();
   payments: Payment[] =[];
   cols =[
-    { field: 'id', header: 'PID' },
     { field: 'amount', header: 'Amount' },
     { field: 'status', header: 'Status' },
     { field: 'createdAt', header: 'Date' },
     { field: 'description', header: 'Reason' },
   ]
   first: number = 0;
-  rows: number = 10;
+  rows: number = 5;
+  total: number =0;
   currentPage:number =1;
   private _billingService =inject(BillingService);
 
   getPayments(page: number =1, limit:number =5){
     this.payments$ =this._billingService.getPaymentHistory(page, limit).pipe(tap(res =>{
-      this.payments =res;
+      this.total =res.total;
+      this.payments =res.payments;
     }))
   }
 
   ngOnInit(): void {
     this.getPayments();
   }
+
+  handlePageChange(event:PaginatorState){
+    this.first =event.first as number;
+    this.currentPage =(event.page as number) +1;
+    this.getPayments(this.currentPage);
+  }
+
 }
