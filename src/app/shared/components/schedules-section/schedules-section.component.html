@@ -9,9 +9,9 @@
       <p>{{body}}</p>
     </div>
     <div class="card__footer">
-      <button *ngIf="linkLabel !== 'Submit Special Criteria Form Request'" (click)="createBooking()" class="cta__button">{{linkLabel}}</button>
-      <a href="mailto:services@capitalconnect.africa" target="_blank"
-       *ngIf="linkLabel === 'Submit Special Criteria Form Request'" class="cta__button">{{linkLabel}}</a>
+      <button *ngIf="linkLabel !== 'Submit Special Criteria Request'" (click)="createBooking()" class="cta__button">{{linkLabel}}</button>
+      <a  (click)='navigateToSpecialCriteria()'
+       *ngIf="linkLabel === 'Submit Special Criteria Request'" class="cta__button">{{linkLabel}}</a>
     </div>
   </div>
 

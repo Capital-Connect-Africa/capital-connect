@@ -147,9 +147,9 @@
     flex-direction: column;
     justify-content: space-between;
     padding: 10px;
-    margin: 2px 0; 
-    // border: .5px solid $primary-color; 
-    border-radius: 8px; 
+    margin: 0 0; 
+    border: .5px solid $gray-300; 
+    border-radius: 4px; 
     background-color: $gray-100; 
     margin-bottom: .7cm;
 }
@@ -199,6 +199,6 @@
 /* Full width style for parent container */
 .container {
     width: 100%; /* Full width */
-    padding: 20px; /* Padding for the container */
+    // padding: 20px; /* Padding for the container */
     box-sizing: border-box; /* Include padding in width */
 }
