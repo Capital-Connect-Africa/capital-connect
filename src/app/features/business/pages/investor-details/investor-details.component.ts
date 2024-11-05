@@ -10,6 +10,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { CompanyInvestorRelationsShip } from '../../../../shared/interfaces/relationship.enum';
 import { BusinessLinks } from '../../../../core/utils/business.links';
+import { Criteria } from '../../interfaces/special-criteria.interface';
+import { SpecialCriteriaService } from '../../services/special-criteria/special-criteria.service';
 
 
 @Component({
@@ -33,6 +35,13 @@ export class InvestorDetailsComponent {
   canViewInvestorDetails =false;
   declineReasons:string[] =[];
   response$ =new Observable<any>();
+  specialCriteriaListing$ = new Observable<Criteria[]>()
+
+  criteriaList:Criteria[] =[];
+  private _specialCriteriaService =inject(SpecialCriteriaService);
+
+
+
   stats$ = this._activatedRoute.paramMap.pipe(
     switchMap(params => {
       const parts = `${params.get('id')}`.split('-');
@@ -45,6 +54,10 @@ export class InvestorDetailsComponent {
             this.investor = res
             this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
+              this.specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteriaByInvestor(res.id).pipe(tap(res =>{
+                console.log("Calling special criteria list", res)
+                this.criteriaList =res;
+              }))
           })
         );
       }
@@ -53,6 +66,10 @@ export class InvestorDetailsComponent {
           tap(res => {
             this.investor = res.find((investor:MatchedInvestor) =>investor.id ===id) as MatchedInvestor
             this.checkIfUserCanViewPage();
+            this.specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteriaByInvestor(this.investor.id).pipe(tap(res =>{
+              console.log("Calling special criteria list", res)
+              this.criteriaList =res;
+            }))
           })
         );
       }
@@ -62,6 +79,9 @@ export class InvestorDetailsComponent {
             this.investor = res;
             this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
+            this.specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteriaByInvestor(res.id).pipe(tap(res =>{
+              this.criteriaList =res;
+            }))
           })
         );
       }
@@ -107,4 +127,18 @@ export class InvestorDetailsComponent {
       return this.goBack();
     }))
   }
+
+
+
+
+  // specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteria().pipe(tap(res =>{
+  //   this.criteriaList =res;
+  // }))
+  
+  openQuestions(criteriId: number){
+    this._router.navigateByUrl(`/business/special-criteria/${criteriId}`);
+  }
+
+
+
 }
