@@ -17,6 +17,7 @@ import { of } from 'rxjs';
 import { CALENDLYEVENTID } from '../../../core';
 import { CreateBookingResponse } from '../../interfaces/booking';
 import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-schedules-section',
@@ -95,6 +96,10 @@ export class SchedulesSectionComponent implements OnInit {
 
   createBooking() {
     this._router.navigate(['/payment-instructions']);
+  }
+
+  navigateToSpecialCriteria() {
+    this._router.navigate(['/investor/create-special-criteria']);
   }
 
 
