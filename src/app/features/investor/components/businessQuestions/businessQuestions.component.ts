@@ -16,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { BusinessQuestionsService } from '../../services/business-questions.services';
 import { Question } from '../../../questions/interfaces';
 import { TabViewModule } from 'primeng/tabview';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 
@@ -25,34 +26,47 @@ import { TabViewModule } from 'primeng/tabview';
   templateUrl: './businessQuestions.component.html',
   styleUrls: ['./businessQuestions.component.scss'],
   imports: [CommonModule, AccordionModule,ButtonModule,
-    TabViewModule,  SharedModule, NavbarComponent, AngularMaterialModule, RouterModule, TableModule, AdvertisementSpaceComponent, ModalComponent]
+    TabViewModule,  SharedModule, NavbarComponent,SkeletonModule, AngularMaterialModule, RouterModule, TableModule, AdvertisementSpaceComponent, ModalComponent]
 })
 export class BusinessQuestionsComponent implements OnInit {
   @Input() showBanner =false;
 
   investor_eligibility: { [key: string]: { [key: string]: number } } = {
-    "INVESTOR ELIGIBILITY (IDEA)": { "Step 1": 332, "Step 2": 333, "Step 3": 334 },
-    "INVESTOR ELIGIBILITY (START-UP)": { "Landing": 15, "Step 1": 3, "Step 2": 1, "Step 3": 9 },
+    "IDEA": { "Step 1": 332, "Step 2": 333, "Step 3": 334 },
+    "START-UP": { "Landing": 15, "Step 1": 3, "Step 2": 1, "Step 3": 9 },
     "PRE-REVENUE": { "Step 1": 232, "Step 2": 235, "Step 3": 335 },
     "POST-REVENUE": { "Step 1": 236, "Step 2": 237, "Step 3": 336 },
-    "INVESTOR ELIGIBILTY (GROWTH STAGE)": { "Step 1": 35, "Step 2": 37, "Step 3": 36 },
-    "INVESTOR ELIGIBILTY (ESTABLISHED)": { "Step 1": 67, "Step 2": 68, "Step 3": 69 },
-    "INVESTOR ELIGIBILITY (LIQUIDATION)": { "Step 1": 133, "Step 2": 136 }
+    "GROWTH STAGE": { "Step 1": 35, "Step 2": 37, "Step 3": 36 },
+    "ESTABLISHED": { "Step 1": 67, "Step 2": 68, "Step 3": 69 },
+    "LIQUIDATION": { "Step 1": 133, "Step 2": 136 }
   };
 
 
+  // Convert object to array in a specific order
+  investorEligibilityArray = [
+    { key: "IDEA", stages: this.investor_eligibility["IDEA"] },
+    { key: "START-UP", stages: this.investor_eligibility["START-UP"] },
+    { key: "PRE-REVENUE", stages: this.investor_eligibility["PRE-REVENUE"] },
+    { key: "POST-REVENUE", stages: this.investor_eligibility["POST-REVENUE"] },
+    { key: "GROWTH STAGE", stages: this.investor_eligibility["GROWTH STAGE"] },
+    { key: "ESTABLISHED", stages: this.investor_eligibility["ESTABLISHED"] },
+    { key: "LIQUIDATION", stages: this.investor_eligibility["LIQUIDATION"] }
+  ];
+
+
+
+  
+
+
   investor_preparedness: { [key: string]: { [key: string]: number } } = {
-    "INVESTOR PREPAREDNESS": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
+    "PREPAREDNESS": { "Step 1": 16, "Step 2": 17, "Step 3": 18 },
   };
 
   loadedQuestions: { [key: string]: { [key: string]: Observable<any> } } = {};
   
   current_questions:Question[] = []
+  isLoading: boolean = true;
  
-  //vars
-
-  // activeIndex: number = 0;
-
   activeIndex: number | null = null;
 
   question$ = new Observable<Question[]>();
@@ -130,6 +144,16 @@ export class BusinessQuestionsComponent implements OnInit {
       this.activeIndex = this.activeIndex === index+1 ? null : index+1;
     }
     this.activeIndex = this.activeIndex === index ? null : index; 
+
+
+
+    if (this.activeIndex === index) {
+      console.log(`Tab ${index} is being closed.`);
+      this.activeIndex = null; 
+    } else {
+      console.log(`Tab ${index} is being opened.`);
+      this.activeIndex = index; 
+    }
   }
 
 }
