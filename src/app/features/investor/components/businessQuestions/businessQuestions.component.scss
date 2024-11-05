@@ -55,7 +55,7 @@
             }
         }
         .top__txt {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 500;
             line-height: 1rem;
             font-family: $font-family-inter;
@@ -256,10 +256,6 @@ p-button {
 }
 
 
-  
-p-accordionTab{
-  // padding: 10px;
-}
 
 
 ::ng-deep .p-accordion-header-link{
@@ -287,7 +283,7 @@ body {
 
 .container {
   // max-width: 800px;
-  margin: 50px auto;
+  margin: -5px auto;
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -334,7 +330,7 @@ body {
 
 /* Style for the overall TabView */
 :host ::ng-deep .p-tabview {
-  border: 1px solid $gray-300;
+  // border: 1px solid $gray-300;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba($black, 0.1);
   background-color: $white;
@@ -346,7 +342,7 @@ body {
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   margin-right: 5px;
-  color: $text-muted;
+  color: black;
   border-bottom: 2px solid transparent;
   transition: all 0.3s;
   cursor: pointer;
@@ -376,7 +372,7 @@ body {
 /* Optional: Style for specific text within the tab content */
 :host ::ng-deep .p-tabview-panel p {
   line-height: 1.6;
-  color: $text-muted;
+  // color: $text-muted;
 }
 
 
@@ -387,3 +383,5 @@ body {
 :host ::ng-deep .p-tabview-title{
   padding: .2rem;
 }
+
+
