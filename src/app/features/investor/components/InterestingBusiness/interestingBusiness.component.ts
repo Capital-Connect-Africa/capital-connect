@@ -1,11 +1,11 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { Observable, tap,EMPTY, switchMap } from "rxjs";
+import { Observable, tap,EMPTY, switchMap, map } from "rxjs";
 import { OverviewSectionComponent } from "../../../../shared/components/overview-section/overview-section.component";
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody } from '../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, DeclineReasons } from '../../../../shared/interfaces';
 import { FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -69,7 +69,7 @@ export class InterestingBusinessComponent {
   selectedMatchedBusiness: MatchedBusiness | null = null;
   interestingBusinesses: InterestingBusinesses[] = [];
   rejectedBusinesses: ConnectedBusiness[] = [];
-  declineReasons: String[] = [];
+  declineReasons: DeclineReasons[] = [];
   companyDetails: CompanyResponse | undefined;
   business__id: number = 0;
   declineForm!: FormGroup;
@@ -125,9 +125,13 @@ export class InterestingBusinessComponent {
 
 
 
-  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
-    this.declineReasons = reasons
-  }))
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "investor")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
+  
 
   pageChange(event: PageEvent): void {
     this.currentPage = event.pageIndex; 

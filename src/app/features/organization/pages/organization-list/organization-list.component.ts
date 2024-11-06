@@ -57,9 +57,19 @@ export class OrganizationListComponent {
   @ViewChild('dt') table!: Table;
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value.trim();
-    this.table.filterGlobal(filterValue, 'contains');
-    this.companiesCount = this.table.filteredValue ? this.table.filteredValue.length : this.companies.length;
-    this.updateDisplayedData();
+    this.companies$ = this._companiesService.searchCompanies(filterValue).pipe(map(res=>{
+      this.companies = res;
+      this.updateDisplayedData();
+      this.companiesCount = res.length
+    }))
+
+    if(filterValue === ''){
+      this.companies$ = this._companiesService.getAllCompanies().pipe(map(res => {
+        this.companies = res;
+        this.updateDisplayedData();
+        this.companiesCount = res.length
+      }))      
+    }
   }
 
 

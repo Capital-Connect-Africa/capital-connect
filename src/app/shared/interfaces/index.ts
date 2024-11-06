@@ -25,6 +25,11 @@ fundsNeeded: any;
 
 }
 
+export interface DeclineReasons{
+    id: number,
+    declineRole: string,
+    reason: string
+}
 
 export interface ConnectionRequest{
   id: number;
