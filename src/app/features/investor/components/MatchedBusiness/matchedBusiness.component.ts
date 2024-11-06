@@ -7,11 +7,11 @@ import { OverviewSectionComponent } from "../../../../shared/components/overview
 import { SchedulesSectionComponent } from "../../../../shared/components/schedules-section/schedules-section.component";
 import { OverviewComponent } from '../dashboard/overview/overview.component';
 import { CardComponent } from '../../../../shared/components/card/card.component';
-import { InterestingBusinesses, MatchedBusiness } from '../../../../shared/interfaces';
+import { DeclineReasons, InterestingBusinesses, MatchedBusiness } from '../../../../shared/interfaces';
 import { inject } from '@angular/core';
 import { BusinessAndInvestorMatchingService } from '../../../../shared/business/services/busines.and.investor.matching.service';
 import { AuthStateService } from '../../../auth/services/auth-state.service';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from "../../../../shared/components/alert/alert.component";
 import { SignalsService } from '../../../../core/services/signals/signals.service';
@@ -60,7 +60,7 @@ export class MatchedBusinessComponent {
   business__id: number = 0
   interestingBusinesses: InterestingBusinesses[] = [];
   userResponses: UserSubmissionResponse[] = [];
-  declineReasons: String[] = [];
+  declineReasons: DeclineReasons[] = [];
   companyDetails: CompanyResponse | undefined;
   impactElementAnswers: UserSubmissionResponse[] = [];
   issue = UserMobileNumbersIssues;
@@ -138,9 +138,14 @@ export class MatchedBusinessComponent {
     this.impactElementAnswers = submissions
   }))
 
-  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
-    this.declineReasons = reasons
-  }))
+ 
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "investor")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
+  
 
   yearsOfOperation$ =this._companyHttpService.fetchCompanyYearsOfOperation().pipe(tap(res =>{
     this.yearsOfOperation = res as string[]

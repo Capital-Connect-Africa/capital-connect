@@ -20,7 +20,7 @@ import { Company, SpecialCriteriaCompany, SpecialCriteriaCompanyRes } from '../.
 import * as XLSX from 'xlsx';
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
-import { ConnectionRequestBody, InterestingBusinesses } from '../../../../../shared/interfaces';
+import { ConnectionRequestBody, DeclineReasons, InterestingBusinesses } from '../../../../../shared/interfaces';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
 import { CardComponent } from "../../../../../shared/components/card/card.component";
 import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
@@ -72,7 +72,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
   customAnswersForm!: FormGroup
   SpecialCriteriaCompanies!: SpecialCriteriaCompany[]
   business__id!:number 
-  declineReasons: String[] = [];
+  declineReasons: DeclineReasons[] = [];
   declineForm!: FormGroup;
 
   interestingBusinesses: InterestingBusinesses[] = [];
@@ -98,9 +98,14 @@ export class ViewSpecialCriteriaComponent implements OnInit {
     this.questions = res
   }))
 
-  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
-    this.declineReasons = reasons
-  }))
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "investor")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
+  
 
   interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1,10).pipe(
     tap(res => {
