@@ -1,11 +1,11 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from "@angular/common";
-import { Observable, tap,EMPTY, switchMap } from "rxjs";
+import { Observable, tap,EMPTY, switchMap, map } from "rxjs";
 import { OverviewSectionComponent } from "../../../../shared/components/overview-section/overview-section.component";
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { BusinessAndInvestorMatchingService } from "../../../../shared/business/services/busines.and.investor.matching.service";
-import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, ConnectionRequest, updateConnectionRequestBody, ConnectionRequestsStats } from '../../../../shared/interfaces';
+import { MatchedBusiness,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequestBody, ConnectionRequest, updateConnectionRequestBody, ConnectionRequestsStats, DeclineReasons } from '../../../../shared/interfaces';
 import { ConfirmationService, FeedbackService } from '../../../../core';
 import { AngularMaterialModule, GeneralSummary, UserSubmissionResponse } from '../../../../shared';
 import { CompanyHttpService } from '../../../organization/services/company.service';
@@ -71,7 +71,7 @@ export class ConnectionRequestsComponent {
   selectedBusiness: ConnectionRequest | null = null;
   selectedMatchedBusiness: MatchedBusiness | null = null;
   rejectedBusinesses: ConnectedBusiness[] = [];
-  declineReasons: String[] = [];
+  declineReasons: DeclineReasons[] = [];
   companyDetails: ConnectionRequest | undefined;
   business__id: number = 0;
   declineForm!: FormGroup;
@@ -155,10 +155,13 @@ export class ConnectionRequestsComponent {
   }))
 
 
-
-  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
-    this.declineReasons = reasons
-  }))
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "investor")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
+  
 
   updateConnectionRequest(connectionRequest:ConnectionRequest){
     let investorProfileId = Number(sessionStorage.getItem('profileId'))

@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable, tap } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody, ConnectionRequestsStats} from "../../interfaces";
+import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody, ConnectionRequestsStats, DeclineReasons} from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
 import { Company } from "../../../features/organization/interfaces";
@@ -130,9 +130,9 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
 
   //reasons for rejecting   
-  getDeclineReasons(): Observable<String[]>{
+  getDeclineReasons(): Observable<DeclineReasons[]>{
     return this.read(`${BASE_URL}/decline-reasons`).pipe(
-      map(res => res as unknown as String[])
+      map(res => res as unknown as DeclineReasons[])
     )
   }
   

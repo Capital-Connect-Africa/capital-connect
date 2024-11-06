@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-8">
   <div class="flex justify-between items-center">
-    <div class="flex gap-4 items-center">
+    <div class="flex gap-4 items-center justify-between">
       <svg width="42" height="42" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M49.2122 0H14.4234C13.8582 0 13.3162 0.224507 12.9166 0.624131C12.517 1.02376 12.2925 1.56576 12.2925 2.13092V7.99983H41.5134C42.0786 7.99983 42.6206 8.22434 43.0202 8.62396C43.4198 9.02359 43.6443 9.5656 43.6443 10.1307V48.0002H49.2122C49.7774 48.0002 50.3194 47.7757 50.719 47.376C51.1186 46.9764 51.3431 46.4344 51.3431 45.8693V2.13092C51.3431 1.56576 51.1186 1.02376 50.719 0.624131C50.3194 0.224507 49.7774 0 49.2122 0Z" fill="#EEF4EE"/>
         <path d="M43.6444 53.8692C43.6444 54.4344 43.4199 54.9764 43.0203 55.376C42.6207 55.7757 42.0787 56.0002 41.5135 56.0002H6.72467C6.15951 56.0002 5.61751 55.7757 5.21788 55.376C4.81826 54.9764 4.59375 54.4344 4.59375 53.8692V10.1309C4.59375 9.85108 4.64887 9.57399 4.75596 9.31545C4.86305 9.05692 5.02001 8.822 5.21788 8.62413C5.41575 8.42626 5.65067 8.2693 5.9092 8.16221C6.16774 8.05512 6.44483 8 6.72467 8H41.5135C41.7933 8 42.0704 8.05512 42.329 8.16221C42.5875 8.2693 42.8224 8.42626 43.0203 8.62413C43.2182 8.822 43.3751 9.05692 43.4822 9.31545C43.5893 9.57399 43.6444 9.85108 43.6444 10.1309V53.8692Z" fill="#C9DDCC"/>
@@ -16,20 +16,20 @@
         <h2 class="title">{{title}}</h2>
         <p class="description">{{description}}</p>
       </div>
+
+
+
+
     </div>
-    <!-- <div class="flex gap-4 items-center actions-btns">
-      <button class="cursor-pointer upload-btn ">Upload <mat-icon>upload</mat-icon></button>
-      <button title="Download" class="cursor-pointer"><mat-icon>download</mat-icon></button>
-      <button title="Delete" class="cursor-pointer"><mat-icon>delete</mat-icon></button>
-    </div> -->
 
-
-  </div>
-  <div class="flex gap-4">
-    @for(action of actions; track  $index){
-      <a [href] ="action.action"  class="action-btn block w-max rounded-[6px] px-[30px] py-[8px]" [ngClass]="{active: $index ==0}">{{ action.name }}</a>
-    }
+    <div class="flex gap-4 div__2">
+      @for(action of actions; track  $index){
+        <a [href] ="action.action"  class="action-btn block w-max rounded-[6px] px-[30px] py-[8px]" [ngClass]="{active: $index ==0}">{{ action.name }}</a>
+      }
+  
+    </div>
 
   </div>
+
 </div>
 
