@@ -15,6 +15,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { SubmissionService } from '../../../../shared';
 import { BusinessLinks } from '../../../../core/utils/business.links';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-special-criteria-questions',
@@ -24,6 +25,7 @@ import { BusinessLinks } from '../../../../core/utils/business.links';
   styleUrl: './special-criteria-questions.component.scss'
 })
 export class SpecialCriteriaQuestionsComponent {
+  private location = inject(Location)
 
   links =BusinessLinks;
   step =0;
@@ -114,7 +116,8 @@ export class SpecialCriteriaQuestionsComponent {
 
   goBack(){
     this.visible =false;
-    return this._router.navigateByUrl(`/business/special-criteria`)
+    // return this._router.navigateByUrl(`/business/special-criteria`)
+    this.location.back();
   }
 
   goToDashboard(){

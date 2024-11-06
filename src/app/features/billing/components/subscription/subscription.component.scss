@@ -9,7 +9,7 @@ h3{
     line-height: 1.25rem;
 }
 .inner__html{
-    color: #000000;
+    color: #404040;
     font-size: .9rem;
     margin: 10px 0;
     line-height: 1.4;
@@ -28,8 +28,8 @@ h3{
 }
 
 .feature-list {
-    list-style-type: disc !important;  /* Adds bullet points */
-    padding-left: 20px;     /* Adds padding to align bullets */
+   
+    padding-left: 10px;     /* Adds padding to align bullets */
     font-size: 0.9em;       /* Adjust font size to be a bit smaller */
     color: #333;            /* Optional: change text color for styling */
 }
@@ -39,18 +39,17 @@ h3{
 }
 
 .feature-list li {
-    // list-style-type: lower-alpha !important;  /* Force bullet display on each item */
-    margin-bottom: 4px;                
-    padding-left: 20px;                /* Adds padding for each list item */
     font-size: 0.9em;
     color: #333;
+    font-weight: 300;
 }
 
 .feature-list li::before {
-    content: "➤"; /* Right arrow pointer */
+    content: "✓"; /* Right arrow pointer */
     margin-right: 8px;
-    color: #333; /* Optional: Customize color */
-    font-size: 0.9em; /* Optional: Customize size */
+    color: #7953dc;
+    font-weight: 300;
+    font-size: 1.5em; /* Optional: Customize size */
 }
 
 

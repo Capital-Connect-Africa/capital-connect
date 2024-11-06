@@ -10,9 +10,9 @@
     <section class="col__right">
 
 
-      <h6><strong>Create a Special Criteria</strong></h6>
+      <p><strong>Create a Special Criteria</strong></p>
       <form [formGroup]="specialCriteriaForm" (ngSubmit)="onSubmit()">
-        <div class="form_content__container">
+        <div class="">
           <div class="input__wrapper">
             <label class="input__label">Title<sup>*</sup></label>
             <input class="input__field" formControlName="title" type="text"
@@ -25,6 +25,13 @@
             <input class="input__field" formControlName="description" type="text"
               placeholder="Enter Criteria Description" />
           </div>
+
+          <div class="input__wrapper mt-6">
+            <label class="input__label">Globally Visible<span class="text__sm">(Will Be Visible To All Businessess)</span>
+            <input class="input__field " formControlName="globalVisible" type="checkbox"
+              placeholder="Enter Criteria Description" /></label>
+          </div>
+
 
 
           <div class="cta__group">

@@ -26,7 +26,13 @@ export class SpecialCriteriaService extends BaseHttpService {
     }
 
     listSPecialCriteria(){
-        return this.read(`${BASE_URL}/special-criteria`).pipe(map(res =>{
+        return this.read(`${BASE_URL}/special-criteria/global`).pipe(map(res =>{
+            return res
+        })) as Observable<Criteria[]>
+    }
+
+    listSPecialCriteriaByInvestor(profileId:number){
+        return this.read(`${BASE_URL}/special-criteria/investor-profile/${profileId}`).pipe(map(res =>{
             return res
         })) as Observable<Criteria[]>
     }

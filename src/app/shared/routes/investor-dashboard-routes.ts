@@ -3,7 +3,7 @@ export const INVESTOR_DASHBOARD_LINKS = [
     { label: 'Global Search', href: '/investor/global-search', exact: false, icon: 'public' ,display:true},
     { label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune' ,display:true},
     { label: 'Manage Access', href: '/investor/manage-access', exact: false, icon: 'admin_panel_settings' ,display:true},
-    { label: 'Questions', href: '/investor/business-questions', exact: false, icon: 'quiz' ,display:true},
+    { label: 'Scoring Criteria', href: '/investor/business-questions', exact: false, icon: 'quiz' ,display:true},
     { label: 'Profile', href: '/investor/investor-page', exact: false, icon: 'settings' ,display:true},
 
 

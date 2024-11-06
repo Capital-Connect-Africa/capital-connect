@@ -37,7 +37,8 @@ export class CreateSpecialCriteriaComponent implements OnInit {
 
     this.specialCriteriaForm = this._formBuilder.group({
       title: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      globalVisible:[false,Validators.required]
     })
   }
 

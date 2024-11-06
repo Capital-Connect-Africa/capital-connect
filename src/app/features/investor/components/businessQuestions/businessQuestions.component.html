@@ -9,90 +9,94 @@
     <div class="main__content">
         <section class="col__right">
             <div class="flex justify-between top__details">
-                <h6 class="top__txt" >Business Questions</h6>
+                <h6 class="top__txt" >Scoring Criteria</h6>
             </div>
 
+            <p-tabView>
+              <p-tabPanel header="INVESTOR PREPAREDNESS">       
+                <div class="accordion">
+                  <div class="card">
+                    <p-accordion   *ngFor="let category of (investor_preparedness | keyvalue); let i = index" [activeIndex]="activeIndex">
+                        <p-accordionTab [header]="category.key" (click)="toggleAccordion(i); loadPreparednessQuestionDetails(category.key)">
 
-            <!-- <div *ngFor="let category of (data | keyvalue)">
-                <h3>{{ category.key }}</h3>
-                <div *ngFor="let step of (category.value | keyvalue)">
-                  <button >
-                    {{ step.key }}
-                  </button>
-                  <div *ngIf="loadedQuestions[category.key]?.[step.key] | async as questionDetails">
-                    <p>{{ questionDetails?.details }}</p> 
-                  </div>
-                </div>
-              </div> -->
-              
-              
+                            <div class="container" *ngIf="current_questions && current_questions.length > 0">
+                              <div *ngFor="let question of current_questions let i = index" class="question">
+                                  <h2>{{i+1}}.  {{ question.text }}</h2>
+                                  <p class="tooltip">{{ question.tooltip }}</p>
+                                  <p><strong>Type:</strong> {{ question.type }}</p>
+                                  <p><strong>Order:</strong> {{ question.order }}</p>
 
-            <div class="accordion">
-              <div class="card">
-                <p-accordion   *ngFor="let category of (data | keyvalue); let i = index" [activeIndex]="activeIndex">
-                     <p-accordionTab [header]="category.key" (click)="toggleAccordion(i); loadQuestionDetails(category.key)">
-                        <!-- <p class="m-0">
-                          {{current_questions | json}}                          
-                        </p> -->
-
-
-
-                        <div class="container" *ngIf="current_questions && current_questions.length > 0">
-                          <div *ngFor="let question of current_questions let i = index" class="question">
-                              <h2>{{i+1}}.  {{ question.text }}</h2>
-                              <p class="tooltip">{{ question.tooltip }}</p>
-                              <p><strong>Type:</strong> {{ question.type }}</p>
-                              <p><strong>Order:</strong> {{ question.order }}</p>
-                              <!-- <p><strong>Subsection ID:</strong> {{ question.subSection.id }}</p>
-                              <p *ngIf="question.submissionId"><strong>Submission ID:</strong> {{ question.submissionId }}</p> -->
-                              <div class="answers" *ngIf="question.answers && question.answers.length > 0">
-                                  <p><strong>Possible Answers:</strong></p>
-                                  <ul>
-                                      <li *ngFor="let answer of question.answers">
-                                          <p><strong>Answer:</strong> {{ answer.text }}</p>
-                                          <p><strong>Weight:</strong> {{ answer.weight }}</p>
-                                          <!-- <p><strong>Answer ID:</strong> {{ answer.id }}</p> -->
-                                          <p *ngIf="answer.recommendation"><strong>Recommendation:</strong> {{ answer.recommendation }}</p>
-                                      </li>
-                                  </ul>
+                                  <div class="answers" *ngIf="question.answers && question.answers.length > 0">
+                                      <p><strong>Possible Answers:</strong></p>
+                                      <ul>
+                                          <li *ngFor="let answer of question.answers">
+                                              <p><strong>Answer:</strong> {{ answer.text }}</p>
+                                              <p><strong>Weight:</strong> {{ answer.weight }}</p>
+                                              <p *ngIf="answer.recommendation"><strong>Recommendation:</strong> {{ answer.recommendation }}</p>
+                                          </li>
+                                      </ul>
+                                  </div>
                               </div>
                           </div>
-                      </div>
 
+                          
+                          <div *ngIf="!current_questions || current_questions.length === 0">
+                            <p-skeleton [style]="{ height: '60px', width: '100%', 'margin-bottom': '10px' }"></p-skeleton>
+                            <p-skeleton [style]="{ height: '60px', width: '100%', 'margin-bottom': '10px' }"></p-skeleton>
+                            <p-skeleton [style]="{ height: '60px', width: '100%', 'margin-bottom': '10px' }"></p-skeleton>
+                          </div>
+
+                        </p-accordionTab>                 
+                    </p-accordion>
+                </div>
+                </div>  
+
+              </p-tabPanel>
+              <p-tabPanel header="INVESTOR ELIGIBILITY">
+
+            <div class="accordion">
+              <div class="card">            
+                <p-accordion *ngFor="let category of investorEligibilityArray; let i = index" [activeIndex]="activeIndex">
+                    <p-accordionTab [header]="category.key" (click)="toggleAccordion(i); loadEligibiltyQuestionDetails(category.key)">
                       
-                      <div *ngIf="!current_questions || current_questions.length === 0">
-                          <p>No questions available.</p>
+                      <div class="container" *ngIf="current_questions && current_questions.length > 0">
+                        <div *ngFor="let question of current_questions; let i = index" class="question">
+                          <h2>{{i+1}}. {{ question.text }}</h2>
+                          <p class="tooltip">{{ question.tooltip }}</p>
+                          <p><strong>Type:</strong> {{ question.type }}</p>
+                          <p><strong>Order:</strong> {{ question.order }}</p>
+                  
+                          <div class="answers" *ngIf="question.answers && question.answers.length > 0">
+                            <p><strong>Possible Answers:</strong></p>
+                            <ul>
+                              <li *ngFor="let answer of question.answers">
+                                <p><strong>Answer:</strong> {{ answer.text }}</p>
+                                <p><strong>Weight:</strong> {{ answer.weight }}</p>
+                                <p *ngIf="answer.recommendation"><strong>Recommendation:</strong> {{ answer.recommendation }}</p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
                       </div>
-
-
-
-
-
-
-
-
+                  
+                      <div *ngIf="!current_questions || current_questions.length === 0">
+                        <p-skeleton [style]="{ height: '20px', width: '100%', 'margin-bottom': '10px' }"></p-skeleton>
+                        <p-skeleton [style]="{ height: '40px', width: '100%', 'margin-bottom': '10px' }"></p-skeleton>
+                        <p-skeleton [style]="{ height: '20px', width: '50%', 'margin-bottom': '10px' }"></p-skeleton>
+                      </div>
+                  
                     </p-accordionTab>                 
-                </p-accordion>
+                  </p-accordion>   
             </div>
-
-
-            </div>
-
-
-              
+            </div>  
+              </p-tabPanel>
+            </p-tabView>     
         </section>
 
         <section class="col__left">
-            <!-- <button class="btn btn-primary">Create Special Criteria</button> -->
-            <app-advertisement-space [title]="'Advertise Here'"
-            [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+            <app-advertisement-space [title]="'Advertise Here'" [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
         </section>
-
     </div>
-
-
-
-
 </div>
 
 
