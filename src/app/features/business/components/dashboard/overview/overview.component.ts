@@ -19,6 +19,11 @@ import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
 import { groupUserSubmissions } from '../../../../../core/utils/group-user-submissions';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
+import { map } from 'rxjs';
+import { DeclineReasons } from '../../../../../shared/interfaces';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-overview',
@@ -33,7 +38,9 @@ import { groupUserSubmissions } from '../../../../../core/utils/group-user-submi
     RouterModule,
     SharedModule,
     TableModule,
-    NumberAbbriviationPipe
+    NumberAbbriviationPipe,
+    MultiSelectModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -60,6 +67,9 @@ export class OverviewComponent {
   investorPreparednessScore: string = '0';
   answers: UserSubmissionResponse[] = [];
   generalSummary!: GeneralSummary;
+  declineReasons: DeclineReasons[] = [];
+
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
   preparednessAnswers: UserSubmissionResponse[] = [];
   factSheetAnswers: UserSubmissionResponse[] = [];
@@ -80,6 +90,8 @@ export class OverviewComponent {
   private _companyService = inject(CompanyStateService);
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
+  declineForm!: FormGroup
+  decline: boolean = false;
 
   response$ =new Observable<any>()
 
@@ -89,12 +101,121 @@ export class OverviewComponent {
     this.stats =res;
   }))
 
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "business")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
+
 investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
   this.matchedInvestors =res.matches;
-  this.connectionRequests =res.requests;
+  // this.connectionRequests =res.requests;
+  this.connectionRequests =  [
+    {
+      id: 1,
+      uuid: "uuid-123",
+      matched: 5,
+      connected: 2,
+      declined: 1,
+      interested: 4,
+      investorType: "Venture Capital",
+      useOfFunds: ["Expansion", "Technology"],
+      emailAddress: "investor1@example.com",
+      minimumFunding: 50000,
+      maximumFunding: 200000,
+      esgFocusAreas: ["Environmental", "Social"],
+      organizationName: "Green Ventures",
+      sectors: [{ name: "Technology" }, { name: "Healthcare" }],
+      subSectors: [{ name: "AI" }, { name: "Biotech" }],
+      noMaximumFunding: false,
+      headOfficeLocation: "San Francisco, USA",
+      businessGrowthStages: ["Growth", "Mature"],
+      investmentStructures: ["Equity", "Debt"],
+      registrationStructures: ["LLC", "Corporation"],
+      countriesOfInvestmentFocus: ["USA", "Canada"],
+      availableFunding: 150000,
+      specialCriteria: [],
+      declineReasons: ["Market fit"],
+      investor: {
+        lastName: "Smith",
+        username: "investor1",
+        firstName: "John"
+      }
+    },
+    {
+      id: 2,
+      uuid: "uuid-456",
+      matched: 3,
+      connected: 1,
+      declined: 2,
+      interested: 5,
+      investorType: "Private Equity",
+      useOfFunds: ["Product Development", "Marketing"],
+      emailAddress: "investor2@example.com",
+      minimumFunding: 100000,
+      maximumFunding: 500000,
+      esgFocusAreas: ["Governance"],
+      organizationName: "Blue Equity Partners",
+      sectors: [{ name: "Finance" }, { name: "Retail" }],
+      subSectors: [{ name: "Fintech" }, { name: "E-commerce" }],
+      noMaximumFunding: false,
+      headOfficeLocation: "London, UK",
+      businessGrowthStages: ["Early", "Growth"],
+      investmentStructures: ["Convertible Note"],
+      registrationStructures: ["Partnership"],
+      countriesOfInvestmentFocus: ["UK", "Germany"],
+      availableFunding: 300000,
+      specialCriteria: ["Impact-driven"],
+      declineReasons: ["Lack of transparency"],
+      investor: {
+        lastName: "Brown",
+        username: "investor2",
+        firstName: "Alice"
+      }
+    },
+    {
+      id: 3,
+      uuid: "uuid-789",
+      matched: 8,
+      connected: 4,
+      declined: 1,
+      interested: 6,
+      investorType: "Angel Investor",
+      useOfFunds: ["R&D", "Operations"],
+      emailAddress: "investor3@example.com",
+      minimumFunding: 25000,
+      maximumFunding: 100000,
+      esgFocusAreas: ["Environmental", "Social", "Governance"],
+      organizationName: "Future Ventures",
+      sectors: [{ name: "Energy" }, { name: "Agriculture" }],
+      subSectors: [{ name: "Renewable Energy" }, { name: "AgriTech" }],
+      noMaximumFunding: true,
+      headOfficeLocation: "Nairobi, Kenya",
+      businessGrowthStages: ["Seed", "Growth"],
+      investmentStructures: ["Grants", "Equity"],
+      registrationStructures: ["Non-profit"],
+      countriesOfInvestmentFocus: ["Kenya", "Uganda"],
+      availableFunding: 75000,
+      specialCriteria: ["Focus on rural impact"],
+      declineReasons: ["Risk level too high"],
+      investor: {
+        lastName: "Williams",
+        username: "investor3",
+        firstName: "Michael"
+      }
+    }
+  ];
+
+
+
+
+
   this.declinedConnections =res.declines;
   this.connectedInvestors =res.connections;
 }))
+
 
   reload(){
     this.investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
@@ -246,9 +367,15 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
   }
 
   declineConnectionRequest(uuid: string){
+    const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+
     this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'decline').pipe(tap(res =>{
       return this.reload();
     }))
+  }
+
+  declineReq(){
+    this.decline = true
   }
 
   revokeConnection(id:number){
@@ -268,4 +395,11 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
     this.impactElementAnswers =[];
     this.stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
   }
+
+
+
+  submit(){
+    // this.declineConnectionRequest(id)
+  }
+
 }
