@@ -1,1 +1,129 @@
 @import "../../../../styles/main.scss";
+@import "../../../../styles/card.scss";
+
+.advisory-page {
+    padding: 2rem;
+    background-color: $gray-100;
+  
+    .header {
+      margin-bottom: 1rem;
+      h1 {
+        font-size: 24px;
+        color: $primary-color;
+      }
+    }
+  
+    .sessions-list {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  
+      .session-card {
+        @extend .card;
+        background-color: $gray-200;
+        color: $text-color;
+  
+        .session-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+  
+          h3 {
+            font-size: 18px;
+            color: $secondary-color;
+          }
+  
+          p {
+            font-size: 14px;
+            color: $gray-600;
+          }
+  
+          .countdown-timer {
+            font-size: 16px;
+            color: $danger-color;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  
+    .add-session-form {
+      margin-top: 2rem;
+  
+      h2 {
+        color: $primary-color;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+    
+  
+      form {
+        // display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+
+        .time{
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+        }
+  
+        .input__wrapper {
+          .input__label {
+            color: $gray-700;
+          }
+  
+          .input__field {
+            @extend .input__field;
+            border: 1px solid $gray-400;
+            &:focus {
+              border-color: $primary-color;
+            }
+          }
+        }
+
+        .cta__group{
+            margin-top: .5cm;
+        }
+  
+        .btn-primary {
+          grid-column: span 2;
+          justify-self: end;
+        }
+      }
+    }
+
+    .attendees-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px; /* Space between pills */
+      }
+      
+      .attendee-pill {
+        display: flex;
+        align-items: center;
+        padding: 6px 12px;
+        background-color: $primary-color;
+        color: white;
+        border-radius: 16px;
+        font-size: 14px;
+      }
+      
+      .remove-pill-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        margin-left: 8px;
+        padding: 0;
+      }
+      
+      .remove-pill-btn:hover {
+        color: #ff0000; /* Red color on hover */
+      }
+      
+  }
+  
