@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { map, Observable, tap } from "rxjs";
 import { BASE_URL, BaseHttpService } from "../../../core";
 import { Score } from "./onboarding.questions.service";
-import {MatchedBusiness, MatchedInvestor,InterestingBusinesses,ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody, ConnectionRequestsStats, DeclineReasons} from "../../interfaces";
+import { MatchedBusiness, MatchedInvestor, InterestingBusinesses, ConnectedBusiness, MatchMakingStats, ConnectionRequest, ConnectionRequestBody, updateConnectionRequestBody, ConnectionRequestsStats, DeclineReasons } from "../../interfaces";
 import { GeneralSummary, UserSubmissionResponse } from "../../interfaces/submission.interface";
 import { Submission } from "../../interfaces/submission.interface";
 import { Company } from "../../../features/organization/interfaces";
@@ -24,8 +24,8 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as MatchedInvestor[]
     }))
   }
-  getCompanyStats(companyId: number){
-    return this.read(`${BASE_URL}/statistics/matchmaking/${companyId}?role=company`).pipe(map((res:any) => {
+  getCompanyStats(companyId: number) {
+    return this.read(`${BASE_URL}/statistics/matchmaking/${companyId}?role=company`).pipe(map((res: any) => {
       return res as {
         matched: number,
         requested: number,
@@ -36,14 +36,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     }))
   }
 
-  getDecliningInvestors(companyId:number) {
+  getDecliningInvestors(companyId: number) {
     return this.read(`${BASE_URL}/matchmaking/investors/declined/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
     }))
   }
 
-  getInvestorProfile(profileId:number){
-    return this.readById(`${BASE_URL}/investor-profiles`, profileId).pipe(map(res =>{
+  getInvestorProfile(profileId: number) {
+    return this.readById(`${BASE_URL}/investor-profiles`, profileId).pipe(map(res => {
       return res as MatchedInvestor;
     }))
   }
@@ -53,28 +53,28 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
       return res as MatchedInvestor[]
     }))
   }
-  
+
   getConnectedInvestors(companyId: number) {
     return this.read(`${BASE_URL}/matchmaking/investors/connected/${companyId}`).pipe(map(res => {
       return res as MatchedInvestor[]
     }))
   }
 
-  respondToInvestorConnectionRequest(uuid: string, response: string){
-    return this.put(`${BASE_URL}/connection-requests/${uuid}/${response}`).pipe(map(res =>{
+  respondToInvestorConnectionRequest(uuid: string, response: string) {
+    return this.put(`${BASE_URL}/connection-requests/${uuid}/${response}`).pipe(map(res => {
       return res
     }))
   }
 
   getOnboardingScores(userId: number): Observable<Score[]> {
-    return this.read(`${BASE_URL}/submissions/user/${userId}/score`).pipe((map(res  => {
+    return this.read(`${BASE_URL}/submissions/user/${userId}/score`).pipe((map(res => {
       // @ts-ignore
       return res.score as Score[];
     })))
   }
 
-  getSubmisionByIds(userId: number,questionIds: number[]) : Observable<UserSubmissionResponse[]>{
-    return this.read(`${BASE_URL}/submissions/by-question-ids?questionIds=${questionIds}&userId=${userId}`).pipe((map(res=>{
+  getSubmisionByIds(userId: number, questionIds: number[]): Observable<UserSubmissionResponse[]> {
+    return this.read(`${BASE_URL}/submissions/by-question-ids?questionIds=${questionIds}&userId=${userId}`).pipe((map(res => {
       return res as UserSubmissionResponse[];
     })))
 
@@ -99,14 +99,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     );
   }
 
-  getConnectionRequestsStats(){
+  getConnectionRequestsStats() {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/statistics/requests/${investorProfileId}`).pipe(
       map(res => res as unknown as ConnectionRequestsStats)
     )
   }
 
-  getMatchMakingStatistics(): Observable<MatchMakingStats>{
+  getMatchMakingStatistics(): Observable<MatchMakingStats> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/statistics/matchmaking/${investorProfileId}?role=investor`).pipe(
       map(res => res as unknown as MatchMakingStats)
@@ -117,55 +117,55 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   markCompanyAsInteresting(companyId: number): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/interesting/${investorProfileId}/${companyId}`, {}).pipe(
-      map(() => void 0)  
+      map(() => void 0)
     );
   }
 
   //Search criteria
-  postSearchCriteria(criteria: Company):Observable<MatchedBusiness[]>{
+  postSearchCriteria(criteria: Company): Observable<MatchedBusiness[]> {
     return this.create(`${BASE_URL}/matchmaking/search-companies`, criteria).pipe(
-      map((res) => res as unknown as MatchedBusiness[])  
+      map((res) => res as unknown as MatchedBusiness[])
     );
   }
 
 
   //reasons for rejecting   
-  getDeclineReasons(): Observable<DeclineReasons[]>{
+  getDeclineReasons(): Observable<DeclineReasons[]> {
     return this.read(`${BASE_URL}/decline-reasons`).pipe(
       map(res => res as unknown as DeclineReasons[])
     )
   }
-  
+
   //Connect with a company
   connectWithCompany(companyId: number): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/connect/${investorProfileId}/${companyId}`, {}).pipe(
-      map(() => void 0) 
+      map(() => void 0)
     );
   }
 
 
   //Cancel Connection with a company
-  cancelConnectWithCompany(companyId: number,reasons: string[]): Observable<void> {
+  cancelConnectWithCompany(companyId: number, reasons: string[]): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/disconnect/${investorProfileId}/${companyId}`, reasons).pipe(
-      map(() => void 0)  
+      map(() => void 0)
     );
   }
 
   //search a company
-  searchCompany(status:string, query:string):Observable<InterestingBusinesses[]>{
+  searchCompany(status: string, query: string): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/matchmaking/search-matches/${investorProfileId}?status=${status}&q=${query}`).pipe(
       map(res => res as unknown as InterestingBusinesses[]))
 
   }
 
-   //Cancel Connection with a company
-   cancelInterestWithCompany(companyId: number, reasons: string[]): Observable<void> {    
+  //Cancel Connection with a company
+  cancelInterestWithCompany(companyId: number, reasons: string[]): Observable<void> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.create(`${BASE_URL}/matchmaking/decline/${investorProfileId}/${companyId}`, reasons).pipe(
-      map(() => void 0)  
+      map(() => void 0)
     );
   }
 
@@ -174,7 +174,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
 
 
   //Interesting companies
-  getInterestingCompanies(page:number, limit:number): Observable<InterestingBusinesses[]> {
+  getInterestingCompanies(page: number, limit: number): Observable<InterestingBusinesses[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/matchmaking/interested/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as InterestingBusinesses[])
@@ -182,7 +182,7 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
 
   //connected companies
-  getConnectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
+  getConnectedCompanies(page: number, limit: number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
 
     return this.read(`${BASE_URL}/matchmaking/connected/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
@@ -191,14 +191,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   }
 
   //Rejected companies
-  getRejectedCompanies(page:number, limit:number): Observable<ConnectedBusiness[]> {
+  getRejectedCompanies(page: number, limit: number): Observable<ConnectedBusiness[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
     return this.read(`${BASE_URL}/matchmaking/declined/${investorProfileId}?page=${page}&limit=${limit}`).pipe(
       map(res => res as ConnectedBusiness[])
     );
   }
 
-    
+
   //Matched Investor Profiles
   getMatchedInvestorProfiles(): Observable<MatchedInvestor[]> {
     return this.read(`${BASE_URL}/matchmaking/investor-profiles`).pipe(
@@ -210,21 +210,21 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   //create a connection request
   createAConnectionRequest(body: ConnectionRequestBody): Observable<void> {
     return this.create(`${BASE_URL}/connection-requests`, body).pipe(
-      map(() => void 0) 
+      map(() => void 0)
     );
   }
   //Get connection request by Id
-  getConnectionRequestById(id:number){
-    return this.readById(`${BASE_URL}/connection-requests`, id).pipe(map(res =>{
+  getConnectionRequestById(id: number) {
+    return this.readById(`${BASE_URL}/connection-requests`, id).pipe(map(res => {
       return res as ConnectionRequest;
     }))
   }
 
 
   //get All connection requests made by an investor
-  getConnectionRequestByInvestor(page:number, limit:number):Observable<ConnectionRequest[]>{
+  getConnectionRequestByInvestor(page: number, limit: number): Observable<ConnectionRequest[]> {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.read(`${BASE_URL}/connection-requests/investor/${investorProfileId}?page=${page}&limit=${limit}`).pipe(map(res =>{
+    return this.read(`${BASE_URL}/connection-requests/investor/${investorProfileId}?page=${page}&limit=${limit}`).pipe(map(res => {
       return res as ConnectionRequest[];
     }))
   }
@@ -232,26 +232,26 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
   //Update connection request
   updateConnectionRequest(body: updateConnectionRequestBody): Observable<void> {
     return this.create(`${BASE_URL}/connection-requests`, body).pipe(
-      map(() => void 0) 
+      map(() => void 0)
     );
   }
   //Deletete connection request
-  deleteConnectionRequest(id:number): Observable<void> {
+  deleteConnectionRequest(id: number): Observable<void> {
     return this.delete(`${BASE_URL}/connection-requests`, id).pipe(
-      map(() => void 0) 
+      map(() => void 0)
     );
   }
 
   //Download CSV
-  matchMakingCsv(status:string){
+  matchMakingCsv(status: string) {
     let investorProfileId = Number(sessionStorage.getItem('profileId'))
-    return this.downloadExcel(`${BASE_URL}/matchmaking/download-csv`,investorProfileId,status).pipe(tap(blob=>{
-      const fileName = `matchmaking_${status}.csv`; 
-      this.saveFile(blob, fileName);      
+    return this.downloadExcel(`${BASE_URL}/matchmaking/download-csv`, investorProfileId, status).pipe(tap(blob => {
+      const fileName = `matchmaking_${status}.csv`;
+      this.saveFile(blob, fileName);
     })
 
     )
-  }  
+  }
 
   private saveFile(blob: Blob, fileName: string): void {
     const a = document.createElement('a');
@@ -264,14 +264,14 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     URL.revokeObjectURL(objectUrl);
   }
 
-  getSectionSubmissionProgress(userId:number, sectionId: number){
-    return this.read(`${BASE_URL}/submissions/complete/${userId}/${sectionId}`).pipe(map(res =>{
+  getSectionSubmissionProgress(userId: number, sectionId: number) {
+    return this.read(`${BASE_URL}/submissions/complete/${userId}/${sectionId}`).pipe(map(res => {
       return res;
     }))
   }
 
-  getCompanyProgress(companyId: number){
-    return this.read(`${BASE_URL}/company/complete/${companyId}`).pipe(map(res =>{
+  getCompanyProgress(companyId: number) {
+    return this.read(`${BASE_URL}/company/complete/${companyId}`).pipe(map(res => {
       return res;
     }))
   }

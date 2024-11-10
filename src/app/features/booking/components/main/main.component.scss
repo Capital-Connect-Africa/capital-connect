@@ -1,1 +1,518 @@
 @import "../../../../styles/main.scss";
+@import "../../../../styles/card.scss";
+
+
+.advisory-page {
+    padding: 2rem;
+      
+    .header {
+      margin-bottom: 1rem;
+      h1 {
+        font-size: 24px;
+        color: $primary-color;
+      }
+    }
+
+
+    .main{
+      height: 100%;
+      display: grid;
+      background-color: #F9FAFB;
+      .navbar{
+        display: flex;
+        padding-left: 1rem;
+        align-items: center;
+        background-color: white;
+        justify-content: space-between;
+        button{
+          display: flex;
+          background: none;
+        }
+      }
+      main{
+        gap: 2rem;
+        display: grid;
+        padding: 1rem;
+        .brand__name{
+          color: #031D16;
+          font-weight: 700;
+          line-height: 2rem;
+          font-size: 1.35rem;
+          font-family: $font-family-sans-serif;
+        }
+        .left__col,
+        .right__col{
+          width: 100%;
+          gap: 1rem;
+          display: flex;
+          flex-direction: column;
+        }
+        .right__col{
+          gap: 2rem;
+        }
+      }
+    }
+
+    .sessions-list {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  
+      .session-card {
+        @extend .card;
+        background-color: $gray-200;
+        color: $text-color;
+  
+        .session-details {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+  
+          h3 {
+            font-size: 18px;
+            color: $secondary-color;
+          }
+  
+          p {
+            font-size: 14px;
+            color: $gray-600;
+          }
+  
+          .countdown-timer {
+            font-size: 16px;
+            color: $danger-color;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    .form_content__container{
+      border-radius: 10px !important;
+    }
+  
+    .add-session-form {
+      font-family: $font-family-inter;
+      font-size: small;
+      border-radius: 10px !important;
+
+
+      .input__label{
+        font-family: $font-family-inter !important;
+        font-weight: 400;
+        color: black;
+      }
+  
+      h6 {
+        color: $primary-color;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+
+    
+  
+      form {
+        // display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr 1fr;
+
+        .time{
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr 1fr;
+        }
+  
+        .input__wrapper {
+          .input__label {
+            color: $gray-700;
+          }
+  
+          .input__field {
+            @extend .input__field;
+            border: 1px solid $gray-400;
+            &:focus {
+              border-color: $primary-color;
+            }
+          }
+        }
+
+        .cta__group{
+            margin-top: .5cm;
+            width: 100%;
+        }
+
+        .attendee__save{
+            margin-top: .5cm;
+        }
+  
+        .btn-primary {
+          grid-column: span 2;
+          justify-self: end;
+        }
+      }
+    }
+
+  }
+  
+
+  .input__wrapper {
+    margin-bottom: 1.5rem;
+  
+    .input__label {
+      font-size: 16px;
+      font-weight: 600;
+      color: $gray-800;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+  
+    [formArrayName="invitees"] {
+      .invitee-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+  
+        input[type="email"],
+        input[type="text"] {
+          flex: 1;
+          padding: 0.5rem 1rem;
+          font-size: 14px;
+          color: $gray-800;
+          border: 1px solid $gray-400;
+          border-radius: 4px;
+          background-color: $white;
+          transition: border-color 0.2s ease-in-out;
+  
+          &:focus {
+            border-color: $primary-color;
+            outline: none;
+          }
+        }
+  
+        button {
+          background-color: $danger-color;
+          color: $white;
+          border: none;
+          padding: 0.5rem 0.75rem;
+          border-radius: 4px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: background-color 0.2s ease-in-out;
+  
+          &:hover {
+            background-color: darken($danger-color, 10%);
+          }
+        }
+      }
+    }
+  
+    .add-invitee-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 14px;
+      font-weight: 600;
+      color: $white;
+      background-color: $primary-color;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+  
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+  }
+  
+
+
+  .input__wrapper {
+    margin-bottom: 1.5rem;
+  
+    .input__label {
+      font-size: 16px;
+      font-weight: 600;
+      color: $gray-800;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+  
+    .attendees-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px; // Space between pills
+      margin-top: 0.5rem;
+    }
+  
+    .attendee-pill {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px;
+      background-color: $primary-color;
+      color: white;
+      border-radius: 16px;
+      font-size: 14px;
+  
+      span {
+        margin-right: 8px;
+      }
+  
+      .remove-pill-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 0;
+        margin-left: 8px;
+  
+        &:hover {
+          color: #ff0000; // Red color on hover
+        }
+      }
+    }
+  
+    .add-invitee-form {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+  
+      input {
+        padding: 0.5rem;
+        border: 1px solid $gray-400;
+        border-radius: 4px;
+        &:focus {
+          border-color: $primary-color;
+        }
+      }
+
+      .validation__error{
+        color: #ff0000;
+      }
+  
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 14px;
+        font-weight: 600;
+        background-color: $primary-color;
+        color: $white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+  
+        &:hover {
+          background-color: darken($primary-color, 10%);
+        }
+      }
+    }
+  }
+  
+
+  
+.main{
+  height: 100%;
+  display: grid;
+  background-color: #F9FAFB;
+  .navbar{
+    display: flex;
+    padding-left: 1rem;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+    button{
+      display: flex;
+      background: none;
+    }
+  }
+  main{
+    gap: 2rem;
+    display: grid;
+    padding: 1rem;
+    .brand__name{
+      color: #031D16;
+      font-weight: 700;
+      line-height: 2rem;
+      font-size: 1.35rem;
+      font-family: $font-family-sans-serif;
+    }
+    .left__col,
+    .right__col{
+      width: 100%;
+      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .right__col{
+      gap: 2rem;
+    }
+  }
+}
+
+
+
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+
+
+.input__wrapper {
+  margin-bottom: 1rem;
+}
+
+.input__label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.input__field {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.validation__error {
+  color: #d9534f;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.invitee-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 4px;
+}
+
+.btn-danger {
+  background-color: #d9534f;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: #c9302c;
+}
+
+
+
+.btn-success-alt:hover {
+  background-color: #4cae4c;
+}
+
+.cta__group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+
+
+
+
+
+
+
+ 
+  
+
+
+
+
+
+
+
+  
+  
+ 
+
+
+ 
+
+
+
