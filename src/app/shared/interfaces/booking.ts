@@ -11,6 +11,21 @@ export interface CreateBookingResponse {
 }
 
 
+export interface Invitee {
+  email: string;
+  displayName: string;
+}
+
+export interface Meeting {
+  title: string;
+  start: string; // ISO date string format
+  end: string;   // ISO date string format
+  timezone: string;
+  invitees: Invitee[];
+}
+
+
+
 export interface Payment {
     id: number;
     currency: string;
