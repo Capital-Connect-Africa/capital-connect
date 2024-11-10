@@ -41,8 +41,8 @@ export class MainComponent {
 
   advisorySessionForm = this._formBuilder.group({
     title: ['', Validators.required],
-    start: ['', Validators.required, this.isWithinWorkingHours],
-    end: ['', Validators.required, this.isWithinWorkingHours],
+    start: ['', Validators.required],
+    end: ['', Validators.required],
     timezone: ['', Validators.required],
     invitees: this._formBuilder.array([], Validators.required)
   })
