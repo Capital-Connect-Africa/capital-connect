@@ -66,6 +66,13 @@ export class BusinessAndInvestorMatchingService extends BaseHttpService {
     }))
   }
 
+
+  declineConnectionRequestBusiness(uuid:string, reasons:unknown){
+    return this.putPost(`${BASE_URL}/connection-requests/${uuid}/decline`, reasons).pipe(map(res=>{
+      return res
+    }))
+  }
+
   getOnboardingScores(userId: number): Observable<Score[]> {
     return this.read(`${BASE_URL}/submissions/user/${userId}/score`).pipe((map(res => {
       // @ts-ignore

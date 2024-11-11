@@ -115,7 +115,8 @@ export class BusinessOnboardingScoringService {
       const matches =res[0]
       const connections =res[1];
       const declines =res[2];
-      const requests =res[3].filter(investor =>!matches.find(minvestor =>minvestor.id ==investor.id) && !connections.find(cinvestor =>cinvestor.id ==investor.id) && !declines.find(dinvestor =>dinvestor.id ==investor.id));
+      const requests = res[3]
+      // const requests =res[3].filter(investor =>!matches.find(minvestor =>minvestor.id ==investor.id) && !connections.find(cinvestor =>cinvestor.id ==investor.id) && !declines.find(dinvestor =>dinvestor.id ==investor.id));
       return {
         matches, connections, declines, requests
       }
