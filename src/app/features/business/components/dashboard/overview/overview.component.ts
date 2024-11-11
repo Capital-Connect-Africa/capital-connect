@@ -19,7 +19,7 @@ import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
 import { groupUserSubmissions } from '../../../../../core/utils/group-user-submissions';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
 import { map } from 'rxjs';
 import { DeclineReasons } from '../../../../../shared/interfaces';
@@ -68,6 +68,7 @@ export class OverviewComponent {
   answers: UserSubmissionResponse[] = [];
   generalSummary!: GeneralSummary;
   declineReasons: DeclineReasons[] = [];
+  select_reasons:boolean = false
 
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
@@ -100,6 +101,14 @@ export class OverviewComponent {
   stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
     this.stats =res;
   }))
+  decline_uuid!: string;
+
+  constructor(private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+      reasons:[[]]
+    });
+  }
 
 
   declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
@@ -111,107 +120,7 @@ export class OverviewComponent {
 
 investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
   this.matchedInvestors =res.matches;
-  // this.connectionRequests =res.requests;
-  this.connectionRequests =  [
-    {
-      id: 1,
-      uuid: "uuid-123",
-      matched: 5,
-      connected: 2,
-      declined: 1,
-      interested: 4,
-      investorType: "Venture Capital",
-      useOfFunds: ["Expansion", "Technology"],
-      emailAddress: "investor1@example.com",
-      minimumFunding: 50000,
-      maximumFunding: 200000,
-      esgFocusAreas: ["Environmental", "Social"],
-      organizationName: "Green Ventures",
-      sectors: [{ name: "Technology" }, { name: "Healthcare" }],
-      subSectors: [{ name: "AI" }, { name: "Biotech" }],
-      noMaximumFunding: false,
-      headOfficeLocation: "San Francisco, USA",
-      businessGrowthStages: ["Growth", "Mature"],
-      investmentStructures: ["Equity", "Debt"],
-      registrationStructures: ["LLC", "Corporation"],
-      countriesOfInvestmentFocus: ["USA", "Canada"],
-      availableFunding: 150000,
-      specialCriteria: [],
-      declineReasons: ["Market fit"],
-      investor: {
-        lastName: "Smith",
-        username: "investor1",
-        firstName: "John"
-      }
-    },
-    {
-      id: 2,
-      uuid: "uuid-456",
-      matched: 3,
-      connected: 1,
-      declined: 2,
-      interested: 5,
-      investorType: "Private Equity",
-      useOfFunds: ["Product Development", "Marketing"],
-      emailAddress: "investor2@example.com",
-      minimumFunding: 100000,
-      maximumFunding: 500000,
-      esgFocusAreas: ["Governance"],
-      organizationName: "Blue Equity Partners",
-      sectors: [{ name: "Finance" }, { name: "Retail" }],
-      subSectors: [{ name: "Fintech" }, { name: "E-commerce" }],
-      noMaximumFunding: false,
-      headOfficeLocation: "London, UK",
-      businessGrowthStages: ["Early", "Growth"],
-      investmentStructures: ["Convertible Note"],
-      registrationStructures: ["Partnership"],
-      countriesOfInvestmentFocus: ["UK", "Germany"],
-      availableFunding: 300000,
-      specialCriteria: ["Impact-driven"],
-      declineReasons: ["Lack of transparency"],
-      investor: {
-        lastName: "Brown",
-        username: "investor2",
-        firstName: "Alice"
-      }
-    },
-    {
-      id: 3,
-      uuid: "uuid-789",
-      matched: 8,
-      connected: 4,
-      declined: 1,
-      interested: 6,
-      investorType: "Angel Investor",
-      useOfFunds: ["R&D", "Operations"],
-      emailAddress: "investor3@example.com",
-      minimumFunding: 25000,
-      maximumFunding: 100000,
-      esgFocusAreas: ["Environmental", "Social", "Governance"],
-      organizationName: "Future Ventures",
-      sectors: [{ name: "Energy" }, { name: "Agriculture" }],
-      subSectors: [{ name: "Renewable Energy" }, { name: "AgriTech" }],
-      noMaximumFunding: true,
-      headOfficeLocation: "Nairobi, Kenya",
-      businessGrowthStages: ["Seed", "Growth"],
-      investmentStructures: ["Grants", "Equity"],
-      registrationStructures: ["Non-profit"],
-      countriesOfInvestmentFocus: ["Kenya", "Uganda"],
-      availableFunding: 75000,
-      specialCriteria: ["Focus on rural impact"],
-      declineReasons: ["Risk level too high"],
-      investor: {
-        lastName: "Williams",
-        username: "investor3",
-        firstName: "Michael"
-      }
-    }
-  ];
-
-
-
-
-
+  this.connectionRequests =res.requests;
   this.declinedConnections =res.declines;
   this.connectedInvestors =res.connections;
 }))
@@ -367,16 +276,13 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
   }
 
   declineConnectionRequest(uuid: string){
-    const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
-
-    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'decline').pipe(tap(res =>{
-      return this.reload();
-    }))
+    this.decline_uuid = uuid
+    this.select_reasons = true
   }
 
-  declineReq(){
-    this.decline = true
-  }
+
+
+
 
   revokeConnection(id:number){
     this.signalService.connectionRequestsDialogIsVisible.set(false);
@@ -396,10 +302,22 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
     this.stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
   }
 
-
+  back(){
+    this.select_reasons = false
+  }
 
   submit(){
-    // this.declineConnectionRequest(id)
+    const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+
+    let data = {
+       declineReasons: selectedReasons
+    }
+
+    this.response$ =this._businessMatchingService.declineConnectionRequestBusiness( this.decline_uuid,data ).pipe(tap(res =>{
+      return this.reload();
+    }))
+
+    this.select_reasons = false
   }
 
 }

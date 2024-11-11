@@ -290,10 +290,11 @@
 
 <app-modal [(visible)]="signalService.connectionRequestsDialogIsVisible" title="Connection Requests" [value]="stats.requested"
   helperText="This investor requested to connect with you">
+
   <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectionRequests.length">
     You have no connections requests from any investors yet <br /> check again later
   </div>
-  <div class="flex flex-col gap-4" *ngIf="connectionRequests.length">
+  <div class="flex flex-col gap-4" *ngIf="connectionRequests.length && !select_reasons">
     <p-table [value]="connectionRequests" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
       <ng-template pTemplate="header">
           <tr>
@@ -327,30 +328,30 @@
       </ng-template>
   </p-table>
   </div>
-</app-modal>
 
 
+  <div *ngIf="select_reasons" >
+    <form  [formGroup]="declineForm">
+      <div class="form_content__container">
+        <div class="input__wrapper">
+          <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
+          <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason"
+            [options]="declineReasons" formControlName="reasons" optionLabel="reason"
+            placeholder="Select reasons"></p-multiSelect>
+  
+          <div class="button-group mt-4 flex end flex justify-between space-x-4 mt-6">
+            <button pButton type="button" class="btn btn-tertiary mt-5 btn-sm" label="Submit" (click)="back()">Back</button>
 
-
-<!-- Decline Reasons -->
-<app-modal [(visible)]="decline" title="Reasons for declining" helperText="Tell us why you are declining">
-  <form [formGroup]="declineForm">
-    <div class="form_content__container">
-      <div class="input__wrapper">
-        <label class="input__label">Select The Reasons for Declining<sup>*</sup></label>
-        <p-multiSelect class="input__field p-6" styleClass="w-full gap-4" optionValue="reason"
-          [options]="declineReasons" formControlName="reasons" optionLabel="reason"
-          placeholder="Select reasons"></p-multiSelect>
-
-        <div class="button-group mt-4 flex end flex justify-end space-x-4 mt-6">
-          <div class="cta__group">
-            <button pButton type="button" class="btn btn-primary mt-5" label="Submit" (click)="submit()">Submit</button>
+            
+            <button pButton type="button" class="btn btn-primary mt-5 btn-sm" label="Submit" (click)="submit()">Submit</button>
           </div>
         </div>
       </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </app-modal>
+
+
 
 <!-- Business fact Report -->
 <app-modal [visible]="factSheetVisible">
