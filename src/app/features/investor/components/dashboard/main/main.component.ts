@@ -5,15 +5,15 @@ import {
 import {
   AssessmentSummaryComponent
 } from "../../../../../shared/components/assessment-summary/assessment-summary.component";
-import {MatIcon} from "@angular/material/icon";
-import {NavbarComponent} from "../../../../../core";
+import { MatIcon } from "@angular/material/icon";
+import { NavbarComponent } from "../../../../../core";
 import {
   OverviewSectionComponent
 } from "../../../../../shared/components/overview-section/overview-section.component";
 import {
   SchedulesSectionComponent
 } from "../../../../../shared/components/schedules-section/schedules-section.component";
-import {OverviewComponent} from "../overview/overview.component";
+import { OverviewComponent } from "../overview/overview.component";
 import { CardComponent } from '../../../../../shared/components/card/card.component';
 import { InterestingBusinesses, MatchedBusiness, MatchMakingStats } from '../../../../../shared/interfaces';
 import { inject } from '@angular/core';
@@ -58,12 +58,12 @@ export class MainComponent {
 
   markAsInteresting$ = new Observable<unknown>()
   interestingBusinesses: InterestingBusinesses[] = [];
-  matchMakingStats: MatchMakingStats | undefined 
+  matchMakingStats: MatchMakingStats | undefined
 
 
-  table:boolean = true
+  table: boolean = true
 
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res   }));
+  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
   private _feedBackService = inject(FeedbackService);
 
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
@@ -72,12 +72,12 @@ export class MainComponent {
 
 
 
-  getTotalReviewedBusinesess():string{
+  getTotalReviewedBusinesess(): string {
     let total = 0
-    if(this.matchMakingStats && this.matchedBusinesses){
+    if (this.matchMakingStats && this.matchedBusinesses) {
       total = this.matchMakingStats?.connected + this.matchMakingStats?.declined + this.matchMakingStats?.interesting + this.matchedBusinesses.length
       return total.toString()
-    }else{
+    } else {
       return '1'
     }
   }
@@ -99,10 +99,10 @@ export class MainComponent {
 
   showInterest(id: number) {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
-      tap(() => { 
-        this._feedBackService.success('Company marked as interesting successfully.');        
+      tap(() => {
+        this._feedBackService.success('Company marked as interesting successfully.');
 
-      })        
+      })
     );
   }
 
@@ -111,36 +111,36 @@ export class MainComponent {
     this.selectedMatchedBusiness = null;
   }
 
- 
+
 
   private _authStateService = inject(AuthStateService);
-  issue =UserMobileNumbersIssues;
-  signalsService =inject(SignalsService);
-  private _fb =inject(FormBuilder);
-  savephoneNumber$ =new Observable<any>();
-  phoneNumberPull$ =new Observable<any>();
+  issue = UserMobileNumbersIssues;
+  signalsService = inject(SignalsService);
+  private _fb = inject(FormBuilder);
+  savephoneNumber$ = new Observable<any>();
+  phoneNumberPull$ = new Observable<any>();
 
-  phoneUpdateForm =this._fb.group({
+  phoneUpdateForm = this._fb.group({
     field: ['', [
       Validators.required,
     ]]
   })
 
-  showalert(){
+  showalert() {
     this.signalsService.showDialog.set(true)
   }
 
-  savePhoneNumber(){
-    const field =(this.phoneUpdateForm.value?.field)??'';
-    if(this.signalsService.actionBody().issue ==this.issue.EMPTY){
-      this.savephoneNumber$ =this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res =>{
+  savePhoneNumber() {
+    const field = (this.phoneUpdateForm.value?.field) ?? '';
+    if (this.signalsService.actionBody().issue == this.issue.EMPTY) {
+      this.savephoneNumber$ = this._authStateService.saveUserPhoneNumberAddedStatus(field).pipe(tap(res => {
         return res
       }))
-      
-    } else if(this.signalsService.actionBody().issue ==this.issue.UNVERIFIED){
-      const mobileNumbers:MobileNumber[] =JSON.parse(sessionStorage.getItem('mobile_numbers')??JSON.stringify([]))
-      if(mobileNumbers.length){
-        this.savephoneNumber$ =this._authStateService.verifyPhoneNumber(field, mobileNumbers.at(0)?.phoneNo??'').pipe(tap(res =>{
+
+    } else if (this.signalsService.actionBody().issue == this.issue.UNVERIFIED) {
+      const mobileNumbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]))
+      if (mobileNumbers.length) {
+        this.savephoneNumber$ = this._authStateService.verifyPhoneNumber(field, mobileNumbers.at(0)?.phoneNo ?? '').pipe(tap(res => {
           return res
         }))
 
@@ -149,10 +149,10 @@ export class MainComponent {
   }
 
   ngOnChanges(): void {
-    this.phoneNumberPull$ =this._authStateService.checkPhoneNumberStatus().pipe(tap((res: UserMobileNumbersIssues) =>{
-      this.signalsService.showInAppAlert.set(res !==UserMobileNumbersIssues.VERIFIED);
-      if(res ===UserMobileNumbersIssues.UNVERIFIED)
-        this.signalsService.actionBody.set({issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required'})
+    this.phoneNumberPull$ = this._authStateService.checkPhoneNumberStatus().pipe(tap((res: UserMobileNumbersIssues) => {
+      this.signalsService.showInAppAlert.set(res !== UserMobileNumbersIssues.VERIFIED);
+      if (res === UserMobileNumbersIssues.UNVERIFIED)
+        this.signalsService.actionBody.set({ issue: UserMobileNumbersIssues.UNVERIFIED, command: 'Verify', message: 'Please Verify your phone number', title: 'Action Required' })
     }));
   }
 

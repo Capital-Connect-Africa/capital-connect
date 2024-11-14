@@ -6,6 +6,7 @@ import { SharedModule } from './shared';
 import { LoadingComponent } from './core/components/loading/loading.component';
 import { FeedbackNotificationComponent, LoadingService } from './core';
 import { DataLayerService } from './core/services/analytics/data.layer.service';
+import { ZendeskService } from './core/services/intergrations/zendesk.service';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private _loadingService = inject(LoadingService);
   private _cd = inject(ChangeDetectorRef);
   private _router =inject(Router);
+  private _zenDeskService = inject(ZendeskService)
 
   routerEvents$ =new Observable<any>();
 
@@ -43,6 +45,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._trackLoadingStatusSubscription().unsubscribe()
+  }
+
+  openChat() {
+    this._zenDeskService.openChat();
+  }
+
+  closeChat() {
+    this._zenDeskService.closeChat();
+  }
+
+  setUser() {
+    this._zenDeskService.setVisitorInfo('John Doe', 'john.doe@example.com');
   }
 
 }
