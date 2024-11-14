@@ -13,6 +13,8 @@ export interface User {
   emailVerificationExpires: string;
   subscriptions: Subscription[];
   activeSubscription: ActiveSubscription;
+  createdAt:Date,
+  updatedAt:Date
 }
 
 export enum Role {
