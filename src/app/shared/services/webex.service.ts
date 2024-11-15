@@ -2,7 +2,7 @@ import { Injectable ,inject} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from '../../core/http/base/base.http.service';
-import { CreateBookingRequest, CreateBookingResponse, Meeting } from '../interfaces/booking';
+import { CreateBookingRequest, CreateBookingResponse, Meeting, MeetingResponse } from '../interfaces/booking';
 import { BASE_URL } from '../../core';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../features/auth/services/auth-state.service';
@@ -29,8 +29,9 @@ export class WebExService extends BaseHttpService {
     return this.create(`${BASE_URL}/webex/create`, request, this.headers) as Observable<unknown>;
   }
 
-  getMeeting(id: string): Observable<unknown> {
-    return this.read(`${BASE_URL}/webex/${id}`, this.headers) as Observable<unknown>;
+  getMeeting(id: string): Observable<MeetingResponse> {
+    // id = "cebd5c382d234975805723958efff95c"
+    return this.read(`${BASE_URL}/webex/${id}`, this.headers) as unknown as Observable<MeetingResponse>;
   }
 
 }

@@ -32,11 +32,15 @@ export class MainComponent {
   private _pesapalService = inject(PesapalService);
   private _feedbackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
-  private _webExSerive = inject(WebExService)
+  private _webExService = inject(WebExService)
 
 
   //Observables
   createMeeting$ = new Observable<unknown>()
+
+
+  //vars
+  bookingId: string | null = '';
 
 
   advisorySessionForm = this._formBuilder.group({
@@ -44,7 +48,8 @@ export class MainComponent {
     start: ['', Validators.required],
     end: ['', Validators.required],
     timezone: ['', Validators.required],
-    invitees: this._formBuilder.array([], Validators.required)
+    invitees: this._formBuilder.array([], Validators.required),
+    bookingId:[this.bookingId]
   })
 
 
@@ -63,10 +68,14 @@ export class MainComponent {
   advisorySessions = [
     { title: 'Session 1', startTime: new Date('2024-11-07T12:00:00Z'), endTime: new Date('2024-11-07T13:00:00Z'), timeZone: 'UTC', timer: null },
   ];
+  
+
 
 
   ngOnInit(): void {
     // this.initializeTimers();
+    this.bookingId = sessionStorage.getItem('bookingId')
+
   }
 
   get invitees(): FormArray {
@@ -113,7 +122,9 @@ export class MainComponent {
         end: formData.end ? this.convertToUTC(formData.end) : null,
       };
 
-      this.createMeeting$ = this._webExSerive.createMeeting(dataToSubmit).pipe(tap(res=>{
+      formData.bookingId = this.bookingId
+
+      this.createMeeting$ = this._webExService.createMeeting(dataToSubmit).pipe(tap(res=>{
         this._feedbackService.success("Meeting Created Successfully")
       }))
 
