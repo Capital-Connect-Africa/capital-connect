@@ -80,10 +80,13 @@ export class PaymentComponent implements OnInit {
     this._loader.setLoading(true)
     this.visible = true
 
+
     this.createBooking$ = this._bookingService.createBooking({ calendlyEventId: CALENDLYEVENTID }).pipe(
       mergeMap((response: CreateBookingResponse) => {
+
         if (response && response.redirectUrl) {
           this.redirectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(response.redirectUrl);
+
 
           this.orderTrackingId = response.orderTrackingId;
           this._loader.setLoading(false);  // Execute when the observable emits
