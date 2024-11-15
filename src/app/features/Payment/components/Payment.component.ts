@@ -86,7 +86,9 @@ export class PaymentComponent implements OnInit {
           this.redirectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(response.redirectUrl);
 
           this.orderTrackingId = response.orderTrackingId;
-          this._loader.setLoading(false);  // Execute when the observable emits          
+          this._loader.setLoading(false);  // Execute when the observable emits
+          
+          sessionStorage.setItem('bookingId',response.bookingId)
 
           return interval(20000).pipe(
             take(3),

@@ -1,5 +1,7 @@
 <ng-container *ngIf="bookings$ | async"></ng-container>
 <ng-container *ngIf="transactionStatus$ | async"></ng-container>
+<ng-container *ngIf="getMeeting$ | async"></ng-container>
+
 
 <div class="main">
   <div class="navbar">
@@ -7,69 +9,57 @@
   </div>
 
   <main>
-    <div class="left flex flex-col gap-12">
+    <p class="brand__name">Booked Sessions</p>
 
-      <div class="flex flex-col gap-3 top-instance">
-      <h2 class="text-center"><strong>My Bookings</strong></h2>
-
-        <div class="table-parent">
-          <table class="table">
-            <thead >
-              <tr> 
-                <th>Booking Id</th>
+    <div class="left__col">
+ 
+        <div class="flex flex-col gap-4" *ngIf="!iframe">
+          <p-table [value]="bookings" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>#</th> <!--Booking Id-->
                 <th>Event ID</th>
                 <th>Created At</th>
-                <th>Amount</th>
-                <th>Status</th>
                 <th>Action</th>
               </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let booking of bookings | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
-                <td>{{ booking.id }}</td>
-                <td>{{ booking.calendlyEventId }}</td>
-                <td>{{ booking.createdAt | date }}</td>
-                <ng-container *ngFor="let payment of booking.payments">
-                  <td>{{ payment.currency }} {{ payment.amount }}</td>
-                  <td>{{ payment.status }}</td>
-                  <td>
-                    <button *ngIf="payment.status === 'initiated'" class="btn" (click)="checkStatus(payment.orderTrackingId)">Check Status</button>
-                  </td>
-                </ng-container>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-booking let-i="rowIndex">
+              <tr>
+                <td><strong>{{i+1}}</strong></td>
+                <td class="">{{ booking.calendlyEventId  }}</td>
+                <td class="">{{ booking.createdAt }}</td>
+                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking.calendlyEventId)">Get Meeting</button></td>
               </tr>
-            </tbody>
-          </table>
+  
+            </ng-template>
+          </p-table>
 
         </div>
 
-    
-        <pagination-controls (pageChange)="pageChange($event)"></pagination-controls>
-      </div>
+        <p>{{webLink}}</p>
+
+
+         <div *ngIf="iframe">
+
+          <!-- <a href="https://meet3.webex.com/meet3/j.php?MTID=m46bcba582c70d251340e2635bbaafaf5" target="_blank">Join Webex Meeting</a> -->
+          <!-- <iframe src="https://meet3.webex.com/meet3/j.php?MTID=m46bcba582c70d251340e2635bbaafaf5" width="100%" height="700"></iframe> -->
+
+          <iframe [src]="webLink" width="100%" height="700"></iframe>
+
+          
+
+
+
+
+        </div>
+
     </div>
 
 
-    <div class="right__col hidden">
-      <div class="wrapper">
-        <h2>Assessment Summary</h2>
-        <div class="body">
-          <p>You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy</p>                
-          <a  [routerLink]="['/business']"><span>Unlock the whole summary</span><mat-icon>chevron_right</mat-icon></a> 
-        </div>
-      </div>
-
-
-
-      <section class="main__section">
-        <div class="overlay">
-          <h2>Advertise Here</h2>
-          <p>This space is available for your advertising needs. Contact us to learn more</p>
-          <a href="mailto:services@capitalconnect.africa" class="button"><span>Book Space</span> <mat-icon>chevron_right</mat-icon></a>
-        </div>
-      </section>
-      <!-- <button (click)="toggleNewBookingForm()" class="btn">Add New Booking</button>
-      <div *ngIf="showNewBookingForm">
-        <app-new-booking (bookingCreated)="onBookingCreated($event)"></app-new-booking>
-      </div> -->
+    <div class="right__col">
+      <app-advertisement-space [title]="'Advertise Here'"
+      [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
     </div>
 
 
