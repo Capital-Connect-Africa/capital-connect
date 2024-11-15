@@ -59,7 +59,7 @@ export class MainComponent {
   OrderMerchantReference = this.params['OrderMerchantReference'];
   callback$ = this._pesapalService.callback(this.OrderTrackingId, this.OrderMerchantReference).pipe(tap(res => {
     this._feedbackService.success(res.message, 'Payments');
-    this._location.back();
+    // this._location.back();
   }),
     catchError(err => {
       return EMPTY
