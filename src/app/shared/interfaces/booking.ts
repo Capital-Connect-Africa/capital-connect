@@ -41,6 +41,10 @@ export interface Payment {
     createdAt: string; 
     updatedAt: string; 
   }
+  
+  export interface BookingResponse{
+    data: Booking[]
+  }
 
   export interface Booking {
     id: number;

@@ -14,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { WebExService } from '../../../../../shared/services/webex.service';
 import { TableModule } from 'primeng/table';
 import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -35,6 +36,8 @@ import { AdvertisementSpaceComponent } from "../../../../../shared/components/ad
 export class BookingComponent {
   //services
   private _webExService = inject(WebExService)
+  private _sanitizer = inject(DomSanitizer); 
+
 
 
   bookings: Booking[] = [];
@@ -57,7 +60,10 @@ export class BookingComponent {
   getMeeting$ = new Observable<unknown>()
 
   message$ = new Observable<{ title: string, message: string, type: 'info' | 'success' | 'warning' | 'error' } | null>;
-  webLink: string = ''; 
+  // webLink: string = ''; 
+
+  webLink: SafeResourceUrl | null = null;
+
 
   ngOnInit() {
     this.message$ = this._feedbackService.message$;
@@ -65,128 +71,11 @@ export class BookingComponent {
 
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
-      this.bookings = res;
+      this.bookings = res.data;
 
-      // this.bookings = [
-      //   {
-      //     id: 1,
-      //     calendlyEventId: 'CAL12345',
-      //     createdAt: '2024-10-01T10:00:00Z',
-      //     updatedAt: '2024-10-02T10:30:00Z',
-      //     payments: [
-      //       {
-      //         id: 101,
-      //         currency: 'USD',
-      //         amount: 150,
-      //         description: 'Booking deposit',
-      //         status: 'completed',
-      //         orderTrackingId: 'ORD12345A',
-      //         createdAt: '2024-10-01T10:05:00Z',
-      //         updatedAt: '2024-10-01T10:20:00Z',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 2,
-      //     calendlyEventId: 'CAL12346',
-      //     createdAt: '2024-10-03T14:00:00Z',
-      //     updatedAt: '2024-10-03T14:30:00Z',
-      //     payments: [
-      //       {
-      //         id: 102,
-      //         currency: 'EUR',
-      //         amount: 200,
-      //         description: 'Booking fee',
-      //         status: 'initiated',
-      //         orderTrackingId: 'ORD12346B',
-      //         createdAt: '2024-10-03T14:10:00Z',
-      //         updatedAt: '2024-10-03T14:15:00Z',
-      //       },
-      //       {
-      //         id: 103,
-      //         currency: 'EUR',
-      //         amount: 200,
-      //         description: 'Booking fee retry',
-      //         status: 'completed',
-      //         orderTrackingId: 'ORD12346C',
-      //         createdAt: '2024-10-03T14:25:00Z',
-      //         updatedAt: '2024-10-03T14:27:00Z',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 3,
-      //     calendlyEventId: 'CAL12347',
-      //     createdAt: '2024-10-04T09:00:00Z',
-      //     updatedAt: '2024-10-04T09:45:00Z',
-      //     payments: [
-      //       {
-      //         id: 104,
-      //         currency: 'GBP',
-      //         amount: 100,
-      //         description: 'Partial payment',
-      //         status: 'failed',
-      //         orderTrackingId: 'ORD12347D',
-      //         createdAt: '2024-10-04T09:05:00Z',
-      //         updatedAt: '2024-10-04T09:10:00Z',
-      //       },
-      //       {
-      //         id: 105,
-      //         currency: 'GBP',
-      //         amount: 100,
-      //         description: 'Final payment',
-      //         status: 'completed',
-      //         orderTrackingId: 'ORD12347E',
-      //         createdAt: '2024-10-04T09:20:00Z',
-      //         updatedAt: '2024-10-04T09:30:00Z',
-      //       },
-      //     ],
-      //   },
-      //   {
-      //     id: 4,
-      //     calendlyEventId: 'CAL12348',
-      //     createdAt: '2024-10-05T15:00:00Z',
-      //     updatedAt: '2024-10-05T15:30:00Z',
-      //     payments: [
-      //       {
-      //         id: 106,
-      //         currency: 'AUD',
-      //         amount: 250,
-      //         description: 'Full booking payment',
-      //         status: 'completed',
-      //         orderTrackingId: 'ORD12348F',
-      //         createdAt: '2024-10-05T15:05:00Z',
-      //         updatedAt: '2024-10-05T15:25:00Z',
-      //       },
-      //     ],
-      //   },
-      // ];
+      this.totalItems = res.data.length;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      this.totalItems = res.length;
+      console.log("The response is", res)
     }),
     catchError((error: any) => {
       this._feedbackService.error('Error Fetching The Bookings.', error);
@@ -199,8 +88,8 @@ export class BookingComponent {
     this.currentPage = page;
     this.bookings$ = this._bookingService.getBookings(this.currentPage, this.itemsPerPage).pipe(
       tap(res => {
-        this.bookings = res;
-        this.totalItems = res.length; 
+        this.bookings = res.data;
+        this.totalItems = res.data.length; 
       })
     );
   }
@@ -237,7 +126,9 @@ export class BookingComponent {
   getMeeting(calendlyEventId:string) {
     this.iframe = true
     this.getMeeting$ = this._webExService.getMeeting(calendlyEventId).pipe(tap(res=>{
-      this.webLink = res.webLink
+      this.webLink = this._sanitizer.bypassSecurityTrustResourceUrl(res.webLink);
+
+      // this.webLink = res.webLink
     }))    
   }
 }
