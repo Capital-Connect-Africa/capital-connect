@@ -119,69 +119,16 @@
 
 
       <div *ngIf="special__criteria__companies" class="special__criteria__companies flex flex-col gap-4">
-        <!-- <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>#</th>
-              <th>Country</th>
-              <th>Business Sector</th>
-              <th>Sub Sector</th>
-              <th>Growth Stage</th>
-              <th>Score</th>
-              <th>Actions</th>
-            </tr>
-          </ng-template>
-      
-          <ng-template pTemplate="body" let-business let-i="rowIndex">
-            
-            <tr>
-              <td><strong>{{ i + 1 }}</strong></td>
-              <td class="">{{ business.country ? business.country : "N/A" }}</td>
-              <td class="">{{ business.businessSector ? business.businessSector : "N/A" }}</td>
-              <td class="">{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
-              <td class="">{{ business.growthStage ? business.growthStage :"N/A"}}</td>
-              <td class="">{{business.percentageScore}} %</td>
-      
-              <td class="flex space-x-1 items-center gap-2">
-                <button class="btn btn-sm text-xs " (click)="showInterest(business.id)"
-                [disabled]="business.status === 'interesting'"
-                >Interested</button>
-                <button class="btn btn-danger btn-sm text-xs " 
-                [disabled]="business.status === 'declined'"
-                (click)="openModal(business.id)">Decline</button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table> -->
-        
-      
-      
         <p-table [value]="SpecialCriteriaCompanies" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10" [filterDelay]="500">
           <ng-template pTemplate="header">
             <tr>
               <th></th>
-              <th>
-                Country
-                <p-columnFilter type="text" field="country"></p-columnFilter>
-              </th>
-              <th>
-                Sector
-                <p-columnFilter type="text" field="businessSector"></p-columnFilter>
-              </th>
-              <th >
-                Sub Sector
-                <p-columnFilter type="text" field="businessSubsector"></p-columnFilter>
-              </th>
-              <th >
-                Growth Stage
-                <p-columnFilter type="text" field="growthStage"></p-columnFilter>
-              </th>
-              <th pSortableColumn="percentageScore">
-                Score
-                <p-sortIcon field="percentageScore"></p-sortIcon>
-              </th>
-              <th>Actions</th>
-            </tr>
+              <th>Country <p-columnFilter type="text" field="country"></p-columnFilter></th>
+              <th>Sector <p-columnFilter type="text" field="businessSector"></p-columnFilter></th>
+              <th>Sub Sector <p-columnFilter type="text" field="businessSubsector"></p-columnFilter></th>
+              <th>Growth Stage <p-columnFilter type="text" field="growthStage"></p-columnFilter>
+              </th><th pSortableColumn="percentageScore">Score<p-sortIcon field="percentageScore"></p-sortIcon>
+              </th><th>Actions</th></tr>
           </ng-template>
         
           <ng-template pTemplate="body" let-business let-i="rowIndex">
@@ -200,16 +147,8 @@
           </ng-template>
         </p-table>
         
-      
-      
-      
-      
-      
-      
+    
       </div>
-      
-
-
     </section>
 
     <section class="right__col">

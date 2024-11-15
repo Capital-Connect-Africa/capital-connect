@@ -4,11 +4,31 @@ export interface CreateBookingRequest {
 }
 
 export interface CreateBookingResponse {
-    bookingId: number;
+    bookingId: string;
     orderTrackingId: string;
     redirectUrl: string;
     paymentId: number;
 }
+
+
+export interface Invitee {
+  email: string;
+  displayName: string;
+}
+
+export interface Meeting {
+  title: string;
+  start: string; // ISO date string format
+  end: string;   // ISO date string format
+  timezone: string;
+  invitees: Invitee[];
+  bookingId:string
+}
+
+export interface MeetingResponse{
+  webLink:string
+}
+
 
 
 export interface Payment {

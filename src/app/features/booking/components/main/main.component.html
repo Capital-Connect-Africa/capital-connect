@@ -1,16 +1,194 @@
 <ng-container *ngIf="callback$ | async"/>
+<ng-container *ngIf="createMeeting$ | async" />
+
 
 <div class="main">
   <div class="navbar">
-<!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
-    <app-navbar onDashboard="true" />
-    
-  <div>
-    <iframe src="https://calendly.com/investor-eligibility/investor-preparedness" width="100%" height="700"></iframe>
-  </div>
-
+    <!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
+    <!-- <app-navbar onDashboard="true" /> -->
   </div>
   <main>
-  </main>
-</div>
+    <!-- <div>
+      <iframe src="https://calendly.com/investor-eligibility/investor-preparedness" width="100%" height="700"></iframe>
+    </div> -->
+    <div class="left__col">
+      <div class="advisory-page">
+        <!-- Header Section -->
+        <div class="header">
+          <h1>Advisory Sessions Booking</h1>
+        </div>
+  
+        <!-- Advisory Sessions List -->
+        <!-- <div class="sessions-list">
+          <div class="session-card" *ngFor="let session of advisorySessions">
+            <div class="session-details">
+              <h3>{{ session.title }}</h3>
+              <p>Start Time: {{ session.startTime | date:'shortTime' }} ({{ session.timeZone }})</p>
+              <p>End Time: {{ session.endTime | date:'shortTime' }}</p>
+              <p class="countdown-timer">Time until session: {{ session.timer | async }}</p>
+            </div>
+          </div>
+        </div> -->
+  
+        <!-- Add New Advisory Session Form -->
+        <div class="form_content__container add-session-form">
+          <h6>Book Advisory Session</h6>
+          <!-- <form [formGroup]="advisorySessionForm" (submit)="onSubmit()">
+            <div class="input__wrapper">
+              <label class="input__label" for="title">Session Title</label>
+              <input type="text" id="title" class="input__field" placeholder="Meeting Title" formControlName="title">
+            </div>
+  
+            <div class="time">
+              <div class="input__wrapper">
+                <label class="input__label" for="startTime">Start Time</label>
+                <input type="datetime-local" id="startTime" class="input__field" formControlName="start" />
+              </div>
+              <div class="input__wrapper">
+                <label class="input__label" for="endTime">End Time</label>
+                <input type="datetime-local" id="endTime" class="input__field" formControlName="end" />
+              </div>
+            </div>
+  
+            <div class="input__wrapper">
+              <label class="input__label" for="timeZone">Time Zone</label>
+              <select id="timeZone" class="input__field" formControlName="timezone">
+                <option *ngFor="let timeZone of timeZones" [value]="timeZone.value">
+                  {{ timeZone.label }}
+                </option>
+              </select>
+            </div>
+  
+            <div class="input__wrapper form_content__container">
+              <label class="input__label" for="invitees">Attendees</label>
+              <div formArrayName="invitees">
+                <div *ngFor="let invitee of invitees.controls; let i = index" [formGroupName]="i" class="invitee-group">
+                  <span><strong>{{i+1}}. </strong></span>
+                  <input type="email" placeholder="example@mail.com" class="input__field" formControlName="email" />
+                  <input type="text" placeholder="Enter display name" class="input__field"
+                    formControlName="displayName" />
+                  <button type="button" class="btn-sm  btn btn-danger" (click)="removeInvitee(i)"><i
+                      class="pi pi-trash"></i></button>
+                  <div *ngIf="!this.advisorySessionForm.valid" class="validation__error">
+                    <span *ngIf="this.advisorySessionForm.valid">Email is required.</span>
+                    <span *ngIf="this.advisorySessionForm.valid">Invalid email format.</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn-success-alt btn btn-sm" (click)="addInvitee()">Add
+                Attendant</button>
+            </div>
+  
+  
+  
+  
+  
+            <div class="cta__group">
+              <button type="submit" class="btn btn-primary btn-sm" [disabled]="!this.advisorySessionForm.valid">Book
+                Session</button>
+            </div>
+          </form> -->
+        
+        
+          <form [formGroup]="advisorySessionForm" (submit)="onSubmit()">
+            <div class="input__wrapper">
+              <label class="input__label" for="title">Session Title</label>
+              <input
+                type="text"
+                id="title"
+                class="input__field"
+                placeholder="Meeting Title"
+                formControlName="title"
+              />
+              <div *ngIf="advisorySessionForm.get('title')?.invalid && advisorySessionForm.get('title')?.touched" class="validation__error">
+                <span *ngIf="advisorySessionForm.get('title')?.hasError('required')">Session title is required.</span>
+              </div>
+            </div>
+          
+            <div class="time">
+              <div class="input__wrapper">
+                <label class="input__label" for="startTime">Start Time</label>
+                <input
+                  type="datetime-local"
+                  id="startTime"
+                  class="input__field"
+                  formControlName="start"
+                />
+                <div *ngIf="advisorySessionForm.get('start')?.invalid && advisorySessionForm.get('start')?.touched" class="validation__error">
+                  <span *ngIf="advisorySessionForm.get('start')?.hasError('required')">Start time is required.</span>
+                  <span *ngIf="advisorySessionForm.get('start')?.hasError('outsideWorkingHours')">
+                    Start time must be on a weekday between 8 AM and 5 PM.
+                  </span>
+                </div>
+              </div>
+          
+              <div class="input__wrapper">
+                <label class="input__label" for="endTime">End Time</label>
+                <input
+                  type="datetime-local"
+                  id="endTime"
+                  class="input__field"
+                  formControlName="end"
+                />
+                <div *ngIf="advisorySessionForm.get('end')?.invalid && advisorySessionForm.get('end')?.touched" class="validation__error">
+                  <span *ngIf="advisorySessionForm.get('end')?.hasError('required')">End time is required.</span>
+                  <span *ngIf="advisorySessionForm.get('end')?.hasError('outsideWorkingHours')">
+                    End time must be on a weekday between 8 AM and 5 PM.
+                  </span>
+                </div>
+              </div>
+            </div>
+          
+            <div class="input__wrapper">
+              <label class="input__label" for="timeZone">Time Zone</label>
+              <select id="timeZone" class="input__field" formControlName="timezone">
+                <option *ngFor="let timeZone of timeZones" [value]="timeZone.value">{{ timeZone.label }}</option>
+              </select>
+              <div *ngIf="advisorySessionForm.get('timezone')?.invalid && advisorySessionForm.get('timezone')?.touched" class="validation__error">
+                <span *ngIf="advisorySessionForm.get('timezone')?.hasError('required')">Timezone is required.</span>
+              </div>
+            </div>
+          
+            <div class="input__wrapper form_content__container">
+              <label class="input__label" for="invitees">Attendees</label>
+              <div formArrayName="invitees">
+                <div *ngFor="let invitee of invitees.controls; let i = index" [formGroupName]="i" class="invitee-group">
+                  <span><strong>{{ i + 1 }}. </strong></span>
+                  <input type="email" placeholder="example@mail.com" class="input__field" formControlName="email" />
+                  <input type="text" placeholder="Enter display name" class="input__field" formControlName="displayName" />
+                  <button type="button" class="btn-sm btn btn-danger" (click)="removeInvitee(i)"><i class="pi pi-trash"></i></button>
+                  <div *ngIf="invitee.get('email')?.invalid && invitee.get('email')?.touched" class="validation__error">
+                    <span *ngIf="invitee.get('email')?.hasError('required')">Email is required.</span>
+                    <span *ngIf="invitee.get('email')?.hasError('email')">Invalid email format.</span>
+                  </div>
+                  <div *ngIf="invitee.get('displayName')?.invalid && invitee.get('displayName')?.touched" class="validation__error">
+                    <span *ngIf="invitee.get('displayName')?.hasError('required')">Display name is required.</span>
+                  </div>
+                </div>
+              </div>
+              <button type="button" class="btn-success-alt btn btn-sm" (click)="addInvitee()">Add Attendant</button>
+            </div>
+          
+            <div class="cta__group">
+              <button type="submit" class="btn btn-primary btn-sm" [disabled]="!advisorySessionForm.valid">
+                Book Session
+              </button>
+            </div>
+          </form>
+            
+        
+        
+        
+        </div>
+      </div>
 
+    </div>
+ 
+
+    <div class="right__col">
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+  </main>
+
+</div>

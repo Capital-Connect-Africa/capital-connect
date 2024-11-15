@@ -3,6 +3,7 @@ import {SidenavComponent} from "../../../../core";
 import { PaymentComponent } from "../../components/Payment.component";
 import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
 import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
+import { BusinessLinks } from '../../../../core/utils/business.links';
 
 @Component({
   selector: 'booking-dashboard',
@@ -18,20 +19,17 @@ import { NavbarComponent } from "../../../../core/components/navbar/navbar.compo
 })
 export class DashboardComponent {
   hidden =true;
-  // links =[
-  //   // {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
-  //   // {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
-  //   // {label: 'My business', href: '/business/my-business', exact: false, icon: 'business_center'}
-  // ]
   toggle_hidden() {
     this.hidden = !this.hidden;
   }
 
-  links =[
-    {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
-    {label: 'Plans', href: '/business/plans', exact: false, icon: 'paid'},
-    {label: 'My business', href: '/business/my-business', exact: false, icon: 'business_center'},
-    // {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'}
+  links = BusinessLinks
 
-  ]
+  // links =[
+  //   {label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view'},
+  //   {label: 'Plans', href: '/business/plans', exact: false, icon: 'paid'},
+  //   {label: 'My business', href: '/business/my-business', exact: false, icon: 'business_center'},
+  //   // {label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event'}
+
+  // ]
 }

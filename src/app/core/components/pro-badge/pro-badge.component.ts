@@ -9,11 +9,12 @@ import { TransactionStatus } from '../../../shared/interfaces/payment';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-pro-badge',
   standalone: true,
-  imports: [CommonModule, ModalComponent],
+  imports: [CommonModule, ModalComponent,SkeletonModule],
   templateUrl: './pro-badge.component.html',
   styleUrl: './pro-badge.component.scss'
 })
@@ -39,9 +40,15 @@ export class ProBadgeComponent {
 
   constructor(){} 
 
+  loading:boolean = true;
   ngOnInit() {
     this.message$ = this._feedbackService.message$;
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000); 
   }
+
+  
 
   checkPaymentStatus() {
     this.transactionStatus$ = this._paymentService.getTransactionStatus(this.orderTrackingId).pipe(

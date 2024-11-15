@@ -37,6 +37,12 @@ export class BaseHttpService {
     );
   }
 
+  putPost(url: string,item:unknown, headers =this._headers): Observable<unknown>{
+    return this._http.put<unknown>(`${url}`, item, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   // Update an item using put request
   update(url: string, id: number, updatedItem: unknown,  headers = this._headers): Observable<unknown> {
     return this._http.put<unknown>(`${url}/${id}`, updatedItem, { headers }).pipe(

@@ -31,41 +31,43 @@ import { SubscriptionsService } from '../../services/subscriptions.service';
     UserRoleFormatPipe,
     NumberAbbriviationPipe,
     TimeAgoPipe
-],
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })
 
 export class MainComponent {
   private _router = inject(Router);
-  private _userServices =inject(UsersHttpService);
-  private _paymentsService =inject(PaymentsService);
-  private _bookingsService =inject(BookingsService);
+  private _userServices = inject(UsersHttpService);
+  private _paymentsService = inject(PaymentsService);
+  private _bookingsService = inject(BookingsService);
 
-  private _statsService =inject(UserStatisticsService);
-  private _subscriptionsService =inject(SubscriptionsService);
-  subscriptions!:Record<string, number>;
-  payments:Payment[] =[];
-  bookings: Booking[] =[];
-  
-  businessCountriesStats!:Record<string, number>;
-  matches!:Stats;
+  private _statsService = inject(UserStatisticsService);
+  private _subscriptionsService = inject(SubscriptionsService);
+  subscriptions!: Record<string, number>;
+  payments: Payment[] = [];
+  bookings: Booking[] = [];
+
+  businessCountriesStats!: Record<string, number>;
+  matches!: Stats;
 
   navigateTo(path: string) {
     this._router.navigate([path]);
   }
 
-  recentSubscriptions: Plan[] =[]
-  stats$ =new Observable<Stats>();
+  recentSubscriptions: Plan[] = []
+  stats$ = new Observable<Stats>();
   users: User[] = [];
 
-  cols =[
+  cols = [
     { field: 'firstName', header: 'Name' },
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
+    { field: 'createdAt', header: 'Created At' },
+    {field:'updatedAt',header:'Updated At'}
   ];
 
-  billing_cols =[
+  billing_cols = [
     { field: 'subscriber', header: 'Subscriber' },
     { field: 'tier', header: 'Package' },
     { field: 'price', header: 'Price' },
@@ -81,32 +83,32 @@ export class MainComponent {
     { field: 'description', header: 'Reason' },
   ];
 
-  booking_cols =[
+  booking_cols = [
     { field: 'id', header: 'Event ID' },
     { field: 'amount', header: 'Amount' },
     { field: 'status', header: 'Status' },
     { field: 'createdAt', header: 'Date' }
   ]
-  
-  payments$ =this._paymentsService.getPayments().pipe(tap(payments =>{
-    this.payments =payments.data
+
+  payments$ = this._paymentsService.getPayments().pipe(tap(payments => {
+    this.payments = payments.data
   }))
 
-  bookings$ =this._bookingsService.getBookings().pipe(tap(bookings =>{
-    this.bookings =bookings.data
+  bookings$ = this._bookingsService.getBookings().pipe(tap(bookings => {
+    this.bookings = bookings.data
   }))
 
-  subscriptions$ =this._subscriptionsService.getSubscriptions().pipe(tap(res =>{
-    this.recentSubscriptions =res.plans
+  subscriptions$ = this._subscriptionsService.getSubscriptions().pipe(tap(res => {
+    this.recentSubscriptions = res.plans
   }))
 
-  summary$ =this._statsService.getSummary().pipe(tap(summary =>{
-    this.subscriptions =summary.subscription_counts;
+  summary$ = this._statsService.getSummary().pipe(tap(summary => {
+    this.subscriptions = summary.subscription_counts;
   }))
 
-  
-  users$ =this._userServices.getAllUsers().pipe(tap(res =>{
-    this.users =res.map(user =>{
+
+  users$ = this._userServices.getAllUsers().pipe(tap(res => {
+    this.users = res.map(user => {
       return {
         ...user,
         name: `${user.firstName} ${user.lastName}`
@@ -116,8 +118,8 @@ export class MainComponent {
 
 
   ngOnInit(): void {
-    this.stats$ =this._statsService.fetchUserStats().pipe(tap(res =>{
-      this.matches =res;
+    this.stats$ = this._statsService.fetchUserStats().pipe(tap(res => {
+      this.matches = res;
       return res
     }))
   }

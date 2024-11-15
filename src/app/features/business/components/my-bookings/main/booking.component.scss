@@ -1,113 +1,61 @@
 @import "../../../styles/main.scss";
 
-h2{
-  font-size: 34px;
-  font-weight: 400;
-  line-height: 40px;
-  font-family: $font-family-sans-serif;
-}
-.content{
-  h3{
-    padding: 0;
-    margin: 0;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 1.5rem;
-    font-family: $font-family-sans-serif;
-  }
-  p{
-    font-size: 14px;
-    color: #1C1C1EB8;
-    font-weight: 400;
-    font-family: $font-family-sans-serif;
-  }
-}
+.main {
+  height: 100%;
+  display: grid;
+  background-color: #F9FAFB;
 
-.btn{
-  padding: 12px 40px;
-  font-family: $font-family-sans-serif;
-}
-
-tbody tr{
-  text-align: center;
-  font-family: $font-family-sans-serif;
-
-}
-
-.table-parent{
-  margin: 20px;
-  border: 1px solid rgb(211, 211, 211);
-  border-radius: 10px;
-}
-
-
-
-
-.wrapper{
-  gap: 1rem;
-  display: flex;
-  overflow: hidden;
-  border-radius: 10px;
-  line-height: 1.5rem;
-  flex-direction: column;
-  background-color: $green-50;
-  font-family: $font-family-sans-serif;
-  h2{
-    color: $white;
-    font-weight: 700;
-    font-size: 1.125rem;
-    background-color: $green-800;
-    padding: 10px 10px 10px 24px;
-  }
-  .body{
-    gap: 1rem;
+  .navbar {
     display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    .button{
-      gap: 10px;
-      color: $white;
+    padding-left: 1rem;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+
+    button {
       display: flex;
-      cursor: pointer;
-      font-weight: 500;
-      width: max-content;
-      text-align: center;
-      border-radius: 6px;
-      align-items: center;
-      justify-content: center;
-      background: $primary-color;
-      padding: .75rem 1rem;
-      font-family: $font-family-sans-serif;
-      text-decoration: none;
-      *{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      span{
-        font-size: 14px;
+      background: none;
+    }
+  }
+}
+
+
+
+@include when-screen-is-atleast(medium) {
+  .main {
+
+    .navbar {
+      padding: 0;
+      display: block;
+
+      button {
+        display: none;
       }
     }
-    p{
-      opacity: .8;
-      font-size: 1rem;
-      font-weight: 400;
+
+    main {
+      .brand__name {
+        display: none;
+      }
+
+      .right__col {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
-    a{
-      display: flex;
-      font-weight: 500;
-      font-size: .875rem;
-      padding: 11px 14px 11px 0;
-      text-decoration: none;
-      color: $secondary-color;
-      font-family: $font-family-sans-serif;
-      *{
-        margin: 0;
-        padding: 0;
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  .main {
+    grid-template-rows: max-content auto;
+
+    main {
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+
+      .right__col {
         display: flex;
-        align-items: center;
       }
     }
   }
@@ -115,51 +63,83 @@ tbody tr{
 
 
 
-.main__section{
-  height: 350px;
-  overflow: hidden;
-  border-radius: 1rem;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: url("../../../../../../assets/img/adverts-bg.jpeg");
-  box-shadow: 0 11px 20px 0 #0510371A;
-  .overlay{
-    gap: .5rem;
-    height: 100%;
-    display: flex;
-    color: $white;
-    padding: 2rem;
-    flex-direction: column;
-    justify-content: flex-end;
-    font-family: $font-family-sans-serif;
-    background-image: linear-gradient(to top, #040506, #1E202C00);
-    h2{
 
-    }
-    .button{
-      gap: 10px;
-      color: $white;
-      display: flex;
-      cursor: pointer;
-      font-weight: 500;
-      width: max-content;
-      text-align: center;
-      border-radius: 6px;
-      align-items: center;
-      justify-content: center;
-      background: $primary-color;
-      padding: .75rem 1rem;
-      font-family: $font-family-sans-serif;
-      text-decoration: none;
-      *{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+
+@include when-screen-is-atleast(medium) {
+  .main {
+
+    .navbar {
+      padding: 0;
+      display: block;
+
+      button {
+        display: none;
       }
-      span{
-        font-size: 14px;
+    }
+
+    main {
+      .brand__name {
+        display: none;
+      }
+
+      .right__col {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  .main {
+    grid-template-rows: max-content auto;
+
+    main {
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+
+      .right__col {
+        display: flex;
+      }
+    }
+  }
+}
+
+
+@import '../../../../business/styles/business.components.steps.scss';
+
+// tables 
+:host ::ng-deep .p-paginator {
+  padding-top: 2rem;
+  justify-content: flex-start !important;
+}
+
+:host ::ng-deep .p-datatable {
+  tr {
+    transition: all .2s linear;
+    cursor: default;
+
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    &:hover {
+      background-color: #654f291a;
+    }
+
+    td,
+    th {
+      padding: 1rem 0 1rem .5rem;
+    }
+
+    th {
+      background-color: #f4f4f5;
+
+      span {
+        padding: 0 .5rem;
+        justify-content: flex-start;
+        background-color: transparent !important;
       }
     }
   }

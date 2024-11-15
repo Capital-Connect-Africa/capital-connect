@@ -12,6 +12,7 @@ import { NavbarComponent } from "../../../core/components/navbar/navbar.componen
 import { AssessmentSummaryComponent } from "../../../shared/components/assessment-summary/assessment-summary.component";
 import { AdvertisementSpaceComponent } from "../../../shared/components/advertisement-space/advertisement-space.component";
 import { LoadingService } from '../../../core';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { LoadingService } from '../../../core';
   selector: 'app-payment-instructions',
   templateUrl: './Payment.component.html',
   styleUrls: ['./Payment.component.scss'],
-  imports: [CommonModule, SidenavComponent, NavbarComponent, AssessmentSummaryComponent, AdvertisementSpaceComponent]
+  imports: [CommonModule, SidenavComponent, NavbarComponent, AssessmentSummaryComponent, AdvertisementSpaceComponent, SkeletonModule]
 })
 export class PaymentComponent implements OnInit {
   redirectUrl: SafeResourceUrl | null = null;
@@ -51,6 +52,7 @@ export class PaymentComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+ 
   }
 
 
@@ -77,13 +79,16 @@ export class PaymentComponent implements OnInit {
   createBooking() {
     this._loader.setLoading(true)
     this.visible = true
+
     this.createBooking$ = this._bookingService.createBooking({ calendlyEventId: CALENDLYEVENTID }).pipe(
       mergeMap((response: CreateBookingResponse) => {
         if (response && response.redirectUrl) {
           this.redirectUrl = this._sanitizer.bypassSecurityTrustResourceUrl(response.redirectUrl);
 
           this.orderTrackingId = response.orderTrackingId;
-          this._loader.setLoading(false);  // Execute when the observable emits          
+          this._loader.setLoading(false);  // Execute when the observable emits
+          
+          sessionStorage.setItem('bookingId',response.bookingId)
 
           return interval(20000).pipe(
             take(3),

@@ -19,6 +19,11 @@ import { TableModule } from 'primeng/table';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
 import { groupUserSubmissions } from '../../../../../core/utils/group-user-submissions';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { BusinessAndInvestorMatchingService } from '../../../../../shared/business/services/busines.and.investor.matching.service';
+import { map } from 'rxjs';
+import { DeclineReasons } from '../../../../../shared/interfaces';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-overview',
@@ -33,7 +38,9 @@ import { groupUserSubmissions } from '../../../../../core/utils/group-user-submi
     RouterModule,
     SharedModule,
     TableModule,
-    NumberAbbriviationPipe
+    NumberAbbriviationPipe,
+    MultiSelectModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
@@ -60,6 +67,10 @@ export class OverviewComponent {
   investorPreparednessScore: string = '0';
   answers: UserSubmissionResponse[] = [];
   generalSummary!: GeneralSummary;
+  declineReasons: DeclineReasons[] = [];
+  select_reasons:boolean = false
+
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
   preparednessAnswers: UserSubmissionResponse[] = [];
   factSheetAnswers: UserSubmissionResponse[] = [];
@@ -80,6 +91,8 @@ export class OverviewComponent {
   private _companyService = inject(CompanyStateService);
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
+  declineForm!: FormGroup
+  decline: boolean = false;
 
   response$ =new Observable<any>()
 
@@ -88,6 +101,22 @@ export class OverviewComponent {
   stats$ =this._scoringService.getCompanyStats().pipe(tap(res =>{
     this.stats =res;
   }))
+  decline_uuid!: string;
+
+  constructor(private fb: FormBuilder) {
+    this.declineForm = this.fb.group({
+      countriesOfInvestmentFocus: [[]],
+      reasons:[[]]
+    });
+  }
+
+
+  declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
+    map(reasons => reasons.filter(reason => reason.declineRole === "business")),
+    tap(filteredReasons => {
+      this.declineReasons = filteredReasons;
+    })
+  );
 
 investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
   this.matchedInvestors =res.matches;
@@ -95,6 +124,7 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
   this.declinedConnections =res.declines;
   this.connectedInvestors =res.connections;
 }))
+
 
   reload(){
     this.investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
@@ -246,10 +276,13 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
   }
 
   declineConnectionRequest(uuid: string){
-    this.response$ =this._scoringService.respondToInvestorConnectionRequest(uuid, 'decline').pipe(tap(res =>{
-      return this.reload();
-    }))
+    this.decline_uuid = uuid
+    this.select_reasons = true
   }
+
+
+
+
 
   revokeConnection(id:number){
     this.signalService.connectionRequestsDialogIsVisible.set(false);
@@ -268,4 +301,23 @@ investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().
     this.impactElementAnswers =[];
     this.stats = { matched: 0, connected: 0, interesting: 0, declined: 0, requested: 0}
   }
+
+  back(){
+    this.select_reasons = false
+  }
+
+  submit(){
+    const selectedReasons: string[] = this.declineForm.get('reasons')?.value;
+
+    let data = {
+       declineReasons: selectedReasons
+    }
+
+    this.response$ =this._businessMatchingService.declineConnectionRequestBusiness( this.decline_uuid,data ).pipe(tap(res =>{
+      return this.reload();
+    }))
+
+    this.select_reasons = false
+  }
+
 }
