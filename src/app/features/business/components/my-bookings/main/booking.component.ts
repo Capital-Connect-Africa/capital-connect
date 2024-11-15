@@ -237,8 +237,6 @@ export class BookingComponent {
   getMeeting(calendlyEventId:string) {
     this.iframe = true
     this.getMeeting$ = this._webExService.getMeeting(calendlyEventId).pipe(tap(res=>{
-      console.log("The meeting is", res)
-
       this.webLink = res.webLink
     }))    
   }

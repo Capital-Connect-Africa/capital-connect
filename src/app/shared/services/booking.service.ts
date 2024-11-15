@@ -26,8 +26,7 @@ export class BookingService extends BaseHttpService {
 
 
   createBooking(request: CreateBookingRequest): Observable<CreateBookingResponse> {
-    const url = `${BASE_URL}/bookings`;
-    return this.create(url, request, this.headers) as Observable<CreateBookingResponse>;
+    return this.create(`${BASE_URL}/bookings`, request, this.headers) as Observable<CreateBookingResponse>;
   }
 
   goToCalendly(): void {

@@ -55,7 +55,6 @@ export class InvestorDetailsComponent {
             this.specialCriteria =this.investor.specialCriteria || [];
             this.checkIfUserCanViewPage();
               this.specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteriaByInvestor(res.id).pipe(tap(res =>{
-                console.log("Calling special criteria list", res)
                 this.criteriaList =res;
               }))
           })
@@ -67,7 +66,6 @@ export class InvestorDetailsComponent {
             this.investor = res.find((investor:MatchedInvestor) =>investor.id ===id) as MatchedInvestor
             this.checkIfUserCanViewPage();
             this.specialCriteriaListing$ =this._specialCriteriaService.listSPecialCriteriaByInvestor(this.investor.id).pipe(tap(res =>{
-              console.log("Calling special criteria list", res)
               this.criteriaList =res;
             }))
           })

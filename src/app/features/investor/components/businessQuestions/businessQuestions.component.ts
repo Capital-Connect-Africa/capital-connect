@@ -148,10 +148,8 @@ export class BusinessQuestionsComponent implements OnInit {
 
 
     if (this.activeIndex === index) {
-      console.log(`Tab ${index} is being closed.`);
       this.activeIndex = null; 
     } else {
-      console.log(`Tab ${index} is being opened.`);
       this.activeIndex = index; 
     }
   }
