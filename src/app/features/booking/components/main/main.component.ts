@@ -49,7 +49,6 @@ export class MainComponent {
     end: ['', Validators.required],
     timezone: ['', Validators.required],
     invitees: this._formBuilder.array([], Validators.required),
-    bookingId:[this.bookingId]
   })
 
 
@@ -73,8 +72,13 @@ export class MainComponent {
 
 
   ngOnInit(): void {
-    // this.initializeTimers();
-    this.bookingId = sessionStorage.getItem('bookingId')
+    const bookingId = sessionStorage.getItem('bookingId');
+    if (!bookingId) {
+      console.error('Booking ID is not found in session storage.');
+      // Redirect or handle missing bookingId case
+      return;
+    }
+    this.bookingId = bookingId;
 
   }
 
@@ -120,9 +124,8 @@ export class MainComponent {
         ...formData,
         start: formData.start ? this.convertToUTC(formData.start) : null,
         end: formData.end ? this.convertToUTC(formData.end) : null,
+        bookingId:this.bookingId
       };
-
-      formData.bookingId = this.bookingId
 
       this.createMeeting$ = this._webExService.createMeeting(dataToSubmit).pipe(tap(res=>{
         this._feedbackService.success("Meeting Created Successfully")
