@@ -129,7 +129,7 @@ export class MainComponent {
       }))
 
     } else {
-      console.log('Form is invalid');
+
     }
   }
 

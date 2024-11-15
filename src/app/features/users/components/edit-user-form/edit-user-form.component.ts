@@ -60,12 +60,7 @@ export class EditUserFormComponent {
     if (changes['user'] && changes['user'].currentValue) {
       const user = changes['user'].currentValue;
       this.user = user;
-
-      console.log("The user object is", this.user)
-
       const activeSubscription = user.subscriptions.filter((subscription: { isActive: any; }) => subscription.isActive);
-
-      console.log("The active subscription is", activeSubscription);
 
       this.editUserForm = this._fb.group({
         firstName: [user.firstName, Validators.required],
