@@ -1,3 +1,5 @@
+<ng-container *ngIf="vouchers$ | async"></ng-container>
+<ng-container *ngIf="rules$ | async"></ng-container>
 <app-admin-ui-container title="Billing Vouchers" [bg_gray]="true">
     <div class="flex flex-col gap-2 title__bar">
         <h2 class="text-sm">Goodmorning, Raisin</h2>
@@ -22,16 +24,20 @@
                 </th>
             </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-booking>
+        <ng-template pTemplate="body" let-voucher>
             <tr>
-                <td>{{booking.calendlyEventId}}</td>
-                <td>{{booking.payment.currency}} {{booking.payment.amount | numberabbreviation}}</td>
-                <td>{{booking.payment.status | titlecase}}</td>
-                <td>{{booking.createdAt | time_ago}}</td> 
+                <td>{{voucher.code}}</td>
+                <td>{{voucher.percentageDiscount}}%</td>
+                <td>{{voucher.maxUsers}}</td>
+                <td>{{voucher.users.length}}</td>
+                <td>{{voucher.rules.length}}</td>
+                <td>{{voucher.createdAt | time_ago | titlecase}}</td> 
+                <td>{{voucher.expiresAt | time_ago | titlecase}}</td> 
                 <td>
                     <div class="flex gap-1 items-center cta__btns">
-                        <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(booking.id)"><i class="pi pi-info-circle"></i></button>
-                        <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(booking.id)"><i class="pi pi-trash"></i></button>
+                        <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(voucher.id)"><i class="pi pi-info-circle"></i></button>
+                        <button title ="Open" class="block text-center text-blorangeue-500 hover:text-blue-800 transition-all" (click)="editVoucher(voucher.id)"><i class="pi pi-pencil"></i></button>
+                        <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(voucher.id)"><i class="pi pi-trash"></i></button>
                     </div>
                 </td>
             </tr>

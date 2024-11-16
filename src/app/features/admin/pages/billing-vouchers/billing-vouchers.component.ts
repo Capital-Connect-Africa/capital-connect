@@ -11,11 +11,16 @@ import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
+import { Voucher } from '../../../../shared/interfaces/voucher.interface';
+import { Rule } from '../../../../shared/interfaces/rule.interface';
+import { BillingVoucherService } from '../../services/billing-voucher.service';
+import { RulesService } from '../../services/rule.service';
+import { rule } from 'postcss';
 
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
-  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, CalendarModule, NumberAbbriviationPipe, TimeAgoPipe, CommonModule, DialogModule, ModalComponent],
+  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, CalendarModule, TimeAgoPipe, CommonModule, ModalComponent],
   templateUrl: './billing-vouchers.component.html',
   styleUrl: './billing-vouchers.component.scss'
 })
@@ -28,8 +33,9 @@ export class BillingVouchersComponent {
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
   private _router =inject(Router)
-  vouchers =[]
-  visible =true;
+  rules:Rule[] =[];
+  vouchers:Voucher[] =[];
+  visible =false;
   cols =[
     { field: 'code', header: 'Code' },
     { field: 'percentageDiscount', header: 'Discount' },
@@ -41,18 +47,28 @@ export class BillingVouchersComponent {
     { field: 'actions', header: 'Actions' }
   ]
 
-  bookings$ =new Observable<any>();
+  
+  rules$ =new Observable<Rule[]>();
+  vouchers$ =new Observable<Voucher[]>();
+
+  private _rulesService =inject(RulesService);
+  private _voucherService =inject(BillingVoucherService);
 
   getVouchers(page: number =1, limit:number =10){
-    // this.bookings$ =this._bookingService.getBookings(page, limit).pipe(tap(bookings =>{
-    //   this.bookings =bookings.data;
-    //   this.updateDisplayedData();
-    //   this.rowsCount =bookings.total;
-    // }))
+    this.vouchers$ =this._voucherService.getBillingVouchers(page, limit).pipe(tap(vouchers =>{
+      this.vouchers =vouchers
+    }))
+  }
+
+  getRules(page: number =1, limit: number =10){
+   this.rules$ = this._rulesService.getRules(page, limit).pipe(tap(rules =>{
+    this.rules =rules
+   }))
   }
 
   ngAfterViewInit(): void {
     this.getVouchers();
+    this.getRules();
   }
 
   onPageChange(event:PaginatorState){
@@ -62,15 +78,19 @@ export class BillingVouchersComponent {
     this.getVouchers(this.currentPage , this.rows);
   }
 
+  editVoucher(voucherId:number){
+    this.visible =true;
+  }
+
   removeVoucher(voucherId:number){
-    // this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
-    //   if(confirmation){
-    //     return this._bookingService.deleteBooking(voucherId).pipe(tap(_ =>{
-    //       this.getVouchers(this.currentPage, this.rows);
-    //     }));
-    //   }
-    //   return EMPTY;
-    // }))
+  //   this.delete$ =this._confirmationService.confirm(`Are you sure? This action cannot be undone`).pipe(switchMap(confirmation =>{
+  //     if(confirmation){
+  //       return this._bookingService.deleteBooking(voucherId).pipe(tap(_ =>{
+  //         this.getVouchers(this.currentPage, this.rows);
+  //       }));
+  //     }
+  //     return EMPTY;
+  //   }))
   }
 
 
