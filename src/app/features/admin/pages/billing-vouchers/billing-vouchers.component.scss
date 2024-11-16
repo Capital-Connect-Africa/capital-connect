@@ -154,26 +154,29 @@
 }
 
 :host ::ng-deep {
-    .p-multiselect-filter{
-      padding: .5rem 1rem;
-    }
-    .p-multiselect-item,
-    .p-multiselect-label{
-      white-space: wrap!important;
-    }
-    .p-multiselect-panel ul{
-        padding: .5rem;
+  .p-multiselect-filter{
+    padding: .5rem 1rem;
+  }
+  .p-dropdown-item,
+  .p-multiselect-item,
+  .p-multiselect-label,
+  .p-dropdown-label{
+    white-space: wrap!important;
+  }
+  .p-multiselect-panel ul,
+  .p-dropdown ul{
+      padding: .5rem;
+      display: flex;
+      flex-direction: column;
+      li{
         display: flex;
-        flex-direction: column;
-        li{
-          display: flex;
-          padding: .5rem;
-          gap: .5rem;
-          align-items: center;
-          .p-checkbox-box{
-            display: inline-block;
-            border: 1px solid #f1f1f1;
-          }
+        padding: .5rem;
+        gap: .5rem;
+        align-items: center;
+        .p-checkbox-box{
+          display: inline-block;
+          border: 1px solid #f1f1f1;
         }
       }
+    }
 }

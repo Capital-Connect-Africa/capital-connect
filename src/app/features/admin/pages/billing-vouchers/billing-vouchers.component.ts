@@ -9,26 +9,30 @@ import { CommonModule } from '@angular/common';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
-import { Voucher } from '../../../../shared/interfaces/voucher.interface';
+import { Voucher, VoucherFormData, VoucherType } from '../../../../shared/interfaces/voucher.interface';
 import { Rule } from '../../../../shared/interfaces/rule.interface';
 import { BillingVoucherService } from '../../services/billing-voucher.service';
 import { RulesService } from '../../services/rule.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
-  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, CalendarModule, TimeAgoPipe, CommonModule, ModalComponent],
+  imports: [AdminUiContainerComponent, TableModule, ReactiveFormsModule, PaginatorModule, MultiSelectModule, CalendarModule, DropdownModule, TimeAgoPipe, CommonModule, ModalComponent],
   templateUrl: './billing-vouchers.component.html',
   styleUrl: './billing-vouchers.component.scss'
 })
 export class BillingVouchersComponent {
   first: number = 0;
-  rows: number = 10;
+  rows: number = 0; // set back to 10
   showingRows =0;
   currentPage:number =1;
   delete$ =new Observable();
+  createVoucher$ =new Observable();
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
-  private _router =inject(Router)
+  private _router =inject(Router);
+  private _fb =inject(FormBuilder)
   rules:Rule[] =[];
   vouchers:Voucher[] =[];
   visible =false;
@@ -109,5 +113,33 @@ export class BillingVouchersComponent {
 
   showModal(){
     this.visible =true
+  }
+
+  voucherType:{value: VoucherType, label: string}[] =[
+    {
+      label: 'Subscription Plans',
+      value: VoucherType.subscriptionPlan
+    },
+
+    {
+      label: 'Advisory Sessions',
+      value: VoucherType.AdvisorySession
+    }
+  ]
+
+  voucherForm =this._fb.group({
+    rules: [[]],
+    type: ['', [Validators.required]],
+    maxUsers: ['', [Validators.required]],
+    maxAMount: ['', [Validators.required]],
+    percentageDiscount: ['', [Validators.required]],
+    expiresAt: ['', [Validators.required]]
+  })
+
+  saveVoucher(){
+    const values =this.voucherForm.value as Partial<VoucherFormData>;
+    this.createVoucher$ =this._voucherService.generateVoucher(values).pipe(tap(res =>{
+      this.getVouchers(this.currentPage, this.rows);
+    }))
   }
 }
