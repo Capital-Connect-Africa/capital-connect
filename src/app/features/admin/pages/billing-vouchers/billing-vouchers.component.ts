@@ -1,13 +1,11 @@
 import { Component, inject, ViewChild } from '@angular/core';
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
-import { EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
 import { Table, TableModule } from 'primeng/table';
 import { Router } from '@angular/router';
-import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
@@ -15,8 +13,6 @@ import { Voucher } from '../../../../shared/interfaces/voucher.interface';
 import { Rule } from '../../../../shared/interfaces/rule.interface';
 import { BillingVoucherService } from '../../services/billing-voucher.service';
 import { RulesService } from '../../services/rule.service';
-import { rule } from 'postcss';
-
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
