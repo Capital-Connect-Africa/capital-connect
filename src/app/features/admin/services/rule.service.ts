@@ -30,7 +30,7 @@ export class RulesService extends BaseHttpService{
         }))
     }
 
-    createRule(rule:RuleFormData){
+    createRule(rule:Partial<RuleFormData>){
         return this.create(`${BASE_URL}/vouchers/rules`, rule).pipe(map((res:any) =>{
             return res as Rule
         }))

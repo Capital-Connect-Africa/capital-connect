@@ -10,10 +10,10 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CalendarModule } from 'primeng/calendar';
 import { Voucher, VoucherFormData, VoucherType } from '../../../../shared/interfaces/voucher.interface';
-import { Rule } from '../../../../shared/interfaces/rule.interface';
+import { Rule, RuleFormData } from '../../../../shared/interfaces/rule.interface';
 import { BillingVoucherService } from '../../services/billing-voucher.service';
 import { RulesService } from '../../services/rule.service';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 @Component({
   selector: 'app-billing-vouchers',
@@ -29,6 +29,7 @@ export class BillingVouchersComponent {
   currentPage:number =1;
   delete$ =new Observable();
   createVoucher$ =new Observable();
+  createRule$ =new Observable();
   rowsCount:number =this.rows;
   @ViewChild('dt') table!: Table;
   private _router =inject(Router);
@@ -61,7 +62,7 @@ export class BillingVouchersComponent {
   }
 
   getRules(page: number =1, limit: number =10){
-   this.rules$ = this._rulesService.getRules(page, limit).pipe(tap(rules =>{
+   this.rules$ = this._rulesService.getRules(page, limit, true).pipe(tap(rules =>{
     this.rules =rules
    }))
   }
@@ -136,10 +137,24 @@ export class BillingVouchersComponent {
     expiresAt: ['', [Validators.required]]
   })
 
+  ruleForm =this._fb.group({
+    userPropery: ['', [Validators.required]],
+    description: ['', [Validators.required]],
+    operator: ['', [Validators.required]],
+    value: ['', [Validators.required]],
+  })
+
   saveVoucher(){
     const values =this.voucherForm.value as Partial<VoucherFormData>;
     this.createVoucher$ =this._voucherService.generateVoucher(values).pipe(tap(res =>{
       this.getVouchers(this.currentPage, this.rows);
+    }))
+  }
+
+  saveRule(){
+    const values =this.voucherForm.value as Partial<RuleFormData>;
+    this.createRule$ =this._rulesService.createRule(values).pipe(tap(res =>{
+      this.getRules();
     }))
   }
 }
