@@ -36,7 +36,7 @@ export class BillingVoucherService extends BaseHttpService{
         }))
     }
 
-    generateVoucher(voucher:VoucherFormData){
+    generateVoucher(voucher:Partial<VoucherFormData>){
         return this.create(`${BASE_URL}/vouchers`, voucher).pipe(map((res:any) =>{
             return res as Voucher
         }))
