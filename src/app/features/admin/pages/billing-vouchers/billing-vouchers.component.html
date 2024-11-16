@@ -6,8 +6,9 @@
 
     <div class="bg-white flex flex-col table__container">
         <div class="flex items-center justify-between">
-            <input class="px-4 py-3 border search" pInputText placeholder="search ..." (input)="applyFilter($event)"/>
-            <span>{{showingRows}} of {{rowsCount}}</span>
+            <input class="px-4 py-3 border search" placeholder="search ..." (input)="applyFilter($event)"/>
+            <!-- <span>{{showingRows}} of {{rowsCount}}</span> -->
+             <button class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700">New Voucher</button>
         </div>
         <p-table #dt [value]="vouchers" [paginator]="false"> 
             <ng-template pTemplate="header">
