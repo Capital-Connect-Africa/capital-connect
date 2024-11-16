@@ -10,11 +10,12 @@ import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { MultiSelectModule } from 'primeng/multiselect';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
-  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, NumberAbbriviationPipe, TimeAgoPipe, CommonModule, DialogModule, ModalComponent],
+  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, CalendarModule, NumberAbbriviationPipe, TimeAgoPipe, CommonModule, DialogModule, ModalComponent],
   templateUrl: './billing-vouchers.component.html',
   styleUrl: './billing-vouchers.component.scss'
 })
