@@ -8,7 +8,7 @@
         <div class="flex items-center justify-between">
             <input class="px-4 py-3 border search" placeholder="search ..." (input)="applyFilter($event)"/>
             <!-- <span>{{showingRows}} of {{rowsCount}}</span> -->
-             <button class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700">New Voucher</button>
+             <button (click)="showModal()" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700">New Voucher</button>
         </div>
         <p-table #dt [value]="vouchers" [paginator]="false"> 
             <ng-template pTemplate="header">
@@ -30,8 +30,8 @@
                 <td>{{booking.createdAt | time_ago}}</td> 
                 <td>
                     <div class="flex gap-1 items-center cta__btns">
-                    <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(booking.id)"><i class="pi pi-info-circle"></i></button>
-                    <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(booking.id)"><i class="pi pi-trash"></i></button>
+                        <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(booking.id)"><i class="pi pi-info-circle"></i></button>
+                        <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(booking.id)"><i class="pi pi-trash"></i></button>
                     </div>
                 </td>
             </tr>
@@ -51,3 +51,40 @@
         [rowsPerPageOptions]="[10, 20, 30, rowsCount]" />
     </div>
 </app-admin-ui-container>
+
+<app-modal [(visible)]="visible" title="CREATE VOUCHER" helperText="Enter new voucher details">
+    <form class="flex flex-col gap-4">
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Maximum Usage</label>
+            <input class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Percentage Discount</label>
+            <input class="input__field" type="number" min="0" max="100" placeholder="Enter discount as a percentage"/>
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Fixed Amount</label>
+            <input class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Validation Rules</label>
+            <p-multiSelect
+            class ="input__field"
+            styleClass ="w-full gap-4"
+            [options]="[]"
+            optionLabel="text"
+            optionValue="id"
+            placeholder="Select rule" />
+            <!-- <input class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/> -->
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Expiry Date</label>
+            <input class="input__field" type="date" min="0" placeholder="Maximum discount to be applied"/>
+        </div>
+        <div class="input__wrapper">
+            <div class="">
+                <button (click)="showModal()" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700">Generate</button>
+            </div>
+        </div>
+    </form>
+</app-modal>

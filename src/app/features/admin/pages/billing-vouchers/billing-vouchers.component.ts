@@ -7,11 +7,14 @@ import { Router } from '@angular/router';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
+import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
-  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, NumberAbbriviationPipe, TimeAgoPipe, CommonModule],
+  imports: [AdminUiContainerComponent, TableModule, PaginatorModule, MultiSelectModule, NumberAbbriviationPipe, TimeAgoPipe, CommonModule, DialogModule, ModalComponent],
   templateUrl: './billing-vouchers.component.html',
   styleUrl: './billing-vouchers.component.scss'
 })
@@ -25,7 +28,7 @@ export class BillingVouchersComponent {
   @ViewChild('dt') table!: Table;
   private _router =inject(Router)
   vouchers =[]
-
+  visible =true;
   cols =[
     { field: 'code', header: 'Code' },
     { field: 'percentageDiscount', header: 'Discount' },
@@ -85,5 +88,9 @@ export class BillingVouchersComponent {
     const filterValue = (event.target as HTMLInputElement).value.trim();
     this.table.filterGlobal(filterValue.toLowerCase(), 'contains');
     this.updateDisplayedData();
+  }
+
+  showModal(){
+    this.visible =true
   }
 }

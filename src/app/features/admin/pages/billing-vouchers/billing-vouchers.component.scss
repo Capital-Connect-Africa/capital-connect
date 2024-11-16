@@ -1,5 +1,4 @@
 @import "../../../../styles/main.scss";
-
 .title__bar{
     gap: .5rem;
     display: flex;
@@ -38,7 +37,6 @@
   .table-header {
     display: flex;
     align-items: center;
-    // padding: 1rem;
     margin-bottom: 1rem;
   }
   
@@ -143,4 +141,14 @@
 .new__voucher__cta{
     padding: .75rem 2rem;
     border-radius: .3rem;
+}
+
+.input__wrapper{
+    padding: 0 1rem;
+    .input__field{
+        &:focus{
+            outline: 2px solid ;
+            box-shadow: none;
+        }
+    }
 }
