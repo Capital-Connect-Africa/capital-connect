@@ -72,10 +72,7 @@ export class BookingComponent {
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
       this.bookings = res.data;
-
       this.totalItems = res.data.length;
-
-      console.log("The response is", res)
     }),
     catchError((error: any) => {
       this._feedbackService.error('Error Fetching The Bookings.', error);
@@ -92,6 +89,10 @@ export class BookingComponent {
         this.totalItems = res.data.length; 
       })
     );
+  }
+
+  back(){
+    this.iframe = false
   }
 
 
