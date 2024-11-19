@@ -42,9 +42,7 @@ export interface CompanyInput {
   numberOfEmployees: string;
   fullTimeBusiness: boolean;
   registrationStructure: string;
-  investmentStructure: string[];
-  isHidden:boolean
-
+  investmentStructure: string[]
 }
 
 export interface SpecialCriteriaCompanyRes{

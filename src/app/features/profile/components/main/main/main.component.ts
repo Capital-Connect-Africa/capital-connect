@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 
 import { MatIcon } from "@angular/material/icon";
-import { FeedbackService, NavbarComponent } from "../../../../../core";
+import { NavbarComponent } from "../../../../../core";
 import { OverviewComponent } from "../../../../business/components/dashboard/overview/overview.component";
 import { SchedulesSectionComponent } from "../../../../../shared/components/schedules-section/schedules-section.component";
 
@@ -14,9 +14,6 @@ import { RoutingService } from '../../../../../shared/business/services/routing.
 import { AlertCardComponent } from "../../alert-card/alert-card.component";
 import { Router } from '@angular/router';
 import { OrganizationOnboardService } from '../../../../organization/services/organization-onboard.service';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { FormsModule } from '@angular/forms';
-import { CompanyHttpService } from '../../../../organization/services/company.service';
 
 @Component({
   selector: 'app-main',
@@ -28,9 +25,7 @@ import { CompanyHttpService } from '../../../../organization/services/company.se
     SchedulesSectionComponent,
     CommonModule,
     AlertComponent,
-    AlertCardComponent,
-    InputSwitchModule,
-    FormsModule
+    AlertCardComponent
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
@@ -40,15 +35,8 @@ export class MainComponent {
   private _profileService =inject(ProfileService);
   private _routingService =inject(RoutingService)
   private _router =inject(Router);
-  private _companyHttpService = inject(CompanyHttpService)
   private _companyOnboardingService =inject(OrganizationOnboardService);
-  private _fs = inject(FeedbackService)
-
-
   submissions:{title?: string, url: string}[] =[];
-
-  //observables
-  profileVisibility$ = new Observable<unknown>()
 
   submissionActions$ =this._routingService.nextRoute().pipe(tap(res =>{
 
@@ -71,11 +59,5 @@ export class MainComponent {
 
   editOrganizationProfile(){
     this._router.navigateByUrl('/organization/setup')
-  }
-
-  onToggle(id:number,value:boolean) {
-    this.profileVisibility$ = this._companyHttpService.updateCompanyProfileVisibility(id,value).pipe(tap(res=>{
-      this._fs.success("Profile Visibility Updated Successfully")
-    }))
   }
 }
