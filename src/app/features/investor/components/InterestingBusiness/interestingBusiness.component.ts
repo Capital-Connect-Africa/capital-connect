@@ -115,7 +115,7 @@ export class InterestingBusinessComponent {
   
   interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
     tap(res => {
-      this.interestingBusinesses = res;
+      this.interestingBusinesses = res.filter(business => business.company.isHidden === false);
     })
   );
 
@@ -140,7 +140,7 @@ export class InterestingBusinessComponent {
      
     this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage+1, this.pageSize).pipe(
        tap(res => {
-        this.interestingBusinesses = res;
+        this.interestingBusinesses = res.filter(business => business.company.isHidden === false);
        })
    );
   }
@@ -257,12 +257,12 @@ export class InterestingBusinessComponent {
   onSearch(query: string): void {
     if (query){
       this.search$ = this._businessMatchingService.searchCompany('interesting', query).pipe(tap(res=>{
-        this.interestingBusinesses = res
+        this.interestingBusinesses = res.filter(business => business.company.isHidden === false)
       }))
     }else{
       this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.pageSize).pipe(
         tap(res => {
-          this.interestingBusinesses = res;
+          this.interestingBusinesses = res.filter(business => business.company.isHidden === false);
         })
       );
     }
@@ -283,7 +283,9 @@ export class InterestingBusinessComponent {
         this._feedBackService.success('Connection cancelled successfully.');
 
         this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(
-          tap(res => {this.interestingBusinesses = res;})
+          tap(res => {
+            this.interestingBusinesses = res.filter(business => business.company.isHidden === false)
+            ;})
         );
         this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));   
        })
@@ -309,7 +311,9 @@ export class InterestingBusinessComponent {
         .cancelInterestWithCompany(businessId, selectedReasons).pipe(
           tap(() => {
             this._feedBackService.success('Interest cancelled successfully.');
-            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));  
+            this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {
+              this.interestingBusinesses = res.filter(business => business.company.isHidden === false)
+              ;}));  
 
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
@@ -327,7 +331,9 @@ export class InterestingBusinessComponent {
     this.markAsInteresting$ = this._businessMatchingService.markCompanyAsInteresting(id).pipe(
       tap(() => { 
         this._feedBackService.success('Company marked as interesting successfully.');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;})); 
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(this.currentPage, this.itemsPerPage).pipe(tap(res => {
+          this.interestingBusinesses = res.filter(business => business.company.isHidden === false);
+        })); 
       })        
     );
   }
@@ -343,7 +349,9 @@ export class InterestingBusinessComponent {
     this.connectWithCompany$ = this._businessMatchingService.createAConnectionRequest(payload).pipe(
       tap(()=>{
         this._feedBackService.success('Connection Request Created Succesfully');
-        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {this.interestingBusinesses = res;}));      
+        this.interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1, this.itemsPerPage).pipe(tap(res => {
+          this.interestingBusinesses = res.filter(business => business.company.isHidden === false)
+          ;}));      
       })
     )
   }

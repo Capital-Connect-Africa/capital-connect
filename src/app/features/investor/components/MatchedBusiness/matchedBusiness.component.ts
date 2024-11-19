@@ -115,7 +115,9 @@ export class MatchedBusinessComponent {
   
   //streams
   markAsInteresting$ = new Observable<unknown>()
-  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+  matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { 
+    this.matchedBusinesses = res.filter(business => business.isHidden === false)
+   }));
   cancelInterestWithCompany$ = new Observable<unknown>();
   companyDetails$ = new Observable<unknown>()
   userResponses$ = new Observable<unknown>()
@@ -261,7 +263,7 @@ export class MatchedBusinessComponent {
 
     this.searchCriteria$ = this._businessMatchingService.postSearchCriteria(searchCriteria).pipe(
       tap(res => {
-        this.matchedBusinesses = res;
+        this.matchedBusinesses = res.filter(business => business.isHidden === false);
         this.advanced_Search = false;
         this.searchForm.reset();
         this.searchForm.markAsPristine();
@@ -454,7 +456,7 @@ export class MatchedBusinessComponent {
         .cancelInterestWithCompany(businessId, selectedReasons).pipe(
           tap(() => {
             this._feedBackService.success('Interest cancelled successfully.');
-            this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res }));
+            this.matchedCompanies$ = this._businessMatchingService.getMatchedCompanies().pipe(tap(res => { this.matchedBusinesses = res.filter(business => business.isHidden === false) }));
 
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
