@@ -46,7 +46,8 @@ export class OrganizationOnboardService {
     yearsOfOperation: "",
     growthStage: '',
     numberOfEmployees: '',
-    fullTimeBusiness: false
+    fullTimeBusiness: false,
+    isHidden:false
   });
 
   companyInput$ = toObservable(this._companyInput)
@@ -78,7 +79,8 @@ export class OrganizationOnboardService {
       yearsOfOperation: "",
       growthStage: '',
       numberOfEmployees: '',
-      fullTimeBusiness: false
+      fullTimeBusiness: false,
+      isHidden:false
   })
 }
 
