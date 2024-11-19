@@ -14,6 +14,7 @@ fundsNeeded: any;
   numberOfEmployees: string,
   fullTimeBusiness: boolean,
   declineReasons: String[],
+  isHidden:boolean,
 
   //missing 
   ImpactElements: [],
@@ -106,6 +107,7 @@ export interface InterestingBusinesses {
   updatedAt: string;
   company: MatchedBusiness;
   investorProfile: InvestorProfile;
+  isHidden:boolean;
 }
 
 export interface ConnectedBusiness{
@@ -114,6 +116,7 @@ export interface ConnectedBusiness{
   createdAt: string;
   updatedAt: string;
   company: MatchedBusiness;
+  isHidden:boolean,
   investorProfile: InvestorProfile;
 }
 

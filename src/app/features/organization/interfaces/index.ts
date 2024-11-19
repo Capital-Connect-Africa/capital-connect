@@ -65,7 +65,8 @@ export interface SpecialCriteriaCompany{
     growthStage: string,
     numberOfEmployees: string,
     fullTimeBusiness: boolean,
-    percentageScore: number
+    percentageScore: number,
+    isHidden:boolean,
 }
 
  export interface CompanyResponse extends Company {

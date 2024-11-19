@@ -130,7 +130,7 @@ export class ConnectionRequestsComponent {
 
 
   connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
-    this.connectionRequests = res
+    this.connectionRequests = res.filter(business => business.company.isHidden === false)
     if(this.declined_requests){
       this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true && connection.isApproved !== null);
     }else{
@@ -177,7 +177,7 @@ export class ConnectionRequestsComponent {
         this._feedBackService.success("Connection Request updated successfully")
         this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage + 1, this.pageSize).pipe(
           tap(res => {
-            this.connectionRequests = res;
+            this.connectionRequests = res.filter(business => business.company.isHidden === false);
             this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
 
           })
@@ -212,7 +212,7 @@ export class ConnectionRequestsComponent {
       if(conf){
         this.deleteConnectionRequest$ = this._businessMatchingService.deleteConnectionRequest(id).pipe(tap(res => {
           this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
-            this.connectionRequests = res
+            this.connectionRequests = res.filter(business => business.company.isHidden === false)
           }))    
         }))           
       }
@@ -225,7 +225,7 @@ export class ConnectionRequestsComponent {
     this.pageSize = event.pageSize;  
     
     this.connectionRequest$ = this._businessMatchingService.getConnectionRequestByInvestor(this.currentPage+1, this.pageSize).pipe(tap(res=>{
-      this.connectionRequests = res
+      this.connectionRequests = res.filter(business => business.company.isHidden === false)
       this.filteredConnectionRequests = this.connectionRequests.filter(connection => connection.isApproved !== true);
 
     }))

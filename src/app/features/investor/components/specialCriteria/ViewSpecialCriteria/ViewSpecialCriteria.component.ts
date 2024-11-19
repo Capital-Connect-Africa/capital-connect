@@ -109,7 +109,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
 
   interestingCompanies$ = this._businessMatchingService.getInterestingCompanies(1,10).pipe(
     tap(res => {
-      this.interestingBusinesses = res;
+      this.interestingBusinesses = res.filter(business => business.isHidden === false);
     })
   );
 
@@ -119,7 +119,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
         this._feedBackService.success('Company marked as interesting successfully.');
 
         this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-          this.SpecialCriteriaCompanies = res.companies
+          this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
         }))
       })
     );
@@ -138,7 +138,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       tap(id => {
         this.specialCriteriaId = id;
         this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-          this.SpecialCriteriaCompanies = res.companies
+          this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
         }))
         this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
           this.specialCriteria = res
@@ -385,7 +385,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
             this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-              this.SpecialCriteriaCompanies = res.companies
+              this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
             }))
 
             this.decline = false;
