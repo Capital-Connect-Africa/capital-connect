@@ -1,6 +1,3 @@
-<ng-container *ngIf="profileVisibility$ | async"></ng-container>
-
-
 <div class="main">
   <div class="navbar">
     <app-navbar [showBanner]="showBanner" onDashboard="true" />
@@ -56,21 +53,6 @@
                     </div>
                   </div>
                 </div>
-
-
-                <div class="p-field-checkbox flex items-center space-x-4">
-                  <label for="switch" class="text-gray-700 font-semibold" style="font-size: 0.975rem;">Mute Capital Raise For My Business</label>
-                    <label class="switch">
-                      <input type="checkbox" [(ngModel)]="result.profile.company.isHidden"
-                      (ngModelChange)="onToggle(result.profile.company.id,result.profile.company.isHidden)" 
-                      />
-                      <span class="slider round"></span>
-                    </label>
-                </div>
-                <p style="font-size: 0.875rem;">This will hide your company profile from all investors who you are not yet connected with  or have declined your business or those you have declined</p>
-
-                <p>
-                </p>
               </section>
           </div>
 

@@ -27,15 +27,6 @@ export class CompanyHttpService extends BaseHttpService {
     return this.read(`${BASE_URL}/company?page=1&limit=300`) as Observable<CompanyResponse[]>
   }
 
-  //edit company profile
-  updateCompanyProfileVisibility(id:number,value:boolean){
-    if(value){
-      return this.updatePatchUrl(`${BASE_URL}/company/${id}/hide`)
-    }else{
-      return this.updatePatchUrl(`${BASE_URL}/company/${id}/unhide`)
-    }
-  }
-
   
   searchCompanies(query:string) {
     return this.read(`${BASE_URL}/company/search?query=${query}`) as Observable<CompanyResponse[]>
