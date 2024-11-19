@@ -109,6 +109,12 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
+    path: 'billing-vouchers',
+    loadChildren: () => import('./features/admin/modules/billing.vouchers.module').then(m => m.BillingVouchersRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
     path: 'payments',
     loadChildren: () => import('./features/admin/modules/payments.routing.module').then(m => m.PaymentsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],

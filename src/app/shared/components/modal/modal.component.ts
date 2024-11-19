@@ -7,7 +7,6 @@ import {InputTextModule} from "primeng/inputtext";
   selector: 'app-modal',
   standalone: true,
   imports: [
-    Button,
     DialogModule,
     InputTextModule
   ],
