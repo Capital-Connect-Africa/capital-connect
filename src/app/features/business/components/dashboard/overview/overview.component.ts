@@ -1,7 +1,6 @@
 import { Component, inject, ViewChild, ElementRef } from '@angular/core';
 import { OverviewSectionComponent } from "../../../../../shared/components/overview-section/overview-section.component";
 import { CardComponent } from "../../../../../shared/components/card/card.component";
-import { PhotoCollageComponent } from "../photo-collage/photo-collage.component";
 import { tap, switchMap, Observable } from "rxjs";
 import { CommonModule } from "@angular/common";
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
@@ -31,7 +30,6 @@ import { MultiSelectModule } from 'primeng/multiselect';
   imports: [
     OverviewSectionComponent,
     CardComponent,
-    PhotoCollageComponent,
     CommonModule,
     ModalComponent,
     RemoveQuotesPipe,

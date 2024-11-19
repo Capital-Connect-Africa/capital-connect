@@ -43,6 +43,7 @@ export class AdminUiContainerComponent implements OnInit {
               { label: 'Billing', href: '/billing', exact: false, icon: 'attach_money',display:true },
               { label: 'Payments', href: '/payments', exact: false, icon: 'credit_card' ,display:true},
               { label: 'Bookings', href: '/bookings', exact: false, icon: 'collections_bookmark' ,display:true},
+              { label: 'Vouchers', href: '/billing-vouchers', exact: false, icon: 'sell' ,display:true},
               { label: 'Subscriptions', href: '/subscriptions', exact: false, icon: 'hotel_class',display:true },
             ]},
             {label: 'Users', display: true, href: '/organization/list', icon: 'manage_accounts', children: [
