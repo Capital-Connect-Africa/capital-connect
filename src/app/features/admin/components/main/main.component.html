@@ -39,11 +39,10 @@
           </ng-template>
             <ng-template pTemplate="body" let-user>
               <tr>
-                <td>{{user.name}}</td>
-                <td>{{user.username}}</td>
-                <td>{{user.roles | roleformat}}</td>
-                <td>{{user.createdAt | time_ago}}</td>
-                <td>{{user.updatedAt | time_ago }}</td>
+                <td>{{user.name | titlecase}}</td>
+                <td>{{user.username | lowercase}}</td>
+                <td>{{user.roles | roleformat | titlecase}}</td>
+                <td>{{user.createdAt | time_ago | titlecase}}</td>
 
               </tr>
             </ng-template>
