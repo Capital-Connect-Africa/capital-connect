@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminUiContainerComponent } from "../../../components/admin-ui-container/admin-ui-container.component";
 import { UserStatisticsService } from '../../../services/user.statistics.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { SharedStats, Stats } from '../../../interfaces/stats.interface';
 import { PieChartComponent } from "../../../../../shared/components/charts/pie-chart/pie-chart.component";
 import { GeoChartComponent } from "../../../../../shared/components/charts/geo-chart/geo-chart.component";
@@ -38,6 +38,7 @@ export class BusinessComponent {
   private _statsService =inject(UserStatisticsService);
   sectorStats!:SharedStats;
   fundingStats!:SharedStats;
+  matchedBusinesses:number =0;
   minFunding!:Record<string, number>;
   maxFunding!:Record<string, number>;
   fundRaise!:Record<string, number>;
@@ -54,7 +55,7 @@ export class BusinessComponent {
   }
 
   recentSubscriptions: Plan[] =[]
-  stats$ =new Observable<Stats>();
+  stats$ =new Observable<any>();
   filterStats$ =new Observable();
   sectorStats$ =new Observable();
   analytics$ =new Observable();
@@ -84,9 +85,12 @@ export class BusinessComponent {
 
   ngOnInit(): void {
     this.getAnalytics()
-    this.stats$ =this._statsService.fetchUserStats().pipe(tap(res =>{
+    this.stats$ =this._statsService.fetchUserStats().pipe(switchMap(res =>{
       this.matches =res;
-      return res
+      return this._statsService.fetchBusinessAndInvestorInterractionsStats().pipe(tap(users =>{
+        // the difference between users.total and (res.connected + res.declined + res.interesting + res.requested) = matched businesses
+        this.matchedBusinesses =users.total - (res.connected + res.declined + res.interesting + res.requested)
+      }))
     }))
   }
 

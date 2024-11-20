@@ -9,6 +9,7 @@ import { GoogleChartsModule, ChartType } from 'angular-google-charts';
   styleUrls: ['./pie-chart.component.scss'],
 })
 export class PieChartComponent implements OnInit {
+  @Input() pieHole:number =.4;
   @Input() data!: Record<string, number>;
   @Input() colors:string[] =[];
   @Input() width:number =400;
@@ -32,7 +33,7 @@ export class PieChartComponent implements OnInit {
       fontName: 'Arial',
       fontSize: 12,
       colors: this.colors,
-      pieHole: 0.4,
+      pieHole: this.pieHole,
       legend: {
         position: this.legendPosition,
         alignment: this.legendAlignment,
