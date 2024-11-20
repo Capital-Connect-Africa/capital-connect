@@ -28,6 +28,24 @@ export class UserStatisticsService extends BaseHttpService{
         })) as Observable<Stats>
     }
 
+    fetchBusinessAndInvestorInterractionsStats(){;
+        return this.read(`${BASE_URL}/matchmaking/counts`).pipe(map((res:any) =>{
+            debugger
+            return res
+        }))
+        // return forkJoin(requests).pipe(map((res:any) =>{
+        //     const users =res[0];
+        //     const matches =res[1];
+        //     return {
+        //             declined: matches.declined,
+        //             requested: matches.requested,
+        //             connected: matches.connected,
+        //             interesting: matches.declined,
+        //         }
+            
+        // })) as Observable<Stats>
+    }
+
     getBusinessCountriesStats(): Observable<Record<string, number>>{
         return this.read(`${BASE_URL}/statistics/businesses-country`).pipe(map((stats: any) =>{
             return stats
