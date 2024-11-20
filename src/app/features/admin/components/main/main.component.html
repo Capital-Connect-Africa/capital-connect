@@ -13,7 +13,7 @@
           <div class="grid__container">
             <h3>Roles</h3>
             <div class="">
-              <app-pie-chart [data]="{
+              <app-pie-chart [width]="300" [height]="300" [data]="{
                 'Investors': stats.investors,
                 'Advisors': stats.advisors,
                 'Admins': stats.staff,
@@ -61,7 +61,7 @@
           <div class="grid__container">
             <h3>Subscriptions</h3>
             <div class="">
-              <app-pie-chart [data]="{
+              <app-pie-chart [width]="300" [height]="300" [data]="{
                 'Basic': subscriptions['basic'],
                 'Pro': subscriptions['pro'],
                 'Elite': subscriptions['elite'],

@@ -13,6 +13,29 @@
           <h3 class="padding__b">Business <span *ngIf="heading"> - {{heading}}</span></h3>
           <button title="close" *ngIf="heading" (click)="close()" class="text-sm text-blue-400 outline-none bg-white w-[32px] rounded-full h-[32px] shadow flex items-center justify-center hover:bg-red-200 hover:text-red-400 transition-all"><i class="pi pi-times"></i></button>
         </div>
+
+        <div class ="flex overflow-hidden h-full w-full items-center justify-between bg-white pies__wrapper">
+          <div class="grid__container flex-1">
+            <h3>Business-Investor Engagements</h3>
+            <div class="h-full flex w-full bg-white">
+              <app-pie-chart legendPosition="right" [data]="{
+                Businesses: entities.totalBusinesses,
+                Investors: entities.totalInvestors,
+              }" [colors]="['#847cfb', '#f3b49f']" />
+            </div>
+          </div>
+          <div class="grid__container flex-1">
+            <h3 class="opacity-0">Business-Investor Engagements</h3>
+            <div class="h-full flex w-full bg-white">
+              <app-pie-chart legendPosition="right" [data]="{
+                Declined: matches.declined,
+                Requested: matches.requested,
+                Connected: matches.connected,
+                Interesting: matches.interesting,
+              }" [colors]="['#dc3546', '#654f29', '#13501B', '#495057',]"/>
+            </div>
+          </div>
+        </div>
         <div class="grid grid-cols-1 grid__wrapper">
           <div class="grid__container">
             <h3 class="padding__b">Businesses per sector</h3>
@@ -44,28 +67,7 @@
               <app-column-chart [colors]="['#13501B']" [data]="fundRaise" *ngIf="fundRaise"/>
             </div>
           </div>
-          <div class ="flex overflow-hidden h-full w-full justify-between bg-white pies__wrapper">
-          <div class="grid__container flex-1">
-            <h3>Business-Investor Engagements</h3>
-            <div class="h-full flex w-full bg-white">
-              <app-pie-chart legendPosition="right" [data]="{
-                Declined: matches.declined,
-                Requested: matches.requested,
-                Connected: matches.connected,
-                Interesting: matches.interesting,
-              }" [colors]="['#dc3546', '#654f29', '#13501B', '#495057',]"/>
-            </div>
-          </div>
-          <div class="grid__container flex-1">
-            <h3>Entities</h3>
-            <div class="h-full flex w-full bg-white">
-              <app-pie-chart legendPosition="right" [data]="{
-                Businesses: entities.totalBusinesses,
-                Investors: entities.totalInvestors,
-              }" [colors]="['#847cfb', '#f3b49f']" />
-            </div>
-          </div>
-        </div>
+          
         </div>
       </div>
 
