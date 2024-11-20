@@ -59,9 +59,11 @@ export class ColumnChartComponent {
     this.options = {
       bars: 'vertical',
       colors: this.colors,
-      hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none' },
-      vAxis: { title: this.ylabel, gridlines: { count: 0 }, baselineColor: 'none'  },
+      chartArea: { width: '75%', height: '90%' },
+      hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none', textStyle: { fontSize: 10 } },
+      vAxis: { textPosition: 'none' , gridlines: { count: 0 }, baselineColor: 'none'  },
       legend: 'none',
+      sortColumn: false,
     };
     this.transformData();
   }

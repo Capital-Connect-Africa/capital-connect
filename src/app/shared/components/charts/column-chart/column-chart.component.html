@@ -1,10 +1,8 @@
-<div>
+<div class="canvas">
     <google-chart 
       [type]="chartType"
       [data]="chartData"
       [options]="options"
-      [width]="600"
-      [height]="400"
       (select)="handleSelect($event)"
       >
     </google-chart>

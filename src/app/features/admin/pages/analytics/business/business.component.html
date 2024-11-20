@@ -10,47 +10,23 @@
       <ng-container *ngIf="stats$ | async as stats">
       <div>
         <div class="flex items-center justify-between">
-          <h3>Business <span *ngIf="heading"> - {{heading}}</span></h3>
+          <h3 class="padding__b">Business <span *ngIf="heading"> - {{heading}}</span></h3>
           <button title="close" *ngIf="heading" (click)="close()" class="text-sm text-blue-400 outline-none bg-white w-[32px] rounded-full h-[32px] shadow flex items-center justify-center hover:bg-red-200 hover:text-red-400 transition-all"><i class="pi pi-times"></i></button>
         </div>
-        <div class="grid grid-cols-2 grid__wrapper">
-          <div class="grid__container">
-            <h3>Businesses per sector</h3>
-            <div class="">
-              <app-horizontal-barchart [data]="sectorStats.companies" xlabel="Businesses" *ngIf="sectorStats" (onSelect)="filterStats($event, 'businessSectors')"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Businesses per country</h3>
-            <div class="">
-              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats" (onSelect)="filterStats($event, 'countries')"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Businesses per Stage</h3>
-            <div class="">
-              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" xlabel="Businesses" *ngIf="stagesStats" (onSelect)="filterStats($event, 'growthStages')"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Businesses per Use of funds</h3>
-            <div class="">
-              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" xlabel="Businesses" *ngIf="fundingStats" (onSelect)="filterStats($event, 'useOfFunds')"/>
-            </div>
-          </div>
-          <div class="grid__container">
-            <h3>Businesses per Fund Raise</h3>
-            <div class="">
-              <app-column-chart [colors]="['#13501B']" [data]="fundRaise" *ngIf="fundRaise"/>
-            </div>
-          </div>
-          <div class ="flex overflow-hidden h-full">
-            <div>
-              
-            </div>
-          <div class="grid__container">
+
+        <div class ="flex overflow-hidden h-full w-full items-center justify-between bg-white pies__wrapper">
+          <div class="grid__container flex-1">
             <h3>Business-Investor Engagements</h3>
-            <div class="h-full flex w-full justify-center bg-white">
+            <div class="h-full flex w-full bg-white">
+              <app-pie-chart legendPosition="right" [data]="{
+                Businesses: entities.totalBusinesses,
+                Investors: entities.totalInvestors,
+              }" [colors]="['#847cfb', '#f3b49f']" />
+            </div>
+          </div>
+          <div class="grid__container flex-1">
+            <h3 class="opacity-0">Business-Investor Engagements</h3>
+            <div class="h-full flex w-full bg-white">
               <app-pie-chart legendPosition="right" [data]="{
                 Declined: matches.declined,
                 Requested: matches.requested,
@@ -59,16 +35,39 @@
               }" [colors]="['#dc3546', '#654f29', '#13501B', '#495057',]"/>
             </div>
           </div>
+        </div>
+        <div class="grid grid-cols-1 grid__wrapper">
           <div class="grid__container">
-            <h3 class="text-center">Entities</h3>
-            <div class="h-full flex w-full justify-center bg-white">
-              <app-pie-chart legendPosition="bottom" [data]="{
-                Businesses: entities.totalBusinesses,
-                Investors: entities.totalInvestors,
-              }" [colors]="['#847cfb', '#f3b49f']" />
+            <h3 class="padding__b">Businesses per sector</h3>
+            <div class="">
+              <app-horizontal-barchart [data]="sectorStats.companies" xlabel="Businesses" *ngIf="sectorStats" (onSelect)="filterStats($event, 'businessSectors')"/>
             </div>
           </div>
-        </div>
+          <div class="grid__container">
+            <h3 class="padding__b">Businesses per country</h3>
+            <div class="">
+              <app-geo-chart [data]="businessCountriesStats" *ngIf="businessCountriesStats" (onSelect)="filterStats($event, 'countries')"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3 class="padding__b">Businesses per Stage</h3>
+            <div class="">
+              <app-horizontal-barchart [colors]="['#f3b49f']" [data]="stagesStats" xlabel="Businesses" *ngIf="stagesStats" (onSelect)="filterStats($event, 'growthStages')"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3 class="padding__b">Businesses per Use of funds</h3>
+            <div class="">
+              <app-horizontal-barchart [colors]="['#762db1']" [data]="fundingStats.companies" xlabel="Businesses" *ngIf="fundingStats" (onSelect)="filterStats($event, 'useOfFunds')"/>
+            </div>
+          </div>
+          <div class="grid__container">
+            <h3 class="padding__b">Businesses per Fund Raise</h3>
+            <div class="">
+              <app-column-chart [colors]="['#13501B']" [data]="fundRaise" *ngIf="fundRaise"/>
+            </div>
+          </div>
+          
         </div>
       </div>
 

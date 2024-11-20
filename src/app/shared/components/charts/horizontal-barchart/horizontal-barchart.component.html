@@ -1,3 +1,3 @@
-<div *ngIf="barChartData.length">
+<div *ngIf="barChartData.length" class="canvas">
     <google-chart [type]="chartType" [data]="barChartData" [options]="options" (select)="handleSelect($event)"/>
 </div>

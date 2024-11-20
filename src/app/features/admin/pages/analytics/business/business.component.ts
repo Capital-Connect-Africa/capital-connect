@@ -27,14 +27,10 @@ import { ChangeDetectorRef } from '@angular/core';
     SharedModule, CommonModule, ButtonModule,
     AdminUiContainerComponent,
     PieChartComponent,
-    BubbleChartComponent,
-    BarChartComponent,
     GeoChartComponent,
     TableModule,
-    UserRoleFormatPipe,
     HorizontalBarchartComponent,
-    ColumnChartComponent,
-    TimeAgoPipe
+    ColumnChartComponent
 ],
   templateUrl: './business.component.html',
   styleUrl: './business.component.scss'
