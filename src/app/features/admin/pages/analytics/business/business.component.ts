@@ -8,15 +8,11 @@ import { UserStatisticsService } from '../../../services/user.statistics.service
 import { Observable, tap } from 'rxjs';
 import { SharedStats, Stats } from '../../../interfaces/stats.interface';
 import { PieChartComponent } from "../../../../../shared/components/charts/pie-chart/pie-chart.component";
-import { BubbleChartComponent } from "../../../../../shared/components/charts/bubble-chart/bubble-chart.component";
-import { BarChartComponent } from "../../../../../shared/components/charts/bar-chart/bar-chart.component";
 import { GeoChartComponent } from "../../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
-import { UserRoleFormatPipe } from '../../../../../core/pipes/user-role-format.pipe';
 import { HorizontalBarchartComponent } from "../../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
 import { ColumnChartComponent } from "../../../../../shared/components/charts/column-chart/column-chart.component";
 import { Plan } from '../../../../../shared/interfaces/Billing';
-import { TimeAgoPipe } from '../../../../../core/pipes/time-ago.pipe';
 import { ChartEvent } from '../../../../../shared/interfaces/chart.event.interface';
 import { ChangeDetectorRef } from '@angular/core';
 

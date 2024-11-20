@@ -13,6 +13,7 @@ export class PieChartComponent implements OnInit {
   @Input() colors:string[] =[];
   @Input() width:number =400;
   @Input() height:number =400;
+  @Input() legendAlignment: 'start' | 'center' | 'end' ='center'
   @Input() pieChartLegend = true;
   @Input() is3d:boolean =false;
   @Input() legendPosition: 'top' | 'left' | 'bottom' | 'right' = 'right';
@@ -33,8 +34,8 @@ export class PieChartComponent implements OnInit {
       colors: this.colors,
       pieHole: 0.4,
       legend: {
-        alignment: 'center',
         position: this.legendPosition,
+        alignment: this.legendAlignment,
       },
       chartArea: { width: '100%',},
       is3D: this.is3d, 
