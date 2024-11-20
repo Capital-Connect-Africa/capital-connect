@@ -22,12 +22,12 @@ export class HorizontalBarchartComponent {
 
   ngOnInit(): void {
     this.options = {
-      is3D: true,
       legend: 'none',
       bars: 'horizontal',
       colors: this.colors,
-      vAxis: { title: this.ylabel, gridlines: { count: 0 } },
-      hAxis: { title: this.xlabel, gridlines: { count: 0 }, baselineColor: 'none'  },
+      chartArea: { width: '75%', height: '90%' },
+      vAxis: { title: this.ylabel, gridlines: { count: 0 }, textStyle: { fontSize: 10 } },
+      hAxis: {  gridlines: { count: 0 }, baselineColor: 'none', textPosition: 'none'  },
     };
 
     this.transformData();
