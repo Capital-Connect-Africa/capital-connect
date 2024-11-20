@@ -13,7 +13,7 @@
           <div class="grid__container">
             <h3>Roles</h3>
             <div class="">
-              <app-pie-chart [width]="300" [height]="300" [data]="{
+              <app-pie-chart [width]="300" [height]="300" legendPosition ="bottom" [data]="{
                 'Investors': stats.investors,
                 'Advisors': stats.advisors,
                 'Admins': stats.staff,
@@ -38,7 +38,7 @@
                 </tr>
           </ng-template>
             <ng-template pTemplate="body" let-user>
-              <tr>
+              <tr class="text-sm">
                 <td>{{user.name | titlecase}}</td>
                 <td>{{user.username | lowercase}}</td>
                 <td>{{user.roles | roleformat | titlecase}}</td>
@@ -61,7 +61,7 @@
           <div class="grid__container">
             <h3>Subscriptions</h3>
             <div class="">
-              <app-pie-chart [width]="300" [height]="300" [data]="{
+              <app-pie-chart [width]="300" [height]="300" legendPosition ="bottom" [data]="{
                 'Basic': subscriptions['basic'],
                 'Pro': subscriptions['pro'],
                 'Elite': subscriptions['elite'],
@@ -86,7 +86,7 @@
                 </tr>
           </ng-template>
             <ng-template pTemplate="body" let-subscription>
-              <tr>
+              <tr class="text-sm">
                 <td>{{subscription.user.firstName | titlecase}} {{subscription.user.lastName | titlecase}}</td>
                 <td>{{subscription.subscriptionTier.name | titlecase}}</td>
                 <td>{{'Ksh '+subscription.subscriptionTier.price | uppercase}}</td>
@@ -121,7 +121,7 @@
                 </tr>
           </ng-template>
             <ng-template pTemplate="body" let-payment>
-              <tr>
+              <tr class="text-sm">
                 <td>{{payment.id}}</td>
                 <td>{{payment.currency}} {{payment.amount | numberabbreviation}}</td>
                 <td>{{payment.status | titlecase}}</td>
@@ -156,7 +156,7 @@
                 </tr>
           </ng-template>
             <ng-template pTemplate="body" let-booking>
-              <tr>
+              <tr class="text-sm">
                 <td>{{booking.calendlyEventId}}</td>
                 <td>{{booking.payment.currency}} {{booking.payment.amount | numberabbreviation}}</td>
                 <td>{{booking.payment.status | titlecase}}</td>
