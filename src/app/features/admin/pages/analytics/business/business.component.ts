@@ -88,8 +88,7 @@ export class BusinessComponent {
     this.stats$ =this._statsService.fetchUserStats().pipe(switchMap(res =>{
       this.matches =res;
       return this._statsService.fetchBusinessAndInvestorInterractionsStats().pipe(tap(users =>{
-        // the difference between users.total and (res.connected + res.declined + res.interesting + res.requested) = matched businesses
-        this.matchedBusinesses =users.total - (res.connected + res.declined + res.interesting + res.requested)
+        this.matchedBusinesses =users.total;
       }))
     }))
   }

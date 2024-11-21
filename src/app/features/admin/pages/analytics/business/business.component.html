@@ -18,22 +18,22 @@
           <div class="grid__container flex-1">
             <h3>Business-Investor Engagements</h3>
             <div class="h-full flex w-full bg-white">
-              <app-pie-chart legendPosition="right" [data]="{
+              <app-pie-chart legendPosition="right" [pieHole]=".5" [data]="{
                 Businesses: entities.totalBusinesses,
                 Investors: entities.totalInvestors,
-              }" [colors]="['#847cfb', '#f3b49f']" />
+              }" [colors]="['#13501B', '#762db1']" />
             </div>
           </div>
           <div class="grid__container flex-1">
             <h3 class="opacity-0">Business-Investor Engagements</h3>
             <div class="h-full flex w-full bg-white">
-              <app-pie-chart legendPosition="right" [pieHole]="0" [data]="{
+              <app-pie-chart legendPosition="right" [pieHole]=".5" [data]="{
                 Declined: matches.declined,
                 Requested: matches.requested,
                 Connected: matches.connected,
                 Interesting: matches.interesting,
                 Matched: matchedBusinesses
-              }" [colors]="['#762db1', '#dc3546', '#654f29', '#13501B', '#495057',]"/>
+              }" [colors]="['#13501B', '#dc3546', '#654f29', '#762db1', '#495057',]"/>
             </div>
           </div>
         </div>
