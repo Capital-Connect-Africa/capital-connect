@@ -14,7 +14,7 @@
           </tr>
     </ng-template>
       <ng-template pTemplate="body" let-payment>
-        <tr>
+        <tr class="text-sm">
           <td>{{payment.currency}} {{payment.amount | numberabbreviation}}</td>
           <td>{{payment.status | titlecase}}</td>
           <td>{{payment.createdAt | time_ago}}</td>
