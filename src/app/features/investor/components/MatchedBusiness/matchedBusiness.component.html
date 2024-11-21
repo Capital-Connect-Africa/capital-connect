@@ -38,6 +38,7 @@
       </div>
 
       <div *ngIf="table" class="matched__top  search border-0">
+        
         <div class="flex justify-between">
           <div><h3 class="top__txt">Matched Businesses</h3></div>
           <div class="flex justify-between">
@@ -45,6 +46,8 @@
             <button class="btn btn-primary btn-sm submit__btn" type="submit" (click)="showSearch()">Search Companies</button>
           </div>
         </div>
+
+
         <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!matchedBusinesses.length">No matched businesses found. <br/>Check again later.</div>
       </div>
 

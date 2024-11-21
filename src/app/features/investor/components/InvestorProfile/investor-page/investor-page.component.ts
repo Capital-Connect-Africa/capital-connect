@@ -8,7 +8,7 @@ import { ProfileService } from '../../../../profile/services/profile.service';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { tap } from 'rxjs';
 import { SignalsService } from '../../../../../core/services/signals/signals.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { InvestorProfile } from '../../../../../shared/interfaces/Investor';
 import { InvestorScreensService } from '../../../services/investor.screens.service';
 import { Profile } from '../../../../../shared/interfaces/profile.interface';
@@ -33,11 +33,20 @@ export class InvestorPageComponent implements OnInit {
   private _routingService =inject(RoutingService)
   investorProfile: InvestorProfile | null = null;
   private _screenService = inject(InvestorScreensService)
+  private router = inject(Router)
   private userProfile!:Profile;
 
   constructor() { }
 
+  investorProfileExists: boolean = false;
+
+
   ngOnInit() {
+      this.investorProfileExists = !!sessionStorage.getItem('profileId');
+
+      if(!this.investorProfileExists){
+        this.router.navigate(['/investor/onboarding']);
+      }
   }
 
   investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
