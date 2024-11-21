@@ -12,7 +12,7 @@ import { SignalsService } from '../../services/signals/signals.service';
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [ProBadgeComponent, SharedModule, CommonModule, RouterLink, RouterLinkActive],
+  imports: [SharedModule, CommonModule, RouterLink, RouterLinkActive],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
 })

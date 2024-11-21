@@ -53,8 +53,8 @@ export class AdminUiContainerComponent implements OnInit {
               { label: 'Investors', href: '/business-investors', exact: false, icon: 'paid' ,display:true},
               { label: 'Users', href: '/users', exact: false, icon: 'supervised_user_circle' ,display:true}
             ]},
-            {label: 'Operations', display: true, href: '/referals', icon: 'settings', children: [
-              { label: 'Referals', href: '/referals', exact: false, icon: 'hub' ,display:true},
+            {label: 'Operations', display: true, href: '/referrals', icon: 'trending_up', children: [
+              { label: 'Referrals', href: '/referrals', exact: false, icon: 'screen_share' ,display:true},
               { label: 'Sections', href: '/questions', exact: false, icon: 'help' ,display:true},
               { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' ,display:true},
             ]},

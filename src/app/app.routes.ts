@@ -115,6 +115,12 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
+    path: 'referrals',
+    loadChildren: () => import('./features/admin/modules/referal.routing.module').then(m => m.ReferalsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
     path: 'payments',
     loadChildren: () => import('./features/admin/modules/payments.routing.module').then(m => m.PaymentsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
