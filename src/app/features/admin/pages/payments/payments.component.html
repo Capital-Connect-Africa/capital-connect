@@ -19,7 +19,7 @@
           </tr>
     </ng-template>
       <ng-template pTemplate="body" let-payment>
-        <tr>
+        <tr class="text-sm">
           <td>{{payment.id}}</td>
           <td>{{payment.currency}} {{payment.amount | numberabbreviation}}</td>
           <td>{{payment.status | titlecase}}</td>
