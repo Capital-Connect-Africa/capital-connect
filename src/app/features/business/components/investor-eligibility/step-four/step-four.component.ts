@@ -15,7 +15,7 @@ import { BUSINESS_INFORMATION_SUBSECTION_IDS } from "../../../../../shared/busin
 @Component({
   selector: 'app-step-four',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, DropdownModule, MultiSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, DropdownModule, MultiSelectModule],
   templateUrl: './step-four.component.html',
   styleUrl: './step-four.component.scss'
 })
