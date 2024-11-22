@@ -22,7 +22,6 @@ import { getInvestorEligibilitySubsectionIds } from "../../../../../shared/busin
     AuthModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterLink,
     DropdownModule,
     MultiSelectModule
   ],
@@ -50,8 +49,8 @@ export class StepOneComponent {
       return this._questionAnswersService.investorEligibility(questions)
     }),
     tap(res =>{
-
       this.questions = res;
+      debugger
       this._createFormControls();
     })
   )

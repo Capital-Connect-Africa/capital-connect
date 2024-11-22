@@ -81,7 +81,7 @@ export class SubmissionService extends BaseHttpService {
 
   saveSectionSubmissions(submissions:Submission[][], request =RequestType.SAVE) {
     const requests =request ==RequestType.SAVE
-      ? submissions.filter(submission =>submission.length).map(submission =>this.createMultipleSubmissions(submission.map(sub =>({userId: sub.userId, questionId: sub.questionId, answerId: sub.answerId, text: sub.text}))))
+      ? submissions.filter(submission =>submission.length).map(submission =>this.createMultipleSubmissions(submission.map(sub =>({userId: this._currentUserId, questionId: sub.questionId, answerId: sub.answerId, text: sub.text}))))
       : request ==RequestType.EDIT
       ? submissions.filter(submission =>submission.length).map(submission =>this.editSubmissions(submission))
       : [];

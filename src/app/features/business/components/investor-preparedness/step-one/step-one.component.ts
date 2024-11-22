@@ -16,7 +16,7 @@ import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from "../../../../../shared/busi
 @Component({
   selector: 'app-step-one',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, DropdownModule, MultiSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, DropdownModule, MultiSelectModule],
   templateUrl: './step-one.component.html',
   styleUrl: './step-one.component.scss'
 })

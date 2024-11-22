@@ -10,7 +10,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angula
 import { BusinessPageService } from "../../../services/business-page/business.page.service";
 import { QuestionsService } from "../../../../questions/services/questions/questions.service";
 import { UserSubmissionsService } from '../../../../../core/services/storage/user-submissions.service';
-import { RequestType, Submission, SubmissionService, SubMissionStateService, UserSubmissionResponse } from "../../../../../shared";
+import { RequestType, Submission, SubmissionService, SubMissionStateService } from "../../../../../shared";
 import { loadInvestorEligibilityQuestions } from "../../../../../shared/business/services/onboarding.questions.service";
 import { QuestionsAnswerService } from "../../../../../shared/business/services/question.answers.service";
 import { SignalsService } from "../../../../../core/services/signals/signals.service";
@@ -18,7 +18,7 @@ import { SignalsService } from "../../../../../core/services/signals/signals.ser
 @Component({
   selector: 'app-step-three',
   standalone: true,
-  imports: [CommonModule, AuthModule, ReactiveFormsModule, RouterLink, DropdownModule, MultiSelectModule],
+  imports: [CommonModule, AuthModule, ReactiveFormsModule, DropdownModule, MultiSelectModule],
   templateUrl: './step-three.component.html',
   styleUrl: './step-three.component.scss'
 })
