@@ -1,3 +1,56 @@
-<app-admin-ui-container title="Referrals">
-
+<app-admin-ui-container title="Referrals" [bg_gray]="true">
+    <div class="flex flex-col gap-8">
+        <div>
+            <h3>Referral Stats</h3>
+            <p>Here's how we're doing</p>
+        </div>
+        <section class="bg-white flex justify-start rounded-xl p-4 gap-12">
+            <div>
+                <app-pie-chart [width]="300" [height]="300" legendPosition="bottom" [data]="{
+                'Visits': 10,
+                'Clicks': 20,
+                'Conversions': 15,
+              }" [colors]="['#13501B', '#e9a901', '#762db1']" />
+            </div>
+            <div class="w-full">
+                <div>
+                    <h3>Leadersboard</h3>
+                    <p>The following have referred people to us</p>
+                </div>
+                <p-table [value]="referrals" [paginator]="false">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                                <span class="header-container">
+                                    <span class="header-text">
+                                        {{col.header}}
+                                    </span>
+                                </span>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-referral>
+                        <tr class="text-sm">
+                            <td>1</td>
+                            <td>{{referral.user | titlecase}}</td>
+                            <td>{{referral.referrals}}</td>
+                            <td>{{referral.conversions}}</td>
+                            <td>{{(referral.conversions /referral.referrals)*100 | number}}%</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="5">No recent referrals recorded.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </section>
+        <section class="bg-white rounded-xl p-4 gap-12">
+            <div class="">
+                <h3>Referral Link</h3>
+                <p>Send this referral code to invite users</p>
+            </div>
+        </section>
+    </div>
 </app-admin-ui-container>
