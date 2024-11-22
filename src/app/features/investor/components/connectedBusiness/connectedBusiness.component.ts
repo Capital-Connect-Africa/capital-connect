@@ -31,6 +31,7 @@ import { Scoring } from '../../../../shared/business/services/onboarding.questio
 import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
 import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-connected-business',
@@ -48,7 +49,8 @@ import { DebouncedSearchComponent } from "../../../../core/components/debounced-
     MatPaginatorModule,
     MultiSelectModule, ReactiveFormsModule,
     RemoveQuotesPipe,
-    DebouncedSearchComponent
+    DebouncedSearchComponent,
+    TableModule
 ],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss',
@@ -123,7 +125,7 @@ export class ConnectedBusinessComponent {
   itemsPerPage: number = 8;
   currentPage: number = 0; // Start at 0 for Material paginator
   pageSize: number = 10;
-  totalItems: number = 0; // Set total items
+  totalRecords: number = 0; // Set total items
   
 
   business__id: number = 0
@@ -154,7 +156,7 @@ export class ConnectedBusinessComponent {
 
 
   matchMakingStats$ = this._businessMatchingService.getMatchMakingStatistics().pipe(tap(res => {
-    this.totalItems = res?.connected
+    this.totalRecords = res?.connected
   }))
 
 
@@ -323,15 +325,17 @@ export class ConnectedBusinessComponent {
   }
 
 
-  pageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex; 
-    this.pageSize = event.pageSize; 
+  pageChange(event: { first: number; rows: number }): void {
+    console.log("The Event Is", event)
 
-    this.pageSize = event.pageSize;
+    this.currentPage = event.first / event.rows;
+    this.pageSize = event.rows;
+  
+
+
     this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(this.currentPage + 1, this.pageSize).pipe(
       tap(res => {
         this.connectedBusinesses = res;
-        // this.totalItems = res.length;
       })
     );
   }

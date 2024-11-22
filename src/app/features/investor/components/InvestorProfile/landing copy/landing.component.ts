@@ -20,15 +20,13 @@ import { Sector, SubSector } from '../../../../../shared/interfaces/Investor';
 import { Router } from '@angular/router';
 import { TooltipDirective } from '../../../../../shared/directives/tooltip.directive';
 import { NumberFormatDirective } from '../../../../../shared/directives/number-format.directive';
-import { MatStepperModule } from '@angular/material/stepper';
-
 
 
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, DropdownModule, MultiSelectModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective,MatStepperModule],
+  imports: [CommonModule, DropdownModule, MultiSelectModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
 })
@@ -44,7 +42,7 @@ export class LandingComponent implements OnInit {
   noMaxFund = false;
 
   current_details: number = 1
-  cur_det: number[] = [1, 2, 3,4]
+  cur_det: number[] = [1, 2, 3]
   submit$ = new Observable<unknown>()
   esgFocusAreaOptions: EsgFocusAreaOptions[] = []
   countryOptions: Country[] = []
@@ -208,7 +206,6 @@ export class LandingComponent implements OnInit {
         }
         this.submit$ = this._screenService.updateInvestorProfile(formData,this.investorProfile.id).pipe(
           tap(res => {
-            this._feedbackService.success("Investor Profile Added Sucessfully, Proceed To Add Contact Persons")
             this._router.navigate(['/investor/contact-person']);
           }),
         )
@@ -220,7 +217,6 @@ export class LandingComponent implements OnInit {
         const formData = this.formGroup.value;
         this.submit$ = this._screenService.createInvestorProfile(formData).pipe(
           tap(res => {
-            this._feedbackService.success("Investor Profile Updated Sucessfully,  Proceed To Update Contact Persons")
             this._router.navigate(['/investor/contact-person']);
           }),
           catchError((error: any) => {

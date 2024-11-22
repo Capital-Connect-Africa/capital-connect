@@ -1,5 +1,16 @@
 // @import '../../../../business/styles/success-screen.scss';
 @import '../../../../business/styles/business.components.steps.scss';
+@import '../../../../business/styles/index.layout';
+@import '../../../../business/styles/business.components.steps.scss';
+
+.cta__group{
+  align-items: flex-start;
+}
+
+h2{
+  font-size: 1.8rem !important;
+}
+
 
 .score-checker:hover{
   text-decoration: underline;
@@ -31,4 +42,24 @@
 
 .input__field {
   flex-grow: 1;
+}
+
+
+@import '../../../../../styles/main.scss';
+
+.main__content{
+    gap: 3rem;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    padding: 2rem 1rem;
+    flex-direction: column;
+
+}
+
+@include when-screen-is-atleast(large){
+    .main__content{
+        width: 60%;
+        padding: 2rem;
+    }
 }

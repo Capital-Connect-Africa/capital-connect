@@ -17,6 +17,7 @@ import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../../shared/busi
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../../shared/business/services/onboarding.questions.service';
 import { Router } from '@angular/router';
 import { MatchMakingStats } from '../../../../../shared/interfaces';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @Component({
@@ -27,12 +28,17 @@ import { MatchMakingStats } from '../../../../../shared/interfaces';
     OverviewSectionComponent,
     CardComponent,
     ModalComponent,
-    AngularMaterialModule
+    AngularMaterialModule,
+    SkeletonModule
   ],
   templateUrl: './overview.component.html',
   styleUrl: './overview.component.scss'
 })
 export class OverviewComponent {
+  //booleans
+  isLoading: boolean = true;
+
+
   private _feedBackService = inject(FeedbackService)
   private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
   private _company = inject(CompanyHttpService)
@@ -79,6 +85,13 @@ export class OverviewComponent {
     this.conReqStats = res
     
   }))
+
+  ngOnInit(): void {
+    // Simulate loading delay
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 1200);
+  }
 
 
 
