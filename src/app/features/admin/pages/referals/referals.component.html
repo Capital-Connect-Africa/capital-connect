@@ -1,10 +1,40 @@
 <app-admin-ui-container title="Referrals" [bg_gray]="true">
     <div class="flex flex-col gap-8">
-        <div>
+        <div class="header__section">
             <h3>Referral Stats</h3>
             <p>Here's how we're doing</p>
         </div>
-        <section class="bg-white flex justify-start rounded-xl p-4 gap-12">
+        <section class="grid grid-cols-4 gap-8">
+            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
+                <div>
+                    <h3 class="h3">180</h3>
+                    <p>Clicks</p>
+                </div>
+                <i class="pi pi-bolt text-4xl font-light text-[#13501B]"></i>
+            </div>
+            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
+                <div>
+                    <h3 class="h3">120</h3>
+                    <p>Visits</p>
+                </div>
+                <i class="pi pi-wave-pulse text-4xl font-light text-[#762db1]"></i>
+            </div>
+            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
+                <div>
+                    <h3 class="h3">90</h3>
+                    <p>Conversions</p>
+                </div>
+                <i class="pi pi-briefcase text-4xl font-light text-[#e9a901]"></i>
+            </div>
+            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
+                <div>
+                    <h3 class="h3">50%</h3>
+                    <p>Conversion Rate</p>
+                </div>
+                <i class="pi pi-chart-scatter text-3xl font-light text-[#762db1]"></i>
+            </div>
+        </section>
+        <section class="bg-white flex justify-start rounded-xl p-8 gap-12">
             <div>
                 <app-pie-chart [width]="300" [height]="300" legendPosition="bottom" [data]="{
                 'Visits': 10,
@@ -13,8 +43,8 @@
               }" [colors]="['#13501B', '#e9a901', '#762db1']" />
             </div>
             <div class="w-full">
-                <div>
-                    <h3>Leadersboard</h3>
+                <div class="header__section">
+                    <h3>Leaders board</h3>
                     <p>The following have referred people to us</p>
                 </div>
                 <p-table [value]="referrals" [paginator]="false">
@@ -46,11 +76,22 @@
                 </p-table>
             </div>
         </section>
-        <section class="bg-white rounded-xl p-4 gap-12">
-            <div class="">
+        <section class="bg-white rounded-xl p-8 gap-2 flex flex-col">
+            <div class="header__section">
                 <h3>Referral Link</h3>
-                <p>Send this referral code to invite users</p>
+                <p>Share this referral link to invite users</p>
             </div>
+            <div class="flex items-center gap-6">
+                <div class="block w-max text-sm font-light link__input cursor-pointer" (click)="copyToClipboard()" #textDiv>https://app.capitalconnect.africa/signup?referralId=1234567</div>
+                <button class="text-sm text-blue-500 " (click)="copyToClipboard()">
+                    <span *ngIf="!linkCopied">Copy Link</span>
+                    <span class="flex gap-1 items-center text-xs" *ngIf="linkCopied">
+                        copied
+                        <i class="pi pi-check text-xs"></i>
+                    </span>
+                </button>
+            </div>
+            
         </section>
     </div>
 </app-admin-ui-container>
