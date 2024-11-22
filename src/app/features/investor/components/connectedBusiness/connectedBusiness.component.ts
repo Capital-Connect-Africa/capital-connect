@@ -216,6 +216,7 @@ export class ConnectedBusinessComponent {
 
 
   showDetails(business:  InterestingBusinesses): void {
+    console.log("The business is", business)
     this.table = !this.table
     this.selectedBusiness = business;
     // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
@@ -227,7 +228,6 @@ export class ConnectedBusinessComponent {
       tap(res => {
         this.companyDetails = res
         this.useOfFunds = res.useOfFunds
-
 
         //get the questions
         this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{

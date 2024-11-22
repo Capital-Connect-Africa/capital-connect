@@ -97,8 +97,16 @@
               <h6  class="top__txt">Connected Businesses Information</h6>
               <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
                 <div>
-                  <p class="font-bold" ><strong>Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name
-                      }}</span></p>
+                  <p class="font-bold" ><strong>Company Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name }}</span></p>
+                </div>
+
+                <div>
+                  <p class="font-bold" ><strong>Company Owner: </strong><span class="font-light  w-20 break-words max-w-ful  ">
+                    {{ companyDetails?.user?.firstName}}  {{companyDetails?.user?.lastName }} </span></p>
+                </div>
+                <div>
+                  <p class="font-bold" ><strong>Email: </strong><span class="font-light  w-20 break-words max-w-ful  ">
+                    {{ companyDetails?.user?.username}} </span></p>
                 </div>
                 <div>
                   <p class="font-bold" ><strong>Country: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
@@ -283,6 +291,9 @@
                     <p>{{ submission.explanation | removeQuotes }}</p>
                   </li>
                 </ul>
+              </div>
+              <div *ngIf="!(impactElementAnswers.length > 0)">
+                <p>No Impact Results</p>
               </div>
 
             </div>

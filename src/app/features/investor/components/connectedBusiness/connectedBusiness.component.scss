@@ -157,9 +157,10 @@ th{
 
 
 .business-details {
-  background-color: $white;
+  // background-color: $white;
+  background-color: $gray-200;
   border-radius: 0.5rem;
-  box-shadow: 10px;
+  // box-shadow: 10px;
   color: $text-color;
   // font-family: $main-font;
   
@@ -190,6 +191,7 @@ th{
   }
 
   .company__info {
+    background-color: $gray-200;
     hr {
       margin: 1.5rem 0;
       border: 1px solid $gray-300;
