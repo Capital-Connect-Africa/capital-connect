@@ -109,19 +109,19 @@ export class LandingComponent implements OnInit {
 
 
 
-    this.noMaxFunding$ = this.formGroup.get('noMaximumFunding')!.valueChanges.pipe(
-      tap((noMaxFunding: boolean) => {
-        const maxFundingControl = this.formGroup.get('maximumFunding');
-        if (noMaxFunding) {
-          this.noMaxFund = true
-          maxFundingControl?.disable();
-          maxFundingControl?.setValue(0);
-        } else {
-          maxFundingControl?.enable();
-          maxFundingControl?.setValue(this.investorProfile?.maximumFunding);
-        }
-      })
-    );
+    // this.noMaxFunding$ = this.formGroup.get('noMaximumFunding')!.valueChanges.pipe(
+    //   tap((noMaxFunding: boolean) => {
+    //     const maxFundingControl = this.formGroup.get('maximumFunding');
+    //     if (noMaxFunding) {
+    //       this.noMaxFund = true
+    //       maxFundingControl?.disable();
+    //       maxFundingControl?.setValue(0);
+    //     } else {
+    //       maxFundingControl?.enable();
+    //       maxFundingControl?.setValue(this.investorProfile?.maximumFunding);
+    //     }
+    //   })
+    // );
   
 
     
