@@ -1,4 +1,5 @@
 import { InvestorProfile } from "./Investor"
+import { User } from "../../features/users/models";
 
 export interface MatchedBusiness {
 fundsNeeded: any;
@@ -15,6 +16,7 @@ fundsNeeded: any;
   fullTimeBusiness: boolean,
   declineReasons: String[],
   isHidden:boolean,
+  user:User,
 
   //missing 
   ImpactElements: [],
@@ -25,6 +27,7 @@ fundsNeeded: any;
   ImpactAssesment : string, //connected
 
 }
+
 
 export interface DeclineReasons{
     id: number,

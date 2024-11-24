@@ -6,11 +6,25 @@
 <ng-container *ngIf="conReqStats$  | async"></ng-container>
 
 
+<!-- Skeltons -->
+<ng-container *ngIf="isLoading">
+  <app-overview-section [onInvestor]="true">
 
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+    <p-skeleton height="160px" width="100%"></p-skeleton>
+
+
+
+  </app-overview-section>
+</ng-container>
 
 
 <ng-container *ngIf="(matchMakingStats$ | async) as MatchMakingStats">
-  <app-overview-section [onInvestor]="true">
+  <app-overview-section [onInvestor]="true" *ngIf="!isLoading">
     <app-card [detail]="{title: 'Matched Businesses', value: matchedBusinesses.length.toString(), featured: true}"
       (click)="showDialog('matched_businesses')">
       <p class="helper__text text__yellow">{{ matchedBusinesses.length }} perfect match</p>
@@ -44,6 +58,16 @@
 
   </app-overview-section>
 </ng-container>
+
+
+
+
+
+
+
+
+
+
 
 <app-modal [(visible)]="visible" [title]="getModalTitle()" [value]="modalData.length"
   [helperText]="getModalHelperText()">

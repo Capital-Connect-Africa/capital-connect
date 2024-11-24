@@ -12,6 +12,8 @@
 <ng-container *ngIf="matchMakingStats$ | async"> </ng-container>
 <ng-container *ngIf="esgSubmissions$ | async"></ng-container>
 <ng-container *ngIf="search$ | async"></ng-container>
+<ng-container *ngIf="downloadCSV$  | async"></ng-container>
+
 
 
 
@@ -29,276 +31,308 @@
   <main>
     <div class="left__col">
       <div class="flex justify-start" *ngIf="selectedBusiness">
-        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">
-          Back to List
-        </button>
+        <button class="btn bg-blue-500 btn-sm text-white hover:bg-blue-600" (click)="hideDetails()">Back to List</button>
       </div>
 
 
       <div *ngIf="table" class="matched__top  search border-0">
         
-        <div class="d-flex justify-between items-center">
-          <div>
-          <h5 class="top__txt">Connected Businesses</h5>
-          <app-debounced-search placeholder="Search for a company ..." [debounceTime]="800" (search)="onSearch($event)"/>
-          <ng-container *ngIf="downloadCSV$  | async"></ng-container>
-          <button class="btn btn-primary btn-sm btn-secondary" (click)="downloadCSV('connected')">Download List</button>
+        <div class="flex justify-between">
+          <div><h5 class="top__txt">Connected Businesses</h5></div>
+          
+          <div class="flex items-center justify-end space-x-4">
+            <app-debounced-search 
+              class="flex-grow" 
+              placeholder="Search for a company ..." 
+              [debounceTime]="800" 
+              (search)="onSearch($event)">
+            </app-debounced-search>
+            <button 
+              class="btn btn-primary btn-secondary-alt submit_btn btn-sm"
+              (click)="downloadCSV('connected')">
+              Download List
+            </button>
           </div>
+          
+
+
+
         </div>
-     
-        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectedBusinesses.length">
-          No connected businesses found. <br /> Check again later.
-        </div>
+        <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!connectedBusinesses.length">No connected businesses found. <br /> Check again later.</div>
+
       </div>
 
-      <div class="table-parent">
-        <div>
-          <table class="table" *ngIf="table">
-            <tbody>
-              <tr class="border-b border-gray-200">
-                <td class="font-bold" >#</td>
-                <td class="font-bold" >Country</td>
-                <td class="font-bold" >Amount Raised</td>
-                <td class="font-bold" >Business Sub Sector</td>
-                <td class="font-bold" >Growth Stage</td>
-                <td class="flex font-bold  space-x-2">Actions</td>
-              </tr>
+      
+        <div class="flex flex-col gap-4" *ngIf="table">
+        <p-table [value]="connectedBusinesses" [tableStyle]="{ 'width': '100%' }" [paginator]="true"
+         [rows]="pageSize"
+         [totalRecords]="totalRecords" 
+         styleclass="p-paginator-bottom"
+        (onPage)="pageChange($event)"
+        [showCurrentPageReport]="true"
+        responsiveLayout="scroll"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
 
 
-              <tr *ngFor="let business of connectedBusinesses; let i = index; trackBy: trackByIndex"
-                class="border-b border-gray-200">
-                <td class="font-bold" >{{ i + 1 }}</td>
-                <td class="">{{ business.company.country }}</td>
-                <td class="">{{business.company.fundsNeeded}}</td>
-                <td class="">{{ business.company.businessSubsector }}</td>
-                <td class="">{{ business.company.growthStage }}</td>
-                <td class="flex space-x-2 justify-center p-2">
-                  <button class="btn btn-danger btn-sm text-xs px-3 py-1"
-                    (click)="openModal(business.company.id)">Decline</button>
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>#</th>
+              <th>Country</th>
+              <th>Business Sector</th>
+              <th>Business Sub Sector</th>
+              <th>Growth Stage</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+          
+          
+          <ng-template pTemplate="body" let-business let-i="rowIndex">
+            <tr>
+              <td><strong>{{ i + 1 }}</strong></td>
+              <td class="">{{ business.company.country }}</td>
+              <td class="">{{business.company.fundsNeeded}}</td>
+              <td class="">{{ business.company.businessSubsector }}</td>
+              <td class="">{{ business.company.growthStage }}</td>
+              <td class="flex space-x-2 justify-center p-2">
+                <button class="btn btn-danger btn-sm text-xs px-3 py-1"
+                  (click)="openModal(business.company.id)">Decline</button>
 
-                  <div class="py-auto eye" (click)="showDetails(business)">
-                    <mat-icon class="small-icon">visibility</mat-icon>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                <div class="py-auto eye" (click)="showDetails(business)">
+                  <mat-icon class="small-icon">visibility</mat-icon>
+                </div>
+              </td>
+            </tr>
+          </ng-template>          
+        </p-table>
+        </div>
 
-          <mat-paginator *ngIf="table" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10]"
-            (page)="pageChange($event)">
-          </mat-paginator>
+        <!-- <mat-paginator *ngIf="table" [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10]"
+          (page)="pageChange($event)">
+        </mat-paginator> -->
 
 
-          <!-- Connected Business Extra Details -->
-          <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
-            <!-- Company Details -->
-            <div class="mb-6 details company__info">
-              <!-- <hr /> -->
-              <h6  class="top__txt">Connected Businesses Information</h6>
-              <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
-                <div>
-                  <p class="font-bold" ><strong>Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name
-                      }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Country: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.country }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.businessSector }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Sub Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.businessSubsector }}</span></p>
-                </div>
-                
-
-                <div class="">
-                  <p class="font-bold" ><strong>Products and Services: </strong>
-                    <span class="font-light  w-20 break-words max-w-ful  w-20 break-words max-w-full">{{ selectedBusiness.company.productsAndServices  }}</span></p>
-                </div>
-
-                <div>
-                  <p class="font-bold" ><strong>Registration Structure: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.registrationStructure }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Years of Operation: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.yearsOfOperation }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Growth Stage: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.growthStage }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Number of Employees: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.numberOfEmployees }}</span></p>
-                </div>
-                <div>
-                  <p class="font-bold" ><strong>Full Time Business: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
-                      selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
-                </div>
-                <div>
-                  <p class="text-gray-700 font-mediu m"><strong>Investor Eligibility Score: </strong><span
-                      class="font-norma l">{{investorEligibilityScore}} %</span> </p>
-                </div>
-                <div>
-                  <p class="text-gray-700 font-mediu m"><strong>Investor Preparedness Score: </strong><span
-                      class="font-norma l">{{ investorPreparednessScore }} %</span></p>
-                </div>
+        <!-- Connected Business Extra Details -->
+        <div *ngIf="selectedBusiness" class="mx-auto shadow-xl p-6 business-details">
+          <!-- Company Details -->
+          <div class="mb-6 details company__info">
+            <!-- <hr /> -->
+            <h6  class="top__txt">Connected Businesses Information</h6>
+            <div class="m-6 grid grid-cols-1 sm:grid-cols-2 gap-4 feed_back">
+              <div>
+                <p class="font-bold" ><strong>Company Name: </strong><span class="font-light  w-20 break-words max-w-ful  ">{{ selectedBusiness.company.name }}</span></p>
               </div>
 
-              <!-- <h6 class="text-gray-700 font-mediu m mt-5 text-sm text-center">Business Feedback</h6> -->
-              <hr />
-              <h6 class="top__txt">Business Feedback</h6>
-              <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <p><strong>Annual Revenue for the last three years</strong></p>
-                  <p>N/A</p>
-                </div>
-                <div>
-                  <p><strong>Annual gross profit margin for the last 3 years</strong></p>
-                  <p>{{ getSubmissionTextById(18) }}</p>
-                </div>
-                <div>
-                  <p><strong>Net profit in the last 3- years</strong></p>
-                  <p>{{ getSubmissionTextById(19) }}</p>
-                </div>
-                <div>
-                  <p><strong>Current value of assets held by the business</strong></p>
-                  <p>{{ getSubmissionTextById(82) }}</p>
-                </div>
-                <div>
-                  <p><strong>Debt and loans the business holds</strong></p>
-                  <p>{{ getSubmissionTextById(83) }}</p>
-                </div>
-                <div>
-                  <p><strong>Forecasted annual revenues for the next 3 years</strong></p>
-                  <p>{{ getSubmissionTextById(25) }}</p>
-                </div>
-                <div>
-                  <p><strong>Forecasted gross profit margin for the next 3 years</strong></p>
-                  <p>{{ getSubmissionTextById(26) }}</p>
-                </div>
-                <div>
-                  <p><strong>Forecasted annual EBITDA margin for the next 3 years</strong></p>
-                  <p>{{ getSubmissionTextById(27) }}</p>
-                </div>
+              <div>
+                <p class="font-bold" ><strong>Company Owner: </strong><span class="font-light  w-20 break-words max-w-ful  ">
+                  {{ companyDetails?.user?.firstName}}  {{companyDetails?.user?.lastName }} </span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Email: </strong><span class="font-light  w-20 break-words max-w-ful  ">
+                  {{ companyDetails?.user?.username}} </span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Country: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.country }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.businessSector }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Sub Sector: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.businessSubsector }}</span></p>
+              </div>
+              
 
-                <div>
-                  <p><strong>kind of investments have been made to date</strong></p>
-                  <p>N/A</p>
-                </div>
-
-                <div>
-                  <p><strong>How much investment the business is seeking to raise</strong></p>
-                  <p>{{selectedBusiness.company.fundsNeeded}}</p>
-                </div>
-
-                <div>
-                  <p><strong>Preferred structure for the capital raise</strong></p>
-                  <p>N/A</p>
-                </div>
-
-                <div>
-                  <p><strong>Use of funds</strong></p>
-                  <ul *ngIf="useOfFunds.length >= 1">
-                    <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
-                  </ul>
-                  <p *ngIf="useOfFunds.length < 1">N/A</p>
-                </div>
-                
-                
-
-                <div>
-                  <p><strong>Business has a current tax compliant certificate</strong></p>
-                  <p>{{ getSubmissionTextById(23) }}</p>
-                </div>
-                <div>
-                  <p><strong>Company has audited financial statements</strong></p>
-                  <p>{{ getSubmissionTextById(22) }}</p>
-                </div>
-
-                <div>
-                  <p><strong>Years of Audited Financial Statements</strong></p>
-                  <p>{{ getSubmissionTextById(86) }}</p>
-                </div>
-
-                <div>
-                  <p><strong>Business has a financial plan and forecasts</strong></p>
-                  <p>{{ getSubmissionTextById(87) }}</p>
-                </div>
-
-                <div>
-                  <p><strong>Documents prepared for potential investors as part of the fund raise process</strong></p>
-                  <p>{{ getSubmissionTextById(88) }}</p>
-                </div>
+              <div class="">
+                <p class="font-bold" ><strong>Products and Services: </strong>
+                  <span class="font-light  w-20 break-words max-w-ful  w-20 break-words max-w-full">{{ selectedBusiness.company.productsAndServices  }}</span></p>
               </div>
 
-              <hr />
-              <h6 class="top__txt">Eligibility Results</h6>
-              <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
-                <div class="executive-summary">
-                  <section class="score-section">
-                    <h3>Score</h3>
-                    <h2>{{ InvestorEligibilitygeneralSummary.score}}</h2>
-                  </section>
-                  <p>{{InvestorEligibilitygeneralSummary.comment}}</p>
-                  <h2 class="title implication">Implication</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.implication}}</p>
-                  <h2 class="title">Action</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.action}}</p>
-                  <h2 class="title">Recommendation</h2>
-                  <p>{{InvestorEligibilitygeneralSummary.recommendation}}</p>
-                </div>
-              </ng-container>
+              <div>
+                <p class="font-bold" ><strong>Registration Structure: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.registrationStructure }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Years of Operation: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.yearsOfOperation }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Growth Stage: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.growthStage }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Number of Employees: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.numberOfEmployees }}</span></p>
+              </div>
+              <div>
+                <p class="font-bold" ><strong>Full Time Business: </strong><span class="font-light  w-20 break-words max-w-ful ">{{
+                    selectedBusiness.company.fullTimeBusiness ? 'Yes' : 'No' }}</span></p>
+              </div>
+              <div>
+                <p class="text-gray-700 font-mediu m"><strong>Investor Eligibility Score: </strong><span
+                    class="font-norma l">{{investorEligibilityScore}} %</span> </p>
+              </div>
+              <div>
+                <p class="text-gray-700 font-mediu m"><strong>Investor Preparedness Score: </strong><span
+                    class="font-norma l">{{ investorPreparednessScore }} %</span></p>
+              </div>
+            </div>
 
-              <hr />
-              <h6  class="top__txt">Preparedness Results</h6>
-              <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
-                <div class="executive-summary">
-                  <section class="score-section">
-                    <h3>Score</h3>
-                    <h2>{{InvestorPreparednessgeneralSummary.score}}</h2>
-                  </section>
-                  <p>{{InvestorPreparednessgeneralSummary.comment}}</p>
-                  <h2 class="title implication">Implication</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.implication}}</p>
-                  <h2 class="title">Action</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.action}}</p>
-                  <h2 class="title">Recommendation</h2>
-                  <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
-                </div>
-              </ng-container>
+            <!-- <h6 class="text-gray-700 font-mediu m mt-5 text-sm text-center">Business Feedback</h6> -->
+            <hr />
+            <h6 class="top__txt">Business Feedback</h6>
+            <div class="feed_back grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <p><strong>Annual Revenue for the last three years</strong></p>
+                <p>N/A</p>
+              </div>
+              <div>
+                <p><strong>Annual gross profit margin for the last 3 years</strong></p>
+                <p>{{ getSubmissionTextById(18) }}</p>
+              </div>
+              <div>
+                <p><strong>Net profit in the last 3- years</strong></p>
+                <p>{{ getSubmissionTextById(19) }}</p>
+              </div>
+              <div>
+                <p><strong>Current value of assets held by the business</strong></p>
+                <p>{{ getSubmissionTextById(82) }}</p>
+              </div>
+              <div>
+                <p><strong>Debt and loans the business holds</strong></p>
+                <p>{{ getSubmissionTextById(83) }}</p>
+              </div>
+              <div>
+                <p><strong>Forecasted annual revenues for the next 3 years</strong></p>
+                <p>{{ getSubmissionTextById(25) }}</p>
+              </div>
+              <div>
+                <p><strong>Forecasted gross profit margin for the next 3 years</strong></p>
+                <p>{{ getSubmissionTextById(26) }}</p>
+              </div>
+              <div>
+                <p><strong>Forecasted annual EBITDA margin for the next 3 years</strong></p>
+                <p>{{ getSubmissionTextById(27) }}</p>
+              </div>
 
+              <div>
+                <p><strong>kind of investments have been made to date</strong></p>
+                <p>N/A</p>
+              </div>
 
-              <hr>
-              <h6 class="top__txt">Impact Results</h6>
-              <div *ngIf="(impactElementAnswers.length > 0)" class="feed_back">
-                <ul class="">
-                  <li *ngFor="let submission of  impactElementAnswers ">
-                    <p><strong>{{ submission.question.text | removeQuotes }}</strong></p>
-                    <p>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</p>
-                    <p>{{ submission.explanation | removeQuotes }}</p>
-                  </li>
+              <div>
+                <p><strong>How much investment the business is seeking to raise</strong></p>
+                <p>{{selectedBusiness.company.fundsNeeded}}</p>
+              </div>
+
+              <div>
+                <p><strong>Preferred structure for the capital raise</strong></p>
+                <p>N/A</p>
+              </div>
+
+              <div>
+                <p><strong>Use of funds</strong></p>
+                <ul *ngIf="useOfFunds.length >= 1">
+                  <li *ngFor="let fund of useOfFunds">{{ fund }}</li>
                 </ul>
+                <p *ngIf="useOfFunds.length < 1">N/A</p>
+              </div>
+              
+              
+
+              <div>
+                <p><strong>Business has a current tax compliant certificate</strong></p>
+                <p>{{ getSubmissionTextById(23) }}</p>
+              </div>
+              <div>
+                <p><strong>Company has audited financial statements</strong></p>
+                <p>{{ getSubmissionTextById(22) }}</p>
               </div>
 
+              <div>
+                <p><strong>Years of Audited Financial Statements</strong></p>
+                <p>{{ getSubmissionTextById(86) }}</p>
+              </div>
+
+              <div>
+                <p><strong>Business has a financial plan and forecasts</strong></p>
+                <p>{{ getSubmissionTextById(87) }}</p>
+              </div>
+
+              <div>
+                <p><strong>Documents prepared for potential investors as part of the fund raise process</strong></p>
+                <p>{{ getSubmissionTextById(88) }}</p>
+              </div>
             </div>
 
-            <!-- Back Button -->
-            <div class="flex justify-end details">
-              <div class="flex space-x-2 justify-center p-2">
-                <button class="btn btn-danger px-3 py-1"
-                  (click)="openModal(selectedBusiness.company.id)">Decline</button>
-                <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
-                  List</button>
+            <hr />
+            <h6 class="top__txt">Eligibility Results</h6>
+            <ng-container *ngIf="investorEligibilityGeneralSummary$ | async as InvestorEligibilitygeneralSummary">
+              <div class="executive-summary">
+                <section class="score-section">
+                  <h3>Score</h3>
+                  <h2>{{ InvestorEligibilitygeneralSummary.score}}</h2>
+                </section>
+                <p>{{InvestorEligibilitygeneralSummary.comment}}</p>
+                <h2 class="title implication">Implication</h2>
+                <p>{{InvestorEligibilitygeneralSummary.implication}}</p>
+                <h2 class="title">Action</h2>
+                <p>{{InvestorEligibilitygeneralSummary.action}}</p>
+                <h2 class="title">Recommendation</h2>
+                <p>{{InvestorEligibilitygeneralSummary.recommendation}}</p>
               </div>
+            </ng-container>
+
+            <hr />
+            <h6  class="top__txt">Preparedness Results</h6>
+            <ng-container *ngIf="investorPreparednessGeneralSummary$ | async as InvestorPreparednessgeneralSummary">
+              <div class="executive-summary">
+                <section class="score-section">
+                  <h3>Score</h3>
+                  <h2>{{InvestorPreparednessgeneralSummary.score}}</h2>
+                </section>
+                <p>{{InvestorPreparednessgeneralSummary.comment}}</p>
+                <h2 class="title implication">Implication</h2>
+                <p>{{InvestorPreparednessgeneralSummary.implication}}</p>
+                <h2 class="title">Action</h2>
+                <p>{{InvestorPreparednessgeneralSummary.action}}</p>
+                <h2 class="title">Recommendation</h2>
+                <p>{{InvestorPreparednessgeneralSummary.recommendation}}</p>
+              </div>
+            </ng-container>
+
+
+            <hr>
+            <h6 class="top__txt">Impact Results</h6>
+            <div *ngIf="(impactElementAnswers.length > 0)" class="feed_back">
+              <ul class="">
+                <li *ngFor="let submission of  impactElementAnswers ">
+                  <p><strong>{{ submission.question.text | removeQuotes }}</strong></p>
+                  <p>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</p>
+                  <p>{{ submission.explanation | removeQuotes }}</p>
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="!(impactElementAnswers.length > 0)">
+              <p>No Impact Results</p>
+            </div>
+
+          </div>
+
+          <!-- Back Button -->
+          <div class="flex justify-end details">
+            <div class="flex space-x-2 justify-center p-2">
+              <button class="btn btn-danger px-3 py-1"
+                (click)="openModal(selectedBusiness.company.id)">Decline</button>
+              <button class="btn bg-blue-500 text-white hover:bg-blue-600" (click)="hideDetails()">Back to
+                List</button>
             </div>
           </div>
         </div>
-      </div>
+      
+      
 
     </div>
 

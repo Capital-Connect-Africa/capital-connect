@@ -18,31 +18,26 @@
 
 <div class="container">
   <div class="content">
-    <h6 class="brand__details">{{investorProfile ? "Update Your Investor Profile":"Kindly create your investor profile to proceed ... "}}</h6>
     <ng-container>
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div class="form_content__container">
           <div class="header">
             <div class="steps__bar">
-              <p>Step {{current_details}} of 4</p>
+              <p>Step {{current_details}} of 3</p>
               <ul class="indicators">
                 <li *ngFor="let step of cur_det; let i = index" [class.active]="(i + 1) <= current_details"></li>
               </ul>
             </div>
-            <!-- <strong>Investor/Funder Profile</strong> -->
+            <strong>Investor/Funder Profile</strong>
           </div>
 
           <div class="w-full">
-
-            <div *ngIf="current_details==1" class="section1 grid grid-cols-1 md:grid-cols-2 gap-4" >
+            <div *ngIf="current_details==1" class="section1">
               <div class="input__wrapper w-full">
                 <label class="input__label">Head Office Location<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <p-dropdown [options]="countryOptions" optionLabel="name" optionValue="name" class="input__field"
                   styleClass="w-full gap-4" formControlName="headOfficeLocation" placeholder="Select option" />
-                  <div *ngIf="formGroup.controls['headOfficeLocation']?.touched && formGroup.controls['headOfficeLocation']?.invalid" class="validation-message">
-                    <small *ngIf="formGroup.controls['headOfficeLocation']?.errors?.['required']">Head Office Location is required.</small>
-                  </div>
               </div>
 
 
@@ -53,90 +48,65 @@
                   optionValue="name"
                   formControlName="countriesOfInvestmentFocus" [options]="countryOptions" optionLabel="name"
                   placeholder="Select countries"></p-multiSelect>
-                  <div *ngIf="formGroup.controls['countriesOfInvestmentFocus']?.touched && formGroup.controls['countriesOfInvestmentFocus']?.invalid" class="validation-message">
-                    <small *ngIf="formGroup.controls['countriesOfInvestmentFocus']?.errors?.['required']">At least one country must be selected.</small>
-                  </div>
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Organization Name<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="organizationName" type="text" placeholder="Enter organization name" />
-                  <div *ngIf="formGroup.controls['organizationName']?.touched && formGroup.controls['organizationName']?.invalid" class="validation-message">
-                    <small *ngIf="formGroup.controls['organizationName']?.errors?.['required']">Organization Name is required.</small>
-                  </div>
+                <input class="input__field" formControlName="organizationName" type="text"
+                  placeholder="Enter organization name" />
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Fund Description<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <textarea class="input__field" formControlName="fundDescription" placeholder="Describe the fund" rows="1"></textarea>
-                <div *ngIf="formGroup.controls['fundDescription']?.touched && formGroup.controls['fundDescription']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['fundDescription']?.errors?.['required']">Fund Description is required.</small>
-                </div>
+                <textarea class="input__field" formControlName="fundDescription" placeholder="Describe the fund"
+                  rows="1"></textarea>
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Website URL<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="url" type="url" placeholder="Enter website URL" />
-                <div *ngIf="formGroup.controls['url']?.touched && formGroup.controls['url']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['url']?.errors?.['required']">Website URL is required.</small>
-                  <small *ngIf="formGroup.controls['url']?.errors?.['pattern']">Enter a valid URL.</small>
-                </div>
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Email Address<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="emailAddress" type="email" placeholder="Enter Email Addres" />
-                <div *ngIf="formGroup.controls['emailAddress']?.touched && formGroup.controls['emailAddress']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['emailAddress']?.errors?.['required']">Email Address is required.</small>
-                  <small *ngIf="formGroup.controls['emailAddress']?.errors?.['email']">Enter a valid email address.</small>
-                </div>
               </div>         
             </div>
 
 
 
-            <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngIf="current_details==2" class="section2">
               <div class="input__wrapper">
                 <label class="input__label">Different Funding Vehicles<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="differentFundingVehicles" type="text" placeholder="Enter a funding vehicle" />
-                <div *ngIf="formGroup.controls['differentFundingVehicles']?.touched && formGroup.controls['differentFundingVehicles']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['differentFundingVehicles']?.errors?.['required']">This field is required.</small>
-                </div>
+                <input class="input__field" formControlName="differentFundingVehicles" type="text"
+                  placeholder="Enter a funding vehicle" />
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Available Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="availableFunding" type="text" placeholder="Enter available funding" appNumberFormat/>
-                <div *ngIf="formGroup.controls['availableFunding']?.touched && formGroup.controls['availableFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
+                <input class="input__field" formControlName="availableFunding" type="text"
+                  placeholder="Enter available funding" appNumberFormat/>
               </div>
 
               <div class="input__wrapper">
                 <label class="input__label">Minimum Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="minimumFunding" type="text" placeholder="Enter minimum funding"  appNumberFormat/>
-                <div *ngIf="formGroup.controls['minimumFunding']?.touched && formGroup.controls['minimumFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
+                <input class="input__field" formControlName="minimumFunding" type="text"
+                  placeholder="Enter minimum funding"  appNumberFormat/>
               </div>
 
               <div class="input__wrapper">
-                <label class="input__label">Maximum Funding USD$ <span class="meta">(Toggle No Maximum Funding)</span><sup>*</sup></label>
+                <label class="input__label">Maximum Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="maximumFunding" type="text" placeholder="Enter maximum funding" appNumberFormat/>
-                <div *ngIf="formGroup.controls['maximumFunding']?.touched && formGroup.controls['maximumFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
+                <input class="input__field" formControlName="maximumFunding" type="text"
+                  placeholder="Enter maximum funding" 
+                  appNumberFormat/>
               </div>
 
 
@@ -150,14 +120,6 @@
 
 
               
-            
-            </div>
-
-
-
-
-
-            <div *ngIf="current_details==3">
               <div class="input__wrapper">
                 <label class="input__label">Sectors Of Investment<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
@@ -213,16 +175,10 @@
                   </ng-container>
                 </div>                
               </div>
-              </div>
+            </div>
 
 
-
-
-
-
-
-
-            <div *ngIf="current_details==4" class="section3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div *ngIf="current_details==3" class="section3">
               <div class="input__wrapper">
                 <label class="input__label">Use of Funds<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
@@ -232,11 +188,6 @@
                   placeholder="Select use of funds">                
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
-                <div *ngIf="formGroup.controls['useOfFunds'].touched && formGroup.controls['useOfFunds'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['useOfFunds'].errors?.['required']">Please select at least one option.</small>
-                </div>
-
-
               </div>
 
               <div class="input__wrapper">
@@ -248,9 +199,6 @@
                   placeholder="Select business growth stages">               
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
-                <div *ngIf="formGroup.controls['businessGrowthStages'].touched && formGroup.controls['businessGrowthStages'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['businessGrowthStages'].errors?.['required']">Please select at least one option.</small>
-                </div>
               </div>
 
               <div class="input__wrapper">
@@ -259,9 +207,6 @@
                 <p-dropdown   [options]="investorTypeOptions" optionLabel="title" optionValue="title" class="input__field"
                   styleClass="w-full gap-4"  formControlName="investorType" placeholder="Select option" >
                 </p-dropdown>
-                <div *ngIf="formGroup.controls['investorType'].touched && formGroup.controls['investorType'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['investorType'].errors?.['required']">This field is required.</small>
-                </div>
               </div>
 
               <div class="input__wrapper">
@@ -273,9 +218,6 @@
                   placeholder="Select investment structures">
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
-                <div *ngIf="formGroup.controls['investmentStructures'].touched && formGroup.controls['investmentStructures'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['investmentStructures'].errors?.['required']">Please select at least one option.</small>
-                </div>
               </div>
 
               <div class="input__wrapper">
@@ -287,9 +229,6 @@
                   placeholder="Select ESG focus areas">
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>     
                 </p-multiSelect>
-                <div *ngIf="formGroup.controls['esgFocusAreas'].touched && formGroup.controls['esgFocusAreas'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['esgFocusAreas'].errors?.['required']">Please select at least one option.</small>
-                </div>
               </div>
 
               <div class="input__wrapper">
@@ -301,27 +240,21 @@
                   placeholder="Select registration structures">                
                   <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.title}}</div></ng-template>                
                 </p-multiSelect>
-                <div *ngIf="formGroup.controls['registrationStructures'].touched && formGroup.controls['registrationStructures'].invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['registrationStructures'].errors?.['required']">Please select at least one option.</small>
-                </div>
-
               </div>
             </div>
-
-
-
           </div>
         </div>
 
 
         <div class=" flex justify-end space-x-4 mt-6">
           <div class="cta__group">
-            <button class="btn btn-primary outline" type="button" [disabled]="current_details==1" (click)="setPrevDetails()">Back</button>
+            <button class="btn btn-primary outline" type="button" [disabled]="current_details==1"
+              (click)="setPrevDetails()">Back</button>
           </div>
-          <div *ngIf="current_details!=4">
+          <div *ngIf="current_details!=3">
             <button class="btn btn-primary" type="button" (click)="setNextDetails()">Next</button>
           </div>
-          <button type="submit" *ngIf="current_details==4" [disabled]="!formGroup.valid" class="btn"
+          <button type="submit" *ngIf="current_details==3" [disabled]="!formGroup.valid" class="btn"
             [ngClass]="{'disabled-btn': !formGroup.valid}">{{investorProfile ? "Update" :"Submit"}}</button>
         </div>
       </form>

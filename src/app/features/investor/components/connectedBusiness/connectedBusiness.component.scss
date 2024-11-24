@@ -1,6 +1,191 @@
 @import "../../../../styles/main.scss";
 
 .main{
+
+  .company__info{
+    padding: 1cm;
+  }
+
+  .cta__group{
+    margin-top: 1cm;
+  }
+
+  
+
+  .global_search_wrapper{
+    .input__field{
+      width: 70%;
+    }
+  }
+
+
+
+  height: 100%;
+  display: grid;
+  background-color: #F9FAFB;
+  .navbar{
+    display: flex;
+    padding-left: 1rem;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+    button{
+      display: flex;
+      background: none;
+    }
+  }
+  main{
+    gap: 2rem;
+    display: grid;
+    padding: 1rem;
+    .brand__name{
+      color: #031D16;
+      font-weight: 700;
+      line-height: 2rem;
+      font-size: 1.35rem;
+      font-family: $font-family-sans-serif;
+    }
+    .left__col,
+    .right__col{
+      width: 100%;
+      gap: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .right__col{
+      gap: 2rem;
+    }
+  }
+}
+
+.global_search_wrapper{
+  .input__field{
+    width: 7cm;
+  }
+}
+
+
+@include when-screen-is-atleast(medium){
+  .main{
+
+    .navbar{
+      padding: 0;
+      display: block;
+      button{
+        display: none;
+      }
+    }
+    main{
+      .brand__name{
+        display: none;
+      }
+      .right__col{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large){
+  .main{
+    grid-template-rows: max-content auto;
+
+    main{
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+      .right__col{
+        display: flex;
+      }
+    }
+  }
+}
+
+
+.no-data{
+  height: 100%;
+  font-size: 1.125rem;
+  font-weight: 700;
+  font-family: $font-family-sans-serif;
+  line-height: 1.5rem;
+  color: #1C1C1E;
+}
+
+.details{
+  margin: auto;
+  padding: 1cm;
+}
+
+.eye {
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Vertically center the icon */
+  justify-content: center; /* Horizontally center the icon */
+  padding: 0.5rem; /* Adjust padding as needed */
+}
+
+.small-icon {
+  font-size: 1.2rem; /* Adjust the size of the icon */
+}
+
+.btn{
+  padding: 12px 40px;
+  font-family: $font-family-sans-serif;
+}
+
+tbody tr{
+  text-align: center;
+  font-family: $font-family-sans-serif;
+}
+
+th{
+  text-align: start;
+}
+
+.table-parent{
+  margin: 20px;
+  border: 1px solid rgb(211, 211, 211);
+  border-radius: 10px;
+}
+
+
+.business-details{
+  background-color: $gray-200;
+
+  padding-bottom: 1rem;
+  .flex-layout{
+    padding: .75rem .5rem;
+  }
+  span{
+    flex: 1;
+    color: #1C1C1E;
+    font-weight: 700;
+    display: block;
+    text-align: left;
+    padding: .75rem 1rem;
+    font-family: $font-family-sans-serif;
+    width: max-content;
+  }
+  .cta-group{
+    flex: 5;
+    gap: 1rem;
+    a{
+      font-weight: 500;
+      color: #13501B;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #13501B;
+      padding: .5rem 2rem;
+    }
+
+  }
+
+}
+
+
+@import "../../../../styles/main.scss";
+
+.main{
   height: 100%;
   display: grid;
   background-color: #F9FAFB;
@@ -157,7 +342,6 @@ th{
 
 
 .business-details {
-  background-color: $white;
   border-radius: 0.5rem;
   box-shadow: 10px;
   color: $text-color;
@@ -301,114 +485,49 @@ th{
 }
 
 
-
-
-
-
-
-
 @import '../../../business/styles/business.components.steps.scss';
 .input__wrapper {
     margin-bottom: 1rem;
   }
   
-  .pills-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    color: $white;
+  // .matched__top{
+  //   margin-top: .2cm;
+  // }
 
-  }
-  
-  .pill {
-    position: relative;
-    padding: 8px 12px;
-    border-radius: 50px;
-    background-color:$primary-color;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-  
-  .pill.active {
-    background-color: $success-color;
-    color: $white;
-  }
-  
-  .pill:hover {
-    background-color:$success-color;
-    color: $white;
-  }
-  
-  .pill .close-btn {
-    margin-left: 8px;
-    cursor: pointer;
-    font-weight: bold;
+  .submit__btn{
+    margin-left: .5cm;
   }
 
 
-
-
-
-
-  .selected-subsectors {
-    margin-top: 1rem;
-    
-    h3 {
-      margin-bottom: 0.5rem;
-    }
+  // tables 
+  :host ::ng-deep .p-paginator{
+    padding-top: 2rem;
+    justify-content: flex-start!important;
+  }
   
-    .selected-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 12px;
-      border-radius: 50px;
-      background-color: $success-color;
-      color: $white;
-      margin: 4px;
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
       cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      td, th{
+        padding: 1rem 0 1rem .5rem;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .5rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
     }
-  
-    .remove-icon {
-      margin-left: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
   }
-  
-  .pill {
-    .remove-icon {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 12px;
-      cursor: pointer;
-      color: $white;
-    }
-  }
-  
-  .search{
-    margin-top: -1cm;
-    margin-left: 20px;
-    margin-right: 20px;  
-  }
-  
-  .tooltip {
-    position: absolute;
-    font-family: $font-family-roboto;
-    background-color: $primary-color;
-    color: $white;
-    padding: 20px;
-    border-radius: 4px;
-    z-index: 1000;
-    pointer-events: none;
-    white-space: normal;  
-    // opacity: 0.5;
-    font-size: 12px;
-    max-width: 400px;  
-    word-wrap: break-word;  
-  }
-
 
   .top__txt {
     font-size: 20px;
