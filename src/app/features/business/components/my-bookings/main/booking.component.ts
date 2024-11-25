@@ -10,7 +10,7 @@ import { Booking } from '../../../../../shared/interfaces/booking';
 import { PaymentService } from '../../../../../shared/services/payment.service';
 import { TransactionStatus } from '../../../../../shared/interfaces/payment';
 import { FeedbackService, NavbarComponent } from '../../../../../core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { WebExService } from '../../../../../shared/services/webex.service';
 import { TableModule } from 'primeng/table';
 import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
@@ -52,6 +52,7 @@ export class BookingComponent {
   showNewBookingForm: boolean = false;
   private _paymentService = inject(PaymentService)
   private _feedbackService = inject(FeedbackService)
+  private _router = inject(Router)
 
   private _bookingService = inject(BookingService)
 
@@ -125,11 +126,13 @@ export class BookingComponent {
   }
 
   getMeeting(calendlyEventId:string) {
-    this.iframe = true
-    this.getMeeting$ = this._webExService.getMeeting(calendlyEventId).pipe(tap(res=>{
-      this.webLink = this._sanitizer.bypassSecurityTrustResourceUrl(res.webLink);
+    this._router.navigate([`/business/my-booking/${calendlyEventId}`]);
 
-      // this.webLink = res.webLink
-    }))    
+    // this.iframe = true
+    // this.getMeeting$ = this._webExService.getMeeting(calendlyEventId).pipe(tap(res=>{
+    //   this.webLink = this._sanitizer.bypassSecurityTrustResourceUrl(res.webLink);
+
+    //   // this.webLink = res.webLink
+    // }))    
   }
 }

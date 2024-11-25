@@ -1,0 +1,46 @@
+<ng-container *ngIf="transactionStatus$ | async"></ng-container>
+<!-- <ng-container *ngIf="getMeeting$ | async"></ng-container> -->
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true"></app-navbar>
+  </div>
+  <main>
+    <div class="left__col"> 
+      <!-- meeting-view.component.html -->
+      <div class="meeting-container">
+        <h2 class="meeting-title">{{ meetingDetails.title }}</h2>
+        <div class="meeting-details">
+          <p><strong>Hosted by:</strong> {{ meetingDetails.hostDisplayName }}</p>
+          <p><strong>Email:</strong> {{ meetingDetails.hostEmail }}</p>
+          <p><strong>Start Time:</strong> {{ meetingDetails.start | date: 'medium' }}</p>
+          <p><strong>End Time:</strong> {{ meetingDetails.end | date: 'medium' }}</p>
+        </div>
+
+        <div class="join-section">
+          <h3 class="join-title">Join the Meeting</h3>
+          <p class="join-text">You can join this meeting directly below:</p>
+          <div class="cta__group">
+          <button class="btn btn-sm" (click)="redirectToWebexMeeting()">Click To Join</button>
+          </div>
+        </div>
+
+        <div class="notes-section">
+          <h2 class="meeting-title">Meeting Notes</h2>
+          <p-editor  placeholder="Write your notes here..." class=""></p-editor>          
+        </div>
+        <div class="cta__group">
+          <button class="btn btn-primary btn-sm meetin-btn" (click)="saveMeetingNotes()">Save Notes</button>
+        </div>
+      </div>
+        
+    </div>
+
+
+    <div class="right__col">
+      <app-advertisement-space [title]="'Advertise Here'"  [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+
+  </main>
+</div>
