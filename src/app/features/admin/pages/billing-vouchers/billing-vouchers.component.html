@@ -1,0 +1,112 @@
+<ng-container *ngIf="vouchers$ | async"></ng-container>
+<ng-container *ngIf="rules$ | async"></ng-container>
+<ng-container *ngIf="createVoucher$ | async"></ng-container>
+<app-admin-ui-container title="Billing Vouchers" [bg_gray]="true">
+    <div class="flex flex-col gap-2 title__bar">
+        <h2 class="text-sm">Goodmorning, Raisin</h2>
+        <p>Let's make today more affordable to our users</p>
+    </div>
+
+    <div class="bg-white flex flex-col table__container">
+        <div class="flex items-center justify-between">
+            <input class="px-4 py-3 border search" placeholder="search ..." (input)="applyFilter($event)"/>
+            <button (click)="showModal()" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700">New Voucher</button>
+        </div>
+        <p-table #dt [value]="vouchers" [paginator]="false"> 
+            <ng-template pTemplate="header">
+                <tr>
+                <th *ngFor="let col of cols">
+                <span class="header-container">
+                    <span class="header-text">
+                    {{col.header}}
+                </span>
+                </span>
+            </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-voucher>
+            <tr class="text-sm">
+                <td>{{voucher.code}}</td>
+                <td>{{voucher.percentageDiscount}}%</td>
+                <td>{{voucher.maxUsers}}</td>
+                <td>{{voucher.users.length}}</td>
+                <td>{{voucher.rules.length}}</td>
+                <td>{{voucher.createdAt | time_ago | titlecase}}</td> 
+                <td>{{voucher.expiresAt | time_ago | titlecase}}</td> 
+                <td>
+                    <div class="flex gap-1 items-center cta__btns">
+                        <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(voucher.id)"><i class="pi pi-info-circle"></i></button>
+                        <button title ="Open" class="block text-center text-blorangeue-500 hover:text-blue-800 transition-all" (click)="editVoucher(voucher.id)"><i class="pi pi-pencil"></i></button>
+                        <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(voucher.id)"><i class="pi pi-trash"></i></button>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="8" class="text-sm">No vouchers generated yet.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <div class="flex flex-col gap-2">
+        <p-paginator  *ngIf="vouchers.length >10"
+            styleClass="justify-start"
+            (onPageChange)="onPageChange($event)" 
+            [first]="first"
+            [rows]="rows" 
+            [totalRecords]="rowsCount" 
+            [rowsPerPageOptions]="[10, 20, 30, rowsCount]" />
+        </div>
+        <span class="block text-sm font-light">{{showingRows}} - 0 of {{rowsCount}} entries</span>
+
+    </div>
+</app-admin-ui-container>
+
+<app-modal [(visible)]="visible" title="CREATE VOUCHER" helperText="Enter new voucher details">
+    <form class="flex flex-col gap-4" [formGroup]="voucherForm" (ngSubmit)="saveVoucher()">
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Type</label>
+            <p-dropdown
+                    [options]="voucherType"
+                    optionLabel="label"
+                    optionValue="value"
+                    class ="input__field"
+                    styleClass ="w-full gap-4"
+                    formControlName="type"
+                    placeholder="Select option" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Maximum Usage</label>
+            <input formControlName="maxUsers" class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Percentage Discount</label>
+            <input formControlName="percentageDiscount" class="input__field" type="number" min="0" max="100" placeholder="Enter discount as a percentage"/>
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Fixed Amount</label>
+            <input formControlName ="maxAMount" class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Validation Rules</label>
+            <p-multiSelect
+            class ="input__field"
+            styleClass ="w-full gap-4"
+            [options]="rules"
+            optionLabel="description"
+            optionValue="id"
+            formControlName ="rules"
+            placeholder="Select rule" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">Expiry Date</label>
+            <p-calendar [iconDisplay]="'input'" formControlName ="expiresAt" class ="input__field"
+            styleClass ="w-full gap-4" placeholder="Pick an expiry date"/>
+        </div>
+        <div class="input__wrapper">
+            <div class="">
+                <button [disabled]="!voucherForm.valid" type="submit" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700" [ngClass]="{'bg-gray-300 hover:bg-gray-300': !voucherForm.valid}">Generate</button>
+            </div>
+        </div>
+    </form>
+</app-modal>

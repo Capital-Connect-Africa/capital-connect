@@ -1,0 +1,182 @@
+@import "../../../../styles/main.scss";
+.title__bar{
+    gap: .5rem;
+    display: flex;
+    flex-direction: column;
+
+    h2{
+        line-height: 0;
+        font-weight: 500;
+        color: #404040;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+    }
+
+    p{
+        margin: 0;
+        padding: 0;
+        line-height: 1;
+        color: #404040;
+        font-size: .9rem;
+        font-weight: 300;
+    }
+}
+
+.table__container{
+    gap: 2rem;
+    display: flex;
+    padding: 1rem;
+    border-radius: .4rem;
+    flex-direction: column;
+}
+
+.container {
+    color: $primary-color;
+  }
+  
+  .table-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  
+  ::ng-deep .p-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .p-datatable {
+    margin-top: 1rem;
+  }
+  
+  .p-datatable-tbody > tr > td {
+    padding: 15px 20px;
+    text-align: left;
+    height: 50px; /* Increase row height */
+  }
+  
+  .full-width-table {
+    width: 100%;
+  }
+  
+  .btn-primary {
+    background-color: $primary-color;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  
+    &:disabled {
+      background-color: lighten($primary-color, 40%);
+      cursor: not-allowed;
+    }
+  }
+  
+  tr {
+    height: 3rem !important;
+  }
+  
+  @include when-screen-is-atleast(large) {
+    ::ng-deep main {
+      .grid__area {
+        width: 95% !important;
+      }
+    }
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  td {
+    padding: 0 .5rem;
+  }
+  
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .5rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
+    }
+}
+
+.search{
+  display: block;
+  padding: .5rem 1rem;
+  border-radius: .3rem;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.cta__btns{
+  button{
+    display: block;
+    padding: .4rem;
+    border-radius: .3rem;
+  }
+}
+
+.new__voucher__cta{
+    padding: .75rem 2rem;
+    border-radius: .3rem;
+}
+
+.input__wrapper{
+    padding: 0 1rem;
+    .input__field{
+        &:focus{
+            outline: 2px solid ;
+            box-shadow: none;
+        }
+    }
+}
+
+:host ::ng-deep {
+  .p-multiselect-filter{
+    padding: .5rem 1rem;
+  }
+  .p-dropdown-item,
+  .p-multiselect-item,
+  .p-multiselect-label,
+  .p-dropdown-label{
+    white-space: wrap!important;
+  }
+  .p-multiselect-panel ul,
+  .p-dropdown ul{
+      padding: .5rem;
+      display: flex;
+      flex-direction: column;
+      li{
+        display: flex;
+        padding: .5rem;
+        gap: .5rem;
+        align-items: center;
+        .p-checkbox-box{
+          display: inline-block;
+          border: 1px solid #f1f1f1;
+        }
+      }
+    }
+}

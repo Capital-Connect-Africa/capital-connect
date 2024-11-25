@@ -18,7 +18,7 @@
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-booking>
-        <tr>
+        <tr class="text-sm">
             <td>{{booking.calendlyEventId}}</td>
             <td>{{booking.payment.currency}} {{booking.payment.amount | numberabbreviation}}</td>
             <td>{{booking.payment.status | titlecase}}</td>

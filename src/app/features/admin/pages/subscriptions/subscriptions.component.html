@@ -19,7 +19,7 @@
           </tr>
     </ng-template>
       <ng-template pTemplate="body" let-plan>
-        <tr>
+        <tr class="text-sm">
             <td>{{plan.user.firstName | titlecase}} {{plan.user.lastName | titlecase}}</td>
             <td>{{plan.subscriptionTier.name | titlecase}}</td>
             <td>{{'Ksh '+plan.subscriptionTier.price | uppercase}}</td>

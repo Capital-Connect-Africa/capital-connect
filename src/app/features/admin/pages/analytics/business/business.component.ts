@@ -5,18 +5,14 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdminUiContainerComponent } from "../../../components/admin-ui-container/admin-ui-container.component";
 import { UserStatisticsService } from '../../../services/user.statistics.service';
-import { Observable, tap } from 'rxjs';
+import { Observable, switchMap, tap } from 'rxjs';
 import { SharedStats, Stats } from '../../../interfaces/stats.interface';
 import { PieChartComponent } from "../../../../../shared/components/charts/pie-chart/pie-chart.component";
-import { BubbleChartComponent } from "../../../../../shared/components/charts/bubble-chart/bubble-chart.component";
-import { BarChartComponent } from "../../../../../shared/components/charts/bar-chart/bar-chart.component";
 import { GeoChartComponent } from "../../../../../shared/components/charts/geo-chart/geo-chart.component";
 import { TableModule } from 'primeng/table';
-import { UserRoleFormatPipe } from '../../../../../core/pipes/user-role-format.pipe';
 import { HorizontalBarchartComponent } from "../../../../../shared/components/charts/horizontal-barchart/horizontal-barchart.component";
 import { ColumnChartComponent } from "../../../../../shared/components/charts/column-chart/column-chart.component";
 import { Plan } from '../../../../../shared/interfaces/Billing';
-import { TimeAgoPipe } from '../../../../../core/pipes/time-ago.pipe';
 import { ChartEvent } from '../../../../../shared/interfaces/chart.event.interface';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -27,14 +23,10 @@ import { ChangeDetectorRef } from '@angular/core';
     SharedModule, CommonModule, ButtonModule,
     AdminUiContainerComponent,
     PieChartComponent,
-    BubbleChartComponent,
-    BarChartComponent,
     GeoChartComponent,
     TableModule,
-    UserRoleFormatPipe,
     HorizontalBarchartComponent,
-    ColumnChartComponent,
-    TimeAgoPipe
+    ColumnChartComponent
 ],
   templateUrl: './business.component.html',
   styleUrl: './business.component.scss'
@@ -46,6 +38,7 @@ export class BusinessComponent {
   private _statsService =inject(UserStatisticsService);
   sectorStats!:SharedStats;
   fundingStats!:SharedStats;
+  matchedBusinesses:number =0;
   minFunding!:Record<string, number>;
   maxFunding!:Record<string, number>;
   fundRaise!:Record<string, number>;
@@ -62,7 +55,7 @@ export class BusinessComponent {
   }
 
   recentSubscriptions: Plan[] =[]
-  stats$ =new Observable<Stats>();
+  stats$ =new Observable<any>();
   filterStats$ =new Observable();
   sectorStats$ =new Observable();
   analytics$ =new Observable();
@@ -92,9 +85,11 @@ export class BusinessComponent {
 
   ngOnInit(): void {
     this.getAnalytics()
-    this.stats$ =this._statsService.fetchUserStats().pipe(tap(res =>{
+    this.stats$ =this._statsService.fetchUserStats().pipe(switchMap(res =>{
       this.matches =res;
-      return res
+      return this._statsService.fetchBusinessAndInvestorInterractionsStats().pipe(tap(users =>{
+        this.matchedBusinesses =users.total;
+      }))
     }))
   }
 

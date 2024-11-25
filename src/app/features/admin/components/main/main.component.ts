@@ -63,8 +63,7 @@ export class MainComponent {
     { field: 'firstName', header: 'Name' },
     { field: 'username', header: 'Email' },
     { field: 'roles', header: 'Type' },
-    { field: 'createdAt', header: 'Created At' },
-    {field:'updatedAt',header:'Updated At'}
+    { field: 'createdAt', header: 'Joined' },
   ];
 
   billing_cols = [

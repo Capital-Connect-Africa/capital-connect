@@ -25,11 +25,10 @@ export class GeoChartComponent{
   options = {
     colors: ['#f6c7b6', '#f3b49f', '#ec8f6e','#e0440e', '#e6693e'],
     fontName: 'Arial',
-    fontSize: 12,
+    fontSize: 10,
     region: '002',
-    legend: {
-     display: 'none'
-    },
+    backgroundColor: '#81d4fa',
+    legend: 'none',
   };
   transformData(): void {
     this.geoChartData =[...Object.entries(this.data)].map((record: [string, number]) =>{
