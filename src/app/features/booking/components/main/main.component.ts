@@ -56,13 +56,14 @@ export class MainComponent {
   params = this._activatedRoute.snapshot.queryParams;
   OrderTrackingId = this.params['OrderTrackingId'];
   OrderMerchantReference = this.params['OrderMerchantReference'];
-  callback$ = this._pesapalService.callback(this.OrderTrackingId, this.OrderMerchantReference).pipe(tap(res => {
-    this._feedbackService.success(res.message, 'Payments');
-    // this._location.back();
-  }),
-    catchError(err => {
-      return EMPTY
-    }));
+
+  // callback$ = this._pesapalService.callback(this.OrderTrackingId, this.OrderMerchantReference).pipe(tap(res => {
+  //   this._feedbackService.success(res.message, 'Payments');
+  //   // this._location.back();
+  // }),
+  //   catchError(err => {
+  //     return EMPTY
+  //   }));
 
   advisorySessions = [
     { title: 'Session 1', startTime: new Date('2024-11-07T12:00:00Z'), endTime: new Date('2024-11-07T13:00:00Z'), timeZone: 'UTC', timer: null },
