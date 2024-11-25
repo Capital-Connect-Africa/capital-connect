@@ -15,7 +15,7 @@
             <ng-template pTemplate="header">
               <tr>
                 <th>#</th> <!--Booking Id-->
-                <th>Event ID</th>
+                <!-- <th>Event ID</th> -->
                 <th>Created At</th>
                 <th>Action</th>
               </tr>
@@ -24,9 +24,9 @@
             <ng-template pTemplate="body" let-booking let-i="rowIndex">
               <tr>
                 <td><strong>{{i+1}}</strong></td>
-                <td class="">{{ booking.calendlyEventId  }}</td>
+                <!-- <td class="">{{ booking.calendlyEventId  }}</td> -->
                 <td class="">{{ booking.createdAt }}</td>
-                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking.calendlyEventId)">Get Meeting</button></td>
+                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking.calendlyEventId)">View Meeting</button></td>
               </tr>
   
             </ng-template>
