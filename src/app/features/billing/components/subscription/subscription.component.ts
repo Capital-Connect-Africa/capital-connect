@@ -2,18 +2,18 @@ import { Component, inject } from '@angular/core';
 import { BillingService } from '../../services/billing.service';
 import { CommonModule } from '@angular/common';
 import { catchError, EMPTY, map, Observable, Subscription, switchMap, tap } from 'rxjs';
-import { PAYMENT_STATUS, PaymentPlan, SubscriptionResponse, SubscriptionTier } from '../../../../shared/interfaces/Billing';
+import { PAYMENT_STATUS, PaymentPlan, SubscriptionResponse, SubscriptionTier, VoucherRedeemResponse } from '../../../../shared/interfaces/Billing';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'billing-subscription',
   standalone: true,
-  imports: [CommonModule, NumberAbbriviationPipe, DialogModule, SafeHtmlPipe],
+  imports: [CommonModule, NumberAbbriviationPipe, DialogModule, FormsModule],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.scss'
 })
@@ -24,11 +24,17 @@ export class SubscriptionComponent {
 
   //booleans
   billing_enabled: boolean = false
+  totalPayableAmount =0;
+  discount =0
+  voucherCode:string ='';
 
   //vars
   private flagSubscription: Subscription | undefined;
 
-
+  applyVoucher$ =new Observable<VoucherRedeemResponse>();
+  showInstructions: boolean =false;
+  selectedTier!:SubscriptionTier|null;
+  retry:boolean =false
   paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
@@ -66,17 +72,27 @@ export class SubscriptionComponent {
     }))
   }
 
-  subscribe(tierId: number, retry:boolean){
-    const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
-    if(selectedTier?.price ==0) return;
-    this.plan =selectedTier?.name as string;
-    if(retry){
-      this.retryPayment();
-      return 
-    }
+  initiatePayment(tierId: number, retry:boolean){
+    this.retry =retry;
+    this.showInstructions =true;
+    this.selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId) as SubscriptionTier;
+    this.totalPayableAmount =this.selectedTier.price + this.discount;
+  }
+
+  backToPlans(){
+    this.retry =false;
+    this.selectedTier =null;
+    this.showInstructions =false;
+    this.totalPayableAmount =this.discount;
+  }
+
+  subscribe(){
+    if(this.selectedTier?.price ==0) return;
+    this.plan =this.selectedTier?.name as string;
+    if(this.retry) return this.retryPayment();
     const currentPlan =this.signalService.activePlan().toLowerCase();
     const upgrade =(this.plan.toLowerCase() !==currentPlan) && this.activePlan?.price >0;
-    this.subscribe$ =this._billingService.subscribe(tierId, upgrade).pipe(tap(res =>{
+    this.subscribe$ =this._billingService.subscribe(this.selectedTier?.id as number, upgrade, this.voucherCode, this.discount).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
@@ -106,6 +122,15 @@ export class SubscriptionComponent {
   }
   retryPayment(){
     this.signalService.userHasInitiatedPayment.set(true);
-    this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}`);
+    this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(`https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=${this.paymentAttempt?.orderTrackingId}&voucherCode=${this.voucherCode}&amountDiscounted=${this.discount}`);
+  }
+
+  redeemVoucher(){
+    this.applyVoucher$ =this._billingService.redeemVoucher(this.voucherCode.toUpperCase()).pipe(tap(res =>{
+      const { maxAmount, discount, code } =res;
+      const amount =(discount/100) * (this.selectedTier?.price as number);
+      this.discount = maxAmount < amount? maxAmount: amount;
+      this.voucherCode =code;
+    }))
   }
 }
