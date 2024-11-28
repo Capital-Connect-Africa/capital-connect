@@ -1,7 +1,7 @@
 import { catchError, EMPTY, map, Observable, switchMap, throwError } from "rxjs";
 import { inject, Injectable } from "@angular/core";
 import {BASE_URL, BaseHttpService } from "../../../core";
-import { ActivePlan, Payment, PaymentPlan, SubscriptionResponse, SubscriptionTier } from "../../../shared/interfaces/Billing";
+import { ActivePlan, Payment, PaymentPlan, SubscriptionResponse, SubscriptionTier, VoucherRedeemResponse } from "../../../shared/interfaces/Billing";
 import { AuthStateService } from "../../auth/services/auth-state.service";
 import { SignalsService } from "../../../core/services/signals/signals.service";
 
@@ -53,11 +53,19 @@ export class BillingService {
         )
     }
 
-    subscribe(tierId: number, upgrade:boolean =false){
+    subscribe(tierId: number, upgrade:boolean =false, voucherCode:string ='', discount:number =0){
         const url =upgrade? 'upgrade' : 'subscribe';
-        return this.__http.create(`${BASE_URL}/subscriptions/${url}`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
+        return this.__http.create(`${BASE_URL}/subscriptions/${url}?voucherCode=${voucherCode}&discount=${discount}`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
             return res;
         })) as Observable<SubscriptionResponse>
+    }
+
+    redeemVoucher(voucherCode:string){
+        const purchase ='subscription-plan';
+        const userId =this._authStateService.currentUserId();
+        return this.__http.create(`${BASE_URL}/voucher/redeem-voucher`, {voucherCode, userId, purchase}).pipe(map((res: any) =>{
+            return res as VoucherRedeemResponse;
+        }))
     }
 
     getActivePlan(){

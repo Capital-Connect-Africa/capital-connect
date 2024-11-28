@@ -22,6 +22,13 @@ export interface SubscriptionResponse {
     paymentId: number
 }
 
+export interface VoucherRedeemResponse{
+    code: string,
+    discount: number,
+    maxAmount: number,
+
+}
+
 export interface ActivePlan{
     subscriptionTier: SubscriptionTier
     subscriptionDate: Date
