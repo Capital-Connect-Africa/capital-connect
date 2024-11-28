@@ -2,30 +2,69 @@
 <ng-container *ngIf="recentPayment$ | async"/>
 <ng-container *ngIf="subscriptionTiers$ | async"/>
 
-<div *ngIf="billing_enabled" class="px-4 pb-16 pt-10 bg-slate-50 rounded">
-    <div class="top__bar">
-        <h2 class="uppercase">Choose your plan</h2>
-        <p class="text-[14px] font-thin">Choose a plan that best suits your business</p>
+<ng-container *ngIf="billing_enabled">
+    <section class="rounded-xl bg-white payment__instructions" *ngIf="showInstructions">
+        <h2>{{selectedTier?.name | titlecase}} Plan</h2>
+        <div class="flex-1 flex flex-col justify-between">
+        <div class="grid grid-cols-[75%_auto]">
+            <div>
+                <div>
+                    <p>Thank you for choosing Capital Connect Africa</p>
+                    <p class="font-light leading-7">The next screen will prompt you for payment. If you have a discount coupon please apply it before proceeding. If the code is applicable to the purchase you are making, a discount associated with the coupon will be applied.</p>
+                </div>
+                <div class="py-6 flex flex-col gap-2">
+                    <label class="font-light text-sm">Do you have a promocode?</label>
+                    <div class="flex gap-3 items-center coupon__wrapper">
+                        <input class="px-6 py-3 border inline-block uppercase placeholder:normal-case text-sm rounded-lg" placeholder="Enter promocode" />
+                        <button class="bg-black hover:bg-[#333] transition-all text-white px-6 py-3 w-max flex items-center gap-2 text-sm rounded-lg cursor-pointer">
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button (click)="backToPlans()" class="hover:text-[#777] transition-all text-black px-6 py-2 w-max flex items-center gap-2 rounded-lg cursor-pointer">
+                    <span class="p-0 -mt-[6px] block text-lg leading-none">&#8592;</span>
+                    <span class="text-sm">Back</span>
+                </button>
+                <button (click)="subscribe()" class="bg-blue-500 hover:bg-blue-700 transition-all text-white px-6 py-2 w-max flex items-center gap-2 rounded-lg cursor-pointer">
+                    <span class="text-sm">Next</span>
+                    <span class="p-0 -mt-[6px] block text-lg leading-none">&#8594;</span>
+                </button>
+            </div>
+            <p class="font-light text-xs">Pay: {{totalPayableAmount| currency}} </p>
+        </div>
+        
     </div>
-    <ul class="grid grid-cols-4 gap-4 items-center">
-        <li *ngFor="let tier of tiers" class="bg-white p-4 rounded-xl flex flex-col justify-between gap-4 h-full tier">
-            <div class="w-full flex flex-col gap-4">
-                <div class="text-[#7953dc] font-bold uppercase">{{tier.name | uppercase}} Plan</div>
-                <h3 >{{tier.price | numberabbreviation | currency}}</h3>
-                <div class="w-full">
-                    <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
-                        {{paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id? paymentAttempt?.status?.toString()?.toLowerCase() ==paymentStatus.FAILED? 'Retry': 'Continue': 'Choose Plan'}}
-                    </button>
+</section>
+    <div class="px-4 pb-16 pt-10 bg-slate-50 rounded" *ngIf="!showInstructions">
+        
+        
+        <div class="top__bar">
+            <h2 class="uppercase">Choose your plan</h2>
+            <p class="text-[14px] font-thin">Choose a plan that best suits your business</p>
+        </div>
+        <ul class="grid grid-cols-4 gap-4 items-center">
+            <li *ngFor="let tier of tiers" class="bg-white p-4 rounded-xl flex flex-col justify-between gap-4 h-full tier">
+                <div class="w-full flex flex-col gap-4">
+                    <div class="text-[#7953dc] font-bold uppercase">{{tier.name | uppercase}} Plan</div>
+                    <h3 >{{tier.price | numberabbreviation | currency}}</h3>
+                    <div class="w-full">
+                        <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="initiatePayment(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
+                            {{paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id? paymentAttempt?.status?.toString()?.toLowerCase() ==paymentStatus.FAILED? 'Retry': 'Continue': 'Choose Plan'}}
+                        </button>
                     <button class="py-3 block w-full text-white bg-[#13501B] rounded action__button selected" *ngIf="(tier.name ==signalService.activePlan())">Current Plan</button>
                 </div>
-                    <div class="font-light inner__html">{{tier.description}}</div>
-             
-                    <ul class="feature-list">
-                        <li *ngFor="let feature of tier.features">{{ feature }}</li>
-                    </ul>
+                <div class="font-light inner__html">{{tier.description}}</div>
+                
+                <ul class="feature-list">
+                    <li *ngFor="let feature of tier.features">{{ feature }}</li>
+                </ul>
             </div>
             <div class="w-full">
-                <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="subscribe(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
+                <button class="py-3 block w-full text-[#13501B] rounded action__button" [ngClass]="{'bg-yellow-700 text-white border-yellow-700': paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id}" (click)="initiatePayment(tier.id, !!paymentAttempt)" *ngIf="tier.name !==signalService.activePlan()">
                     {{paymentAttempt?.userSubscription?.subscriptionTier?.id ==tier.id? paymentAttempt?.status?.toString()?.toLowerCase() ==paymentStatus.FAILED? 'Retry': 'Continue': 'Choose Plan'}}
                 </button>
                 <button class="py-3 block w-full text-white bg-[#13501B] rounded action__button selected" *ngIf="(tier.name ==signalService.activePlan())">Current Plan</button>
@@ -40,3 +79,4 @@
         <iframe [src]="redirectURL" width="100%" height="100%" *ngIf="redirectURL"></iframe>
     </div>
 </p-dialog>
+</ng-container>

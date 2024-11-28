@@ -77,3 +77,25 @@ h3{
 .tier{
     box-shadow: 0 0 5px rgba($color: #fdfcfd, $alpha: .5);
 }
+
+.payment__instructions{
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    h2{
+        font-weight: 500;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+    }
+
+    .coupon__wrapper{
+
+        input{
+            border: 1px solid #cccccc;
+        }
+    }
+}

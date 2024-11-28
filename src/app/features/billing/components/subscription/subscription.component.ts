@@ -7,13 +7,12 @@ import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviati
 import { DialogModule } from 'primeng/dialog';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { SafeHtmlPipe } from '../../../../core/pipes/same-html.pipe';
 import { FeatureFlagsService } from '../../../../core/services/FeatureFlags/feature-flags.service';
 
 @Component({
   selector: 'billing-subscription',
   standalone: true,
-  imports: [CommonModule, NumberAbbriviationPipe, DialogModule, SafeHtmlPipe],
+  imports: [CommonModule, NumberAbbriviationPipe, DialogModule],
   templateUrl: './subscription.component.html',
   styleUrl: './subscription.component.scss'
 })
@@ -23,12 +22,16 @@ export class SubscriptionComponent {
   private _ff = inject(FeatureFlagsService)
 
   //booleans
-  billing_enabled: boolean = false
+  billing_enabled: boolean = true
+  totalPayableAmount =0;
+  discount =0
 
   //vars
   private flagSubscription: Subscription | undefined;
 
-
+  showInstructions: boolean =false
+  selectedTier!:SubscriptionTier|null;
+  retry:boolean =false
   paymentStatus =PAYMENT_STATUS
   tiers:SubscriptionTier[] =[];
   activePlan!:SubscriptionTier;
@@ -66,22 +69,34 @@ export class SubscriptionComponent {
     }))
   }
 
-  subscribe(tierId: number, retry:boolean){
-    const selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId);
-    if(selectedTier?.price ==0) return;
-    this.plan =selectedTier?.name as string;
-    if(retry){
-      this.retryPayment();
-      return 
-    }
+  initiatePayment(tierId: number, retry:boolean){
+    this.retry =retry;
+    this.showInstructions =true;
+    this.selectedTier =this.tiers.find((tier: SubscriptionTier) =>tier.id ===tierId) as SubscriptionTier;
+    this.totalPayableAmount =this.selectedTier.price + this.discount;
+  }
+
+  backToPlans(){
+    this.retry =false;
+    this.selectedTier =null;
+    this.showInstructions =false;
+    this.totalPayableAmount =this.discount;
+  }
+
+  subscribe(){
+    if(this.selectedTier?.price ==0) return;
+    this.plan =this.selectedTier?.name as string;
+    if(this.retry) return this.retryPayment();
     const currentPlan =this.signalService.activePlan().toLowerCase();
     const upgrade =(this.plan.toLowerCase() !==currentPlan) && this.activePlan?.price >0;
-    this.subscribe$ =this._billingService.subscribe(tierId, upgrade).pipe(tap(res =>{
+    this.subscribe$ =this._billingService.subscribe(this.selectedTier?.id as number, upgrade).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);
     }))
   }
+
+
   
   ngOnInit(): void {
     this.getRecentPayments()
