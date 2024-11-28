@@ -22,7 +22,7 @@ export class UserStatisticsService extends BaseHttpService{
                     declined: matches.declined,
                     requested: matches.requested,
                     connected: matches.connected,
-                    interesting: matches.declined,
+                    interesting: matches.interesting,
                 }
             
         })) as Observable<Stats>
