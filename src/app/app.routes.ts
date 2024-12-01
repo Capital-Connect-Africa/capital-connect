@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { isLoggedInCanActivateChildGuard, isLoggedInCanActivateGuard } from './shared/guards/isLoggedIn.guard';
 import { isAdminCanActivateChildGuard, isAdminCanActivateGuard } from './shared/guards/isAdminGuard';
-import { isInvestorChildGuard,isInvestorGuard } from './shared/guards/isInvestorGuard';
+import { isInvestorGuard } from './shared/guards/isInvestorGuard';
 
 
 export const routes: Routes = [

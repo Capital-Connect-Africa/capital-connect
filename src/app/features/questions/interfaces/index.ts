@@ -79,3 +79,36 @@ export interface RESPONSE_NODE {
   title: string,
   children?: RESPONSE_NODE[]
 }
+
+
+
+
+export interface RevenueRecords{
+    id: number,
+    description: string,
+    value: number
+}
+
+
+export interface OpexRecords{
+  id: number,
+  description: string,
+  value: number
+}
+
+export interface FinancialInfoRecords {
+  id: number;
+  year: number;
+  createdAt: string; 
+  updatedAt: string; 
+  status: string; 
+  notes: string | null; 
+  revenues: RevenueRecords[]; 
+  opex: OpexRecords[]; 
+  company: {
+    id: number;
+  };
+  user: {
+    username: string;
+  };
+}
