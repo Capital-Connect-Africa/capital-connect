@@ -19,14 +19,19 @@
   </div>
   <main>
     <div class="left__col"> 
-      <h2>Financial Reports</h2>
         <div class="flex flex-col gap-4">
           
           <div class="p-6 bg-gray-50 rounded">
+          <h2>Financial Reports</h2>
+
+
+
+
             <p-tabView class="mb-6">
               <!-- Revenue Records Tab -->
               <p-tabPanel header="REVENUE RECORDS">
-                <div class="mb-4">
+                  <button  class="btn btn-sm mb-4" (click)="addRevenueRecord()">Add Revenue Record</button>
+                <div class="mb-4">        
                   <p-table [value]="revenueRecords" class="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                       <tr>
@@ -58,6 +63,7 @@
           
               <!-- Opex Records Tab -->
               <p-tabPanel header="OPEX RECORDS">
+                <button  class="btn btn-sm mb-4" (click)="addOpexRecord()">Add Opex Record</button>
                 <div class="mb-4">
                   <p-table [value]="opexRecords" class="p-datatable-gridlines">
                     <ng-template pTemplate="header">
@@ -86,6 +92,8 @@
               </p-tabPanel>
           
               <p-tabPanel header="FINANCIAL INFORMATION">
+                <button  class="btn btn-sm mb-4" (click)="addFinancialRecord()">Add Financial Information</button>
+
                 <p-table [value]="financialInfoRecords" class="p-datatable-gridlines">
                   <ng-template pTemplate="header">
                     <tr>
@@ -263,3 +271,82 @@
 
 
 
+<app-modal [(visible)]="showCreateRecordModal" title="Create Revenue Record" helperText="Create A New Revenue Record">
+  <!-- Update Revenue Record -->
+  <div class="form_content__container">
+    <div class="input__wrapper">
+      <label for="description" class="input__label">Description</label>
+      <input id="description" type="text" class="input__field" [(ngModel)]="newRevenueRecord.description" />
+    </div>
+    <div class="input__wrapper">
+      <label for="value" class="input__label">Value</label>
+      <input id="value" type="number" class="input__field" [(ngModel)]="newRevenueRecord.value" />
+    </div>
+    <div class="cta__group">
+      <button class="btn btn-primary mt-2 btn-sm" (click)="createRevenueRecord()">Save</button>
+    </div>
+  </div>
+</app-modal>
+
+
+<app-modal [(visible)]="showCreateOpexModal" title="Create Opex Record" helperText="Create A New Operational Expenditure Record">
+  <!-- Update Revenue Record -->
+  <div class="form_content__container">
+    <div class="input__wrapper">
+      <label for="description" class="input__label">Description</label>
+      <input id="description" type="text" class="input__field" [(ngModel)]="newOpexRecord.description" />
+    </div>
+    <div class="input__wrapper">
+      <label for="value" class="input__label">Value</label>
+      <input id="value" type="number" class="input__field" [(ngModel)]="newOpexRecord.value" />
+    </div>
+    <div class="cta__group">
+      <button class="btn btn-primary mt-2 btn-sm" (click)="CreateOpexRecord()">Save</button>
+    </div>
+  </div>
+</app-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Existing modals above -->
+<app-modal [(visible)]="createFinancialModal" title="Financial Information" helperText="Add New Financial Information Details">
+  <div class="form_content__container">
+    <div class="input__wrapper">
+      <label for="year" class="input__label">Year</label>
+      <input id="year" type="number" class="input__field" [(ngModel)]="newFinancialRecord.year" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="notes" class="input__label">Revenue Records</label>
+      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.revenues"
+      [options]="revenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
+    </p-multiSelect>
+    </div>
+  
+
+    <div class="input__wrapper">
+      <label for="notes" class="input__label">Opex Records</label>
+      <p-multiSelect class="input__field" styleClass="w-full gap-4"  [(ngModel)]="newFinancialRecord.opex"
+        [options]="opexRecords" optionLabel="description" optionValue="id" placeholder="Select Opex Records">
+      </p-multiSelect>
+    </div> 
+
+    <div class="cta__group">
+      <button class="btn btn-primary mt-2 btn-sm" (click)="createFinancial()">Save</button>
+    </div>
+  </div>
+</app-modal>
