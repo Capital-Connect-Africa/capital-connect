@@ -264,3 +264,72 @@ h2{
   background-color: #f9f9f9;
 }
 
+.cta__group{
+  margin-top: 1cm;
+}
+
+
+
+
+.financial-info-card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+  }
+
+  .content {
+    p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      strong {
+        color: #555;
+      }
+    }
+
+    .status {
+      font-weight: bold;
+      color: $primary-color; /* Green for positive status */
+    }
+  }
+
+  .financial-section {
+    margin-top: 20px;
+
+    h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
+
+      li {
+        margin-bottom: 5px;
+        font-size: 0.95rem;
+
+        .value {
+          font-weight: bold;
+          color: $primary-color; /* Blue for monetary values */
+        }
+      }
+    }
+  }
+}

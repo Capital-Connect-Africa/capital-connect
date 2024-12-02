@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../../core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mergeMap, Observable, switchMap } from 'rxjs';
-import { FinancialInfoRecords, OpexRecords, RevenueRecords } from '../../../questions/interfaces';
+import { FinancialInfoRecords, OpexRecords, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -63,7 +63,7 @@ export class FinancialReportingService extends BaseHttpService {
     return this.readById(`${BASE_URL}/finances`, id) as Observable<FinancialInfoRecords>
   }
 
-  updateFinancialRecord(payload: FinancialInfoRecords) {
+  updateFinancialRecord(payload: UpdateFinancialRecords) {
     return this.update(`${BASE_URL}/finances`, payload.id, payload) as Observable<unknown>
   }
 

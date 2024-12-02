@@ -13,10 +13,11 @@ import { AdvertisementSpaceComponent } from "../../../../shared/components/adver
 import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
 import { AngularMaterialModule } from '../../../../shared';
-import { FinancialInfoRecords, OpexRecords, RevenueRecords } from '../../../questions/interfaces';
+import { FinancialInfoRecords, OpexRecords, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { FinancialReportingService } from './FinancialReporting.service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { FinancialReportingService } from './FinancialReporting.service';
     NgxPaginationModule,
     TableModule,
     AdvertisementSpaceComponent,
-    TabViewModule, SharedModule, AngularMaterialModule, FormsModule,
+    TabViewModule, SharedModule, AngularMaterialModule, FormsModule,MultiSelectModule,
     ModalComponent
 ],
   templateUrl: './booking.component.html',
@@ -258,6 +259,10 @@ export class FinancialReporting {
 
   showModalFuncFinancial(record: any, action: string) {
     this.currentFinancialRecord = { ...record };
+    this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res=>[
+      this.currentFinancialRecord = res
+    ])) 
+
     this.view_financial_info = action === 'view_financial_info';
     this.update_financial_info = action === 'update_financial_info';
     this.title =
@@ -272,9 +277,24 @@ export class FinancialReporting {
   }
 
   saveUpdatesFinancial() {
-    // Logic to save the updated record
-    console.log('Updated Record:', this.currentRecord);
-    this.showModal = false;
-  }
-  
+
+    const extractedObject:UpdateFinancialRecords = {
+      id: this.currentFinancialRecord.id,
+      year: this.currentFinancialRecord.year, // Override year as per requirement
+      status: this.currentFinancialRecord.status,
+      notes: this.currentFinancialRecord.notes, // `null` if explicitly required
+      revenues: this.currentFinancialRecord.revenues.map(item => (typeof item === 'object' ? item.id : item)),
+      opex: this.currentFinancialRecord.opex.map(item => (typeof item === 'object' ? item.id : item)),
+      companyId: this.currentFinancialRecord.company.id
+  };
+
+
+    this.UpdateFinancialInfoRecord$ = this._fr.updateFinancialRecord(extractedObject).pipe(tap(res=>{
+      this._fs.success("Financial Records Updated Successfully")
+      this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res=>{
+        this.financialInfoRecords = res
+        this.showFinancialModal = false;
+      }))
+    }))
+  }  
 }
