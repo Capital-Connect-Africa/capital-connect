@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../../core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mergeMap, Observable, switchMap } from 'rxjs';
-import { FinancialInfoRecords, OpexRecords, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
+import { FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class FinancialReportingService extends BaseHttpService {
   }
 
   //Revenue Records
-  createRevenueRecord(payload: RevenueRecords) {
+  createRevenueRecord(payload: OpexRecordsPayload) {
     return this.create(`${BASE_URL}/revenues`, payload) as Observable<unknown>
   }
 
@@ -32,7 +32,7 @@ export class FinancialReportingService extends BaseHttpService {
 
 
   //Opex records
-  createOpexRecord(payload: OpexRecords) {
+  createOpexRecord(payload: OpexRecordsPayload) {
     return this.create(`${BASE_URL}/opex`, payload) as Observable<unknown>
   }
 
@@ -51,7 +51,7 @@ export class FinancialReportingService extends BaseHttpService {
 
 
   //Financial records
-  createFinancialRecord(payload: FinancialInfoRecords) {
+  createFinancialRecord(payload: FinancialInfoRecordsPayload) {
     return this.create(`${BASE_URL}/finances`, payload) as Observable<unknown>
   }
 

@@ -96,6 +96,12 @@ export interface OpexRecords {
   value: number
 }
 
+
+export interface OpexRecordsPayload {
+  description: string,
+  value: number
+}
+
 export interface FinancialInfoRecords {
   id: number;
   year: number;
@@ -111,6 +117,14 @@ export interface FinancialInfoRecords {
   user: {
     username: string;
   };
+}
+
+
+export interface FinancialInfoRecordsPayload{
+  companyId: number,
+  year: number,
+  revenues: number[],
+  opex: number[]
 }
 
 
