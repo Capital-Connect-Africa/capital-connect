@@ -16,6 +16,7 @@ import { AngularMaterialModule } from '../../../../shared';
 import { FinancialInfoRecords, OpexRecords, RevenueRecords } from '../../../questions/interfaces';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { FinancialReportingService } from './FinancialReporting.service';
 
 
 @Component({
@@ -36,6 +37,11 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
   providers: [PaginationService]
 })
 export class FinancialReporting {
+  //services
+  private _fr = inject(FinancialReportingService)
+  private _fs = inject(FeedbackService)
+
+
   //booleans
   showModal: boolean = false;
   showFinancialModal: boolean = false;
@@ -58,17 +64,11 @@ export class FinancialReporting {
   createRevenueRecord$ = new Observable<unknown>()
   UpdateRevenueRecord$ = new Observable<unknown>()
 
-
-
-
-
   //opex
   opexRecords$ = new Observable<unknown>()
   opexRecord$ = new Observable<unknown>()
   createOpexRecord$ = new Observable<unknown>()
   UpdateOpexRecord$ = new Observable<unknown>()
-
-
 
 
   //financial info
@@ -80,6 +80,17 @@ export class FinancialReporting {
 
 
   ngOnInit() {
+    this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res=>{
+      this.revenueRecords = res
+    }))
+
+    this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res=>{
+      this.opexRecords = res
+    }))
+
+    this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res=>{
+      this.financialInfoRecords = res
+    }))
 
   }
 
@@ -166,6 +177,9 @@ export class FinancialReporting {
         this.helperText = "Revenue Record Details";
         this.view_revenue_records = true;
         this.update_revenue_records = false;
+        this.revenueRecord$ = this._fr.getRevenueRecord(record.id).pipe(tap(res=>[
+          this.currentRecord = res
+        ])) 
         break;
   
       case "update_revenue_records":
@@ -173,6 +187,9 @@ export class FinancialReporting {
         this.helperText = "Update Revenue Record Details";
         this.view_revenue_records = false;
         this.update_revenue_records = true;
+        this.revenueRecord$ = this._fr.getRevenueRecord(record.id).pipe(tap(res=>[
+          this.currentRecord = res
+        ])) 
         break;
   
       case "view_opex_records":
@@ -180,6 +197,9 @@ export class FinancialReporting {
         this.helperText = "Operational Expenditure Record Details";
         this.view_opex_records = true;
         this.update_opex_records = false;
+        this.opexRecord$ = this._fr.getOpexRecord(record.id).pipe(tap(res=>[
+          this.currentRecord = res
+        ])) 
         break;
   
       case "update_opex_records":
@@ -187,6 +207,9 @@ export class FinancialReporting {
         this.helperText = "Update Operational Expenditure Record Details";
         this.view_opex_records = false;
         this.update_opex_records = true;
+        this.opexRecord$ = this._fr.getOpexRecord(record.id).pipe(tap(res=>[
+          this.currentRecord = res
+        ])) 
         break;
     }
   }
@@ -196,11 +219,23 @@ export class FinancialReporting {
       const index = this.revenueRecords.findIndex(r => r.id === this.currentRecord.id);
       if (index !== -1) {
         this.revenueRecords[index] = { ...this.currentRecord };
+        this.UpdateRevenueRecord$ = this._fr.updateRevenueRecord(this.revenueRecords[index]).pipe(tap(res=>{
+          this._fs.success("Revenue Record Updated Successfully")
+          this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res=>{
+            this.revenueRecords = res
+          }))
+        }))
       }
     } else if (this.update_opex_records) {
       const index = this.opexRecords.findIndex(o => o.id === this.currentRecord.id);
       if (index !== -1) {
         this.opexRecords[index] = { ...this.currentRecord };
+        this.UpdateOpexRecord$ = this._fr.updateOpexRecord(this.opexRecords[index]).pipe(tap(res=>{
+          this._fs.success("Opex Record Updated Successfully")
+           this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res=>{
+            this.opexRecords = res
+          }))
+        }))
       }
     }
   

@@ -255,7 +255,9 @@ h2{
 
 :host ::ng-deep .p-tabview-nav li {
   font-size: 1rem;
+  font-family: $font-family-roboto;
   color: #555;
+  font-weight: 300;
 }
 
 :host ::ng-deep .p-tabview-panel {

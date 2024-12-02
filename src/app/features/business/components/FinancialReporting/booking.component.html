@@ -1,3 +1,18 @@
+<ng-container *ngIf="revenueRecords$ | async"></ng-container>
+<ng-container *ngIf="revenueRecord$ | async"></ng-container>
+<ng-container *ngIf="createRevenueRecord$ | async"></ng-container>
+<ng-container *ngIf="UpdateRevenueRecord$ | async"></ng-container>
+<ng-container *ngIf="opexRecords$ | async"></ng-container>
+<ng-container *ngIf="opexRecord$ | async"></ng-container>
+<ng-container *ngIf="createOpexRecord$ | async"></ng-container>
+<ng-container *ngIf="UpdateOpexRecord$ | async"></ng-container>
+<ng-container *ngIf="financialInfoRecords$ | async"></ng-container>
+<ng-container *ngIf="financialInfoRecord$ | async"></ng-container>
+<ng-container *ngIf="CreateFinancialInfoRecord$ | async"></ng-container>
+<ng-container *ngIf="UpdateFinancialInfoRecord$ | async"></ng-container>
+
+
+
 <div class="main">
   <div class="navbar">
     <app-navbar onDashboard="true"></app-navbar>
@@ -10,7 +25,7 @@
           <div class="p-6 bg-gray-50 rounded">
             <p-tabView class="mb-6">
               <!-- Revenue Records Tab -->
-              <p-tabPanel header="Revenue Records">
+              <p-tabPanel header="REVENUE RECORDS">
                 <div class="mb-4">
                   <p-table [value]="revenueRecords" class="p-datatable-gridlines">
                     <ng-template pTemplate="header">
@@ -42,7 +57,7 @@
               </p-tabPanel>
           
               <!-- Opex Records Tab -->
-              <p-tabPanel header="Opex Records">
+              <p-tabPanel header="OPEX RECORDS">
                 <div class="mb-4">
                   <p-table [value]="opexRecords" class="p-datatable-gridlines">
                     <ng-template pTemplate="header">
@@ -70,13 +85,13 @@
                 </div>
               </p-tabPanel>
           
-              <p-tabPanel header="Financial Information">
+              <p-tabPanel header="FINANCIAL INFORMATION">
                 <p-table [value]="financialInfoRecords" class="p-datatable-gridlines">
                   <ng-template pTemplate="header">
                     <tr>
                       <th>Year</th>
                       <th>Status</th>
-                      <th>Notes</th>
+                      <!-- <th>Notes</th> -->
                       <th>Created At</th>
                       <th>Updated At</th>
                       <th>Actions</th>
@@ -86,7 +101,7 @@
                     <tr>
                       <td>{{ info.year }}</td>
                       <td>{{ info.status }}</td>
-                      <td>{{ info.notes }}</td>
+                      <!-- <td>{{ info.notes }}</td> -->
                       <td>{{ info.createdAt | date: 'short' }}</td>
                       <td>{{ info.updatedAt | date: 'short' }}</td>
                       <td>
@@ -117,8 +132,8 @@
 <app-modal [(visible)]="showModal" [title]="title" [helperText]="helperText">
   <!-- View Revenue Record -->
   <div *ngIf="view_revenue_records">
-    <p><strong>Description:</strong> {{ currentRecord?.description }}</p>
-    <p><strong>Value:</strong> {{ currentRecord?.value | currency }}</p>
+    <p><strong>Description:</strong> {{ currentRecord.description }}</p>
+    <p><strong>Value:</strong> {{ currentRecord.value | currency }}</p>
   </div>
 
   <!-- Update Revenue Record -->
@@ -138,8 +153,8 @@
 
   <!-- View Opex Record -->
   <div *ngIf="view_opex_records">
-    <p><strong>Description:</strong> {{ currentRecord?.description }}</p>
-    <p><strong>Value:</strong> {{ currentRecord?.value | currency }}</p>
+    <p><strong>Description:</strong> {{ currentRecord.description }}</p>
+    <p><strong>Value:</strong> {{ currentRecord.value | currency }}</p>
   </div>
 
   <!-- Update Opex Record -->
@@ -167,11 +182,11 @@
   <!-- Financial Information Modal -->
   <!-- View Financial Information Record -->
   <div *ngIf="view_financial_info">
-    <p><strong>Year:</strong> {{ currentFinancialRecord?.year }}</p>
-    <p><strong>Status:</strong> {{ currentFinancialRecord?.status }}</p>
-    <p><strong>Notes:</strong> {{ currentFinancialRecord?.notes }}</p>
-    <p><strong>Created At:</strong> {{ currentFinancialRecord?.createdAt | date: 'short' }}</p>
-    <p><strong>Updated At:</strong> {{ currentFinancialRecord?.updatedAt | date: 'short' }}</p>
+    <p><strong>Year:</strong> {{ currentFinancialRecord.year }}</p>
+    <p><strong>Status:</strong> {{ currentFinancialRecord.status }}</p>
+    <p><strong>Notes:</strong> {{ currentFinancialRecord.notes }}</p>
+    <p><strong>Created At:</strong> {{ currentFinancialRecord.createdAt | date: 'short' }}</p>
+    <p><strong>Updated At:</strong> {{ currentFinancialRecord.updatedAt | date: 'short' }}</p>
   </div>
 
   <!-- Update Financial Information Record -->

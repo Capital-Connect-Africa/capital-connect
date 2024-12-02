@@ -141,6 +141,14 @@ export class MyBookingComponent {
 
   saveMeetingNotes(): void {
     console.log('Meeting Notes Saved:', this.meetingNotes);
+
+    let data = {
+      calendlyEventId: this.bookingId,
+      notes:this.meetingNotes
+    }
+    // this.saveNotes$ = this._webExService.saveMeetingNotes(data).pipe(tap(res=>{
+
+    // }))
     // Logic to persist meeting notes goes here (e.g., API call)
   }
 
