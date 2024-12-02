@@ -10,7 +10,7 @@
   <main>
     <div class="left__col"> 
         <div class="flex flex-col gap-4" *ngIf="!iframe">
-          <h6>My Bookings</h6>
+          <h6>My Meetings</h6>
           <p-table [value]="bookings" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
             <ng-template pTemplate="header">
               <tr>
@@ -25,8 +25,8 @@
               <tr>
                 <td><strong>{{i+1}}</strong></td>
                 <!-- <td class="">{{ booking.calendlyEventId  }}</td> -->
-                <td class="">{{ booking.createdAt }}</td>
-                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking.calendlyEventId)">View Meeting</button></td>
+                <td class="">{{ booking.createdAt | date : 'short' }}</td>
+                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking)">View Meeting</button></td>
               </tr>
   
             </ng-template>

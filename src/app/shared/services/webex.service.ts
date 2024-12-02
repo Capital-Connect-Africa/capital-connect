@@ -2,7 +2,7 @@ import { Injectable ,inject} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from '../../core/http/base/base.http.service';
-import { CreateBookingRequest, CreateBookingResponse, Meeting, MeetingResponse } from '../interfaces/booking';
+import { CreateBookingRequest, CreateBookingResponse, Meeting, MeetingResponse, SaveMeetingPayload } from '../interfaces/booking';
 import { BASE_URL } from '../../core';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../features/auth/services/auth-state.service';
@@ -30,8 +30,11 @@ export class WebExService extends BaseHttpService {
   }
 
   getMeeting(id: string): Observable<MeetingResponse> {
-    // id = "cebd5c382d234975805723958efff95c"
     return this.read(`${BASE_URL}/webex/${id}`, this.headers) as unknown as Observable<MeetingResponse>;
+  }
+
+  saveMeetingNotes(request:SaveMeetingPayload,bookingId:number):Observable<unknown>{
+    return this.create(`${BASE_URL}/bookings/${bookingId}`, request, this.headers) as Observable<unknown>;
   }
 
 }

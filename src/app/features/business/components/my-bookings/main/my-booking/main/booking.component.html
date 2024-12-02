@@ -28,10 +28,10 @@
 
         <div class="notes-section">
           <h2 class="meeting-title">Meeting Notes</h2>
-          <p-editor  placeholder="Write your notes here..." class=""></p-editor>          
+          <p-editor  placeholder="Write your notes here..." class="" [(ngModel)]="meetingNotes"></p-editor>          
         </div>
-        <div class="cta__group">
-          <button class="btn btn-primary btn-sm meetin-btn" (click)="saveMeetingNotes()">Save Notes</button>
+        <div class="cta__group mt-5 p-5">
+          <button class="btn btn-primary btn-sm meetin-btn w-100"  (click)="saveMeetingNotes()">Save Notes</button>
         </div>
       </div>
         

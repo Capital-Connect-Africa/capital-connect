@@ -107,14 +107,21 @@ export interface Payment {
     updatedAt: string; 
   }
   
-  export interface BookingResponse{
-    data: Booking[]
-  }
+export interface BookingResponse{
+  data: Booking[]
+}
 
-  export interface Booking {
-    id: number;
-    calendlyEventId: string;
-    createdAt: string; 
-    updatedAt: string; 
-    payments: Payment[];
-  }
+export interface Booking {
+  id: number;
+  calendlyEventId: string;
+  createdAt: string; 
+  updatedAt: string; 
+  payments: Payment[];
+}
+
+export interface SaveMeetingPayload{
+  calendlyEventId: string,
+  notes: string
+}
+
+
