@@ -1,6 +1,6 @@
+<!-- <app-loading *ngIf="signals.fileUploading()"/> -->
 <div class="main__content">
-  <ng-container *ngIf="!previewUrl ;else imagePreview">
-
+  <ng-container *ngIf="!previewUrl && !logo; else imagePreview">
     <svg width="163" height="163" viewBox="0 0 163 163" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="81.5" cy="81.5" r="79.5" fill="#FEF8EF" stroke="#F0BB62" stroke-width="4" />
       <path d="M82.3452 94.3947V87.8652" stroke="#F0BB62" stroke-width="4" stroke-linecap="round"
@@ -25,10 +25,14 @@
       </svg>
       <span>Upload Logo</span>
     </button>
+    <div *ngIf="!previewUrl">
+      <small *ngIf="!fileErr" class="font-light text-sm">Upload a logo 3MBS or less</small>
+      <small *ngIf="fileErr" class="text-red-600 font-light">{{fileErr}}</small>
+    </div>
     <button (click)="removeLogo()" class="outline danger" *ngIf="previewUrl">
       <mat-icon class="dialog-icon" [ngStyle]="{'color':'red'}">delete_outline</mat-icon>
     </button>
-    <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;">
+    <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;" accept="image/*">
     <!-- <button class="outline" (click)="editLogo()">
       <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path fill-rule="evenodd" clip-rule="evenodd"
@@ -39,7 +43,9 @@
     </button> -->
   </div>
 </div>
-
 <ng-template #imagePreview>
-  <img [src]="previewUrl" alt="Image preview" style="max-width: 100%; height: auto;">
+  <img [src]="previewUrl" alt="Image preview" style="max-width: 100%; height: auto; object-fit: contain;" *ngIf="previewUrl">
+  <img [src]="logo.path" alt="Image preview" style="max-width: 100%; height: auto; object-fit: contain;" *ngIf="logo && !previewUrl">
+
 </ng-template>
+

@@ -1,16 +1,18 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { of, switchMap, tap } from 'rxjs';
-import { FeedbackService, UploadService } from '../../../core';
+import { catchError, EMPTY, of, switchMap, tap } from 'rxjs';
+import { FeedbackService, LoadingService, UploadService } from '../../../core';
 import { AuthStateService } from '../../auth/services/auth-state.service';
 import { SectorsService } from '../../sectors/services/sectors/sectors.service';
 import { Company, CompanyInput } from '../interfaces';
 import { CompanyHttpService } from './company.service';
 import { CompanyStateService } from './company-state.service';
+import { SignalsService } from '../../../core/services/signals/signals.service';
 
 @Injectable({ providedIn: 'root' })
 export class OrganizationOnboardService {
-
+  private _signalsService =inject(SignalsService);
+  private _loadingService =inject(LoadingService);
   private _feedbackService = inject(FeedbackService);
   private _companyService = inject(CompanyHttpService)
   private _authStateService = inject(AuthStateService);
@@ -89,6 +91,7 @@ export class OrganizationOnboardService {
 
     const valToEdit = { ...this.companyInput, id: editId }
     //TODO: @pchessah Needs rework to check for image during updating
+    if(this.companyLogoToUpload()) this._signalsService.fileUploading.set(true);
     const res$ = isEditMode && editId ? this._companyService.updateCompany(editId, valToEdit as Company) : this._companyService.createCompany(this.companyInput)
     return res$.pipe(
       switchMap(() => {
@@ -100,8 +103,15 @@ export class OrganizationOnboardService {
       }),
       tap(() => {
         this.resetCompanyInput()
+        this._loadingService.setLoading(false);
+        this._signalsService.fileUploading.set(false);
         this._feedbackService.success(isEditMode ? 'Company updated Successfully.' : 'Company created successfully.')
-      }))
+      }),
+    catchError(_ =>{
+      this._loadingService.setLoading(false);
+      this._signalsService.fileUploading.set(false);
+      return EMPTY
+    }))
   }
 
   getCompanyOfUser() {
