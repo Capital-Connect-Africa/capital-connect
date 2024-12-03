@@ -50,7 +50,6 @@ export class StepOneComponent {
     }),
     tap(res =>{
       this.questions = res;
-      debugger
       this._createFormControls();
     })
   )
