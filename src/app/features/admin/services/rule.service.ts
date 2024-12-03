@@ -7,13 +7,13 @@ import { Rule, RuleFormData } from "../../../shared/interfaces/rule.interface";
 export class RulesService extends BaseHttpService{
 
     getRules(page:number =1, limit:number =10, all:boolean =false){
-        return this.read(`${BASE_URL}/vouchers/rules/list?page=${page}&limit=${limit}&all=${all}`).pipe(map(res =>{
+        return this.read(`${BASE_URL}/vouchers/rules?page=${page}&limit=${limit}&all=${all}`).pipe(map(res =>{
             return res as Rule[]
         }))
     }
 
     getRuleById(id: number){
-        return this.readById(`${BASE_URL}/vouchers/rules/get-by-id`, id).pipe(map((res:any) =>{
+        return this.readById(`${BASE_URL}/vouchers/rules`, id).pipe(map((res:any) =>{
             return res as Rule;
         }))
     }
@@ -25,7 +25,7 @@ export class RulesService extends BaseHttpService{
     }
 
     removeRule(id:number){
-        return this.delete(`${BASE_URL}/vouchers/rules/remove`, id).pipe(map((res:any) =>{
+        return this.delete(`${BASE_URL}/vouchers/rules`, id).pipe(map((res:any) =>{
             return 
         }))
     }

@@ -28,7 +28,7 @@
             <tr class="text-sm">
                 <td>{{voucher.code}}</td>
                 <td>{{voucher.percentageDiscount}}%</td>
-                <td>{{voucher.maxUsers}}</td>
+                <td>{{voucher.maxUses}}</td>
                 <td>{{voucher.users.length}}</td>
                 <td>{{voucher.rules.length}}</td>
                 <td>{{voucher.createdAt | time_ago | titlecase}}</td> 
@@ -77,7 +77,7 @@
         </div>
         <div class="input__wrapper">
             <label class="input__label uppercase font-bold">Maximum Usage</label>
-            <input formControlName="maxUsers" class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
+            <input formControlName="maxUses" class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
         </div>
         <div class="input__wrapper">
             <label class="input__label uppercase font-bold">Percentage Discount</label>
@@ -85,7 +85,7 @@
         </div>
         <div class="input__wrapper">
             <label class="input__label uppercase font-bold">Fixed Amount</label>
-            <input formControlName ="maxAMount" class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
+            <input formControlName ="maxAmount" class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
         </div>
         <div class="input__wrapper">
             <label class="input__label uppercase font-bold">Validation Rules</label>

@@ -7,19 +7,19 @@ import { Injectable } from "@angular/core";
 export class BillingVoucherService extends BaseHttpService{
 
     getBillingVouchers(page:number =1, limit:number =10){
-        return this.read(`${BASE_URL}/vouchers/list?page=${page}&limit=${limit}`).pipe(map(res =>{
+        return this.read(`${BASE_URL}/vouchers?page=${page}&limit=${limit}`).pipe(map(res =>{
             return res as Voucher[]
         }))
     }
 
     getBillingVoucherByCode(code: string){
-        return this.read(`${BASE_URL}/vouchers/get-by-code/${code}`).pipe(map((res:any) =>{
+        return this.read(`${BASE_URL}/vouchers/code/${code}`).pipe(map((res:any) =>{
             return res as Voucher
         }))
     }
 
     getBillingVoucherById(id: number){
-        return this.readById(`${BASE_URL}/vouchers/get-by-id`, id).pipe(map((res:any) =>{
+        return this.readById(`${BASE_URL}/vouchers`, id).pipe(map((res:any) =>{
             return res as Voucher;
         }))
     }
@@ -31,7 +31,7 @@ export class BillingVoucherService extends BaseHttpService{
     }
 
     removeBillingVoucher(id: number){
-        return this.delete(`${BASE_URL}/vouchers/remove`, id).pipe(map((res:any) =>{
+        return this.delete(`${BASE_URL}/vouchers`, id).pipe(map((res:any) =>{
             return 
         }))
     }

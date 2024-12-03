@@ -40,7 +40,7 @@ export class BillingVouchersComponent {
   cols =[
     { field: 'code', header: 'Code' },
     { field: 'percentageDiscount', header: 'Discount' },
-    { field: 'maxUsers', header: 'Max Users' },
+    { field: 'maxUses', header: 'Max Users' },
     { field: 'users', header: 'Uses' },
     { field: 'rules', header: 'Rules' },
     { field: 'createdAt', header: 'Created' },
@@ -131,8 +131,8 @@ export class BillingVouchersComponent {
   voucherForm =this._fb.group({
     rules: [[]],
     type: ['', [Validators.required]],
-    maxUsers: ['', [Validators.required]],
-    maxAMount: ['', [Validators.required]],
+    maxUses: ['', [Validators.required]],
+    maxAmount: ['', [Validators.required]],
     percentageDiscount: ['', [Validators.required]],
     expiresAt: ['', [Validators.required]]
   })
