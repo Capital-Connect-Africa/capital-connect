@@ -6,6 +6,7 @@ import { SectionSubmissions } from '../../../shared/interfaces/section.submissio
   providedIn: 'root'
 })
 export class SignalsService {
+  fileUploading: WritableSignal<boolean> =signal(false);
   expandedLink: WritableSignal<number> =signal(-1)
   showDialog: WritableSignal<boolean> =signal(false);
   showInAppAlert: WritableSignal<boolean> =signal(false);

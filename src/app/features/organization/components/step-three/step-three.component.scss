@@ -13,7 +13,7 @@
     }
 
     .buttons__group{
-        gap: 2rem;
+        gap: 1rem;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -44,7 +44,6 @@
         }
         .buttons__group{
             width: auto;
-            flex-direction: row;
             button{
                 width: max-content;
             }

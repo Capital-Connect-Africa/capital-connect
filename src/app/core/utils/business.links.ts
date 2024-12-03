@@ -28,4 +28,5 @@ export const BusinessLinks = [
     { label: 'Special Criteria', href: '/business/special-criteria', exact: false, icon: 'contact_support', display: true },
     { label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event', display: true },
     { label: 'My Profile', href: '/user-profile', exact: true, icon: 'person', display: true },
+    { label: 'Financials', href: '/business/financial-reporting', exact: true,   icon: 'bar_chart',  display: true },
 ];

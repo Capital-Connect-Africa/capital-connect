@@ -125,14 +125,7 @@ export class BookingComponent {
     this.pageChange(this.currentPage);
   }
 
-  getMeeting(calendlyEventId:string) {
-    this._router.navigate([`/business/my-booking/${calendlyEventId}`]);
-
-    // this.iframe = true
-    // this.getMeeting$ = this._webExService.getMeeting(calendlyEventId).pipe(tap(res=>{
-    //   this.webLink = this._sanitizer.bypassSecurityTrustResourceUrl(res.webLink);
-
-    //   // this.webLink = res.webLink
-    // }))    
+  getMeeting(booking:Booking) {
+    this._router.navigate([`/business/my-booking/${booking.calendlyEventId}`]);
   }
 }

@@ -17,6 +17,7 @@ import { PaymentService } from '../../../../../../../shared/services/payment.ser
 import { WebExService } from '../../../../../../../shared/services/webex.service';
 import { EditorModule } from 'primeng/editor';
 import { MeetingResponse } from '../../../../../../../shared/interfaces/booking';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-booking',
@@ -29,7 +30,8 @@ import { MeetingResponse } from '../../../../../../../shared/interfaces/booking'
     NgxPaginationModule,
     TableModule,
     AdvertisementSpaceComponent,
-    EditorModule
+    EditorModule,
+    FormsModule
 ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
@@ -51,6 +53,8 @@ export class MyBookingComponent {
   bookingId!: string;
 
   webLink: SafeResourceUrl | null = null;
+
+  // meetingDetails!:MeetingResponse 
 
   meetingDetails:MeetingResponse = {
     "id": "865ca0f68b694cebb0025f4084435723",
@@ -137,6 +141,14 @@ export class MyBookingComponent {
 
   saveMeetingNotes(): void {
     console.log('Meeting Notes Saved:', this.meetingNotes);
+
+    let data = {
+      calendlyEventId: this.bookingId,
+      notes:this.meetingNotes
+    }
+    // this.saveNotes$ = this._webExService.saveMeetingNotes(data).pipe(tap(res=>{
+
+    // }))
     // Logic to persist meeting notes goes here (e.g., API call)
   }
 
