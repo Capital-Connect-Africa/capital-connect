@@ -1,0 +1,28 @@
+<ng-container *ngIf="voucher$ | async"></ng-container>
+
+<app-admin-ui-container title="Billing Voucher">
+    <div class="tab-view">
+        <div class="tab-headers">
+          <div class="tab-header" [class.active]="activeTab === 'voucherInfo'" (click)="setActiveTab('voucherInfo')">
+            Voucher Details
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'voucherUsers'" (click)="setActiveTab('voucherUsers')">
+            Voucher Users
+          </div>
+          <div class="tab-header" [class.active]="activeTab === 'voucherRules'"
+            (click)="setActiveTab('voucherRules')">
+            Voucher Rules
+          </div>
+        </div>
+  
+        <div class="tab-content" [@tabChange]="activeTab">
+          <div *ngIf="activeTab === 'voucherInfo'">
+          </div>
+          <div *ngIf="activeTab === 'voucherUsers'">
+          </div>
+  
+          <div *ngIf="activeTab === 'voucherRules'">
+          </div>
+        </div>
+      </div>
+</app-admin-ui-container>
