@@ -246,6 +246,11 @@ export class FinancialReporting {
           this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
             this.revenueRecords = res
           }))
+
+          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+            this.financialInfoRecords = res
+            this.transformData();
+          }))
         }))
       }
     } else if (this.update_opex_records) {
@@ -256,6 +261,11 @@ export class FinancialReporting {
           this._fs.success("Opex Record Updated Successfully")
           this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res => {
             this.opexRecords = res
+          }))
+
+          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+            this.financialInfoRecords = res
+            this.transformData();
           }))
         }))
       }
@@ -356,9 +366,6 @@ export class FinancialReporting {
     this.createFinancialModal = true
   }
 
-  // Retrieve the data from sessionStorage
-
-
   newFinancialRecord: FinancialInfoRecordsPayload = {
     companyId: this.companyId,
     year: 0,
@@ -385,46 +392,6 @@ export class FinancialReporting {
   reversedTableData: any[] = [];
 
   years: number[] = [];
-
-  // transformData() {
-  //   // Collect all years
-  //   this.years = this.financialInfoRecords.map((item) => item.year);
-
-  //   // Prepare rows with descriptions and values
-  //   const rows: any = {};
-
-  //   this.financialInfoRecords.forEach((entry) => {
-  //     const year = entry.year;
-
-  //     // Handle revenues
-  //     entry.revenues.forEach((rev: any) => {
-  //       if (!rows[rev.description]) {
-  //         rows[rev.description] = { description: rev.description };
-  //       }
-  //       rows[rev.description][year] = rev.value;
-  //     });
-
-  //     // Handle opex
-  //     entry.opex.forEach((opex: any) => {
-  //       if (!rows[opex.description]) {
-  //         rows[opex.description] = { description: opex.description };
-  //       }
-  //       rows[opex.description][year] = opex.value;
-  //     });
-  //   });
-
-  //   // Convert rows object to array for PrimeNG table
-  //   this.tableData = Object.values(rows);
-    
-  // }
-
-
-
-
-
-
-
-
 
   transformData() {
     // Collect all years and sort them in ascending order
