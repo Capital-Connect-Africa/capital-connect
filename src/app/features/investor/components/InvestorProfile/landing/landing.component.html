@@ -112,6 +112,41 @@
               <div class="input__wrapper">
                 <label class="input__label">Available Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="availableFunding" type="number" placeholder="Enter available funding"/>
+                <div *ngIf="formGroup.controls['availableFunding']?.touched && formGroup.controls['availableFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
+              </div>
+
+              <div class="input__wrapper">
+                <label class="input__label">Minimum Funding USD$<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="minimumFunding" type="number" placeholder="Enter minimum funding" />
+                <div *ngIf="formGroup.controls['minimumFunding']?.touched && formGroup.controls['minimumFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
+              </div>
+
+              <div class="input__wrapper">
+                <label class="input__label">Maximum Funding USD$ <sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="maximumFunding" type="number" placeholder="Enter maximum funding" />
+                <div *ngIf="formGroup.controls['maximumFunding']?.touched && formGroup.controls['maximumFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
+              </div>
+
+
+
+
+
+
+              <!-- <div class="input__wrapper">
+                <label class="input__label">Available Funding USD$<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="availableFunding" type="text" placeholder="Enter available funding" appNumberFormat/>
                 <div *ngIf="formGroup.controls['availableFunding']?.touched && formGroup.controls['availableFunding']?.invalid" class="validation-message">
                   <small *ngIf="formGroup.controls['availableFunding']?.errors?.['required']">This field is required.</small>
@@ -137,15 +172,6 @@
                   <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
                   <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
                 </div>
-              </div>
-
-<!-- 
-              <div class="input__wrapper">
-                <p>
-                <label class="input__label">No Maximum Funding<sup>*</sup></label>
-                <input class="input__field" formControlName="noMaximumFunding" type="checkbox" />
-                </p>
-                <a [title]="">Why do we ask this?</a>
               </div> -->
 
 
