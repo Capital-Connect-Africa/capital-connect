@@ -93,12 +93,16 @@ export class LandingComponent implements OnInit {
       fundDescription: ['', Validators.required],
       emailAddress: ['', Validators.required],
       url: ['', Validators.required],
-      availableFunding: [null, Validators.required],
+
+
+      availableFunding: [0, Validators.required],
+      minimumFunding: [0, Validators.required],
+      maximumFunding: [0, Validators.required],
+
+
       differentFundingVehicles: ['', Validators.required],
       countriesOfInvestmentFocus: [[], Validators.required],
-      useOfFunds: [[], Validators.required],
-      minimumFunding: ['', Validators.required],
-      maximumFunding: ['', Validators.required],
+      useOfFunds: [[], Validators.required],    
       noMaximumFunding:[false],
       businessGrowthStages: [[], Validators.required],
       investorType: ['', Validators.required],
@@ -172,26 +176,26 @@ export class LandingComponent implements OnInit {
     this.formGroup.value.subSectors = this.selectedSubSectors
 
 
-    if (this.formGroup.value.minimumFunding) {
-      const minimumFundingStr = String(this.formGroup.value.minimumFunding);
-      if (minimumFundingStr.includes(',')) {
-        this.formGroup.value.minimumFunding = parseFloat(minimumFundingStr.replace(/,/g, ''));
-      }
-    }
+    // if (this.formGroup.value.minimumFunding) {
+    //   const minimumFundingStr = String(this.formGroup.value.minimumFunding);
+    //   if (minimumFundingStr.includes(',')) {
+    //     this.formGroup.value.minimumFunding = parseFloat(minimumFundingStr.replace(/,/g, ''));
+    //   }
+    // }
     
-    if (this.formGroup.value.maximumFunding) {
-      const maximumFundingStr = String(this.formGroup.value.maximumFunding);
-      if (maximumFundingStr.includes(',')) {
-        this.formGroup.value.maximumFunding = parseFloat(maximumFundingStr.replace(/,/g, ''));
-      }
-    }
+    // if (this.formGroup.value.maximumFunding) {
+    //   const maximumFundingStr = String(this.formGroup.value.maximumFunding);
+    //   if (maximumFundingStr.includes(',')) {
+    //     this.formGroup.value.maximumFunding = parseFloat(maximumFundingStr.replace(/,/g, ''));
+    //   }
+    // }
     
-    if (this.formGroup.value.availableFunding) {
-      const availableFundingStr = String(this.formGroup.value.availableFunding);
-      if (availableFundingStr.includes(',')) {
-        this.formGroup.value.availableFunding = parseFloat(availableFundingStr.replace(/,/g, ''));
-      }
-    }
+    // if (this.formGroup.value.availableFunding) {
+    //   const availableFundingStr = String(this.formGroup.value.availableFunding);
+    //   if (availableFundingStr.includes(',')) {
+    //     this.formGroup.value.availableFunding = parseFloat(availableFundingStr.replace(/,/g, ''));
+    //   }
+    // }
 
   
     
