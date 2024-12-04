@@ -7,11 +7,14 @@ import { Voucher } from '../../../../shared/interfaces/voucher.interface';
 import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { VoucherTabs } from '../../../organization/interfaces';
+import { VoucherDetailsComponent } from "../../components/billing-vouchers/voucher-details/voucher-details.component";
+import { VoucherUserComponent } from "../../components/billing-vouchers/voucher-user/voucher-user.component";
+import { VoucherRulesComponent } from "../../components/billing-vouchers/voucher-rules/voucher-rules.component";
 
 @Component({
   selector: 'app-single-billing-voucher',
   standalone: true,
-  imports: [AdminUiContainerComponent, CommonModule],
+  imports: [AdminUiContainerComponent, CommonModule, VoucherDetailsComponent, VoucherUserComponent, VoucherRulesComponent],
   templateUrl: './single-billing-voucher.component.html',
   styleUrl: './single-billing-voucher.component.scss',
   animations: [
