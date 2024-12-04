@@ -12,18 +12,17 @@
             (click)="setActiveTab('voucherRules')">
             Constraints
           </div>
-        </div>
-  
+        </div>  
         <div class="tab-content" [@tabChange]="activeTab">
           <div *ngIf="activeTab === 'voucherInfo'">
             <app-voucher-details [voucher]="voucher"/>
           </div>
           <div *ngIf="activeTab === 'voucherUsers'">
-            <app-voucher-user />
+            <app-voucher-user [voucher]="voucher"/>
           </div>
           <div *ngIf="activeTab === 'voucherRules'">
             <app-voucher-rules />
           </div>
         </div>
-      </div>
+    </div>
 </app-admin-ui-container>

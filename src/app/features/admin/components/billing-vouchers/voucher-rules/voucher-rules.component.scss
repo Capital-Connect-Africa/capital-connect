@@ -1,0 +1,85 @@
+:host {
+    display: block;
+    margin: 1em 0;
+  }
+  
+  /* Styles for the tab panels */
+  .p-tabview {
+    margin-top: 1em;
+  }
+  
+  /* Styles for the tab headers */
+  .p-tabview-nav {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .p-tabview-nav li {
+    flex: 1;
+    margin: 0 0.5em;
+  }
+  
+  .p-tabview-nav li .p-tabview-nav-link {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 0.75em 1em;
+    border: 1px solid #007ad9;
+    border-radius: 4px;
+    background-color: transparent;
+    color: #007ad9;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .p-tabview-nav li .p-tabview-nav-link:hover {
+    background-color: #007ad9;
+    color: #fff;
+  }
+  
+  .p-tabview-nav li .p-tabview-nav-link.p-highlight {
+    background-color: #007ad9;
+    color: #fff;
+  }
+  
+  /* Styles for the list of responses */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    max-height: 40vh; /* Set max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+  
+  /* Styles for individual list items */
+  li {
+    padding: 1em;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Styles for the question, answer, and explanation */
+  .card__item__details{
+    gap: 2rem;
+    display: flex;
+    padding-top: 1rem;
+    flex-direction: column;
+  
+    .card__item__detail {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid #ddd;
+      div {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        label {
+          font-weight: bold;
+        }
+    
+        p {
+          margin: 0.25rem 0;
+          color: #555;
+        }
+      }
+    }
+  }
