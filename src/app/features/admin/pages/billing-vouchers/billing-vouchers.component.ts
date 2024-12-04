@@ -15,10 +15,12 @@ import { BillingVoucherService } from '../../services/billing-voucher.service';
 import { RulesService } from '../../services/rule.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
+import { AuthStateService } from '../../../auth/services/auth-state.service';
+import { WelcomeUserPipe } from "../../../../core/pipes/welcome-user.pipe";
 @Component({
   selector: 'app-billing-vouchers',
   standalone: true,
-  imports: [AdminUiContainerComponent, TableModule, ReactiveFormsModule, PaginatorModule, MultiSelectModule, CalendarModule, DropdownModule, TimeAgoPipe, CommonModule, ModalComponent],
+  imports: [AdminUiContainerComponent, TableModule, ReactiveFormsModule, PaginatorModule, MultiSelectModule, CalendarModule, DropdownModule, TimeAgoPipe, CommonModule, ModalComponent, WelcomeUserPipe],
   templateUrl: './billing-vouchers.component.html',
   styleUrl: './billing-vouchers.component.scss'
 })
@@ -34,6 +36,9 @@ export class BillingVouchersComponent {
   @ViewChild('dt') table!: Table;
   private _router =inject(Router);
   private _fb =inject(FormBuilder)
+  private _userAuthState =inject(AuthStateService);
+
+  currentUsersFirstName =this._userAuthState.currentUserProfile().firstName
   rules:Rule[] =[];
   vouchers:Voucher[] =[];
   visible =false;

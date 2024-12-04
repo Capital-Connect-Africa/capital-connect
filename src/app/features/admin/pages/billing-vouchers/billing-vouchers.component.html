@@ -3,7 +3,7 @@
 <ng-container *ngIf="createVoucher$ | async"></ng-container>
 <app-admin-ui-container title="Billing Vouchers" [bg_gray]="true">
     <div class="flex flex-col gap-2 title__bar">
-        <h2 class="text-sm">Goodmorning, Raisin</h2>
+        <h2 class="text-sm">{{currentUsersFirstName | welcome_user}}</h2>
         <p>Let's make today more affordable to our users</p>
     </div>
 
@@ -65,7 +65,7 @@
 <app-modal [(visible)]="visible" title="CREATE VOUCHER" helperText="Enter new voucher details">
     <form class="flex flex-col gap-4" [formGroup]="voucherForm" (ngSubmit)="saveVoucher()">
         <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Type</label>
+            <label class="input__label font-bold">Type</label>
             <p-dropdown
                     [options]="voucherType"
                     optionLabel="label"
@@ -76,30 +76,19 @@
                     placeholder="Select option" />
         </div>
         <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Maximum Usage</label>
+            <label class="input__label font-bold">Maximum Usage</label>
             <input formControlName="maxUses" class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
         </div>
         <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Percentage Discount</label>
+            <label class="input__label font-bold">Percentage Discount</label>
             <input formControlName="percentageDiscount" class="input__field" type="number" min="0" max="100" placeholder="Enter discount as a percentage"/>
         </div>
         <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Fixed Amount</label>
+            <label class="input__label font-bold">Fixed Amount</label>
             <input formControlName ="maxAmount" class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
         </div>
         <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Validation Rules</label>
-            <p-multiSelect
-            class ="input__field"
-            styleClass ="w-full gap-4"
-            [options]="rules"
-            optionLabel="description"
-            optionValue="id"
-            formControlName ="rules"
-            placeholder="Select rule" />
-        </div>
-        <div class="input__wrapper">
-            <label class="input__label uppercase font-bold">Expiry Date</label>
+            <label class="input__label font-bold">Expiry Date</label>
             <p-calendar [iconDisplay]="'input'" formControlName ="expiresAt" class ="input__field"
             styleClass ="w-full gap-4" placeholder="Pick an expiry date"/>
         </div>
