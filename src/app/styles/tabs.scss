@@ -1,0 +1,24 @@
+@import './main.scss';
+
+
+.tab-headers {
+  display: flex;
+  gap: 4rem;
+}
+
+.tab-header {
+  padding: .5rem 0;
+
+  cursor: pointer;
+}
+
+.tab-header.active {
+  border-bottom: 1px solid  $primary-color;
+  color: $primary-color;
+  font-weight: bold;
+}
+
+.tab-content {
+  padding: 16px;
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+}
