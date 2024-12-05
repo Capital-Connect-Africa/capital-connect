@@ -110,6 +110,8 @@ export class LandingComponent implements OnInit {
       investmentStructures: [[], Validators.required],
       esgFocusAreas: [[], Validators.required],
       registrationStructures: [[], Validators.required],
+      sectors:[[],Validators.required],
+      subSectors:[[],Validators.required]
     });
 
 
@@ -163,7 +165,8 @@ export class LandingComponent implements OnInit {
       investmentStructures: investorProfile.investmentStructures,
       esgFocusAreas: investorProfile.esgFocusAreas,
       registrationStructures: investorProfile.registrationStructures,
-      tsectors:this.selectedSectors
+      sectors:this.selectedSectors,
+      subSectors:this.selectedSubSectors
     });
 
 
@@ -174,8 +177,11 @@ export class LandingComponent implements OnInit {
 
 
   onSubmit(): void { 
-    this.formGroup.value.sectors = this.selectedSectors
-    this.formGroup.value.subSectors = this.selectedSubSectors
+    // this.formGroup.value.sectors = this.selectedSectors
+    this.formGroup.value.subSectors = [...this.selectedSubSectorIds1]
+
+    console.log("The form is", this.formGroup.value)
+
 
 
     // if (this.formGroup.value.minimumFunding) {
@@ -416,9 +422,20 @@ export class LandingComponent implements OnInit {
 
   activeIndex: number = 0;
 
+
+  selectedSectorsObjects!:Sector[]
+  selectedSubSectorObjects!:String[]
+
+
   onSectorChange() {
-    // Reset sub-sectors when a new sector is selected or deselected
-    this.selectedSubSectors = [];
+   this.selectedSectorsObjects = this.getSelectedSectors(this.formGroup.value.sectors)
+  }
+
+  selectedSubSectorIds1: Set<number> = new Set();
+  onSubSectorChange(){
+     this.selectedSubSectorObjects = this.getSelectedSubSectors(this.formGroup.value.subSectors)
+     this.selectedSubSectorIds1 = new Set([...this.selectedSubSectorIds1, ...this.formGroup.value.subSectors]);
+     this.formGroup.value.subSectors = []
   }
 
   getSubSectors(sectorId: number) {
@@ -429,4 +446,48 @@ export class LandingComponent implements OnInit {
     const sector = this.sectors.find(s => s.id === sectorId);
     return sector ? sector.name : '';
   }
+
+
+  getSelectedSectors(sectorIds: number[]): Sector[] {
+    return sectorIds
+      .map(sectorId => this.sectors.find(s => s.id === sectorId))
+      .filter((sector): sector is Sector => !!sector); // Filter out undefined/null
+  }
+
+
+
+  getSelectedSubSectors(sectorIds: number[]): string[] {
+    return sectorIds
+      .map(sectorId => {
+        const subSector = this.subSectors.find(s => s.id === sectorId);
+        return subSector ? subSector.name : null; // Return the name or null if not found
+      })
+      .filter((name): name is string => !!name); // Filter out null values
+  }
+  
+
+  activeAccordionIndex: number | null = null; // Tracks the currently open accordion
+  selectedSubSectorIds: number[] = []; // Selected sub-sector IDs
+
+
+  handleSubSectorChange(event: any): void {
+    const currentSelectedIds: number[] = event.value;
+    console.log('Updated Selected IDs:', currentSelectedIds);
+    this.selectedSubSectorIds.push(...currentSelectedIds);
+  }
+
+
+
+  onAccordionOpen(sectorId: number): void {
+    this.activeAccordionIndex = this.activeAccordionIndex === sectorId ? null : sectorId;
+    this.loadSubSectors(sectorId)
+    this.activeAccordionIndex ? this.activeAccordionIndex: null
+  }
+
+  getSubSectorsBySectorId(sectorId: number): any[] {
+    return this.subSectors.filter(subSector => subSector.id === sectorId);
+  }
+
+    
+  
 }

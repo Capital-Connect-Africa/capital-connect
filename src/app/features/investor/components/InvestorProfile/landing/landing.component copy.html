@@ -178,26 +178,6 @@
               </div> -->
 
 
-              <div class="input__wrapper">
-                <label class="input__label">Sectors Of Investment<sup>*</sup></label>
-                <a [title]="">Why do we ask this?</a>
-                <p-multiSelect 
-                  class="input__field" styleClass="w-full gap-4"
-                  [options]="sectors" 
-                  formControlName="sectors"
-                  optionLabel="name" 
-                  optionValue="id"
-                  placeholder="Select Sectors"
-                  (onChange)="onSectorChange()">
-                </p-multiSelect> 
-                <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.name}}</div></ng-template>                
-
-                <div *ngIf="formGroup.controls['sectors']?.touched && formGroup.controls['sectors']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['sectors']?.errors?.['required']">Select atleast one sector.</small>
-                </div>
-              </div>
-
-
               
             
             </div>
@@ -206,38 +186,70 @@
 
 
 
-            <div *ngIf="current_details==3">             
+            <div *ngIf="current_details==3">
 
-              <div class="input__wrapper">
-              <label class="input__label">Select Sub Sectors Of The Selected Sectors<sup>*</sup></label>              
-              <div class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p-accordion [activeIndex]="activeAccordionIndex">
-                  <p-accordionTab *ngFor="let sector of selectedSectorsObjects" [header]="sector.name" (click)="onAccordionOpen(sector.id)">
-                    <div class="input__wrapper accordion-select">
-                      <p-multiSelect 
-                        class="input__field" 
-                        styleClass="w-full gap-4"
-                        [options]="subSectors" 
-                        optionValue="id"
-                        formControlName="subSectors"
-                        optionLabel="name" 
-                        (onChange)="onSubSectorChange()"
-                        placeholder="Select Sub Sectors">
-                      </p-multiSelect>
-                      <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.name}}</div></ng-template>                
 
-                      <div *ngIf="formGroup.controls['subSectors']?.touched && formGroup.controls['subSectors']?.invalid" class="validation-message">
-                        <small *ngIf="formGroup.controls['subSectors']?.errors?.['required']">Select atleast one sub sector.</small>
-                      </div>
-                    </div>
-                  </p-accordionTab>
-                </p-accordion>
-                </div>
-                
               
+               <div class="input__wrapper">
+                <label class="input__label">Sectors Of Investment<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <div class="pills-container">
+                  <ng-container *ngFor="let sector of sectors">
+                    <div 
+                      class="pill"
+                      [class.active]="isSectorSelected(sector.id)"
+                      (click)="toggleSectorSelection(sector.id)"
+                      (mouseover)="showTooltip($event, sector.description)"
+                      (mouseleave)="hideTooltip()"
+                      >
+                      {{ sector.name }}
+                      <span *ngIf="isSectorSelected(sector.id)" class="close-btn" (click)="removeSector(sector.id, $event)">×</span>
+                    </div>
+                  </ng-container>
+                </div>
+                <!-- <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div> -->
               </div>
+              
+              <div class="input__wrapper">
+                <label class="input__label">Sub Sectors Of Investment<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <div class="pills-container">
+                  <ng-container *ngFor="let subSector of subSectors">
+                    <div 
+                      class="pill"
+                      [class.active]="isSubSectorSelected(subSector.id)"
+                      (click)="toggleSubSectorSelection(subSector.id)"
+                      (mouseover)="showTooltip($event, subSector.description)"
+                      (mouseleave)="hideTooltip()"
+                      >
+                      {{ subSector.name }}
+                      <span *ngIf="isSubSectorSelected(subSector.id)" class="close-btn" (click)="removeSubSector(subSector.id, $event)">×</span>
+                    </div>
+                  </ng-container>
+                </div>
+                <!-- <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div> -->
 
               </div>
+
+
+              <div class="input__wrapper" *ngIf="selectedSubSectors.length >=1">
+                <label class="input__label">Selected Sub Sectors</label>                             
+                <div class="pills-container">
+                  <ng-container *ngFor="let id of selectedSubSectors">
+                    <ng-container *ngIf="getSubSectorNameById(id)">
+                      <div class="pill active">
+                        {{ getSubSectorNameById(id) }}
+                        <span *ngIf="isSubSectorSelected(id)" class="close-btn" (click)="removeSubSector(id, $event)">×</span>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>                
+              </div>
+              </div>
+
+
+
+
 
 
 
