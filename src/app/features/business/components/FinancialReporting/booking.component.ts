@@ -14,10 +14,11 @@ import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
 import { AngularMaterialModule } from '../../../../shared';
 import { FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
 import { FinancialReportingService } from './FinancialReporting.service';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -31,18 +32,20 @@ import { MultiSelectModule } from 'primeng/multiselect';
     TableModule,
     AdvertisementSpaceComponent,
     TabViewModule, SharedModule, AngularMaterialModule, FormsModule, MultiSelectModule,
-    ModalComponent
+    ModalComponent,ReactiveFormsModule
   ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
   providers: [PaginationService]
 })
 export class FinancialReporting {
+  financialForm!: FormGroup;
 
 
   //services
   private _fr = inject(FinancialReportingService)
   private _fs = inject(FeedbackService)
+  private _fb = inject(FormBuilder)
 
 
   //booleans
@@ -79,6 +82,12 @@ export class FinancialReporting {
 
 
   ngOnInit() {
+    this.financialForm = this._fb.group({
+      revenues: [[]], // Empty array by default
+      opex: [[]], // Empty array by default
+    });
+
+
     this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
       this.revenueRecords = res
     }))
@@ -89,6 +98,7 @@ export class FinancialReporting {
 
     this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
       this.financialInfoRecords = res
+      this.transformData();
     }))
 
 
@@ -236,6 +246,11 @@ export class FinancialReporting {
           this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
             this.revenueRecords = res
           }))
+
+          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+            this.financialInfoRecords = res
+            this.transformData();
+          }))
         }))
       }
     } else if (this.update_opex_records) {
@@ -246,6 +261,11 @@ export class FinancialReporting {
           this._fs.success("Opex Record Updated Successfully")
           this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res => {
             this.opexRecords = res
+          }))
+
+          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+            this.financialInfoRecords = res
+            this.transformData();
           }))
         }))
       }
@@ -270,8 +290,16 @@ export class FinancialReporting {
 
   showModalFuncFinancial(record: any, action: string) {
     this.currentFinancialRecord = { ...record };
+
+    this.patchFormData({
+      revenues:this.currentFinancialRecord.revenues,
+      opex:this.currentFinancialRecord.opex
+    })
+
+
     this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
       this.currentFinancialRecord = res
+      
     ]))
 
     this.view_financial_info = action === 'view_financial_info';
@@ -285,6 +313,15 @@ export class FinancialReporting {
         ? 'View details of the financial record.'
         : 'Update the details of the financial record.';
     this.showFinancialModal = true;
+  }
+
+
+  patchFormData(data: any): void {
+    // Patch values into the form
+    this.financialForm.patchValue({
+      revenues: data.revenues.map((rec: { id: any; }) => rec.id),
+      opex: data.opex.map((rec: { id: any; }) => rec.id),
+    });
   }
 
 
@@ -329,9 +366,6 @@ export class FinancialReporting {
     this.createFinancialModal = true
   }
 
-  // Retrieve the data from sessionStorage
-
-
   newFinancialRecord: FinancialInfoRecordsPayload = {
     companyId: this.companyId,
     year: 0,
@@ -348,9 +382,51 @@ export class FinancialReporting {
       this._fs.success("Financial Information Created Successfully")
       this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
         this.financialInfoRecords = res
+        this.transformData();
       }))
     }))
   }
+
+
+  tableData: any[] = [];
+  reversedTableData: any[] = [];
+
+  years: number[] = [];
+
+  transformData() {
+    // Collect all years and sort them in ascending order
+    this.years = Array.from(
+      new Set(this.financialInfoRecords.map((item) => item.year))
+    ).sort((a, b) => a - b); // Sort numerically in ascending order
+  
+    // Prepare rows with descriptions and values
+    const rows: any = {};
+  
+    this.financialInfoRecords.forEach((entry) => {
+      const year = entry.year;
+  
+      // Handle revenues
+      entry.revenues.forEach((rev: any) => {
+        if (!rows[rev.description]) {
+          rows[rev.description] = { description: rev.description };
+        }
+        rows[rev.description][year] = rev.value;
+      });
+  
+      // Handle opex
+      entry.opex.forEach((opex: any) => {
+        if (!rows[opex.description]) {
+          rows[opex.description] = { description: opex.description };
+        }
+        rows[opex.description][year] = opex.value;
+      });
+    });
+  
+    // Convert rows object to array for PrimeNG table
+    this.tableData = Object.values(rows);
+  }
+  
+
 
 
 
@@ -358,14 +434,13 @@ export class FinancialReporting {
 
 
   saveUpdatesFinancial() {
-
     const extractedObject: UpdateFinancialRecords = {
       id: this.currentFinancialRecord.id,
       year: this.currentFinancialRecord.year, // Override year as per requirement
       status: this.currentFinancialRecord.status,
       notes: this.currentFinancialRecord.notes, // `null` if explicitly required
-      revenues: this.currentFinancialRecord.revenues.map(item => (typeof item === 'object' ? item.id : item)),
-      opex: this.currentFinancialRecord.opex.map(item => (typeof item === 'object' ? item.id : item)),
+      revenues: this.financialForm.value.revenues,
+      opex: this.financialForm.value.revenues,
       companyId: this.currentFinancialRecord.company.id
     };
 
@@ -378,4 +453,26 @@ export class FinancialReporting {
       }))
     }))
   }
+
+
+
+
+  handleYearClick(year: number) {
+    const foundRecord = this.financialInfoRecords.find(record => record.year === year);
+    if (foundRecord) {
+      console.log(foundRecord); // Replace this with your desired action
+      // Example: Show a modal with the record's details
+      this.showModalFuncFinancial(foundRecord, 'update_financial_info');
+    } else {
+      console.error('Record not found for year:', year);
+    }
+  }
+
+
+  updateReversedData() {
+    this.reversedTableData = [...this.tableData].reverse();
+  }
+
+
+  
 }

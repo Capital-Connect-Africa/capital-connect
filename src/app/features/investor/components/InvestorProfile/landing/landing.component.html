@@ -19,6 +19,9 @@
 <div class="container">
   <div class="content">
     <h6 class="brand__details">{{investorProfile ? "Update Your Investor Profile":"Kindly create your investor profile to proceed ... "}}</h6>
+    <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div>
+
+
     <ng-container>
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div class="form_content__container">
@@ -100,16 +103,51 @@
 
 
             <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="input__wrapper">
+              <!-- <div class="input__wrapper">
                 <label class="input__label">Different Funding Vehicles<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="differentFundingVehicles" type="text" placeholder="Enter a funding vehicle" />
                 <div *ngIf="formGroup.controls['differentFundingVehicles']?.touched && formGroup.controls['differentFundingVehicles']?.invalid" class="validation-message">
                   <small *ngIf="formGroup.controls['differentFundingVehicles']?.errors?.['required']">This field is required.</small>
                 </div>
+              </div> -->
+
+              <div class="input__wrapper">
+                <label class="input__label">Available Funding USD$<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="availableFunding" type="number" placeholder="Enter available funding"/>
+                <div *ngIf="formGroup.controls['availableFunding']?.touched && formGroup.controls['availableFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
               </div>
 
               <div class="input__wrapper">
+                <label class="input__label">Minimum Funding USD$<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="minimumFunding" type="number" placeholder="Enter minimum funding" />
+                <div *ngIf="formGroup.controls['minimumFunding']?.touched && formGroup.controls['minimumFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
+              </div>
+
+              <div class="input__wrapper">
+                <label class="input__label">Maximum Funding USD$ <sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="maximumFunding" type="number" placeholder="Enter maximum funding" />
+                <div *ngIf="formGroup.controls['maximumFunding']?.touched && formGroup.controls['maximumFunding']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
+                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
+                </div>
+              </div>
+
+
+
+
+
+
+              <!-- <div class="input__wrapper">
                 <label class="input__label">Available Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <input class="input__field" formControlName="availableFunding" type="text" placeholder="Enter available funding" appNumberFormat/>
@@ -137,15 +175,6 @@
                   <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
                   <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
                 </div>
-              </div>
-
-<!-- 
-              <div class="input__wrapper">
-                <p>
-                <label class="input__label">No Maximum Funding<sup>*</sup></label>
-                <input class="input__field" formControlName="noMaximumFunding" type="checkbox" />
-                </p>
-                <a [title]="">Why do we ask this?</a>
               </div> -->
 
 
@@ -158,7 +187,7 @@
 
 
             <div *ngIf="current_details==3">
-              <div class="input__wrapper">
+               <div class="input__wrapper">
                 <label class="input__label">Sectors Of Investment<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
                 <div class="pills-container">
@@ -175,7 +204,7 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div>
+                <!-- <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div> -->
               </div>
               
               <div class="input__wrapper">
@@ -195,7 +224,7 @@
                     </div>
                   </ng-container>
                 </div>
-                <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div>
+                <!-- <div class="tooltip" *ngIf="tooltipVisible" [ngStyle]="tooltipStyle">{{ tooltipText }}</div> -->
 
               </div>
 

@@ -27,7 +27,40 @@
 
 
 
-            <p-tabView class="mb-6">
+
+
+            <p-tabView class="mb-6">                    
+              <p-tabPanel header="FINANCIAL INFORMATION">
+                <button  class="btn btn-sm mb-4" (click)="addFinancialRecord()">Add Financial Information</button>
+
+                <p-table [value]="tableData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines">
+                  <p>{{tableData}}</p>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>Key Financial Values</th>
+                      <th *ngFor="let year of years" >
+                        <span style="display: flex; align-items: center;">
+                          {{ year }}
+                          <mat-icon 
+                            class="small-icon" 
+                            style="font-size: 18px; margin-left: 4px; cursor: pointer;" 
+                            (click)="handleYearClick(year)">
+                            edit
+                          </mat-icon>
+                        </span>
+                      </th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-row>
+                    <tr>
+                      <td>{{ row.description }}</td>
+                      <td *ngFor="let year of years">{{ row[year] || 'N/A' }}</td>
+                    </tr>
+                  </ng-template>
+                </p-table>               
+              </p-tabPanel>
+
+
               <!-- Revenue Records Tab -->
               <p-tabPanel header="REVENUE RECORDS">
                   <button  class="btn btn-sm mb-4" (click)="addRevenueRecord()">Add Revenue Record</button>
@@ -90,39 +123,7 @@
                   </p-table>
                 </div>
               </p-tabPanel>
-          
-              <p-tabPanel header="FINANCIAL INFORMATION">
-                <button  class="btn btn-sm mb-4" (click)="addFinancialRecord()">Add Financial Information</button>
-
-                <p-table [value]="financialInfoRecords" class="p-datatable-gridlines">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>Year</th>
-                      <th>Status</th>
-                      <!-- <th>Notes</th> -->
-                      <th>Created At</th>
-                      <th>Updated At</th>
-                      <th>Actions</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-info>
-                    <tr>
-                      <td>{{ info.year }}</td>
-                      <td>{{ info.status }}</td>
-                      <!-- <td>{{ info.notes }}</td> -->
-                      <td>{{ info.createdAt | date: 'short' }}</td>
-                      <td>{{ info.updatedAt | date: 'short' }}</td>
-                      <td>
-                        <div class="flex space-x-4">
-                          <button  class="btn btn-sm btn-tertiary-alt btn-success-alt" (click)="showModalFuncFinancial(info, 'view_financial_info')">View</button>
-                          <button  class="btn btn-sm" (click)="showModalFuncFinancial(info, 'update_financial_info')">Edit</button>
-                        </div>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </p-tabPanel>
-              
+                
             </p-tabView>
           </div>
         </div>
@@ -232,9 +233,10 @@
 
   <!-- Update Financial Information Record -->
   <div *ngIf="update_financial_info" class="form_content__container">
+      <h6>Year : <strong>{{currentFinancialRecord.year}}</strong></h6>
     <div class="input__wrapper">
-      <label for="year" class="input__label">Year</label>
-      <input id="year" type="number" class="input__field" [(ngModel)]="currentFinancialRecord.year" />
+      <!-- <label for="year" class="input__label">Year : {{currentFinancialRecord.year}}</label> -->
+      <!-- <input id="year" type="number" class="input__field" [(ngModel)]="currentFinancialRecord.year" readonly /> -->
     </div>
     <!-- <div class="input__wrapper">
       <label for="status" class="input__label">Status</label>
@@ -243,29 +245,40 @@
     <div class="input__wrapper">
       <label for="notes" class="input__label">Notes</label>
       <textarea id="notes" class="input__field" [(ngModel)]="currentFinancialRecord.notes"></textarea>
-    </div>
-
-
-    <div class="input__wrapper">
-      <label for="notes" class="input__label">Revenue Records</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="currentFinancialRecord.revenues"
-      [options]="revenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
-    </p-multiSelect>
-    </div>
-  
-
-
-    <div class="input__wrapper">
-      <label for="notes" class="input__label">Opex Records</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4"  [(ngModel)]="currentFinancialRecord.opex"
-        [options]="opexRecords" optionLabel="description" optionValue="id" placeholder="Select Opex Records">
-      </p-multiSelect>
     </div> -->
 
-
-    <div class="cta__group">
-      <button class="btn btn-primary mt-2 btn-sm" (click)="saveUpdatesFinancial()">Save</button>
-    </div>
+    <form [formGroup]="financialForm">
+      <div class="input__wrapper">
+        <label for="notes" class="input__label">Revenue Records</label>
+        <p-multiSelect 
+          class="input__field" 
+          styleClass="w-full gap-4" 
+          formControlName="revenues"
+          [options]="revenueRecords"
+          optionLabel="description"
+          optionValue="id"
+          placeholder="Select Revenue Records">
+        </p-multiSelect>
+      </div>
+    
+      <div class="input__wrapper">
+        <label for="notes" class="input__label">Opex Records</label>
+        <p-multiSelect 
+          class="input__field" 
+          styleClass="w-full gap-4"  
+          formControlName="opex"
+          [options]="opexRecords"
+          optionLabel="description"
+          optionValue="id"
+          placeholder="Select Opex Records">
+        </p-multiSelect>
+      </div>
+    
+      <div class="cta__group">
+        <button class="btn btn-primary mt-2 btn-sm" (click)="saveUpdatesFinancial()">Save</button>
+      </div>
+    </form>
+    
   </div>
 </app-modal>
 
@@ -305,20 +318,6 @@
     </div>
   </div>
 </app-modal>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
