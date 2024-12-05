@@ -1,0 +1,140 @@
+<ng-container *ngIf="delete$ | async" />
+<ng-container *ngIf="plans$ | async" />
+
+<ng-container *ngIf="financialInfoRecords$ | async" />
+<ng-container *ngIf="addNotesToFinancialInfoRecord$ | async" />
+<ng-container *ngIf="UpdateFinancialInfoRecordStatus$ | async" />
+
+
+<app-admin-ui-container [title]="'Financial Reports'">
+  <div class="flex flex-col gap-8">
+    <div class="flex items-center justify-between">
+      <input class="px-4 py-3 border search" pInputText placeholder="search ..." (input)="applyFilter($event)"/>
+      <span class="text-sm font-light">{{showingRows}} of {{rowsCount}} entries</span>
+    </div>
+
+
+
+
+
+
+    <p-table [value]="financialInfoRecords" class="p-datatable-gridlines">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>#</th>
+          <th>Year</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Updated At</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-record let-i="rowIndex">
+        <tr>
+          <td>{{i+1}}</td>
+          <td>{{ record.year }}</td>
+          <!-- <td>{{ record.status }}</td> -->
+          <td [ngClass]="getStatusClass(record.status)">
+            {{ record.status }}
+          </td>
+          
+          <td>{{ record.createdAt | date: 'short'}}</td>
+          <td>{{ record.updatedAt | date: 'short'}}</td>
+ 
+          <td>
+            <div class="flex space-x-4">
+              <button  class="btn btn-sm btn-tertiary-alt btn-success-alt" (click)="showModalFuncFinancial(record,'view_financial_info')">View</button>
+              <button  class="btn btn-sm" (click)="showModalFuncFinancial(record,'update_financial_info')">Edit</button>
+            </div>
+          </td>
+          
+
+        </tr>
+      </ng-template>
+    </p-table>
+
+  </div>
+
+</app-admin-ui-container>
+
+
+
+
+
+
+<app-modal [(visible)]="showFinancialModal" [title]="title" [helperText]="helperText">
+  <!-- Financial Information Modal -->
+  <!-- View Financial Information Record -->
+
+
+  <div *ngIf="view_financial_info" class="card financial-info-card">
+    <div class="header">
+      <h2>Financial Information</h2>
+    </div>
+    <div class="content">
+      <p><strong>Year:</strong> {{ currentFinancialRecord.year }}</p>
+      <p><strong>Status:</strong> <span class="status">{{ currentFinancialRecord.status }}</span></p>
+      <p><strong>Notes:</strong> {{ currentFinancialRecord.notes }}</p>
+      <p><strong>Created At:</strong> {{ currentFinancialRecord.createdAt | date: 'short' }}</p>
+      <p><strong>Updated At:</strong> {{ currentFinancialRecord.updatedAt | date: 'short' }}</p>
+    </div>
+  
+    <div class="financial-section">
+      <h3>Revenues</h3>
+      <ul>
+        <li *ngFor="let item of currentFinancialRecord.revenues">
+          <span class="value">{{ item.value | currency}}</span> : {{ item.description }}
+        </li>
+      </ul>
+    </div>
+  
+    <div class="financial-section">
+      <h3>Operational Expenditures</h3>
+      <ul>
+        <li *ngFor="let item of currentFinancialRecord.opex">
+          <span class="value">{{ item.value | currency }}</span> : {{ item.description }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+  <!-- Update Financial Information Record -->
+  <div *ngIf="update_financial_info" class="form_content__container">
+      <h6>Year : <strong>{{currentFinancialRecord.year}}</strong></h6>
+    <div class="input__wrapper">
+    </div>
+    <div class="input__wrapper">
+      <label for="status" class="input__label">Status</label>
+        <p-dropdown 
+          id="status"
+          class="input__field"
+          [options]="statusOptions" 
+          [(ngModel)]="currentFinancialRecord.status" 
+          optionLabel="label" 
+          optionValue="value" 
+          placeholder="Select Status">
+        </p-dropdown>
+
+    </div>
+    <div class="input__wrapper">
+      <label for="notes" class="input__label">Notes</label>
+      <textarea id="notes" class="input__field" [(ngModel)]="currentFinancialRecord.notes"></textarea>
+    </div>
+
+ 
+  
+      <div class="cta__group">
+        <button class="btn btn-primary mt-2 btn-sm" (click)="saveUpdatesFinancial()">Save</button>
+      </div>
+    
+    
+  </div>
+</app-modal>

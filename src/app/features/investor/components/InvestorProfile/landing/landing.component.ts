@@ -135,7 +135,7 @@ export class LandingComponent implements OnInit {
 
     this.investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
       this.investorProfile = investorProfile ;
-      this.patchForm(investorProfile);
+      // this.patchForm(investorProfile);
     })  
   )
 
