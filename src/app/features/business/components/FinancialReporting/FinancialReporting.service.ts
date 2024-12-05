@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../../core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mergeMap, Observable, switchMap } from 'rxjs';
-import { FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
+import { AddNotesToFinancialecords, FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -68,5 +68,15 @@ export class FinancialReportingService extends BaseHttpService {
   }
 
 
+  //add notes to financial records
+  addNotesToFinancialRecords(payload:AddNotesToFinancialecords,recordId:number){
+    return this.putPost(`${BASE_URL}/finances/${recordId}/notes`, payload) as Observable<unknown>
+  }
 
+
+
+  //Reject a financial information record.
+  rejectApproveFinancialRecord(recordId:number,status:string){
+    return this.put(`${BASE_URL}/finances/${recordId}/${status}`) as Observable<unknown>
+  }
 }

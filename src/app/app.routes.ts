@@ -133,6 +133,12 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
+    path: 'financial-reports',
+    loadChildren: () => import('./features/admin/modules/financial-reports.routing.module').then(m => m.FinacialReportsRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+  {
     path: 'dashboard-investor',
     loadChildren: () => import('./features/admin/modules/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],

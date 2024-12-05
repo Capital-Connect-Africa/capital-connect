@@ -137,3 +137,7 @@ export interface UpdateFinancialRecords {
   opex: number[],
   companyId: number
 }
+
+export interface AddNotesToFinancialecords{
+  notes:string | null,
+}

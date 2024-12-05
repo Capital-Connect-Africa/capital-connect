@@ -1,0 +1,232 @@
+@import "../../../../styles/main.scss";
+
+.container {
+    color: $primary-color;
+  }
+  
+  .table-header {
+    display: flex;
+    align-items: center;
+    // padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .p-input-icon-left {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+  
+  .p-input-icon-left i {
+    position: absolute;
+    left: 10px;
+    color: #999;
+  }
+  
+  ::ng-deep .p-dropdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .p-input-icon-left input {
+    padding-left: 2rem; /* Adjust padding to make room for the icon */
+    padding: 0.5rem 1rem;
+    width: 300px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .p-datatable {
+    margin-top: 1rem;
+  }
+  
+  .p-datatable-tbody > tr > td {
+    padding: 15px 20px;
+    text-align: left;
+    height: 50px; /* Increase row height */
+  }
+  
+  .full-width-table {
+    width: 100%;
+  }
+  
+  .input-error {
+    border-color: red;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
+  .btn-primary {
+    background-color: $primary-color;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  
+    &:disabled {
+      background-color: lighten($primary-color, 40%);
+      cursor: not-allowed;
+    }
+  }
+  
+  tr {
+    height: 3rem !important;
+  }
+  
+  @include when-screen-is-atleast(large) {
+    ::ng-deep main {
+      .grid__area {
+        width: 95% !important;
+      }
+    }
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  td {
+    padding: 0 .5rem;
+  }
+  
+  :host ::ng-deep .p-datatable{
+    tr{
+      transition: all .2s linear;
+      cursor: default;
+      &:nth-child(even){
+        background-color: #f9f9f9;
+      }
+      &:hover{
+        background-color: #654f291a;
+      }
+      th{
+        background-color: #f4f4f5;
+       span{
+          padding: 0 .5rem;
+          justify-content: flex-start;
+          background-color: transparent!important;
+       }
+      }
+    }
+}
+
+.search{
+  display: block;
+  padding: .5rem 1rem;
+  border-radius: .3rem;
+  border: 1px solid rgba(0, 0, 0, .4);
+}
+
+.cta__btns{
+  button{
+    display: block;
+    padding: .4rem;
+    border-radius: .3rem;
+  }
+}
+
+.cta__group{
+  margin-top: 1cm;
+}
+
+
+
+.financial-info-card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+  }
+
+  .content {
+    p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      strong {
+        color: #555;
+      }
+    }
+
+    .status {
+      font-weight: bold;
+      color: $primary-color; /* Green for positive status */
+    }
+  }
+
+  .financial-section {
+    margin-top: 20px;
+
+    h3 {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
+
+      li {
+        margin-bottom: 5px;
+        font-size: 0.95rem;
+
+        .value {
+          font-weight: bold;
+          color: $primary-color; /* Blue for monetary values */
+        }
+      }
+    }
+  }
+}
+
+.status-banner {
+  // padding: 5px 10px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+
+  &.rejected {
+    // background-color: #ff4d4f; // Red
+    color: rgb(190, 27, 27);
+  }
+
+  &.pending {
+    // background-color: #ffc107; // Yellow
+    // color: black; // Optional for better contrast
+    color: rgb(197, 197, 12);
+  }
+
+  &.approved {
+    color: rgb(5, 68, 5);
+    // background-color: #28a745; // Green
+  }
+}
+
