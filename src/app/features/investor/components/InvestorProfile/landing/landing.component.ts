@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { TooltipDirective } from '../../../../../shared/directives/tooltip.directive';
 import { NumberFormatDirective } from '../../../../../shared/directives/number-format.directive';
 import { MatStepperModule } from '@angular/material/stepper';
+import { AccordionModule } from 'primeng/accordion';
 
 
 
@@ -28,7 +29,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, DropdownModule, MultiSelectModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective,MatStepperModule],
+  imports: [CommonModule, DropdownModule,AccordionModule, MultiSelectModule,FormsModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective,MatStepperModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
 })
@@ -44,7 +45,7 @@ export class LandingComponent implements OnInit {
   noMaxFund = false;
 
   current_details: number = 1
-  cur_det: number[] = [1, 2, 3,4]
+  cur_det: number[] = [1, 2, 3,4] 
   submit$ = new Observable<unknown>()
   esgFocusAreaOptions: EsgFocusAreaOptions[] = []
   countryOptions: Country[] = []
@@ -100,7 +101,7 @@ export class LandingComponent implements OnInit {
       maximumFunding: [0, Validators.required],
 
 
-      differentFundingVehicles: ['', Validators.required],
+      differentFundingVehicles: [''],
       countriesOfInvestmentFocus: [[], Validators.required],
       useOfFunds: [[], Validators.required],    
       noMaximumFunding:[false],
@@ -162,6 +163,7 @@ export class LandingComponent implements OnInit {
       investmentStructures: investorProfile.investmentStructures,
       esgFocusAreas: investorProfile.esgFocusAreas,
       registrationStructures: investorProfile.registrationStructures,
+      tsectors:this.selectedSectors
     });
 
 
@@ -322,9 +324,9 @@ export class LandingComponent implements OnInit {
     }
   }
 
-  onSectorChange(selectedSectorId: number): void {
-    this.updateSelectedSubSectorsForSector(selectedSectorId);
-  }
+  // onSectorChange(selectedSectorId: number): void {
+  //   this.updateSelectedSubSectorsForSector(selectedSectorId);
+  // }
 
   updateSelectedSubSectorsForSector(sectorId: number): void {
     const associatedSubSectors = this.sectorSubSectorsMap[sectorId] || [];
@@ -401,13 +403,30 @@ export class LandingComponent implements OnInit {
   showTooltip(event: MouseEvent, description: string): void {
     this.tooltipText = description;
     this.tooltipStyle = {
-      top: `${event.clientY + 10}px`,
-      left: `${event.clientX + 5}px`
+      top: `${event.clientY - 380}px`,
+      left: `${event.clientX + 100}px`
     };
     this.tooltipVisible = true;
   }
 
   hideTooltip(): void {
     this.tooltipVisible = false;
+  }
+
+
+  activeIndex: number = 0;
+
+  onSectorChange() {
+    // Reset sub-sectors when a new sector is selected or deselected
+    this.selectedSubSectors = [];
+  }
+
+  getSubSectors(sectorId: number) {
+    return this.subSectors[sectorId] || [];
+  }
+
+  getSectorName(sectorId: number): string {
+    const sector = this.sectors.find(s => s.id === sectorId);
+    return sector ? sector.name : '';
   }
 }
