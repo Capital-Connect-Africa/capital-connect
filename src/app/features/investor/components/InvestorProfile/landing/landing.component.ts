@@ -482,6 +482,14 @@ export class LandingComponent implements OnInit {
     this.activeAccordionIndex = this.activeAccordionIndex === sectorId ? null : sectorId;
     this.loadSubSectors(sectorId)
     this.activeAccordionIndex ? this.activeAccordionIndex: null
+
+    console.log("The active index is", this.activeAccordionIndex)
+
+    const tabs = document.querySelectorAll('.p-toggleable-content');
+    tabs.forEach((tab, index) => {
+        const isHidden = index !== this.activeAccordionIndex;
+        tab.setAttribute('aria-hidden', isHidden.toString());
+    });
   }
 
   getSubSectorsBySectorId(sectorId: number): any[] {
