@@ -221,6 +221,7 @@
                         optionValue="id"
                         formControlName="subSectors"
                         optionLabel="name" 
+                        (click)="$event.stopPropagation()"
                         (onChange)="onSubSectorChange()"
                         placeholder="Select Sub Sectors">
                       </p-multiSelect>
