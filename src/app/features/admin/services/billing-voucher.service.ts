@@ -41,4 +41,10 @@ export class BillingVoucherService extends BaseHttpService{
             return res as Voucher
         }))
     }
+
+    updateVoucher(voucher:Partial<VoucherFormData>, voucherId:number){
+        return this.update(`${BASE_URL}/vouchers`, voucherId, voucher).pipe(map((res:any) =>{
+            return res as Voucher
+        }))
+    }
 }
