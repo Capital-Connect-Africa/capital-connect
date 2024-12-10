@@ -14,9 +14,16 @@ export interface VoucherBase{
     percentageDiscount: number
 }
 
-export interface VoucherFormData{
+export interface VoucherFormData extends VoucherBase{
     rules: number[]
 
+}
+
+
+export interface VoucherUser {
+    id: number;
+    user: User;
+    usedAt: Date;
 }
 
 export interface Voucher extends VoucherBase{
@@ -24,5 +31,5 @@ export interface Voucher extends VoucherBase{
     code: string,
     rules: Rule[];
     createdAt: Date;
-    users: User[]
+    users: VoucherUser[]
 }
