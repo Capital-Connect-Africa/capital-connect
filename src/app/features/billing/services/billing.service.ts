@@ -56,7 +56,6 @@ export class BillingService {
     subscribe(tierId: number, upgrade:boolean =false, voucherCode:string =''){
         const url =upgrade? 'upgrade' : 'subscribe';
         const payload =voucherCode && voucherCode.length? {subscriptionTierId: tierId, voucherCode}: {subscriptionTierId: tierId}
-        debugger
         return this.__http.create(`${BASE_URL}/subscriptions/${url}`, payload).pipe(map((res: any) =>{
             return res;
         })) as Observable<SubscriptionResponse>
