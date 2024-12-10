@@ -30,6 +30,7 @@ export class BillingVouchersComponent {
   showingRows =0;
   currentPage:number =1;
   delete$ =new Observable();
+  updateVoucher$ =new Observable();
   createVoucher$ =new Observable();
   createRule$ =new Observable();
   rowsCount:number =this.rows;
@@ -41,13 +42,14 @@ export class BillingVouchersComponent {
   currentUsersFirstName =this._userAuthState.currentUserProfile().firstName
   rules:Rule[] =[];
   vouchers:Voucher[] =[];
+  voucherToBeEdited:Voucher | null =null;
   visible =false;
   cols =[
     { field: 'code', header: 'Code' },
     { field: 'percentageDiscount', header: 'Discount' },
+    { field: 'maxAmount', header: 'Max Amount' },
     { field: 'maxUses', header: 'Max Users' },
-    { field: 'users', header: 'Uses' },
-    { field: 'rules', header: 'Rules' },
+    { field: 'users', header: 'Current Uses' },
     { field: 'createdAt', header: 'Created' },
     { field: 'expires', header: 'Expires' },
     { field: 'actions', header: 'Actions' }
@@ -85,6 +87,17 @@ export class BillingVouchersComponent {
   }
 
   editVoucher(voucherId:number){
+    const voucherToBeEdited =this.vouchers.find(voucher =>voucher.id === voucherId) as Voucher;
+    if(voucherToBeEdited){
+      this.voucherToBeEdited =voucherToBeEdited
+      this.voucherForm.patchValue({
+        maxUses: `${voucherToBeEdited.maxUses}`,
+        maxAmount: `${voucherToBeEdited.maxAmount}`,
+        type: voucherToBeEdited.type,
+        expiresAt: `${new Date(voucherToBeEdited.expiresAt)}`,
+        percentageDiscount: `${Number(voucherToBeEdited.percentageDiscount)}`
+      })
+    }
     this.visible =true;
   }
 
@@ -118,7 +131,8 @@ export class BillingVouchersComponent {
   }
 
   showModal(){
-    this.visible =true
+    this.voucherToBeEdited =null;
+    this.visible =true;
   }
 
   voucherType:{value: VoucherType, label: string}[] =[
@@ -150,8 +164,22 @@ export class BillingVouchersComponent {
   })
 
   saveVoucher(){
+    if(this.voucherToBeEdited) return this.updateVoucher()
     const values =this.voucherForm.value as Partial<VoucherFormData>;
     this.createVoucher$ =this._voucherService.generateVoucher(values).pipe(tap(res =>{
+      this.getVouchers(this.currentPage, this.rows);
+    }))
+  }
+
+  updateVoucher(){
+    const {expiresAt, maxAmount, maxUses, percentageDiscount, type} =this.voucherForm.value as Partial<VoucherFormData>;
+    this.updateVoucher$ =this._voucherService.updateVoucher({
+      expiresAt, type, 
+      maxAmount: maxAmount as number, 
+      maxUses: maxUses as number, 
+      percentageDiscount: percentageDiscount as number}, 
+      this.voucherToBeEdited?.id as number).pipe(tap(res =>{
+      this.voucherToBeEdited =null;
       this.getVouchers(this.currentPage, this.rows);
     }))
   }

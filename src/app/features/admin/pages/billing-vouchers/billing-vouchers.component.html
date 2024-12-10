@@ -27,17 +27,17 @@
         <ng-template pTemplate="body" let-voucher>
             <tr class="text-sm">
                 <td>{{voucher.code}}</td>
-                <td>{{voucher.percentageDiscount}}%</td>
+                <td>{{voucher.percentageDiscount | number}}%</td>
+                <td>{{voucher.maxAmount | currency: 'ksh. '}}</td>
                 <td>{{voucher.maxUses}}</td>
                 <td>{{voucher.users.length}}</td>
-                <td>{{voucher.rules.length}}</td>
                 <td>{{voucher.createdAt | time_ago | titlecase}}</td> 
                 <td>{{voucher.expiresAt | time_ago | titlecase}}</td> 
                 <td>
                     <div class="flex gap-1 items-center cta__btns">
                         <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openVoucher(voucher.id)"><i class="pi pi-info-circle"></i></button>
                         <button title ="Open" class="block text-center text-blorangeue-500 hover:text-blue-800 transition-all" (click)="editVoucher(voucher.id)"><i class="pi pi-pencil"></i></button>
-                        <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(voucher.id)"><i class="pi pi-trash"></i></button>
+                        <!-- <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeVoucher(voucher.id)"><i class="pi pi-trash"></i></button> -->
                     </div>
                 </td>
             </tr>
@@ -94,7 +94,7 @@
         </div>
         <div class="input__wrapper">
             <div class="">
-                <button [disabled]="!voucherForm.valid" type="submit" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700" [ngClass]="{'bg-gray-300 hover:bg-gray-300': !voucherForm.valid}">Generate</button>
+                <button [disabled]="!voucherForm.valid" type="submit" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700" [ngClass]="{'bg-gray-300 hover:bg-gray-300': !voucherForm.valid}">{{voucherToBeEdited? 'Update': 'Generate'}}</button>
             </div>
         </div>
     </form>
