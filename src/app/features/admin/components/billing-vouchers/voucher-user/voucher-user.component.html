@@ -1,7 +1,12 @@
-<ul>
-    <li *ngFor="let user of users">
+<ul class="card__item__details">
+    <li *ngFor="let voucherUser of voucherUsers" class="card__item__detail">
         <div>
-            <h2>{{user.firstName}}</h2>
+            <label>Name:</label>
+            <p>{{voucherUser.user.firstName}} {{voucherUser.user.lastName}}</p>
+        </div>
+        <div>
+            <label>Applied:</label>
+            <p>{{voucherUser.usedAt | time_ago}}</p>
         </div>
     </li>
 </ul>

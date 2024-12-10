@@ -5,23 +5,16 @@
         <p>{{ voucher.code }}</p>
       </div>
       <div>
-        <label>Applications:</label>
-        <p>{{ voucher.users.length }}</p>
+          <label>Max Amount:</label>
+          <p>{{ voucher.maxAmount | currency: 'ksh. ' }}</p>
       </div>
+      <div>
+        <label>Discount:</label>
+        <p>{{ voucher.percentageDiscount | number }}%</p>
+    </div>
     </div>
     
-    <div class="card__item__detail">
-        <div>
-            <label>Discount:</label>
-            <p>{{ voucher.percentageDiscount | number }}%</p>
-        </div>
-        <div>
-            <label>Maximum Amount:</label>
-            <p>{{ voucher.maxAmount | currency: 'ksh. ' }}</p>
-          </div>
-    </div>
-    
-    <div class="card__item__detail">
+    <!-- <div class="card__item__detail">
       <div>
         <label>Constraints:</label>
         <p>{{ voucher.rules.length }}</p>
@@ -30,13 +23,18 @@
         <label>Maximum Users:</label>
         <p>{{ voucher.maxUses }}</p>
       </div>
-    </div>
+    </div> -->
 
     <div class="card__item__detail">
-        <div>
-            <label>Created:</label>
-            <p>{{ voucher.createdAt | time_ago }}</p>
-          </div>
+      <div>
+        <label>Applications:</label>
+        <p>{{ voucher.users.length }}</p>
+      </div>
+      <div>
+        <label>Created:</label>
+        <p>{{ voucher.createdAt | time_ago }}</p>
+      </div>
+          
       <div>
         <label>Expires:</label>
         <p>{{ voucher.expiresAt | time_ago }}</p>
