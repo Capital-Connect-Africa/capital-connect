@@ -1,5 +1,10 @@
 <ng-container *ngIf="bookings$ | async" />
 <ng-container *ngIf="delete$ | async" />
+<ng-container *ngIf="users$ | async"></ng-container>
+<ng-container *ngIf="assignBooking$ | async"></ng-container>
+
+
+
 <app-admin-ui-container [title]="'Bookings'">
     <div class="flex items-center justify-between">
         <input class="px-4 py-3 border search" pInputText placeholder="search ..." (input)="applyFilter($event)"/>
@@ -27,13 +32,17 @@
                 <div class="flex gap-1 items-center cta__btns">
                   <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openBooking(booking.id)"><i class="pi pi-info-circle"></i></button>
                   <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeBooking(booking.id)"><i class="pi pi-trash"></i></button>
+                  <button title="Assign Advisor" class="block text-center text-green-500 hover:text-green-800 transition-all" (click)="assignAdvisor(booking.id)">
+                    <i class="pi pi-user-plus"></i>
+                  </button>               
+                
                 </div>
             </td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-        <td colspan="5">No bookins yet.</td>
+        <td colspan="5">No bookings yet.</td>
         </tr>
     </ng-template>
     </p-table>
@@ -45,3 +54,33 @@
       [totalRecords]="rowsCount" 
       [rowsPerPageOptions]="[10, 20, 30, rowsCount]" />
 </app-admin-ui-container>
+
+
+
+
+
+
+<app-modal [(visible)]="advisorModal" title="Advisors" helperText="Select an advisor for this booking">
+    <div class="flex flex-col gap-4">
+        <div class="input__wrapper">
+            <label class="input__label uppercase font-bold">ADVISORS</label>
+            <p-dropdown
+                    [options]="users"
+                    optionLabel="fullName"
+                    optionValue="id"
+                    class ="input__field"
+                    styleClass ="w-full gap-4"
+                    [(ngModel)]="advisor"
+                    placeholder="Select option" />
+        </div>
+
+
+        <div class="input__wrapper">
+            <div class="cta__group">
+                <button type="submit" class="btn btn-sm capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700"
+                (click)="saveAdvisor()"
+                >Assign Advisor</button>
+            </div>
+        </div>
+    </div>
+</app-modal>
