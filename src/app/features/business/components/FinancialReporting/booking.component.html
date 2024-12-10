@@ -54,7 +54,12 @@
                   <ng-template pTemplate="body" let-row>
                     <tr>
                       <td>{{ row.description }}</td>
-                      <td *ngFor="let year of years">{{ row[year] || 'N/A' }}</td>
+                      <!-- <td *ngFor="let year of years">{{ row[year]  | currency || '0'| currency }}</td> -->
+
+                      <td *ngFor="let year of years">
+                        {{ row[year] ? (row[year] | currency) : (0 | currency) }}
+                      </td>
+                      
                     </tr>
                   </ng-template>
                 </p-table>               
@@ -70,6 +75,7 @@
                       <tr>
                         <th>#</th>
                         <th>Description</th>
+                        <th>Year</th>
                         <th>Value</th>
                         <th>Actions</th>
                       </tr>
@@ -78,6 +84,7 @@
                       <tr>
                         <td>{{i+1}}</td>
                         <td>{{ revenue.description }}</td>
+                        <td>{{ revenue.year || 'n/a'}}</td>
                         <td>{{ revenue.value | currency }}</td>
                
                         <td>
@@ -103,6 +110,7 @@
                       <tr>
                         <th>#</th>
                         <th>Description</th>
+                        <th>Year</th>
                         <th>Value</th>
                         <th>Actions</th>
                       </tr>
@@ -111,6 +119,7 @@
                       <tr>
                         <td>{{i+1}}</td>
                         <td>{{ opex.description }}</td>
+                        <td>{{opex.year || 'n/a'}}</td>
                         <td>{{ opex.value | currency }}</td>
                         <td>
                           <div class="flex space-x-4">
@@ -295,6 +304,10 @@
       <label for="value" class="input__label">Value</label>
       <input id="value" type="number" class="input__field" [(ngModel)]="newRevenueRecord.value" />
     </div>
+    <div class="input__wrapper">
+      <label for="value" class="input__label">Year</label>
+      <input id="value" type="number" class="input__field" [(ngModel)]="newRevenueRecord.year" />
+    </div>
     <div class="cta__group">
       <button class="btn btn-primary mt-2 btn-sm" (click)="createRevenueRecord()">Save</button>
     </div>
@@ -312,6 +325,10 @@
     <div class="input__wrapper">
       <label for="value" class="input__label">Value</label>
       <input id="value" type="number" class="input__field" [(ngModel)]="newOpexRecord.value" />
+    </div>
+    <div class="input__wrapper">
+      <label for="value" class="input__label">Year</label>
+      <input id="value" type="number" class="input__field" [(ngModel)]="newRevenueRecord.year" />
     </div>
     <div class="cta__group">
       <button class="btn btn-primary mt-2 btn-sm" (click)="CreateOpexRecord()">Save</button>

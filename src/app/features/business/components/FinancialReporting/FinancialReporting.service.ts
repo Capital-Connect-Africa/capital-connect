@@ -22,6 +22,10 @@ export class FinancialReportingService extends BaseHttpService {
     return this.read(`${BASE_URL}/revenues`) as Observable<RevenueRecords[]>
   }
 
+  getCompanyRevenueRecords(companyId:number) :Observable<RevenueRecords[]>{
+    return this.read(`${BASE_URL}/revenues/company/${companyId}`) as Observable<RevenueRecords[]>
+  }
+
   getRevenueRecord(id: number):Observable<RevenueRecords>{
     return this.readById(`${BASE_URL}/revenues`, id) as Observable<RevenueRecords>
   }
@@ -40,6 +44,10 @@ export class FinancialReportingService extends BaseHttpService {
     return this.read(`${BASE_URL}/opex`) as Observable<OpexRecords[]>
   }
 
+  getCompanyOpexRecords(companyId:number) :Observable<OpexRecords[]>{
+    return this.read(`${BASE_URL}/opex/company/${companyId}`) as Observable<OpexRecords[]>
+  }
+
   getOpexRecord(id: number):Observable<OpexRecords>{
     return this.readById(`${BASE_URL}/opex`, id) as Observable<OpexRecords>
   }
@@ -53,6 +61,10 @@ export class FinancialReportingService extends BaseHttpService {
   //Financial records
   createFinancialRecord(payload: FinancialInfoRecordsPayload) {
     return this.create(`${BASE_URL}/finances`, payload) as Observable<unknown>
+  }
+
+  getAllCompanyFinancialRecords(companyId:number) :Observable<FinancialInfoRecords[]>{
+    return this.read(`${BASE_URL}/finances/company/${companyId}`) as Observable<FinancialInfoRecords[]>
   }
 
   getAllFinancialRecords() :Observable<FinancialInfoRecords[]>{
