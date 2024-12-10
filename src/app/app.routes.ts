@@ -91,6 +91,13 @@ export const routes: Routes = [
   },
 
   {
+    path: 'business-owners',
+    loadChildren: () => import('./features/users/modules/business.owners.routes').then(m => m.BusinessOwnersRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
+  },
+
+  {
     path: 'dashboard',
     loadChildren: () => import('./features/admin/modules/admin.routing.module').then(m => m.AdminRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
