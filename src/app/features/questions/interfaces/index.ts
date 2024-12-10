@@ -99,7 +99,9 @@ export interface OpexRecords {
 
 export interface OpexRecordsPayload {
   description: string,
-  value: number
+  value: number,
+  year:number,
+  companyId:number
 }
 
 export interface FinancialInfoRecords {

@@ -88,18 +88,6 @@ export class FinancialReporting {
     });
 
 
-    this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
-      this.revenueRecords = res
-    }))
-
-    this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res => {
-      this.opexRecords = res
-    }))
-
-    this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
-      this.financialInfoRecords = res
-      this.transformData();
-    }))
 
 
 
@@ -110,6 +98,20 @@ export class FinancialReporting {
     if (companyDataString) {
       const companyData = JSON.parse(companyDataString);
       this.companyId = companyData.id;
+
+
+    this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
+      this.revenueRecords = res
+    }))
+
+    this.opexRecords$ = this._fr.getCompanyOpexRecords(this.companyId).pipe(tap(res => {
+      this.opexRecords = res
+    }))
+
+    this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
+      this.financialInfoRecords = res
+      this.transformData();
+    }))
 
     }
 
@@ -243,11 +245,11 @@ export class FinancialReporting {
         this.revenueRecords[index] = { ...this.currentRecord };
         this.UpdateRevenueRecord$ = this._fr.updateRevenueRecord(this.revenueRecords[index]).pipe(tap(res => {
           this._fs.success("Revenue Record Updated Successfully")
-          this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
+          this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
             this.revenueRecords = res
           }))
 
-          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+          this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
             this.financialInfoRecords = res
             this.transformData();
           }))
@@ -263,7 +265,7 @@ export class FinancialReporting {
             this.opexRecords = res
           }))
 
-          this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+          this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
             this.financialInfoRecords = res
             this.transformData();
           }))
@@ -330,22 +332,27 @@ export class FinancialReporting {
 
 
 
-  newOpexRecord: OpexRecordsPayload = { description: "", value: 0 };
-  newRevenueRecord: OpexRecordsPayload = { description: "", value: 0 };;
+  newOpexRecord: OpexRecordsPayload = { description: "", value: 0 ,year:0, companyId:this.companyId};
+  newRevenueRecord: OpexRecordsPayload = { description: "", value: 0 ,year:0,companyId:this.companyId};
+
   CreateOpexRecord() {
+    this.newOpexRecord.companyId = this.companyId
     this.createOpexRecord$ = this._fr.createOpexRecord(this.newOpexRecord).pipe(tap(res => {
       this.showCreateOpexModal = false;
       this._fs.success("Opex Record Created Successfully")
-      this.opexRecords$ = this._fr.getAllOpexRecords().pipe(tap(res => {
+      this.opexRecords$ = this._fr.getCompanyOpexRecords(this.companyId).pipe(tap(res => {
         this.opexRecords = res
       }))
     }))
   }
+
+
   createRevenueRecord() {
+    this.newRevenueRecord.companyId = this.companyId
     this.createRevenueRecord$ = this._fr.createRevenueRecord(this.newRevenueRecord).pipe(tap(res => {
       this.showCreateRecordModal = false;
       this._fs.success("Opex Record Created Successfully")
-      this.revenueRecords$ = this._fr.getAllRevenueRecords().pipe(tap(res => {
+      this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
         this.revenueRecords = res
       }))
     }))
@@ -380,7 +387,7 @@ export class FinancialReporting {
       this.createFinancialModal = false
 
       this._fs.success("Financial Information Created Successfully")
-      this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+      this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
         this.financialInfoRecords = res
         this.transformData();
       }))
@@ -447,7 +454,7 @@ export class FinancialReporting {
 
     this.UpdateFinancialInfoRecord$ = this._fr.updateFinancialRecord(extractedObject).pipe(tap(res => {
       this._fs.success("Financial Records Updated Successfully")
-      this.financialInfoRecords$ = this._fr.getAllFinancialRecords().pipe(tap(res => {
+      this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
         this.financialInfoRecords = res
         this.showFinancialModal = false;
       }))
@@ -460,8 +467,6 @@ export class FinancialReporting {
   handleYearClick(year: number) {
     const foundRecord = this.financialInfoRecords.find(record => record.year === year);
     if (foundRecord) {
-      console.log(foundRecord); // Replace this with your desired action
-      // Example: Show a modal with the record's details
       this.showModalFuncFinancial(foundRecord, 'update_financial_info');
     } else {
       console.error('Record not found for year:', year);
