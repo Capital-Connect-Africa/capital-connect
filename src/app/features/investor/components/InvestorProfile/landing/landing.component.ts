@@ -22,6 +22,7 @@ import { TooltipDirective } from '../../../../../shared/directives/tooltip.direc
 import { NumberFormatDirective } from '../../../../../shared/directives/number-format.directive';
 import { MatStepperModule } from '@angular/material/stepper';
 import { AccordionModule } from 'primeng/accordion';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 
@@ -29,7 +30,7 @@ import { AccordionModule } from 'primeng/accordion';
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [CommonModule, DropdownModule,AccordionModule, MultiSelectModule,FormsModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective,MatStepperModule],
+  imports: [CommonModule,TooltipModule, DropdownModule,AccordionModule, MultiSelectModule,FormsModule, ReactiveFormsModule, TooltipDirective,NumberFormatDirective,MatStepperModule],
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss'],
 })

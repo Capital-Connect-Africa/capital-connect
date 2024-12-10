@@ -72,11 +72,11 @@ export class BookingComponent {
 
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
-      this.bookings = res.data;
-      this.totalItems = res.data.length;
+      this.bookings = res;
+      this.totalItems = res.length;
     }),
     catchError((error: any) => {
-      this._feedbackService.error('Error Fetching The Bookings.', error);
+      this._feedbackService.info('Error Fetching The Bookings.', error);
       return of([]);
     })
   );
@@ -86,8 +86,8 @@ export class BookingComponent {
     this.currentPage = page;
     this.bookings$ = this._bookingService.getBookings(this.currentPage, this.itemsPerPage).pipe(
       tap(res => {
-        this.bookings = res.data;
-        this.totalItems = res.data.length; 
+        this.bookings = res;
+        this.totalItems = res.length ; 
       })
     );
   }

@@ -34,9 +34,9 @@ export class BookingService extends BaseHttpService {
     window.open(calendlyUrl, '_blank');
   }
 
-  getBookings(page:number,limit:number) : Observable<BookingResponse>{
+  getBookings(page:number,limit:number) : Observable<Booking[]>{
     const url =  `${BASE_URL}/bookings?page=${page}&limit=${limit}`;
-    return this.read(url, this.headers) as unknown as Observable<BookingResponse>;
+    return this.read(url, this.headers) as unknown as Observable<Booking[]>;
   }
 
 }

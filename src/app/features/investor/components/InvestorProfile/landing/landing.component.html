@@ -103,15 +103,6 @@
 
 
             <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- <div class="input__wrapper">
-                <label class="input__label">Different Funding Vehicles<sup>*</sup></label>
-                <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="differentFundingVehicles" type="text" placeholder="Enter a funding vehicle" />
-                <div *ngIf="formGroup.controls['differentFundingVehicles']?.touched && formGroup.controls['differentFundingVehicles']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['differentFundingVehicles']?.errors?.['required']">This field is required.</small>
-                </div>
-              </div> -->
-
               <div class="input__wrapper">
                 <label class="input__label">Available Funding USD$<sup>*</sup></label>
                 <a [title]="">Why do we ask this?</a>
@@ -141,41 +132,6 @@
                   <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
                 </div>
               </div>
-
-
-
-
-
-
-              <!-- <div class="input__wrapper">
-                <label class="input__label">Available Funding USD$<sup>*</sup></label>
-                <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="availableFunding" type="text" placeholder="Enter available funding" appNumberFormat/>
-                <div *ngIf="formGroup.controls['availableFunding']?.touched && formGroup.controls['availableFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['availableFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
-              </div>
-
-              <div class="input__wrapper">
-                <label class="input__label">Minimum Funding USD$<sup>*</sup></label>
-                <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="minimumFunding" type="text" placeholder="Enter minimum funding"  appNumberFormat/>
-                <div *ngIf="formGroup.controls['minimumFunding']?.touched && formGroup.controls['minimumFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['minimumFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
-              </div>
-
-              <div class="input__wrapper">
-                <label class="input__label">Maximum Funding USD$ <sup>*</sup></label>
-                <a [title]="">Why do we ask this?</a>
-                <input class="input__field" formControlName="maximumFunding" type="text" placeholder="Enter maximum funding" appNumberFormat/>
-                <div *ngIf="formGroup.controls['maximumFunding']?.touched && formGroup.controls['maximumFunding']?.invalid" class="validation-message">
-                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['required']">This field is required.</small>
-                  <small *ngIf="formGroup.controls['maximumFunding']?.errors?.['pattern']">Enter a valid number.</small>
-                </div>
-              </div> -->
 
 
               <div class="input__wrapper">
@@ -214,18 +170,16 @@
                 <p-accordion [activeIndex]="activeAccordionIndex">
                   <p-accordionTab *ngFor="let sector of selectedSectorsObjects" [header]="sector.name" (click)="onAccordionOpen(sector.id)">
                     <div class="input__wrapper accordion-select">
-                      <p-multiSelect 
-                        class="input__field" 
-                        styleClass="w-full gap-4"
-                        [options]="subSectors" 
-                        optionValue="id"
-                        formControlName="subSectors"
-                        optionLabel="name" 
-                        (click)="$event.stopPropagation()"
-                        (onChange)="onSubSectorChange()"
-                        placeholder="Select Sub Sectors">
+                      <p-multiSelect  class="input__field" styleClass="w-full gap-4" [options]="subSectors" optionValue="id" formControlName="subSectors"
+                        optionLabel="name" (click)="$event.stopPropagation()" (onChange)="onSubSectorChange()" placeholder="Select Sub Sectors">
                       </p-multiSelect>
-                      <ng-template let-option pTemplate="item"><div appTooltip="{{option.description}}">{{option.name}}</div></ng-template>                
+
+                      <ng-template let-option pTemplate="item"><div appTooltip="{{option.name}}">{{option.name}}</div></ng-template>       
+                      
+                      
+                      <ng-template let-option pTemplate="item">
+                        <div pTooltip="{{option.description}}" tooltipPosition="top">{{option.name}}</div>
+                      </ng-template>
 
                       <div *ngIf="formGroup.controls['subSectors']?.touched && formGroup.controls['subSectors']?.invalid" class="validation-message">
                         <small *ngIf="formGroup.controls['subSectors']?.errors?.['required']">Select atleast one sub sector.</small>
@@ -233,11 +187,8 @@
                     </div>
                   </p-accordionTab>
                 </p-accordion>
-                </div>
-                
-              
+                </div>               
               </div>
-
               </div>
 
 

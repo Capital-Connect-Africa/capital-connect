@@ -9,7 +9,7 @@ export class BookingsService extends BaseHttpService{
 
     getBookings(page: number =1, limit:number =5){
         return this.read(`${BASE_URL}/bookings?page=${page}&limit=${limit}`).pipe(map((bookings: any) =>{
-          return {total: bookings.total, data: bookings.data.map((booking: any) =>{
+          return {total: bookings.length, data: bookings.map((booking: any) =>{
             const payment =booking.payments.reduce((curr: Payment, acc:Payment) =>{
                 return {
                     id: curr.id || acc.id,
@@ -38,5 +38,10 @@ export class BookingsService extends BaseHttpService{
         return this.readById(`${BASE_URL}/bookings`, bookingId).pipe(map(res =>{
             return res
         })) as Observable<Booking>
+    }
+
+
+    assignBookingToInvestor(bookingId:number, payload:unknown){
+        return this.putPost(`${BASE_URL}/bookings/${bookingId}/assign-advisor`, payload) as Observable <unknown>
     }
 }
