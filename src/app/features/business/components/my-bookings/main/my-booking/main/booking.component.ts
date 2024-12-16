@@ -48,9 +48,11 @@ export class MyBookingComponent {
   //observables
   transactionStatus$ = new Observable<unknown>();
   getMeeting$ = new Observable<unknown>()
+  saveNotes$ = new Observable<unknown>()
 
   //vars
-  bookingId!: string;
+  bookingId!: number;
+  calendlyId!:string
 
   webLink: SafeResourceUrl | null = null;
 
@@ -128,9 +130,13 @@ export class MyBookingComponent {
 
   ngOnInit() {
     this._route.params.subscribe(params => {
-      this.bookingId = params['id'];
-      console.log('Booking ID:', this.bookingId);
-      this.getMeeting$ = this._webExService.getMeeting(this.bookingId).pipe(tap(res=>{
+      this.bookingId = params['bookingId'];
+      this.calendlyId = params['id'];
+
+      console.log("The booking id is", this.bookingId)
+      console.log("The calendly eent id is", this.calendlyId)
+
+      this.getMeeting$ = this._webExService.getMeeting(this.calendlyId).pipe(tap(res=>{
         this.meetingDetails = res
       }))
     });
@@ -143,12 +149,12 @@ export class MyBookingComponent {
     console.log('Meeting Notes Saved:', this.meetingNotes);
 
     let data = {
-      calendlyEventId: this.bookingId,
+      calendlyEventId: this.calendlyId,
       notes:this.meetingNotes
     }
-    // this.saveNotes$ = this._webExService.saveMeetingNotes(data).pipe(tap(res=>{
-
-    // }))
+    this.saveNotes$ = this._webExService.saveMeetingNotes(data,this.bookingId).pipe(tap(res=>{
+      this._feedbackService.success("Meeting notes added Successfully")
+    }))
     // Logic to persist meeting notes goes here (e.g., API call)
   }
 

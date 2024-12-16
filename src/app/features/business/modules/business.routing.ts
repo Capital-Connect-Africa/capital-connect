@@ -6,7 +6,7 @@ const routes: Routes = [
   { path: '', loadComponent: () => import('../pages/dashboard/dashboard.component').then(c => c.DashboardComponent) },
   { path: 'my-business', loadChildren: () => import('./my.business.routing').then(m => m.MyBusinessRoutingModule) },
   { path: 'my-bookings', loadComponent: () => import('../pages/my-bookings/my-bookings.component').then(c => c.MyBookingsComponent) },
-  { path: 'my-booking/:id', loadComponent: () => import('../pages/my-bookings/my-booking/my-booking.component').then(c => c.BookingComponent) },
+  { path: 'my-booking/:id/:bookingId', loadComponent: () => import('../pages/my-bookings/my-booking/my-booking.component').then(c => c.BookingComponent) },
   { path: 'financials', loadComponent: () => import('../pages/financials/financials.component').then(c => c.FinancialsComponent) },
   { path: 'plans', loadComponent: () => import('../../billing/pages/subscription/subscription.component').then(c => c.SubscriptionComponent) },
   { path: 'investor-eligibility', loadComponent: () => import('../pages/investor-eligibility/investor-eligibility.component').then(c => c.InvestorEligibilityComponent) },

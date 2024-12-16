@@ -56,6 +56,7 @@ export interface Payment{
 }
 
 export interface Booking {
+    id:number,
     calendlyEventId: number
     payment: Payment
     createdAt: Date

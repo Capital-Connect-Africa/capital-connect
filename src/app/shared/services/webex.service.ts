@@ -34,7 +34,7 @@ export class WebExService extends BaseHttpService {
   }
 
   saveMeetingNotes(request:SaveMeetingPayload,bookingId:number):Observable<unknown>{
-    return this.create(`${BASE_URL}/bookings/${bookingId}`, request, this.headers) as Observable<unknown>;
+    return this.putPost(`${BASE_URL}/bookings/${bookingId}`, request, this.headers) as Observable<unknown>;
   }
 
 }

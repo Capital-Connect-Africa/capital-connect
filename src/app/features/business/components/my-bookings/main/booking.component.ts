@@ -60,14 +60,11 @@ export class BookingComponent {
   transactionStatus$ = new Observable<unknown>();
   getMeeting$ = new Observable<unknown>()
 
-  message$ = new Observable<{ title: string, message: string, type: 'info' | 'success' | 'warning' | 'error' } | null>;
-  // webLink: string = ''; 
-
   webLink: SafeResourceUrl | null = null;
 
 
   ngOnInit() {
-    this.message$ = this._feedbackService.message$;
+  
   }
 
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
@@ -126,6 +123,7 @@ export class BookingComponent {
   }
 
   getMeeting(booking:Booking) {
-    this._router.navigate([`/business/my-booking/${booking.calendlyEventId}`]);
+    console.log("Get meeting hit....")
+    this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
   }
 }

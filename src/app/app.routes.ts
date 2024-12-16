@@ -97,6 +97,12 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
   {
+    path: 'advisor',
+    loadChildren: () => import('./features/advisor/modules/advisor.routing.module').then(m => m.AdvisorRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard]
+  },
+  {
     path: 'analytics',
     loadChildren: () => import('./features/admin/modules/analytics.routing.module').then(m => m.AnalyticsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
