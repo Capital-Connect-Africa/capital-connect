@@ -14,5 +14,22 @@ import { MyBookingComponent } from '../../../components/my-bookings/main/my-book
   styleUrl: './my-booking.component.scss'
 })
 export class BookingComponent {
-  links =BusinessLinks
+  //booleans
+  advisor:boolean = false
+  // links = []
+
+  constructor(){
+    const userProfile = sessionStorage.getItem('userProfile');
+    if(userProfile){  
+      if(JSON.parse(userProfile).roles==="advisor"){
+        this.advisor = true
+        this.links = this.advisor ? 
+        [ { label: 'Sessions', href: '/advisor', exact: false, icon: 'grid_view' ,display:true } ] : BusinessLinks
+
+      }
+    }
+  }
+  links = BusinessLinks
+
+
 }
