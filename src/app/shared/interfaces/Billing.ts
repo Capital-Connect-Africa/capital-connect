@@ -59,11 +59,31 @@ export interface Booking {
     id:number,
     calendlyEventId: number
     payment: Payment
-    createdAt: Date
+    createdAt: Date,
+    advisor:Advisor
 }
 
 export interface PaymentPlan extends Payment{
     userSubscription: ActivePlan,
     orderTrackingId: string,
     booking: Booking | null,
+}
+
+
+export interface Advisor{
+    id: number,
+    username: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+    roles: string,
+    resetPasswordToken: string,
+    resetPasswordExpires: string,
+    isEmailVerified: boolean,
+    emailVerificationToken: string,
+    emailVerificationExpires: string,
+    hasAcceptedTerms: boolean,
+    termsAcceptedAt: string,
+    createdAt: string,
+    updatedAt: string
 }

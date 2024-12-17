@@ -73,7 +73,7 @@ export class BookingsComponent {
     }))
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.getBookings();
 
     this.users$ = this._usersService.getAllUsers().pipe(
