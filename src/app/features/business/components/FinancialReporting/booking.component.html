@@ -22,15 +22,20 @@
       <div class="flex flex-col gap-4">
 
         <div class="p-6 bg-gray-50 rounded">
-          <h2>Financial Reports</h2>
-          <div class="cta__group">
+          <div class="financial-container">
+            <h2><strong>Key Financial Values</strong></h2>
             <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">Add Financial Information</button>
           </div>
 
           <p-table [value]="revenueData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines">
             <ng-template pTemplate="header">
               <tr>
-                <th>Revenue Records</th>
+                <th>
+                  <span style="display: flex; align-items: center;">
+                    Revenue Records
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addRevenueRecord()">add</mat-icon>
+                  </span>
+                </th>
                 <th *ngFor="let year of years">
                   <span style="display: flex; align-items: center;">
                     {{ year }}
@@ -54,12 +59,16 @@
           <p-table [value]="opexData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines mt-5">
             <ng-template pTemplate="header">
               <tr>
-                <th>Opex Records</th>
+                <th>
+                  <span style="display: flex; align-items: center;">
+                    Opex Records
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()">add</mat-icon>
+                  </span>
+                </th>
                 <th *ngFor="let year of years">
                   <span style="display: flex; align-items: center;">
                     {{ year }}
-                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;"
-                      (click)="handleYearClick(year)">edit</mat-icon>
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)">edit</mat-icon>
                   </span>
                 </th>
               </tr>
@@ -138,36 +147,53 @@
 <!-- Existing modals above -->
 <app-modal [(visible)]="showFinancialModal" [title]="title" [helperText]="helperText">
   <div  *ngIf="update_financial_info" class="card financial-info-card">
-    <div class="header">
+    <!-- <div class="header">
       <h2>Financial Information</h2>
-    </div>
+    </div> -->
     <div class="content">
       <p><strong>Year:</strong> {{ currentFinancialRecord.year }}</p>
-      <p><strong>Status:</strong> <span class="status">{{ currentFinancialRecord.status }}</span></p>
+      <p><strong>Approval Status:</strong> <span class="status">{{ currentFinancialRecord.status }}</span></p>
       <p><strong>Notes:</strong> {{ currentFinancialRecord.notes }}</p>
-      <p><strong>Created At:</strong> {{ currentFinancialRecord.createdAt | date: 'short' }}</p>
-      <p><strong>Updated At:</strong> {{ currentFinancialRecord.updatedAt | date: 'short' }}</p>
     </div>
 
     <div class="financial-section">
-      <h3>Revenues</h3>
-      <ul>
-        <li *ngFor="let item of currentFinancialRecord.revenues">
-          <span class="value">{{ item.value | currency}}</span> : {{ item.description }}
-        </li>
-      </ul>
+      <h3 class="status">Revenues</h3>
+      <p-table [value]="currentFinancialRecord.revenues" [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 300px;">Value</th>
+            <th>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="width: 300px;">{{ item.value | currency }}</td>
+            <td>{{ item.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
       <div *ngIf="currentFinancialRecord.revenues.length < 1">
         <p>No Revenues Found</p>
       </div>
     </div>
 
     <div class="financial-section">
-      <h3>Operational Expenditures</h3>
-      <ul>
-        <li *ngFor="let item of currentFinancialRecord.opex">
-          <span class="value">{{ item.value | currency }}</span> : {{ item.description }}
-        </li>
-      </ul>
+      <h3 class="status" >Operational Expenditures</h3>
+      <p-table [value]="currentFinancialRecord.opex" [responsiveLayout]="'scroll'">
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 300px;">Value</th>
+            <th>Description</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-item>
+          <tr>
+            <td style="width: 300px;">{{ item.value | currency }}</td>
+            <td>{{ item.description }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      
       <div *ngIf="currentFinancialRecord.opex.length < 1">
         <p>No Operational Expenditures Found</p>
       </div>
@@ -223,7 +249,7 @@
 
 
 
-<app-modal [(visible)]="showCreateRecordModal" title="Create Revenue Record" helperText="Create A New Revenue Record">
+<app-modal [(visible)]="showCreateRecordModal" title="Add a Revenue Record" helperText="Create a New Revenue Record">
   <!-- Update Revenue Record -->
   <div class="form_content__container">
     <div class="input__wrapper">
@@ -245,8 +271,8 @@
 </app-modal>
 
 
-<app-modal [(visible)]="showCreateOpexModal" title="Create Opex Record"
-  helperText="Create A New Operational Expenditure Record">
+<app-modal [(visible)]="showCreateOpexModal" title="Add an Opex Record"
+  helperText="Add a New Operational Expenditure Record">
   <!-- Update Revenue Record -->
   <div class="form_content__container">
     <div class="input__wrapper">
@@ -274,8 +300,8 @@
   helperText="Add New Financial Information Details">
   <div class="form_content__container">
     <div class="input__wrapper">
-      <label for="year" class="input__label">Year</label>
-      <input id="year" type="number" class="input__field" [(ngModel)]="newFinancialRecord.year" />
+      <label for="year" class="input__label">Select The Financial Year</label>
+      <input id="year" type="number" class="input__field" placeholder="2025" [(ngModel)]="newFinancialRecord.year" />
     </div>
 
     <div class="input__wrapper">
