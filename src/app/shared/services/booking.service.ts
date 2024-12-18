@@ -15,6 +15,8 @@ import { Booking } from '../interfaces/booking';
 export class BookingService extends BaseHttpService {
   authStateService = inject(AuthStateService);
   token = this.authStateService.authToken;
+
+  
   constructor(private _httpClient: HttpClient, private router: Router) {
     super(_httpClient);
   }

@@ -283,6 +283,7 @@ export class FinancialReporting {
     this.update_revenue_records = false;
     this.view_opex_records = false;
     this.update_opex_records = false;
+    this.showFinancialModal = false
   }
 
 
@@ -291,6 +292,7 @@ export class FinancialReporting {
   update_financial_info = false;
 
   showModalFuncFinancial(record: any, action: string) {
+    console.log("The record posted is ", record)
     this.currentFinancialRecord = { ...record };
 
     this.patchFormData({
@@ -299,10 +301,10 @@ export class FinancialReporting {
     })
 
 
-    this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
-      this.currentFinancialRecord = res
+    // this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
+    //   this.currentFinancialRecord = res
       
-    ]))
+    // ]))
 
     this.view_financial_info = action === 'view_financial_info';
     this.update_financial_info = action === 'update_financial_info';
@@ -325,11 +327,6 @@ export class FinancialReporting {
       opex: data.opex.map((rec: { id: any; }) => rec.id),
     });
   }
-
-
-
-
-
 
 
   newOpexRecord: OpexRecordsPayload = { description: "", value: 0 ,year:0, companyId:this.companyId};
@@ -395,7 +392,9 @@ export class FinancialReporting {
   }
 
 
-  tableData: any[] = [];
+  opexData: any[] = [];
+  revenueData: any[] = [];
+
   reversedTableData: any[] = [];
 
   years: number[] = [];
@@ -407,30 +406,34 @@ export class FinancialReporting {
     ).sort((a, b) => a - b); // Sort numerically in ascending order
   
     // Prepare rows with descriptions and values
-    const rows: any = {};
+    const opex_rows: any = {};
+    const revenue_rows: any = {};
+
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
   
       // Handle revenues
       entry.revenues.forEach((rev: any) => {
-        if (!rows[rev.description]) {
-          rows[rev.description] = { description: rev.description };
+        if (!revenue_rows[rev.description]) {
+          revenue_rows[rev.description] = { description: rev.description };
         }
-        rows[rev.description][year] = rev.value;
+        revenue_rows[rev.description][year] = rev.value;
       });
   
       // Handle opex
       entry.opex.forEach((opex: any) => {
-        if (!rows[opex.description]) {
-          rows[opex.description] = { description: opex.description };
+        if (!opex_rows[opex.description]) {
+          opex_rows[opex.description] = { description: opex.description };
         }
-        rows[opex.description][year] = opex.value;
+        opex_rows[opex.description][year] = opex.value;
       });
     });
   
     // Convert rows object to array for PrimeNG table
-    this.tableData = Object.values(rows);
+    this.opexData = Object.values(opex_rows);
+    this.revenueData = Object.values(revenue_rows);
+
   }
   
 
@@ -474,9 +477,9 @@ export class FinancialReporting {
   }
 
 
-  updateReversedData() {
-    this.reversedTableData = [...this.tableData].reverse();
-  }
+  // updateReversedData() {
+  //   this.reversedTableData = [...this.tableData].reverse();
+  // }
 
 
   

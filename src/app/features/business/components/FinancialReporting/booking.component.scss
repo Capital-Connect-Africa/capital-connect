@@ -265,7 +265,7 @@ h2{
 }
 
 .cta__group{
-  margin-top: .5cm;
+  margin-bottom: .5cm;
 }
 
 
@@ -273,6 +273,10 @@ h2{
   cursor: pointer;
   size: 22rem;
   color: green;
+}
+
+h3{
+  color: $primary-color;
 }
 
 .mat-icon:hover{
@@ -321,7 +325,7 @@ h2{
 
     h3 {
       font-size: 1.2rem;
-      color: #333;
+      color: $primary-color;
       margin-bottom: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -342,4 +346,16 @@ h2{
       }
     }
   }
+}
+
+
+.mt-55{
+  margin-top: .5cm;
+}
+
+.financial-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .5cm;
 }

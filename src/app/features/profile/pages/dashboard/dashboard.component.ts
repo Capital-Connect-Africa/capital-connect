@@ -36,9 +36,6 @@ export class DashboardComponent {
   }
 
 
-  private _bs = inject(BusinessLinkService)
-
-  private _authStateService =inject(AuthStateService)
   hidden = true;
   links = BusinessLinks
 
