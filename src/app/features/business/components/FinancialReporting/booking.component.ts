@@ -291,6 +291,7 @@ export class FinancialReporting {
   update_financial_info = false;
 
   showModalFuncFinancial(record: any, action: string) {
+    console.log("The record posted is ", record)
     this.currentFinancialRecord = { ...record };
 
     this.patchFormData({
@@ -299,10 +300,10 @@ export class FinancialReporting {
     })
 
 
-    this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
-      this.currentFinancialRecord = res
+    // this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
+    //   this.currentFinancialRecord = res
       
-    ]))
+    // ]))
 
     this.view_financial_info = action === 'view_financial_info';
     this.update_financial_info = action === 'update_financial_info';

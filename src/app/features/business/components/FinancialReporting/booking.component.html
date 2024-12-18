@@ -34,8 +34,7 @@
                 <th *ngFor="let year of years">
                   <span style="display: flex; align-items: center;">
                     {{ year }}
-                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;"
-                      (click)="handleYearClick(year)">edit</mat-icon>
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)">edit</mat-icon>
                   </span>
                 </th>
               </tr>
@@ -138,7 +137,7 @@
 
 <!-- Existing modals above -->
 <app-modal [(visible)]="showFinancialModal" [title]="title" [helperText]="helperText">
-  <div *ngIf="view_financial_info" class="card financial-info-card">
+  <div  *ngIf="update_financial_info" class="card financial-info-card">
     <div class="header">
       <h2>Financial Information</h2>
     </div>
@@ -184,7 +183,7 @@
 
 
   <!-- Update Financial Information Record -->
-  <div *ngIf="update_financial_info" class="form_content__container">
+  <div *ngIf="false" class="form_content__container">
     <h6>Year : <strong>{{currentFinancialRecord.year}}</strong></h6>
     <div class="input__wrapper">
       <!-- <label for="year" class="input__label">Year : {{currentFinancialRecord.year}}</label> -->
