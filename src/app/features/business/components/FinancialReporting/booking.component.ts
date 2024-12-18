@@ -283,6 +283,7 @@ export class FinancialReporting {
     this.update_revenue_records = false;
     this.view_opex_records = false;
     this.update_opex_records = false;
+    this.showFinancialModal = false
   }
 
 
