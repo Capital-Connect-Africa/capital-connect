@@ -43,6 +43,12 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
           router.navigateByUrl('/verify-email')
         }
       }
+
+      if (isFinancialReportsPage(error.url as string)) {
+        console.log("Handling financial reports error interceptions")
+
+        return EMPTY;
+      }
       
       let errorMessage = 'An unknown error occurred!';
 
@@ -75,6 +81,10 @@ function isGettingActiveSubscription(path: string): boolean{
 
 function isValidAuthLoginPath(path: string): boolean {
   return path.includes('login');
+}
+
+function isFinancialReportsPage(path: string): boolean {
+  return path.includes('opex') || path.includes('revenues');
 }
 
 

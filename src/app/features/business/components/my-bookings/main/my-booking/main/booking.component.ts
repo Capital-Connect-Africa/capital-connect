@@ -132,10 +132,6 @@ export class MyBookingComponent {
     this._route.params.subscribe(params => {
       this.bookingId = params['bookingId'];
       this.calendlyId = params['id'];
-
-      console.log("The booking id is", this.bookingId)
-      console.log("The calendly eent id is", this.calendlyId)
-
       this.getMeeting$ = this._webExService.getMeeting(this.calendlyId).pipe(tap(res=>{
         this.meetingDetails = res
       }))
