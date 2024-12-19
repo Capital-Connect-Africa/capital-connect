@@ -403,7 +403,7 @@ export class FinancialReporting {
     // Collect all years and sort them in ascending order
     this.years = Array.from(
       new Set(this.financialInfoRecords.map((item) => item.year))
-    ).sort((a, b) => a - b); // Sort numerically in ascending order
+    ).sort((a, b) => b - a); // Sort numerically in ascending order
   
     // Prepare rows with descriptions and values
     const opex_rows: any = {};
@@ -444,6 +444,7 @@ export class FinancialReporting {
 
 
   saveUpdatesFinancial() {
+    console.log("The current financial record is", this.currentFinancialRecord)
     const extractedObject: UpdateFinancialRecords = {
       id: this.currentFinancialRecord.id,
       year: this.currentFinancialRecord.year, // Override year as per requirement
@@ -451,7 +452,7 @@ export class FinancialReporting {
       notes: this.currentFinancialRecord.notes, // `null` if explicitly required
       revenues: this.financialForm.value.revenues,
       opex: this.financialForm.value.revenues,
-      companyId: this.currentFinancialRecord.company.id
+      companyId: this.companyId
     };
 
 
@@ -460,6 +461,8 @@ export class FinancialReporting {
       this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
         this.financialInfoRecords = res
         this.showFinancialModal = false;
+        this.transformData();
+
       }))
     }))
   }
