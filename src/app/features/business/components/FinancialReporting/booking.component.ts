@@ -399,16 +399,56 @@ export class FinancialReporting {
 
   years: number[] = [];
 
+  // transformData() {
+  //   // Collect all years and sort them in ascending order
+  //   this.years = Array.from(
+  //     new Set(this.financialInfoRecords.map((item) => item.year))
+  //   ).sort((a, b) => b - a); // Sort numerically in ascending order
+  
+  //   // Prepare rows with descriptions and values
+  //   const opex_rows: any = {};
+  //   const revenue_rows: any = {};
+
+  
+  //   this.financialInfoRecords.forEach((entry) => {
+  //     const year = entry.year;
+  
+  //     // Handle revenues
+  //     entry.revenues.forEach((rev: any) => {
+  //       if (!revenue_rows[rev.description]) {
+  //         revenue_rows[rev.description] = { description: rev.description };
+  //       }
+  //       revenue_rows[rev.description][year] = rev.value;
+  //     });
+  
+  //     // Handle opex
+  //     entry.opex.forEach((opex: any) => {
+  //       if (!opex_rows[opex.description]) {
+  //         opex_rows[opex.description] = { description: opex.description };
+  //       }
+  //       opex_rows[opex.description][year] = opex.value;
+  //     });
+  //   });
+  
+  //   // Convert rows object to array for PrimeNG table
+  //   this.opexData = Object.values(opex_rows);
+  //   this.revenueData = Object.values(revenue_rows);
+
+  // }
+  
+
+
+
   transformData() {
-    // Collect all years and sort them in ascending order
+    // Collect all years and sort them in descending order
     this.years = Array.from(
       new Set(this.financialInfoRecords.map((item) => item.year))
-    ).sort((a, b) => b - a); // Sort numerically in ascending order
+    ).sort((a, b) => b - a); // Sort numerically in descending order
   
     // Prepare rows with descriptions and values
     const opex_rows: any = {};
     const revenue_rows: any = {};
-
+    const revenue_totals: any = {}; // To store the total revenues for each year
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
@@ -419,6 +459,9 @@ export class FinancialReporting {
           revenue_rows[rev.description] = { description: rev.description };
         }
         revenue_rows[rev.description][year] = rev.value;
+  
+        // Add to revenue totals
+        revenue_totals[year] = (revenue_totals[year] || 0) + rev.value;
       });
   
       // Handle opex
@@ -430,13 +473,14 @@ export class FinancialReporting {
       });
     });
   
+    // Add total revenues row
+    revenue_rows["Total Revenue"] = { description: "Total Revenue", ...revenue_totals };
+  
     // Convert rows object to array for PrimeNG table
     this.opexData = Object.values(opex_rows);
     this.revenueData = Object.values(revenue_rows);
-
   }
   
-
 
 
 
