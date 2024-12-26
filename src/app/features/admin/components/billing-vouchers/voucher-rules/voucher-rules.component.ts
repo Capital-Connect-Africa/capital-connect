@@ -1,6 +1,7 @@
-import { Component, Input, SimpleChanges } from '@angular/core';
-import { Voucher, VoucherRule, VoucherUser } from '../../../../../shared/interfaces/voucher.interface';
 import { CommonModule } from '@angular/common';
+import { Component, Input, SimpleChanges } from '@angular/core';
+import { Rule } from '../../../../../shared/interfaces/rule.interface';
+import { Voucher } from '../../../../../shared/interfaces/voucher.interface';
 
 @Component({
   selector: 'app-voucher-rules',
@@ -11,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class VoucherRulesComponent {
   @Input() voucher!:Voucher;
-  voucherRules:VoucherRule[] =[];
+  voucherRules:Rule[] =[];
   
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['voucher'] && this.voucher?.users) {
