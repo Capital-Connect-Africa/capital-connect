@@ -1,0 +1,18 @@
+<div class="pt-4 flex flex-col gap-4">
+    <div class="">
+        <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer">Add Constraint</button>
+    </div>
+    <ng-container *ngIf="voucherRules.length">
+        <ul class="card__item__details" *ngFor="let rule of voucher.rules">
+        
+            <div class="card__item__detail">
+                <p>{{ voucher.code }}</p>
+            </div>
+        </ul>
+    </ng-container>
+    
+    
+    <div *ngIf="!voucherRules.length">
+        <p class="font-light">No custom constraints have been set for this voucher</p>
+    </div>
+</div>
