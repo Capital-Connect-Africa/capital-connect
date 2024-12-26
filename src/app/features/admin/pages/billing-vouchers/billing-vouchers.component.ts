@@ -55,7 +55,8 @@ export class BillingVouchersComponent {
     { field: 'actions', header: 'Actions' }
   ]
 
-  
+  heading ='CREATE VOUCHER';
+  helperText ='Enter new voucher details';
   rules$ =new Observable<Rule[]>();
   vouchers$ =new Observable<Voucher[]>();
 
@@ -87,8 +88,11 @@ export class BillingVouchersComponent {
   }
 
   editVoucher(voucherId:number){
+    this.voucherForm.reset();
     const voucherToBeEdited =this.vouchers.find(voucher =>voucher.id === voucherId) as Voucher;
     if(voucherToBeEdited){
+      this.heading ='UPDATE VOUCHER';
+      this.helperText =`Update details for voucher ${voucherToBeEdited.code}`;
       this.voucherToBeEdited =voucherToBeEdited
       this.voucherForm.patchValue({
         maxUses: `${voucherToBeEdited.maxUses}`,
@@ -131,7 +135,12 @@ export class BillingVouchersComponent {
   }
 
   showModal(){
-    this.voucherToBeEdited =null;
+    if(this.voucherToBeEdited){
+      this.voucherForm.reset();
+      this.voucherToBeEdited =null;
+      this.heading ='CREATE VOUCHER';
+      this.helperText ='Enter new voucher details';
+    }
     this.visible =true;
   }
 

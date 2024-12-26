@@ -62,7 +62,7 @@
     </div>
 </app-admin-ui-container>
 
-<app-modal [(visible)]="visible" title="CREATE VOUCHER" helperText="Enter new voucher details">
+<app-modal [(visible)]="visible" [title]="heading" [helperText]="helperText">
     <form class="flex flex-col gap-4" [formGroup]="voucherForm" (ngSubmit)="saveVoucher()">
         <div class="input__wrapper">
             <label class="input__label font-bold">Type</label>
