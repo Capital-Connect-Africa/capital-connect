@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { Observable, tap } from 'rxjs';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { Table, TableModule } from 'primeng/table';
+import { Table, TableModule, TablePageEvent } from 'primeng/table';
 import { Router } from '@angular/router';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ import { Voucher, VoucherFormData, VoucherType } from '../../../../shared/interf
 import { Rule, RuleFormData } from '../../../../shared/interfaces/rule.interface';
 import { BillingVoucherService } from '../../services/billing-voucher.service';
 import { RulesService } from '../../services/rule.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { AuthStateService } from '../../../auth/services/auth-state.service';
 import { WelcomeUserPipe } from "../../../../core/pipes/welcome-user.pipe";
@@ -55,6 +55,13 @@ export class BillingVouchersComponent {
     { field: 'actions', header: 'Actions' }
   ]
 
+  today: Date =new Date();
+  defaultDate: Date =new Date();
+
+  vouchersCount:number =0;
+  vouchersShowingCount =0;
+  start =0;
+  end =0;
   heading ='CREATE VOUCHER';
   helperText ='Enter new voucher details';
   rules$ =new Observable<Rule[]>();
@@ -65,7 +72,8 @@ export class BillingVouchersComponent {
 
   getVouchers(page: number =1, limit:number =10){
     this.vouchers$ =this._voucherService.getBillingVouchers(page, limit).pipe(tap(vouchers =>{
-      this.vouchers =vouchers
+      this.vouchers =vouchers;
+      this.updateDisplayedData();
     }))
   }
 
@@ -94,11 +102,13 @@ export class BillingVouchersComponent {
       this.heading ='UPDATE VOUCHER';
       this.helperText =`Update details for voucher ${voucherToBeEdited.code}`;
       this.voucherToBeEdited =voucherToBeEdited
+      this.defaultDate =new Date(voucherToBeEdited.expiresAt)
+      debugger
       this.voucherForm.patchValue({
         maxUses: `${voucherToBeEdited.maxUses}`,
         maxAmount: `${voucherToBeEdited.maxAmount}`,
         type: voucherToBeEdited.type,
-        expiresAt: `${new Date(voucherToBeEdited.expiresAt)}`,
+        expiresAt: this.defaultDate,
         percentageDiscount: `${Number(voucherToBeEdited.percentageDiscount)}`
       })
     }
@@ -122,10 +132,11 @@ export class BillingVouchersComponent {
   }
 
   updateDisplayedData() {
-    // const data = this.table.filteredValue || this.bookings;
-    const start = this.table.first??0;
-    const end = start + (this.table.rows??this.rows);
-    // this.showingRows = data.slice(start, end).length;
+      const data = this.table.filteredValue || this.vouchers;
+      const start = this.table.first??10;
+      const end = Math.min(start + (this.table.rows ?? 10), data.length);
+      this.vouchersShowingCount = start + 1;
+      this.end = end;
   }
 
   applyFilter(event: Event) {
@@ -136,10 +147,7 @@ export class BillingVouchersComponent {
 
   showModal(){
     if(this.voucherToBeEdited){
-      this.voucherForm.reset();
-      this.voucherToBeEdited =null;
-      this.heading ='CREATE VOUCHER';
-      this.helperText ='Enter new voucher details';
+      this.resetModal();
     }
     this.visible =true;
   }
@@ -162,7 +170,7 @@ export class BillingVouchersComponent {
     maxUses: ['', [Validators.required]],
     maxAmount: ['', [Validators.required]],
     percentageDiscount: ['', [Validators.required]],
-    expiresAt: ['', [Validators.required]]
+    expiresAt: [this.today, [Validators.required]]
   })
 
   ruleForm =this._fb.group({
@@ -177,6 +185,7 @@ export class BillingVouchersComponent {
     const values =this.voucherForm.value as Partial<VoucherFormData>;
     this.createVoucher$ =this._voucherService.generateVoucher(values).pipe(tap(res =>{
       this.getVouchers(this.currentPage, this.rows);
+      this.resetModal();
     }))
   }
 
@@ -190,6 +199,7 @@ export class BillingVouchersComponent {
       this.voucherToBeEdited?.id as number).pipe(tap(res =>{
       this.voucherToBeEdited =null;
       this.getVouchers(this.currentPage, this.rows);
+      this.resetModal();
     }))
   }
 
@@ -198,5 +208,19 @@ export class BillingVouchersComponent {
     this.createRule$ =this._rulesService.createRule(values).pipe(tap(res =>{
       this.getRules();
     }))
+  }
+
+  onPage(event: TablePageEvent){
+      this.updateDisplayedData()
+  }
+
+  resetModal(){
+    this.visible =false;
+    this.voucherForm.reset();
+    this.today =new Date();
+    this.defaultDate =new Date();
+    this.voucherToBeEdited =null;
+    this.heading ='CREATE VOUCHER';
+    this.helperText ='Enter new voucher details';
   }
 }

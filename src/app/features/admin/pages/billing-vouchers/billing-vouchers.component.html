@@ -57,7 +57,7 @@
             [totalRecords]="rowsCount" 
             [rowsPerPageOptions]="[10, 20, 30, rowsCount]" />
         </div>
-        <span class="block text-sm font-light">{{showingRows}} - 0 of {{rowsCount}} entries</span>
+        <div class="font-light text-sm">Showing {{vouchersShowingCount}} - {{end}} of {{vouchers.length}} entries</div>
 
     </div>
 </app-admin-ui-container>
@@ -89,7 +89,7 @@
         </div>
         <div class="input__wrapper">
             <label class="input__label font-bold">Expiry Date</label>
-            <p-calendar [iconDisplay]="'input'" formControlName ="expiresAt" class ="input__field"
+            <p-calendar [iconDisplay]="'input'" formControlName ="expiresAt" class ="input__field" [defaultDate]="defaultDate" [minDate]="today"
             styleClass ="w-full gap-4" placeholder="Pick an expiry date"/>
         </div>
         <div class="input__wrapper">
