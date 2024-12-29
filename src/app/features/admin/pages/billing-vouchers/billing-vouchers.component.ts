@@ -180,9 +180,12 @@ export class BillingVouchersComponent {
   })
 
   saveVoucher(){
-    if(this.voucherToBeEdited) return this.updateVoucher()
+    if(this.voucherToBeEdited) return this.updateVoucher();
     const values =this.voucherForm.value as Partial<VoucherFormData>;
-    this.createVoucher$ =this._voucherService.generateVoucher(values).pipe(tap(res =>{
+    this.createVoucher$ =this._voucherService.generateVoucher({
+      ...values, 
+      rules: values.rules || [],
+    }).pipe(tap(res =>{
       this.getVouchers(this.currentPage, this.rows);
       this.resetModal();
     }))
