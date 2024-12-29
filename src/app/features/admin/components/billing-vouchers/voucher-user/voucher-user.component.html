@@ -1,12 +1,19 @@
-<ul class="card__item__details">
-    <li *ngFor="let voucherUser of voucherUsers" class="card__item__detail">
-        <div>
-            <label>Name:</label>
-            <p>{{voucherUser.user.firstName}} {{voucherUser.user.lastName}}</p>
-        </div>
-        <div>
-            <label>Applied:</label>
-            <p>{{voucherUser.usedAt | time_ago}}</p>
-        </div>
-    </li>
-</ul>
+<div class="pt-4 flex flex-col gap-4">
+    <ng-container *ngIf="voucherUsers.length">
+        <ul class="card__item__details" >
+            <li *ngFor="let voucherUser of voucherUsers" class="card__item__detail">
+                <div>
+                    <label>Name:</label>
+                    <p>{{voucherUser.user.firstName}} {{voucherUser.user.lastName}}</p>
+                </div>
+                <div>
+                    <label>Applied:</label>
+                    <p>{{voucherUser.usedAt | time_ago}}</p>
+                </div>
+            </li>
+        </ul>
+    </ng-container>
+    <div *ngIf="!voucherUsers.length">
+        <p class="font-light">No user has applied this voucher yet</p>
+    </div>
+</div>
