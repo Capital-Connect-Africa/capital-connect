@@ -1,5 +1,6 @@
 <ng-container *ngIf="vouchers$ | async"></ng-container>
 <ng-container *ngIf="rules$ | async"></ng-container>
+<ng-container *ngIf="updateVoucher$ | async"></ng-container>
 <ng-container *ngIf="createVoucher$ | async"></ng-container>
 <app-admin-ui-container title="Billing Vouchers" [bg_gray]="true">
     <div class="flex flex-col gap-2 title__bar">

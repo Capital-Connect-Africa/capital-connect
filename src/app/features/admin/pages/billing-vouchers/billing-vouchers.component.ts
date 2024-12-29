@@ -103,12 +103,11 @@ export class BillingVouchersComponent {
       this.helperText =`Update details for voucher ${voucherToBeEdited.code}`;
       this.voucherToBeEdited =voucherToBeEdited
       this.defaultDate =new Date(voucherToBeEdited.expiresAt)
-      debugger
       this.voucherForm.patchValue({
         maxUses: `${voucherToBeEdited.maxUses}`,
         maxAmount: `${voucherToBeEdited.maxAmount}`,
         type: voucherToBeEdited.type,
-        expiresAt: this.defaultDate,
+        expiresAt: new Date(voucherToBeEdited.expiresAt),
         percentageDiscount: `${Number(voucherToBeEdited.percentageDiscount)}`
       })
     }
@@ -193,10 +192,10 @@ export class BillingVouchersComponent {
     const {expiresAt, maxAmount, maxUses, percentageDiscount, type} =this.voucherForm.value as Partial<VoucherFormData>;
     this.updateVoucher$ =this._voucherService.updateVoucher({
       expiresAt, type, 
-      maxAmount: maxAmount as number, 
-      maxUses: maxUses as number, 
-      percentageDiscount: percentageDiscount as number}, 
-      this.voucherToBeEdited?.id as number).pipe(tap(res =>{
+      maxAmount: Number(maxAmount), 
+      maxUses: Number(maxUses), 
+      percentageDiscount: Number(percentageDiscount)}, 
+      Number(this.voucherToBeEdited?.id)).pipe(tap(res =>{
       this.voucherToBeEdited =null;
       this.getVouchers(this.currentPage, this.rows);
       this.resetModal();
