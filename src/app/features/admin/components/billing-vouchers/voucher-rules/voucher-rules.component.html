@@ -1,10 +1,36 @@
-<div class="pt-4 flex flex-col gap-4">
-    <div class="">
-        <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer">Add Constraint</button>
+
+<div  class="pt-4 flex flex-col gap-8">
+    <div class="card__item__details">
+        <div class="card__item__detail">
+          <div>
+            <label>Applied to:</label>
+            <p>{{ voucher.type }}</p>
+          </div>
+          <div>
+              <label>Max Uses:</label>
+              <p>{{ voucher.maxUses}}</p>
+          </div>
+          <div>
+            <label>Used:</label>
+            <p>{{ ((voucher.users.length /voucher.maxUses) * 100) | number }}%</p>
+        </div>
+        </div>
+    
+        <div class="card__item__detail">
+          <div>
+            <label>Applicable by:</label>
+            <p>{{ voucher.expiresAt | date }}</p>
+          </div>
+          
+        </div>
+        
+      </div>
+    <div class="flex justify-between items-center">
+        <h3 class="capitalize h3" *ngIf="voucherRules.length">Custom Constraints</h3>
+        <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer">Add a custom constraint</button>
     </div>
     <ng-container *ngIf="voucherRules.length">
         <ul class="card__item__details" *ngFor="let rule of voucher.rules">
-        
             <div class="card__item__detail">
                 <p>{{ voucher.code }}</p>
             </div>
@@ -12,7 +38,7 @@
     </ng-container>
     
     
-    <div *ngIf="!voucherRules.length">
+    <!-- <div *ngIf="!voucherRules.length">
         <p class="font-light">No custom constraints have been set for this voucher</p>
-    </div>
+    </div> -->
 </div>
