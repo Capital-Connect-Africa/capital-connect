@@ -95,15 +95,6 @@ tr {
   height: 3rem !important;
 }
 
-.btn__cta{
-  font-size: .9rem;
-  font-weight: 500;
-  transition: .2s linear;
-  &:hover{
-    text-decoration: underline;
-  }
-}
-
 @include when-screen-is-atleast(large) {
   ::ng-deep main {
     .grid__area {
@@ -141,9 +132,4 @@ td {
      }
     }
   }
-}
-
-:host ::ng-deep .p-paginator{
-    padding-top: 2rem;
-    justify-content: flex-start!important;
 }

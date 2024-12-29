@@ -6,27 +6,26 @@
       <span class="p-input-icon-left">
         <input type="text" pInputText placeholder="Search investors..." (input)="applyFilter($event)">
       </span>
-      <div>{{usersShowingCount}} of <span>{{usersCount}}</span></div>
+      <div class="font-light text-sm">Showing {{usersShowingCount}} - {{userShowingCountEnd}} of {{usersCount}} entries</div>
     </div>
     <p-table #dt [value]="investors" [paginator]="true" [rows]="10" [globalFilterFields]="['organizationName', 'emailAddress', 'headOfficeLocation']" (onPage)="onPage($event)">
       <ng-template pTemplate="header">
-        <tr>
+        <tr class="text-sm">
           <th *ngFor="let col of cols" [pSortableColumn]="col.field">
             <span class="header-container">
               <span class="header-text">
                 {{col.header}}
               </span>
-              <p-sortIcon [field]="col.field"></p-sortIcon>
             </span>
           </th>
           <th>Action</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-investor>
-        <tr>
-          <td>{{investor.organizationName}}</td>
-          <td>{{investor.emailAddress}}</td>
-          <td>{{investor.headOfficeLocation}}</td>
+        <tr class="text-sm font-light">
+          <td>{{investor.organizationName | titlecase}}</td>
+          <td>{{investor.emailAddress | lowercase}}</td>
+          <td>{{investor.headOfficeLocation | titlecase}}</td>
           <td class="text-center">{{investor.matched??0}}</td>
           <td class="text-center">{{investor.connected??0}}</td>
           <td class="text-center">{{investor.declined??0}}</td>

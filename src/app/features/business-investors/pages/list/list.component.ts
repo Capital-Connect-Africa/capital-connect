@@ -21,11 +21,12 @@ export class ListComponent {
   investors$ = new Observable<MatchedInvestor[]>();
   usersCount:number =0;
   usersShowingCount =0;
+  userShowingCountEnd =0;
 
 
   investors: MatchedInvestor[] = [];
   cols: any[] = [
-    { field: 'organizationName', header: 'Name' },
+    { field: 'organizationName', header: 'Organization' },
     { field: 'emailAddress', header: 'Email' },
     { field: 'headOfficeLocation', header: 'Country' },
     { field: 'matched', header: 'Matched' },
@@ -63,19 +64,16 @@ export class ListComponent {
   }
 
   updateDisplayedData() {
+
     const data = this.table.filteredValue || this.investors;
     const start = this.table.first??10;
-    const end = start + (this.table.rows??10);
-    this.usersShowingCount = data.slice(start, end).length;
+    const end = Math.min(start + (this.table.rows ?? 10), data.length);
+    this.usersShowingCount = start + 1;
+    this.userShowingCountEnd = end;
   }
 
   viewInvestor(investorId:number){
     let investor = sessionStorage.getItem('profileId')
-
-    if(investor){
-      this._router.navigateByUrl(`/business-investors-investors/${investorId}`)
-    }else{
-      this._router.navigateByUrl(`/business-investors/${investorId}`)
-    }
+    this._router.navigateByUrl(`/business-investors/${investorId}`)
   }
 }

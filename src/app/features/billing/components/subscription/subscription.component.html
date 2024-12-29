@@ -13,15 +13,12 @@
                     <p>Thank you for choosing Capital Connect Africa</p>
                     <p class="font-light leading-7">The next screen will prompt you for payment. If you have a discount coupon please apply it before proceeding. If the code is applicable to the purchase you are making, a discount associated with the coupon will be applied.</p>
                 </div>
+
                 <div class="py-6 flex flex-col gap-2">
                     <label class="font-light text-sm">Do you have a promocode?</label>
                     <div class="flex gap-3 items-center coupon__wrapper">
                         <input [(ngModel)]="voucherCode" class="px-6 py-3 border inline-block uppercase placeholder:text-sm placeholder:normal-case text-xs rounded-lg" placeholder="Enter promocode" />
-                        <button (click)="redeemVoucher()" [disabled]="voucherCode.length <8" class="bg-black hover:bg-[#333] transition-all text-white px-6 py-3 w-max flex items-center gap-2 text-sm rounded-lg cursor-pointer" [ngClass]="{'bg-slate-500 hover:bg-slate-500': voucherCode.length <8}">
-                            Apply
-                        </button>
                     </div>
-                    <span class="font-light text-xs">Discount: {{discount | currency}}</span>
                 </div>
             </div>
         </div>
@@ -36,7 +33,6 @@
                     <span class="p-0 -mt-[6px] block text-lg leading-none">&#8594;</span>
                 </button>
             </div>
-            <p class="font-light text-xs">Pay: {{totalPayableAmount| currency}} </p>
         </div>
         
     </div>
