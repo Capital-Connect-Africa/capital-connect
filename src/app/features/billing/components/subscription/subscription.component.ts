@@ -92,7 +92,7 @@ export class SubscriptionComponent {
     if(this.retry) return this.retryPayment();
     const currentPlan =this.signalService.activePlan().toLowerCase();
     const upgrade =(this.plan.toLowerCase() !==currentPlan) && this.activePlan?.price >0;
-    this.subscribe$ =this._billingService.subscribe(this.selectedTier?.id as number, upgrade, this.voucherCode, this.discount).pipe(tap(res =>{
+    this.subscribe$ =this._billingService.subscribe(this.selectedTier?.id as number, upgrade, this.voucherCode).pipe(tap(res =>{
       this.subscription =res;
       this.signalService.userHasInitiatedPayment.set(true);
       this.redirectURL =this._sanitizer.bypassSecurityTrustResourceUrl(res.redirectUrl);

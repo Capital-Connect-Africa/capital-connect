@@ -84,4 +84,6 @@ export interface Company extends CompanyInput {
 
 export type CompanyDashBoardData  = 'ownerInfo' | 'companyInfo'  | 'submissionInfo'
 
+export type VoucherTabs ='voucherInfo' | 'voucherUsers' | 'voucherRules'
+
 export type InvestorDashboardData ='profile' | 'matched' | 'connected' | 'interested' | 'declined' | 'special-criteria'

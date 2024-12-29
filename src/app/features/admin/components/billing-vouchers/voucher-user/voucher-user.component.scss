@@ -1,0 +1,25 @@
+.card__item__details{
+    gap: 2rem;
+    display: flex;
+    padding-top: 1rem;
+    flex-direction: column;
+  
+    .card__item__detail {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid #ddd;
+      div {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        label {
+          font-weight: bold;
+        }
+    
+        p {
+          margin: 0.25rem 0;
+          color: #555;
+        }
+      }
+    }
+  }

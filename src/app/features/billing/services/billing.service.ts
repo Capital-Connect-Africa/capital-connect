@@ -53,9 +53,10 @@ export class BillingService {
         )
     }
 
-    subscribe(tierId: number, upgrade:boolean =false, voucherCode:string ='', discount:number =0){
+    subscribe(tierId: number, upgrade:boolean =false, voucherCode:string =''){
         const url =upgrade? 'upgrade' : 'subscribe';
-        return this.__http.create(`${BASE_URL}/subscriptions/${url}?voucherCode=${voucherCode}&discount=${discount}`, {subscriptionTierId: tierId}).pipe(map((res: any) =>{
+        const payload =voucherCode && voucherCode.length? {subscriptionTierId: tierId, voucherCode}: {subscriptionTierId: tierId}
+        return this.__http.create(`${BASE_URL}/subscriptions/${url}`, payload).pipe(map((res: any) =>{
             return res;
         })) as Observable<SubscriptionResponse>
     }
