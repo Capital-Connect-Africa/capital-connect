@@ -49,5 +49,6 @@ export interface Voucher extends VoucherBase{
     code: string,
     rules: Rule[];
     createdAt: Date;
+    updatedAt: Date;
     users: VoucherUser[]
 }
