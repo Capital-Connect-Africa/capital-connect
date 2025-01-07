@@ -7,10 +7,8 @@ export enum VoucherType{
 }
 
 export enum UserProperties{
-    referredBy,
     createdAt,
-    isEmailVerified,
-    hasAcceptedTerms,
+    referredBy,
     roles,
 }
 
@@ -52,3 +50,17 @@ export interface Voucher extends VoucherBase{
     updatedAt: Date;
     users: VoucherUser[]
 }
+
+export interface OperatorOption {
+    value: Operators;
+    label: string;
+}
+
+export interface VoucherFormRuleFields{
+    userPropertyName: string,
+    userPropertyValue: UserProperties,
+    operator: OperatorOption[],
+    valueType: 'text' | 'number' | 'select' | 'date',
+    options?: any
+}
+
