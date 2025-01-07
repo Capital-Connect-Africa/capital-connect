@@ -18,8 +18,8 @@
     
         <div class="card__item__detail">
           <div>
-            <label>Applicable by:</label>
-            <p>{{ voucher.expiresAt | date }}</p>
+            <label>Expires:</label>
+            <p>{{ voucher.expiresAt | time_ago }}</p>
           </div>
           
         </div>
@@ -41,39 +41,59 @@
 </div>
 
 <app-modal [(visible)]="visible" [title]="heading" [helperText]="helperText">
-  <!-- <form class="flex flex-col gap-4" [formGroup]="ruleForm" (ngSubmit)="saveRule()">
+  <form class="flex flex-col gap-4" [formGroup]="ruleForm" (ngSubmit)="saveRule()">
       <div class="input__wrapper">
-          <label class="input__label font-bold">Type</label>
+          <label class="input__label font-bold">Property</label>
           <p-dropdown
-                  [options]="[]"
-                  optionLabel="label"
-                  optionValue="value"
-                  class ="input__field"
-                  styleClass ="w-full gap-4"
-                  formControlName="type"
-                  placeholder="Select option" />
+                [options]="formFields"
+                optionLabel="userPropertyName"
+                optionValue="userPropertyValue"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="userPropery"
+                placeholder="Select Option" 
+                (onChange)="handleUserPropertyChange($event)"
+            />
       </div>
-      <div class="input__wrapper">
-          <label class="input__label font-bold">Maximum Usage</label>
-          <input formControlName="maxUses" class="input__field" type="number" min="1" placeholder="Maximum number of users who can redeem the voucher" />
+      <ng-container *ngIf="operators.length">
+        <div class="input__wrapper">
+          <label class="input__label font-bold">Operator</label>
+          <p-dropdown
+                [options]="operators"
+                optionLabel="label"
+                optionValue="value"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="operator"
+                placeholder="Select Option"
+                (onChange)="handleOperatorChange($event)"
+            />
       </div>
-      <div class="input__wrapper">
-          <label class="input__label font-bold">Percentage Discount</label>
-          <input formControlName="percentageDiscount" class="input__field" type="number" min="0" max="100" placeholder="Enter discount as a percentage"/>
-      </div>
-      <div class="input__wrapper">
-          <label class="input__label font-bold">Fixed Amount</label>
-          <input formControlName ="maxAmount" class="input__field" type="number" min="0" placeholder="Maximum discount to be applied"/>
-      </div>
-      <div class="input__wrapper">
-          <label class="input__label font-bold">Expiry Date</label>
-          <p-calendar [iconDisplay]="'input'" formControlName ="expiresAt" class ="input__field"
-          styleClass ="w-full gap-4" placeholder="Pick an expiry date"/>
-      </div>
+      <ng-container *ngIf="operator">
+          <div class="input__wrapper" >
+            <label class="input__label font-bold">Value</label>
+            <p-dropdown
+                [options]="options"
+                optionLabel="label"
+                optionValue="value"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="value"
+                placeholder="Select Option"
+                (onChange)="handleOperatorChange($event)"
+            />
+            
+            </div>
+            <div class="im">
+
+            </div>
+      </ng-container>
+      
+      </ng-container>
       <div class="input__wrapper">
           <div class="">
               <button [disabled]="!ruleForm.valid" type="submit" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700" [ngClass]="{'bg-gray-300 hover:bg-gray-300': !ruleForm.valid}">Create</button>
           </div>
       </div>
-  </form> -->
+  </form>
 </app-modal>
