@@ -60,12 +60,14 @@
             <ng-template pTemplate="header">
               <tr>
                 <th>
-                  <span style="display: flex; align-items: center;"> Operating Expenses
+                  <span style="display: flex; align-items: center;">
+                    Operating Expenses
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()">add</mat-icon>
                   </span>
                 </th>
                 <th *ngFor="let year of years">
-                  <span style="display: flex; align-items: center;"> {{ year }}
+                  <span style="display: flex; align-items: center;">
+                    {{ year }}
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)">edit</mat-icon>
                   </span>
                 </th>
@@ -73,14 +75,8 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT'
-                  || row.description === 'EBITDA' || row.description === 'Cost of Sales' }" style="width: 300px;">{{ row.description }}</td>
-                <!-- <td *ngFor="let year of years">{{ row[year] ? (row[year] | currency) : "-" :row[year]==='0' ? "-" }}</td> -->
-
-                  <td *ngFor="let year of years">
-                    {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
-                  </td>
-
+                <td style="width: 300px;">{{ row.description }}</td>
+                <td *ngFor="let year of years">{{ row[year] ? (row[year] | currency) : "-" }}</td>
               </tr>
             </ng-template>
           </p-table>

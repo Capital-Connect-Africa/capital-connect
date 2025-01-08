@@ -388,10 +388,6 @@ export class FinancialReporting {
     const opex_rows: any = {};
     const revenue_rows: any = {};
     const revenue_totals: any = {}; // To store the total revenues for each year
-    const taxes_row: any = { description: 'Taxes' };
-    const ebit_row: any = { description: 'EBIT' };
-    const ebitda_row: any = { description: 'EBITDA' };
-    const costOfSales_row: any = { description: 'Cost of Sales' };
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
@@ -414,12 +410,6 @@ export class FinancialReporting {
         }
         opex_rows[opex.description][year] = opex.value;
       });
-  
-      // Handle taxes, ebit, ebitda, and costOfSales
-      taxes_row[year] = entry.taxes || 0;
-      ebit_row[year] = entry.ebit || 0;
-      ebitda_row[year] = entry.ebitda || 0;
-      costOfSales_row[year] = entry.costOfSales || 0;
     });
   
     // Add total revenues row
@@ -428,9 +418,6 @@ export class FinancialReporting {
     // Convert rows object to array for PrimeNG table
     this.opexData = Object.values(opex_rows);
     this.revenueData = Object.values(revenue_rows);
-  
-    // Add additional rows to opexData
-    this.opexData.push(taxes_row, ebit_row, ebitda_row, costOfSales_row);
   }
   
 
