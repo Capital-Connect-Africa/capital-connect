@@ -147,7 +147,11 @@ export interface UpdateFinancialRecords {
   notes: string | null, 
   revenues: number[],
   opex: number[],
-  companyId: number
+  companyId: number,
+  ebit:number,
+  costOfSales:number,
+  taxes:number,
+  ebitda:number
 }
 
 export interface AddNotesToFinancialecords{
