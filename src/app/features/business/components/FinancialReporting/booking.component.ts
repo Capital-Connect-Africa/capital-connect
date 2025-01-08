@@ -453,6 +453,7 @@ export class FinancialReporting {
 
 
   handleYearClick(year: number) {
+    this.updateRecordsByYear(year)
     const foundRecord = this.financialInfoRecords.find(record => record.year === year);
     if (foundRecord) {
       this.showModalFuncFinancial(foundRecord, 'update_financial_info');
@@ -465,14 +466,10 @@ export class FinancialReporting {
   filteredRevenueRecords: RevenueRecords[] = [];
   filteredOpexRecords: OpexRecords[] = [];
 
-
-  logEnteredYear(year: number) {
-    console.log("The year entered is:", year);
-    console.log("The current opex records are ", this.opexRecords)
-    console.log("The current filtered opex records are ",this.filteredOpexRecords)
-    this.filteredOpexRecords = this.opexRecords.filter(record => record.year !== year);
-    this.filteredRevenueRecords = this.revenueRecords.filter(record => record.year !== year)
-
+  updateRecordsByYear(year: number) {   
+    this.filteredOpexRecords = this.opexRecords.filter(record => +record.year === +year);
+    this.filteredRevenueRecords = this.revenueRecords.filter(record => +record.year === +year);
   }
+  
 
 }
