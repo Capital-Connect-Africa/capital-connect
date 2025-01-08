@@ -86,14 +86,16 @@ export interface RESPONSE_NODE {
 export interface RevenueRecords {
   id: number,
   description: string,
-  value: number
+  value: number,
+  year:number
 }
 
 
 export interface OpexRecords {
   id: number,
   description: string,
-  value: number
+  value: number,
+  year:number
 }
 
 
