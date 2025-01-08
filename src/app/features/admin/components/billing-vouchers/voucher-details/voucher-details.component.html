@@ -1,0 +1,34 @@
+<div class="card__item__details">
+    <div class="card__item__detail">
+      <div>
+        <label>Code:</label>
+        <p>{{ voucher.code }}</p>
+      </div>
+      <div>
+          <label>Max Amount:</label>
+          <p>{{ voucher.maxAmount | currency: 'ksh. ' }}</p>
+      </div>
+      <div>
+        <label>Discount:</label>
+        <p>{{ voucher.percentageDiscount | number }}%</p>
+    </div>
+    </div>
+
+    <div class="card__item__detail">
+      <div>
+        <label>Applications:</label>
+        <p>{{ voucher.users.length }}</p>
+      </div>
+      <div>
+        <label>Created:</label>
+        <p>{{ voucher.createdAt | time_ago }}</p>
+      </div>
+          
+      <div>
+        <label>Expires:</label>
+        <p>{{ voucher.expiresAt | time_ago }}</p>
+      </div>
+      
+    </div>
+    
+  </div>

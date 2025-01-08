@@ -16,7 +16,7 @@ import { OrganizationSubmissionsInfoComponent } from "../../components/organizat
 @Component({
   selector: 'app-single-organization',
   standalone: true,
-  imports: [CommonModule, TabViewModule, SharedModule, AdminUiContainerComponent, OrganizationInfoContainerComponent, OrganizationInfoComponent, OrganizationOwnerInfoComponent, OrganizationSubmissionsInfoComponent],
+  imports: [CommonModule, TabViewModule, SharedModule, AdminUiContainerComponent, OrganizationInfoComponent, OrganizationOwnerInfoComponent, OrganizationSubmissionsInfoComponent],
   templateUrl: './single-organization.component.html',
   styleUrl: './single-organization.component.scss',
   animations: [

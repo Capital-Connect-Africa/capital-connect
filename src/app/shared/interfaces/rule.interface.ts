@@ -1,3 +1,5 @@
+import { UserProperties } from "./voucher.interface";
+
 export enum Operators{
     EQUAL_TO ='eq',
     LESS_THAN ='lt',
@@ -9,7 +11,7 @@ export enum Operators{
 }
 
 export interface RuleFormData{
-    userProperty: string;
+    userProperty: UserProperties;
     description: string;
     operator: Operators;
     value: string;
