@@ -305,12 +305,32 @@
 
 
 <!-- Existing modals above -->
-<app-modal [(visible)]="createFinancialModal" title="Financial Information"
-  helperText="Add New Financial Information Details">
+<app-modal [(visible)]="createFinancialModal" title="Financial Information"  helperText="Add New Financial Information Details">
   <div class="form_content__container">
     <div class="input__wrapper">
-      <label for="year" class="input__label">Select The Financial Year</label>
+      <label for="year" class="input__label">Financial Year</label>
       <input id="year" type="number" class="input__field" placeholder="2025" [(ngModel)]="newFinancialRecord.year" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input__label">Cost Of Sales</label>
+      <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
+    </div>
+
+
+    <div class="input__wrapper">
+      <label for="year" class="input__label">EDITDA</label>
+      <input id="ebitda" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebitda" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input__label">EBIT</label>
+      <input id="ebit" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebit" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input__label">TAXES</label>
+      <input id="taxes" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.taxes" />
     </div>
 
     <div class="input__wrapper">

@@ -374,7 +374,11 @@ export class FinancialReporting {
     companyId: this.companyId,
     year: 0,
     revenues: [],
-    opex: []
+    opex: [],
+    costOfSales:0,
+    ebitda:0,
+    ebit:0,
+    taxes:0
   };
 
 

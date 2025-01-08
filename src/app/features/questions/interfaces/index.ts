@@ -126,7 +126,11 @@ export interface FinancialInfoRecordsPayload{
   companyId: number,
   year: number,
   revenues: number[],
-  opex: number[]
+  opex: number[],
+  costOfSales:number,
+  ebitda:number,
+  ebit:number,
+  taxes:number
 }
 
 
