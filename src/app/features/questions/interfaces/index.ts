@@ -112,6 +112,10 @@ export interface FinancialInfoRecords {
   createdAt: string;
   updatedAt: string;
   status: string;
+  costOfSales: string,
+  ebitda: string,
+  ebit: string,
+  taxes: string,
   notes: string | null;
   revenues: RevenueRecords[];
   opex: OpexRecords[];
