@@ -85,6 +85,11 @@ export class FinancialReporting {
     this.financialForm = this._fb.group({
       revenues: [[]], // Empty array by default
       opex: [[]], // Empty array by default
+      costOfSales:[0],
+      ebit:[0],
+      ebitda:[0],
+      taxes:[0],
+      year:[0]
     });
 
 
@@ -273,12 +278,16 @@ export class FinancialReporting {
   update_financial_info = false;
 
   showModalFuncFinancial(record: any, action: string) {
-    console.log("The record posted is ", record)
     this.currentFinancialRecord = { ...record };
 
     this.patchFormData({
       revenues:this.currentFinancialRecord.revenues,
-      opex:this.currentFinancialRecord.opex
+      opex:this.currentFinancialRecord.opex,
+      year:this.currentFinancialRecord.year,
+      ebit:this.currentFinancialRecord.ebit,
+      ebitda:this.currentFinancialRecord.ebitda,
+      costOfSales:this.currentFinancialRecord.costOfSales,
+      taxes:this.currentFinancialRecord.costOfSales
     })
 
     this.view_financial_info = action === 'view_financial_info';
@@ -300,6 +309,11 @@ export class FinancialReporting {
     this.financialForm.patchValue({
       revenues: data.revenues.map((rec: { id: any; }) => rec.id),
       opex: data.opex.map((rec: { id: any; }) => rec.id),
+      costOfSales:data.costOfSales,
+      ebit:data.ebit,
+      ebitda:data.ebitda,
+      taxes:data.taxes,
+      year:data.year
     });
   }
 
@@ -447,7 +461,11 @@ export class FinancialReporting {
       notes: this.currentFinancialRecord.notes, // `null` if explicitly required
       revenues: this.financialForm.value.revenues,
       opex: this.financialForm.value.revenues,
-      companyId: this.companyId
+      companyId: this.companyId,
+      costOfSales:Number(this.financialForm.value.costOfSales),
+      ebit:Number(this.financialForm.value.ebit),
+      ebitda:Number(this.financialForm.value.ebitda),
+      taxes:Number(this.financialForm.value.taxes)
     };
 
 
@@ -458,11 +476,15 @@ export class FinancialReporting {
         this.showFinancialModal = false;
         this.transformData();
 
+        this.update_financial_info = true
+
       }))
     }))
   }
 
-
+  editReports(){
+    this.update_financial_info = false
+  }
 
 
   handleYearClick(year: number) {
