@@ -40,7 +40,7 @@ export class MainComponent {
   visible = true;
   private _toggleService = inject(NavbarToggleService);
   private _companyStateService =inject(CompanyStateService);
-  businessName =this._companyStateService.currentCompany.name;
+  businessName  = this._companyStateService.currentCompany.name;
   private _scoringService =inject(BusinessOnboardingScoringService);
   progress$ =new Observable<any>();
   toggleVisibility() {

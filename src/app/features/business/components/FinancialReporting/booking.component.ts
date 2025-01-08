@@ -119,33 +119,14 @@ export class FinancialReporting {
   }
 
 
-  revenueRecords: RevenueRecords[] = [
-    { id: 1, description: 'Product Sales', value: 150000 },
-    { id: 2, description: 'Service Revenue', value: 85000 },
-  ];
+  revenueRecords: RevenueRecords[] = [];
 
-  opexRecords: OpexRecords[] = [
-    { id: 1, description: 'Office Supplies', value: 12000 },
-    { id: 2, description: 'Salaries', value: 60000 },
-  ];
+  opexRecords: OpexRecords[] = [];
 
-  financialInfoRecords: FinancialInfoRecords[] = [
-    {
-      id: 1,
-      year: 2024,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      status: 'Approved',
-      notes: 'Quarterly report finalized',
-      revenues: [],
-      opex: [],
-      company: { id: 1 },
-      user: { username: 'finance_admin' }
-    }
-  ];
+  financialInfoRecords: FinancialInfoRecords[] = [];
 
-  newRevenue: RevenueRecords = { id: 0, description: '', value: 0 };
-  newOpex: OpexRecords = { id: 0, description: '', value: 0 };
+  newRevenue: RevenueRecords = { id: 0, description: '', value: 0,year:0 };
+  newOpex: OpexRecords = { id: 0, description: '', value: 0 ,year:0};
 
   selectedRevenue: RevenueRecords | null = null;
   selectedOpex: OpexRecords | null = null;
@@ -153,7 +134,7 @@ export class FinancialReporting {
   addRevenue() {
     const newId = this.revenueRecords.length + 1;
     this.revenueRecords.push({ ...this.newRevenue, id: newId });
-    this.newRevenue = { id: 0, description: '', value: 0 };
+    this.newRevenue = { id: 0, description: '', value: 0 ,year:0};
   }
 
   updateRevenue() {
@@ -167,7 +148,7 @@ export class FinancialReporting {
   addOpex() {
     const newId = this.opexRecords.length + 1;
     this.opexRecords.push({ ...this.newOpex, id: newId });
-    this.newOpex = { id: 0, description: '', value: 0 };
+    this.newOpex = { id: 0, description: '', value: 0 ,year:0};
   }
 
   updateOpex() {
@@ -300,12 +281,6 @@ export class FinancialReporting {
       opex:this.currentFinancialRecord.opex
     })
 
-
-    // this.financialInfoRecord$ = this._fr.getFinancialRecord(record.id).pipe(tap(res => [
-    //   this.currentFinancialRecord = res
-      
-    // ]))
-
     this.view_financial_info = action === 'view_financial_info';
     this.update_financial_info = action === 'update_financial_info';
     this.title =
@@ -403,46 +378,6 @@ export class FinancialReporting {
 
   years: number[] = [];
 
-  // transformData() {
-  //   // Collect all years and sort them in ascending order
-  //   this.years = Array.from(
-  //     new Set(this.financialInfoRecords.map((item) => item.year))
-  //   ).sort((a, b) => b - a); // Sort numerically in ascending order
-  
-  //   // Prepare rows with descriptions and values
-  //   const opex_rows: any = {};
-  //   const revenue_rows: any = {};
-
-  
-  //   this.financialInfoRecords.forEach((entry) => {
-  //     const year = entry.year;
-  
-  //     // Handle revenues
-  //     entry.revenues.forEach((rev: any) => {
-  //       if (!revenue_rows[rev.description]) {
-  //         revenue_rows[rev.description] = { description: rev.description };
-  //       }
-  //       revenue_rows[rev.description][year] = rev.value;
-  //     });
-  
-  //     // Handle opex
-  //     entry.opex.forEach((opex: any) => {
-  //       if (!opex_rows[opex.description]) {
-  //         opex_rows[opex.description] = { description: opex.description };
-  //       }
-  //       opex_rows[opex.description][year] = opex.value;
-  //     });
-  //   });
-  
-  //   // Convert rows object to array for PrimeNG table
-  //   this.opexData = Object.values(opex_rows);
-  //   this.revenueData = Object.values(revenue_rows);
-
-  // }
-  
-
-
-
   transformData() {
     // Collect all years and sort them in descending order
     this.years = Array.from(
@@ -492,7 +427,6 @@ export class FinancialReporting {
 
 
   saveUpdatesFinancial() {
-    console.log("The current financial record is", this.currentFinancialRecord)
     const extractedObject: UpdateFinancialRecords = {
       id: this.currentFinancialRecord.id,
       year: this.currentFinancialRecord.year, // Override year as per requirement
@@ -528,10 +462,17 @@ export class FinancialReporting {
   }
 
 
-  // updateReversedData() {
-  //   this.reversedTableData = [...this.tableData].reverse();
-  // }
+  filteredRevenueRecords: RevenueRecords[] = [];
+  filteredOpexRecords: OpexRecords[] = [];
 
 
-  
+  logEnteredYear(year: number) {
+    console.log("The year entered is:", year);
+    console.log("The current opex records are ", this.opexRecords)
+    console.log("The current filtered opex records are ",this.filteredOpexRecords)
+    this.filteredOpexRecords = this.opexRecords.filter(record => record.year !== year);
+    this.filteredRevenueRecords = this.revenueRecords.filter(record => record.year !== year)
+
+  }
+
 }
