@@ -7,9 +7,9 @@ export enum VoucherType{
 }
 
 export enum UserProperties{
-    createdAt,
-    referredBy,
-    roles,
+    CREATED_AT ='createdAt',
+    REFERRED_BY ='referredBy',
+    ROLES ='roles',
 }
 
 export enum Operators{
