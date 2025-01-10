@@ -307,8 +307,14 @@ export class FinancialReporting {
   patchFormData(data: any): void {
     // Patch values into the form
     this.financialForm.patchValue({
-      revenues: data.revenues.map((rec: { id: any; }) => rec.id),
-      opex: data.opex.map((rec: { id: any; }) => rec.id),
+      revenues: data.revenues.map((rec: { id: any; }) => rec.id) || [],
+      // opex: data.opex.map((rec: { id: any; }) => rec.id) || []
+
+
+      opex: data.opex.map((rec: { id: any; description: string }) => {
+        return { id: rec.id, description: rec.description }; // Ensure the full object is passed
+      }) || [],
+
       costOfSales:data.costOfSales,
       ebit:data.ebit,
       ebitda:data.ebitda,
@@ -444,7 +450,8 @@ export class FinancialReporting {
     this.revenueData = Object.values(revenue_rows);
   
     // Add additional rows to opexData
-    this.opexData.push(taxes_row, ebit_row, ebitda_row, costOfSales_row);
+    this.revenueData.push(costOfSales_row)
+    this.opexData.push(ebitda_row,ebit_row,taxes_row);
   }
   
 
@@ -460,7 +467,7 @@ export class FinancialReporting {
       status: this.currentFinancialRecord.status,
       notes: this.currentFinancialRecord.notes, // `null` if explicitly required
       revenues: this.financialForm.value.revenues,
-      opex: this.financialForm.value.revenues,
+      opex: this.financialForm.value.opex,
       companyId: this.companyId,
       costOfSales:Number(this.financialForm.value.costOfSales),
       ebit:Number(this.financialForm.value.ebit),

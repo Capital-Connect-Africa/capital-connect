@@ -427,7 +427,7 @@ p-table td {
 
 .financial-info-card {
   background-color: #f9f9f9; /* Subtle background for contrast */
-  padding: 1.5rem;
+  // padding: 1.5rem;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: 'Roboto', sans-serif;
@@ -452,6 +452,7 @@ p-table td {
       font-weight: 600;
       font-size: 1rem;
       color: #444;
+      margin-top: 0.5rem;
       margin-bottom: 0.5rem;
     }
 
@@ -531,7 +532,6 @@ p-table td {
     margin-top: 1.5rem;
 
     .status {
-      margin-top: 2cm;
       font-weight: 600;
       margin-bottom: 0.5rem;
     }
