@@ -229,16 +229,16 @@
     <div class="input__wrapper">
       <label for="revenues" class="input-label">Revenue</label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
-        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
+        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
     </div>
 
     <div class="input__wrapper">
       <label for="opex" class="input-label">Opex Records</label>
-      <p>Opexes : {{currentFinancialRecord?.opex | json}}</p>
-      <p>Filterd Opexes : {{filteredOpexRecords | json}}</p>
+      <!-- <p>Opexes : {{currentFinancialRecord?.opex | json}}</p>
+      <p>Filterd Opexes : {{filteredOpexRecords | json}}</p> -->
       <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id" formControlName="opex" [options]="filteredOpexRecords"
-         placeholder="Select Opex Records"  optionLabel="description">
+         placeholder="Select Operating Expenses"  optionLabel="description">
       </p-multiSelect>
     </div>
   
@@ -330,7 +330,7 @@
     <div class="input__wrapper">
       <label for="notes" class="input__label">Revenues</label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.revenues"
-        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue">
+        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
     </div>
 
@@ -338,7 +338,7 @@
     <div class="input__wrapper">
       <label for="notes" class="input__label">Opex Records</label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.opex"
-        [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Opex Records">
+        [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Operating Expenses">
       </p-multiSelect>
     </div>
 
