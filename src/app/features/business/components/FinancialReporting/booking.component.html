@@ -220,41 +220,41 @@
   <form *ngIf="!update_financial_info"  [formGroup]="financialForm" class="financial-info-card">
 
     <div class="input__wrapper">
-      <label for="notes" class="input__label">Revenue</label>
+      <label for="notes" class="input-label">Revenue</label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
         [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
       </p-multiSelect>
     </div>
 
     <div class="input__wrapper">
-      <label for="notes" class="input__label">Opex Records</label>
+      <label for="notes" class="input-label">Opex Records</label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="opex" [options]="filteredOpexRecords"
         optionLabel="description" optionValue="id" placeholder="Select Opex Records">
       </p-multiSelect>
     </div>
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">Financial Year</label>
+      <label for="year" class="input-label">Financial Year</label>
       <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"  readonly />
     </div>
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">Cost Of Sales</label>
+      <label for="year" class="input-label">Cost Of Sales</label>
       <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
     </div>
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">Taxes</label>
+      <label for="year" class="input-label">Taxes</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
     </div>
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">EDITDA</label>
+      <label for="year" class="input-label">EDITDA</label>
       <input id="ebitda" type="number" class="input__field" placeholder="0" formControlName="ebitda" />
     </div>
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">EBIT</label>
+      <label for="year" class="input-label">EBIT</label>
       <input id="ebit" type="number" class="input__field" placeholder="0" formControlName="ebit" />
     </div>
 
