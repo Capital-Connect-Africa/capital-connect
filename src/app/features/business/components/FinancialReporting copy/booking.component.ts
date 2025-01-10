@@ -85,6 +85,11 @@ export class FinancialReporting {
     this.financialForm = this._fb.group({
       revenues: [[]], // Empty array by default
       opex: [[]], // Empty array by default
+      costOfSales:[0],
+      ebit:[0],
+      ebitda:[0],
+      taxes:[0],
+      year:[0]
     });
 
 
@@ -273,12 +278,16 @@ export class FinancialReporting {
   update_financial_info = false;
 
   showModalFuncFinancial(record: any, action: string) {
-    console.log("The record posted is ", record)
     this.currentFinancialRecord = { ...record };
 
     this.patchFormData({
       revenues:this.currentFinancialRecord.revenues,
-      opex:this.currentFinancialRecord.opex
+      opex:this.currentFinancialRecord.opex,
+      year:this.currentFinancialRecord.year,
+      ebit:this.currentFinancialRecord.ebit,
+      ebitda:this.currentFinancialRecord.ebitda,
+      costOfSales:this.currentFinancialRecord.costOfSales,
+      taxes:this.currentFinancialRecord.costOfSales
     })
 
     this.view_financial_info = action === 'view_financial_info';
@@ -300,6 +309,11 @@ export class FinancialReporting {
     this.financialForm.patchValue({
       revenues: data.revenues.map((rec: { id: any; }) => rec.id),
       opex: data.opex.map((rec: { id: any; }) => rec.id),
+      costOfSales:data.costOfSales,
+      ebit:data.ebit,
+      ebitda:data.ebitda,
+      taxes:data.taxes,
+      year:data.year
     });
   }
 
@@ -388,6 +402,10 @@ export class FinancialReporting {
     const opex_rows: any = {};
     const revenue_rows: any = {};
     const revenue_totals: any = {}; // To store the total revenues for each year
+    const taxes_row: any = { description: 'Taxes' };
+    const ebit_row: any = { description: 'EBIT' };
+    const ebitda_row: any = { description: 'EBITDA' };
+    const costOfSales_row: any = { description: 'Cost of Sales' };
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
@@ -410,6 +428,12 @@ export class FinancialReporting {
         }
         opex_rows[opex.description][year] = opex.value;
       });
+  
+      // Handle taxes, ebit, ebitda, and costOfSales
+      taxes_row[year] = entry.taxes || 0;
+      ebit_row[year] = entry.ebit || 0;
+      ebitda_row[year] = entry.ebitda || 0;
+      costOfSales_row[year] = entry.costOfSales || 0;
     });
   
     // Add total revenues row
@@ -418,6 +442,9 @@ export class FinancialReporting {
     // Convert rows object to array for PrimeNG table
     this.opexData = Object.values(opex_rows);
     this.revenueData = Object.values(revenue_rows);
+  
+    // Add additional rows to opexData
+    this.opexData.push(taxes_row, ebit_row, ebitda_row, costOfSales_row);
   }
   
 
@@ -434,7 +461,11 @@ export class FinancialReporting {
       notes: this.currentFinancialRecord.notes, // `null` if explicitly required
       revenues: this.financialForm.value.revenues,
       opex: this.financialForm.value.revenues,
-      companyId: this.companyId
+      companyId: this.companyId,
+      costOfSales:Number(this.financialForm.value.costOfSales),
+      ebit:Number(this.financialForm.value.ebit),
+      ebitda:Number(this.financialForm.value.ebitda),
+      taxes:Number(this.financialForm.value.taxes)
     };
 
 
@@ -445,11 +476,15 @@ export class FinancialReporting {
         this.showFinancialModal = false;
         this.transformData();
 
+        this.update_financial_info = true
+
       }))
     }))
   }
 
-
+  editReports(){
+    this.update_financial_info = false
+  }
 
 
   handleYearClick(year: number) {
@@ -468,6 +503,8 @@ export class FinancialReporting {
 
   updateRecordsByYear(year: number) {   
     this.filteredOpexRecords = this.opexRecords.filter(record => +record.year === +year);
+    console.log("The current opex records are", this.opexRecords)
+    console.log("The filtered opex records are ", this.filteredOpexRecords)
     this.filteredRevenueRecords = this.revenueRecords.filter(record => +record.year === +year);
   }
   
