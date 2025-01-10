@@ -503,6 +503,8 @@ export class FinancialReporting {
 
   updateRecordsByYear(year: number) {   
     this.filteredOpexRecords = this.opexRecords.filter(record => +record.year === +year);
+    console.log("The current opex records are", this.opexRecords)
+    console.log("The filtered opex records are ", this.filteredOpexRecords)
     this.filteredRevenueRecords = this.revenueRecords.filter(record => +record.year === +year);
   }
   
