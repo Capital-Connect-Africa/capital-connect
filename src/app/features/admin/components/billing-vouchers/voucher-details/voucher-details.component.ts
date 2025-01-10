@@ -1,10 +1,7 @@
-import { Component, inject, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { tap } from 'rxjs';
-import { Voucher } from '../../../../../shared/interfaces/voucher.interface';
-import { BillingVoucherService } from '../../../services/billing-voucher.service';
 import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
 import { TimeAgoPipe } from "../../../../../core/pipes/time-ago.pipe";
+import { Voucher } from '../../../../../shared/interfaces/voucher.interface';
 
 @Component({
   selector: 'app-voucher-details',

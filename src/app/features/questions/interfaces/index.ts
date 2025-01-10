@@ -86,14 +86,16 @@ export interface RESPONSE_NODE {
 export interface RevenueRecords {
   id: number,
   description: string,
-  value: number
+  value: number,
+  year:number
 }
 
 
 export interface OpexRecords {
   id: number,
   description: string,
-  value: number
+  value: number,
+  year:number
 }
 
 
@@ -110,6 +112,10 @@ export interface FinancialInfoRecords {
   createdAt: string;
   updatedAt: string;
   status: string;
+  costOfSales: string,
+  ebitda: string,
+  ebit: string,
+  taxes: string,
   notes: string | null;
   revenues: RevenueRecords[];
   opex: OpexRecords[];
@@ -141,7 +147,11 @@ export interface UpdateFinancialRecords {
   notes: string | null, 
   revenues: number[],
   opex: number[],
-  companyId: number
+  companyId: number,
+  ebit:number,
+  costOfSales:number,
+  taxes:number,
+  ebitda:number
 }
 
 export interface AddNotesToFinancialecords{

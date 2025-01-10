@@ -156,15 +156,13 @@
 
 
 
+<!-- Existing modals above -->
 <app-modal [(visible)]="showFinancialModal" [title]="title" [helperText]="helperText">
-  <div *ngIf="update_financial_info" class="financial-info-card">
-    <div class="card-header">
-      <p><strong>Financial Information</strong></p>
-      <p class="edit-link" (click)="editReports()">Edit</p>
-    </div>
+  <p *ngIf="update_financial_info"><strong class="edit_financials" (click)="editReports()">Edit</strong></p>
 
+  <div  *ngIf="update_financial_info" class="card financial-info-card">
     <div class="content">
-      <p><strong>Financial Year:</strong> {{ currentFinancialRecord.year }}</p>
+      <p><strong>Financial Year:</strong> {{ currentFinancialRecord.year }}</p>    
       <p><strong>Taxes:</strong> {{ currentFinancialRecord.taxes | currency }}</p>
       <p><strong>Cost Of Sales:</strong> {{ currentFinancialRecord.costOfSales | currency }}</p>
       <p><strong>EBIT:</strong> {{ currentFinancialRecord.ebit | currency }}</p>
@@ -176,20 +174,22 @@
       <p-table [value]="currentFinancialRecord.revenues" [responsiveLayout]="'scroll'">
         <ng-template pTemplate="header">
           <tr>
-            <th>Description</th>
-            <th>Value</th>
+            <th style="width: 300px;">Description</th>
+            <th style="width: 300px;">Value</th>
             <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
           <tr>
-            <td>{{ item.description }}</td>
-            <td>{{ item.value | currency }}</td>
-            <td><mat-icon class="small-icon" (click)="showModalFunc(item, 'update_revenue_records')">edit</mat-icon></td>
+            <td style="width: 300px;">{{ item.description }}</td>
+            <td style="width: 300px;">{{ item.value | currency }}</td>
+            <td><mat-icon class="small-icon" (click)="showModalFunc(item,'update_revenue_records')">edit</mat-icon></td>
           </tr>
         </ng-template>
       </p-table>
-      <p *ngIf="currentFinancialRecord.revenues.length < 1" class="empty-state">No Revenues Found</p>
+      <div *ngIf="currentFinancialRecord.revenues.length < 1">
+        <p>No Revenues Found</p>
+      </div>
     </div>
 
     <div class="financial-section">
@@ -197,73 +197,80 @@
       <p-table [value]="currentFinancialRecord.opex" [responsiveLayout]="'scroll'">
         <ng-template pTemplate="header">
           <tr>
-            <th>Description</th>
-            <th>Value</th>
+            <th style="width: 300px;">Description</th>
+            <th style="width: 300px;">Value</th>
             <th>Actions</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-item>
           <tr>
-            <td>{{ item.description }}</td>
-            <td>{{ item.value | currency }}</td>
-            <td><mat-icon class="small-icon" (click)="showModalFunc(item, 'update_opex_records')">edit</mat-icon></td>
+            <td style="width: 300px;">{{ item.description }}</td>
+            <td style="width: 300px;">{{ item.value | currency }}</td>
+            <td><mat-icon class="small-icon" (click)="showModalFunc(item,'update_opex_records')">edit</mat-icon></td>
+
           </tr>
         </ng-template>
       </p-table>
-      <p *ngIf="currentFinancialRecord.opex.length < 1" class="empty-state">No Operating Expenses Found</p>
+      
+      <div *ngIf="currentFinancialRecord.opex.length < 1">
+        <p>No Operating Expenses Found</p>
+      </div>
     </div>
 
     <p><strong>Approval Status:</strong> <span class="status">{{ currentFinancialRecord.status }}</span></p>
     <p><strong>Notes:</strong> {{ currentFinancialRecord.notes }}</p>
   </div>
 
-  <form *ngIf="!update_financial_info"  [formGroup]="financialForm" class="financial-info-card">
 
-    <div class="input__wrapper">
-      <label for="notes" class="input__label">Revenue</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
-        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
-      </p-multiSelect>
-    </div>
 
-    <div class="input__wrapper">
-      <label for="notes" class="input__label">Opex Records</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="opex" [options]="filteredOpexRecords"
-        optionLabel="description" optionValue="id" placeholder="Select Opex Records">
-      </p-multiSelect>
-    </div>
 
-    <div class="input__wrapper">
-      <label for="year" class="input__label">Financial Year</label>
-      <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"  readonly />
-    </div>
+    <form *ngIf="!update_financial_info"  [formGroup]="financialForm" class="financial-info-card">
 
-    <div class="input__wrapper">
-      <label for="year" class="input__label">Cost Of Sales</label>
-      <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
-    </div>
+      <div class="input__wrapper">
+        <label for="notes" class="input__label">Revenue</label>
+        <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
+          [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue Records">
+        </p-multiSelect>
+      </div>
 
-    <div class="input__wrapper">
-      <label for="year" class="input__label">Taxes</label>
-      <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
-    </div>
+      <div class="input__wrapper">
+        <label for="notes" class="input__label">Opex Records</label>
+        <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="opex" [options]="filteredOpexRecords"
+          optionLabel="description" optionValue="id" placeholder="Select Opex Records">
+        </p-multiSelect>
+      </div>
 
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EDITDA</label>
-      <input id="ebitda" type="number" class="input__field" placeholder="0" formControlName="ebitda" />
-    </div>
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Financial Year</label>
+        <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"  readonly />
+      </div>
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Cost Of Sales</label>
+        <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
+      </div>
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Taxes</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
+      </div>
 
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EBIT</label>
-      <input id="ebit" type="number" class="input__field" placeholder="0" formControlName="ebit" />
-    </div>
+      <div class="input__wrapper">
+        <label for="year" class="input__label">EDITDA</label>
+        <input id="ebitda" type="number" class="input__field" placeholder="0" formControlName="ebitda" />
+      </div>
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">EBIT</label>
+        <input id="ebit" type="number" class="input__field" placeholder="0" formControlName="ebit" />
+      </div>
 
-    <div class="cta__group">
-      <button class="btn btn-primary mt-2 btn-sm" (click)="saveUpdatesFinancial()">Save</button>
-    </div>    
-  </form>
+      <div class="cta__group">
+        <button class="btn btn-primary mt-2 btn-sm" (click)="saveUpdatesFinancial()">Save</button>
+      </div>    
+    </form>
+  
 </app-modal>
-
 
 
 
@@ -323,21 +330,6 @@
     </div>
 
     <div class="input__wrapper">
-      <label for="notes" class="input__label">Revenues</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.revenues"
-        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue">
-      </p-multiSelect>
-    </div>
-
-
-    <div class="input__wrapper">
-      <label for="notes" class="input__label">Opex Records</label>
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.opex"
-        [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Opex Records">
-      </p-multiSelect>
-    </div>
-
-    <div class="input__wrapper">
       <label for="year" class="input__label">Cost Of Sales</label>
       <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
     </div>
@@ -356,6 +348,21 @@
     <div class="input__wrapper">
       <label for="year" class="input__label">TAXES</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.taxes" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="notes" class="input__label">Revenue</label>
+      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.revenues"
+        [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenue">
+      </p-multiSelect>
+    </div>
+
+
+    <div class="input__wrapper">
+      <label for="notes" class="input__label">Opex Records</label>
+      <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.opex"
+        [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Opex Records">
+      </p-multiSelect>
     </div>
 
     <div class="cta__group">

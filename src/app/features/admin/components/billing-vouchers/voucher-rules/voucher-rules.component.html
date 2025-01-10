@@ -1,5 +1,5 @@
-
-<div  class="pt-4 flex flex-col gap-8">
+<ng-container *ngIf="createRule$ | async"></ng-container>
+<div class="pt-4 flex flex-col gap-8">
     <div class="card__item__details">
         <div class="card__item__detail">
           <div>
@@ -18,8 +18,8 @@
     
         <div class="card__item__detail">
           <div>
-            <label>Applicable by:</label>
-            <p>{{ voucher.expiresAt | date }}</p>
+            <label>Expires:</label>
+            <p>{{ voucher.expiresAt | time_ago }}</p>
           </div>
           
         </div>
@@ -27,7 +27,7 @@
       </div>
     <div class="flex justify-between items-center">
         <h3 class="capitalize h3" *ngIf="voucherRules.length">Custom Constraints</h3>
-        <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer">Add a custom constraint</button>
+        <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer" (click)="showModal()">Add a custom constraint</button>
     </div>
     <ng-container *ngIf="voucherRules.length">
         <ul class="card__item__details" *ngFor="let rule of voucher.rules">
@@ -37,8 +37,64 @@
         </ul>
     </ng-container>
     
-    
-    <!-- <div *ngIf="!voucherRules.length">
-        <p class="font-light">No custom constraints have been set for this voucher</p>
-    </div> -->
+  
 </div>
+
+<app-modal [(visible)]="visible" [title]="heading" [helperText]="helperText">
+  <form class="flex flex-col gap-4" [formGroup]="ruleForm" (ngSubmit)="saveRule()">
+      <div class="input__wrapper">
+          <label class="input__label font-bold">Property</label>
+          <p-dropdown
+                [options]="formFields"
+                optionLabel="userPropertyName"
+                optionValue="userPropertyValue"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="userProperty"
+                placeholder="Select Option" 
+                (onChange)="handleUserPropertyChange($event)"
+            />
+      </div>
+      <ng-container *ngIf="ruleForm.get('userProperty')?.value">
+        <div class="input__wrapper">
+          <label class="input__label font-bold">Operator</label>
+          <p-dropdown
+                [options]="operators"
+                optionLabel="label"
+                optionValue="value"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="operator"
+                placeholder="Select Option"
+                (onChange)="handleOperatorChange($event)"
+            />
+      </div>
+      <ng-container *ngIf="ruleForm.get('operator')?.value">
+          <div class="input__wrapper" >
+            <label class="input__label font-bold">Value</label>
+            <p-dropdown
+                [options]="options"
+                optionLabel="label"
+                optionValue="value"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                formControlName="value"
+                placeholder="Select Option"
+                (onChange)="handleOperatorChange($event)"
+            />
+            
+            </div>
+            <div class="input__wrapper" *ngIf="ruleForm.get('value')?.value">
+              <label class="input__label font-bold">Description</label>
+              <textarea formControlName ="description" placeholder="Add a brief description" class="block border border-[#333] resize-none w-full" [rows]="3"></textarea>
+            </div>
+          </ng-container>
+          
+        </ng-container>
+      <div class="input__wrapper">
+          <div class="">
+              <button [disabled]="!ruleForm.valid" type="submit" class="capitalize font-light text-sm text-white bg-[#13501B] new__voucher__cta transition-all hover:bg-green-700" [ngClass]="{'bg-gray-300 hover:bg-gray-300': !ruleForm.valid}">Create</button>
+          </div>
+      </div>
+  </form>
+</app-modal>
