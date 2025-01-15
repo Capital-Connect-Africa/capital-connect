@@ -227,14 +227,29 @@
     </div>
 
     <div class="input__wrapper">
-      <label for="revenues" class="input-label">Revenue</label>
+      <!-- <label for="revenues" class="input-label">Revenue  <span><small>add</small></span></label> -->
+
+      <label for="revenues" class="input-label flex justify-between items-center">
+        <span>Revenues</span> 
+        <span >Revenue not found?
+          <small class="text-blue-500 text-sm cursor-pointer" (click)="addRevenueRecord()">Add New</small>
+        </span>
+      </label>
+
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
         [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
     </div>
+    
 
     <div class="input__wrapper">
-      <label for="opex" class="input-label">Opex Records</label> 
+      <!-- <label for="opex" class="input-label">Opex Records</label>  -->
+      <label for="revenues" class="input-label flex justify-between items-center">
+        <span>Operating Expenses</span> 
+        <span >Opex not found?
+          <small class="text-blue-500 text-sm cursor-pointer" (click)="addOpexRecord()">Add New</small>
+        </span>
+      </label>
       <p-multiSelect class="input__field" styleClass="w-full gap-4"  formControlName="opex"
         [options]="filteredOpexRecords" optionLabel="description"  optionValue="id"  placeholder="Select Operating Expenses"  >
       </p-multiSelect>
