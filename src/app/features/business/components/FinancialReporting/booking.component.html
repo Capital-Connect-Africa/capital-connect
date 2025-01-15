@@ -221,6 +221,11 @@
   </div>
 
   <form *ngIf="!update_financial_info"  [formGroup]="financialForm" class="financial-info-card">
+    <div class="card-header">
+      <p><strong>Financial Information</strong></p>
+      <p class="edit-link" (click)="unEditReports()">Back</p>
+    </div>
+
     <div class="input__wrapper">
       <label for="year" class="input-label">Financial Year</label>
       <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"  readonly />
@@ -341,7 +346,15 @@
     </div>
 
     <div class="input__wrapper">
-      <label for="notes" class="input__label">Revenues</label>
+      <!-- <label for="notes" class="input__label">Revenues</label> -->
+      <label for="revenues" class="input-label flex justify-between items-center">
+        <span>Revenues</span> 
+        <span >Revenue not found?
+          <small class="text-blue-500 text-sm cursor-pointer" (click)="addRevenueRecord()">Add New</small>
+        </span>
+      </label>
+
+
       <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.revenues"
         [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
@@ -349,7 +362,14 @@
 
 
     <div class="input__wrapper">
-      <label for="notes" class="input__label">Opex Records</label>
+      <!-- <label for="notes" class="input__label">Opex Records</label> -->
+      <label for="revenues" class="input-label flex justify-between items-center">
+        <span>Operating Expenses</span> 
+        <span >Opex not found?
+          <small class="text-blue-500 text-sm cursor-pointer" (click)="addOpexRecord()">Add New</small>
+        </span>
+      </label>
+
       <p-multiSelect class="input__field" styleClass="w-full gap-4" [(ngModel)]="newFinancialRecord.opex"
         [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Operating Expenses">
       </p-multiSelect>

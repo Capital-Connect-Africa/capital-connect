@@ -409,12 +409,13 @@ p-table td {
 .input__wrapper label {
   font-weight: bold;
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-top: 5px;
+
 }
 
 .input__wrapper .input__field {
   font-size: 14px;
-  padding: 8px;
+  // padding: 8px;
   border: 1px solid #ddd; /* Subtle border for inputs */
   border-radius: 4px;
 }
