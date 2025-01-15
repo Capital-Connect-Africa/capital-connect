@@ -288,7 +288,7 @@ export class FinancialReporting {
       ebitda:this.currentFinancialRecord.ebitda,
       costOfSales:this.currentFinancialRecord.costOfSales,
       taxes:this.currentFinancialRecord.costOfSales
-    })
+    }, this.currentFinancialRecord.year)
 
     this.view_financial_info = action === 'view_financial_info';
     this.update_financial_info = action === 'update_financial_info';
@@ -304,24 +304,20 @@ export class FinancialReporting {
   }
 
 
-  patchFormData(data: any): void {
-    // Patch values into the form
+  patchFormData(data: any, year: number): void {
+    const filteredRevenues = data.revenues.filter((rec: { year: number }) => rec.year === year);
+    const filteredOpex = data.opex.filter((rec: { year: number }) => rec.year === year);
     this.financialForm.patchValue({
-      revenues: data.revenues.map((rec: { id: any; }) => rec.id) || [],
-      // opex: data.opex.map((rec: { id: any; }) => rec.id) || []
-
-
-      opex: data.opex.map((rec: { id: any; description: string }) => {
-        return { id: rec.id, description: rec.description }; // Ensure the full object is passed
-      }) || [],
-
-      costOfSales:data.costOfSales,
-      ebit:data.ebit,
-      ebitda:data.ebitda,
-      taxes:data.taxes,
-      year:data.year
+      revenues: filteredRevenues.map((rec: { id: any }) => rec.id) || [],
+      opex: filteredOpex.map((rec: { id: any }) => rec.id) || [],
+      costOfSales: data.costOfSales,
+      ebit: data.ebit,
+      ebitda: data.ebitda,
+      taxes: data.taxes,
+      year: data.year
     });
   }
+  
 
 
   newOpexRecord: OpexRecordsPayload = { description: "", value: 0 ,year:0, companyId:this.companyId};

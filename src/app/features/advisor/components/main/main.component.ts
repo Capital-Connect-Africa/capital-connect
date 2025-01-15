@@ -3,21 +3,16 @@ import { SharedModule } from '../../../../shared';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AdvisorUiContainerComponent } from "../admin-ui-container/advisor-ui-container.component";
-import { UserStatisticsService } from '../../services/user.statistics.service';
 import { Observable, tap } from 'rxjs';
-import { Stats } from '../../interfaces/stats.interface';
 import { PieChartComponent } from "../../../../shared/components/charts/pie-chart/pie-chart.component";
 import { TableModule } from 'primeng/table';
-import { User } from '../../../users/models';
-import { UsersHttpService } from '../../../users/services/users-http.service';
 import { UserRoleFormatPipe } from '../../../../core/pipes/user-role-format.pipe';
-import { Booking, Payment, Plan } from '../../../../shared/interfaces/Billing';
+import { Booking, Payment} from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from '../../../../core/pipes/time-ago.pipe';
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
-import { PaymentsService } from '../../services/payments.service';
 import { BookingsService } from '../../services/booking.service';
-import { SubscriptionsService } from '../../services/subscriptions.service';
-
+import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
+import { RouterModule } from '@angular/router';
 
 
 @Component({
@@ -30,8 +25,11 @@ import { SubscriptionsService } from '../../services/subscriptions.service';
     TableModule,
     UserRoleFormatPipe,
     NumberAbbriviationPipe,
-    TimeAgoPipe
-  ],
+    TimeAgoPipe,
+    AdvertisementSpaceComponent,
+    CommonModule,
+    RouterModule
+],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
 })

@@ -234,11 +234,9 @@
     </div>
 
     <div class="input__wrapper">
-      <label for="opex" class="input-label">Opex Records</label>
-      <!-- <p>Opexes : {{currentFinancialRecord?.opex | json}}</p>
-      <p>Filterd Opexes : {{filteredOpexRecords | json}}</p> -->
-      <p-multiSelect class="input__field" styleClass="w-full gap-4" optionValue="id" formControlName="opex" [options]="filteredOpexRecords"
-         placeholder="Select Operating Expenses"  optionLabel="description">
+      <label for="opex" class="input-label">Opex Records</label> 
+      <p-multiSelect class="input__field" styleClass="w-full gap-4"  formControlName="opex"
+        [options]="filteredOpexRecords" optionLabel="description"  optionValue="id"  placeholder="Select Operating Expenses"  >
       </p-multiSelect>
     </div>
   
