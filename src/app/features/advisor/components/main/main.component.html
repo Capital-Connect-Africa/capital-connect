@@ -5,7 +5,7 @@
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Advisor'">
   <div class="main">
-    <main class="stats">
+    <main class="stats">    
       <ng-container >
         <div>
         <h3>Advisory Sessions</h3>
@@ -14,19 +14,28 @@
             <p-table [value]="bookings" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
               <ng-template pTemplate="header">
                 <tr>
-                  <th>#</th> <!--Booking Id-->
-                  <!-- <th>Event ID</th> -->
-                  <th>Created At</th>
+                  <th>#</th> 
+                  <th>Meeting Time</th>
+                  <th>Client</th>
                   <th>Action</th>
                 </tr>
               </ng-template>
   
-              <ng-template pTemplate="body" let-booking let-i="rowIndex">
+              <ng-template pTemplate="body" let-booking let-i="rowIndex">               
                 <tr>
                   <td><strong>{{i+1}}</strong></td>
-                  <!-- <td class="">{{ booking.calendlyEventId  }}</td> -->
-                  <td class="">{{ booking.createdAt | date : 'short' }}</td>
-                  <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking)">View Meeting</button></td>
+                  <td>{{ booking.createdAt | date: 'EEEE, d MMMM y' }}</td>
+              
+                  <td>
+                    <a [routerLink]="['/user-profile', booking.user.id]" class="user-link">
+                      {{ booking.user.firstName }} {{ booking.user.lastName }}
+                    </a>
+                  </td>
+                  
+                  <td  class="flex space-x-1 items-center gap-2 ">                    
+                    <button class="btn btn-sm text-xs px-3 py-1" (click)="getMeeting(booking)">View</button>
+                    <button class="btn btn-tertiary btn-sm text-xs px-3 py-1" (click)="getMeeting(booking)">notes</button>                    
+                  </td>
                 </tr>
     
               </ng-template>
@@ -34,17 +43,13 @@
   
           </div>
   
-          <!-- <p>{{webLink}}</p> -->
-  
-  
-      
-  
+        
       </div>  
 
-
-
         </div>
-      </ng-container>     
+      </ng-container>   
+      
+      
     </main>
   </div>
 </app-admin-ui-container>

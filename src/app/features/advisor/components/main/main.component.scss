@@ -116,6 +116,17 @@ tr {
 }
 
 
+.user-link {
+  color: #007bff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    color: #0056b3;
+  }
+}
+
+
 :host ::ng-deep .p-datatable{
   tr{
     td {
