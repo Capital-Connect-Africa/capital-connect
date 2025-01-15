@@ -495,6 +495,10 @@ export class FinancialReporting {
     this.update_financial_info = false
   }
 
+  unEditReports(){
+    this.update_financial_info = true
+  }
+
 
   handleYearClick(year: number) {
     this.updateRecordsByYear(year)
