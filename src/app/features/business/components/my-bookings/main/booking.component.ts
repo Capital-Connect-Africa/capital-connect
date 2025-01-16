@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { BookingService } from '../../../../../shared/services/booking.service';
-import { Booking } from '../../../../../shared/interfaces/booking';
+import { Booking, MeetingResponse } from '../../../../../shared/interfaces/booking';
 import { PaymentService } from '../../../../../shared/services/payment.service';
 import { TransactionStatus } from '../../../../../shared/interfaces/payment';
 import { FeedbackService, NavbarComponent } from '../../../../../core';
@@ -15,6 +15,10 @@ import { WebExService } from '../../../../../shared/services/webex.service';
 import { TableModule } from 'primeng/table';
 import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
+import { EditorModule } from 'primeng/editor';
+import { FormsModule } from '@angular/forms';
+import { User } from '../../../../users/models';
 
 
 @Component({
@@ -27,7 +31,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     RouterModule,
     NgxPaginationModule,
     TableModule,
-    AdvertisementSpaceComponent
+    AdvertisementSpaceComponent,
+    ModalComponent,
+    EditorModule,
+    FormsModule
 ],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
@@ -39,6 +46,14 @@ export class BookingComponent {
   private _sanitizer = inject(DomSanitizer); 
 
 
+  //vars
+  meetingNotes: string = ''; 
+  calendlyId!:string
+  meetingDetails!:MeetingResponse 
+  bookingId!: number;
+  advisor!:User
+
+
 
   bookings: Booking[] = [];
   currentPage: number = 1;
@@ -47,6 +62,9 @@ export class BookingComponent {
 
   //booleans
   iframe:boolean = false;
+  notes_modal:boolean = false
+  meeting_details:boolean = false
+  advisor_details:boolean = false
 
 
   showNewBookingForm: boolean = false;
@@ -59,6 +77,10 @@ export class BookingComponent {
   //observables
   transactionStatus$ = new Observable<unknown>();
   getMeeting$ = new Observable<unknown>()
+  saveNotes$ = new Observable<unknown>()
+  getSingleMeeting$ = new Observable<MeetingResponse>()
+
+
 
   webLink: SafeResourceUrl | null = null;
 
@@ -69,7 +91,8 @@ export class BookingComponent {
 
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
-      this.bookings = res;
+      // this.bookings = res;
+      this.bookings = res.filter(item => item.calendlyEventId !== "ueiuwiiwu");
       this.totalItems = res.length;
     }),
     catchError((error: any) => {
@@ -122,8 +145,51 @@ export class BookingComponent {
     this.pageChange(this.currentPage);
   }
 
-  getMeeting(booking:Booking) {
-    console.log("Get meeting hit....")
-    this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
-  }
+  // getMeeting(booking:Booking) {
+  //   console.log("Get meeting hit....")
+  //   this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
+  // }
+
+
+   getMeeting(booking:Booking) {
+      this.meeting_details = true
+      this.getSingleMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
+        this.meetingDetails = res
+      }))
+      // this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
+    }
+
+
+   takeMeetingNotes(booking:Booking){
+      console.log("The booking is", booking)
+      this.meetingNotes = booking.notes
+      this.notes_modal = true
+      this.bookingId = booking.id
+      this.calendlyId = booking.calendlyEventId
+  
+    }
+
+
+    redirectToWebexMeeting(): void {
+      window.open(this.meetingDetails.webLink, '_blank');
+    }
+
+    showAdvisor(booking:Booking){
+      this.advisor_details = true
+      this.advisor = booking.advisor
+    }
+    
+
+
+    saveMeetingNotes(): void {
+      let data = {
+        calendlyEventId: this.calendlyId,
+        notes:this.meetingNotes
+      }
+      this.saveNotes$ = this._webExService.saveMeetingNotes(data,this.bookingId).pipe(tap(res=>{
+        this.notes_modal = false
+        this._feedbackService.success("Meeting notes added Successfully")
+      }))
+      // Logic to persist meeting notes goes here (e.g., API call)
+    }
 }

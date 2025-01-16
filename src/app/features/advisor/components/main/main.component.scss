@@ -119,11 +119,16 @@ tr {
 .user-link {
   color: #007bff;
   text-decoration: none;
+  cursor: pointer;
 
   &:hover {
     text-decoration: underline;
     color: #0056b3;
   }
+}
+
+.btn{
+  margin-top: .3cm;
 }
 
 
@@ -149,4 +154,151 @@ tr {
      }
     }
   }
+}
+
+
+.notes-section {
+  margin-top: 2rem;
+
+  .p-editor-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 1rem;
+
+    .ql-toolbar {
+      background: #f7f9fc;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .ql-editor {
+      min-height: 200px;
+      background: #fff;
+      border: none;
+      color: #333;
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+      }
+    }
+  }
+}
+
+
+:host ::ng-deep .p-editor-container {
+  font-family: $font-family-sans-serif;
+  font-size: $font-size-base;
+
+  .ql-editor {
+    margin-bottom: 1cm;
+    min-height: 200px;
+    background-color: $white;
+    border: none;
+    color: $text-color;
+  }
+
+  .cta__group{
+    margin-top: 1cm;
+  }
+
+  .meeting-btn{
+    margin-top: 5cm;
+  }
+}
+
+
+.meeting-container {
+  padding: 1.5rem;
+  background-color: $white;  
+  .meeting-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: $primary-color;
+  }
+
+  .meeting-details {
+    margin-bottom: 1.5rem;
+    
+    p {
+      font-size: 1rem;
+      color: $gray-700;
+      
+      strong {
+        font-weight: 600;
+      }
+    }
+  }
+
+  .join-section {
+    // background-color: $gray-50;
+    padding: 1.25rem;
+    border-radius: 0.5rem;
+    
+    .join-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .join-text {
+      font-size: 1rem;
+      color: $gray-600;
+      margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+      width: 100%;
+      @apply btn btn-sm text-white bg-blue-500 hover:bg-blue-600;
+    }
+  }
+}
+
+
+.advisor-profile {
+  background-color: #fff;
+  padding: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+
+
+.profile-detail {
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-detail:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  text-align: right;
+  word-wrap: break-word;
+  max-width: 60%;
+  line-height: 1.5;
+}
+
+.value span {
+  font-weight: 600;
+  color: #007bff; /* Emphasizing key values */
+}
+
+.profile-detail:hover {
+  background-color: #f7f7f7;
+}
+
+.profile-detail .label {
+  color: $primary-color;
 }

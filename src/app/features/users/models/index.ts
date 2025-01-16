@@ -14,7 +14,8 @@ export interface User {
   subscriptions: Subscription[];
   activeSubscription: ActiveSubscription;
   createdAt:Date,
-  updatedAt:Date
+  updatedAt:Date,
+  hasAcceptedTerms:boolean
 }
 
 export enum Role {

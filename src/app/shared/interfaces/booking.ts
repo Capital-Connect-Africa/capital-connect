@@ -1,3 +1,4 @@
+import { User } from "../../features/users/models";
 
 export interface CreateBookingRequest {
     calendlyEventId: string;
@@ -117,6 +118,9 @@ export interface Booking {
   createdAt: string; 
   updatedAt: string; 
   payments: Payment[];
+  notes:string,
+  user:User,
+  advisor:User
 }
 
 export interface SaveMeetingPayload{
