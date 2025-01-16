@@ -1,6 +1,9 @@
 <ng-container *ngIf="bookings$ | async"></ng-container>
 <ng-container *ngIf="transactionStatus$ | async"></ng-container>
 <ng-container *ngIf="getMeeting$ | async"></ng-container>
+<ng-container *ngIf="saveNotes$ | async"></ng-container>
+
+
 
 
 <div class="main">
@@ -10,13 +13,13 @@
   <main>
     <div class="left__col"> 
         <div class="flex flex-col gap-4" *ngIf="!iframe">
-          <h6>My Meetings</h6>
+          <p>Booked Sessions</p>
           <p-table [value]="bookings" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
             <ng-template pTemplate="header">
               <tr>
-                <th>#</th> <!--Booking Id-->
-                <!-- <th>Event ID</th> -->
-                <th>Created At</th>
+                <th>#</th>
+                <th>Meeting Time</th>
+                <th>Advisor</th>
                 <th>Action</th>
               </tr>
             </ng-template>
@@ -24,9 +27,20 @@
             <ng-template pTemplate="body" let-booking let-i="rowIndex">
               <tr>
                 <td><strong>{{i+1}}</strong></td>
-                <!-- <td class="">{{ booking.calendlyEventId  }}</td> -->
-                <td class="">{{ booking.createdAt | date : 'short' }}</td>
-                <td><button class="btn btn-tertiary btn-sm" (click)="getMeeting(booking)">View Meeting</button></td>
+                <td >{{ booking.createdAt | date :  'EEEE, d MMMM y' }}</td>
+                <td (click)="showAdvisor(booking)">
+                  <a class="user-link">
+                    {{ booking?.advisor?.firstName ?  booking?.advisor?.firstName : "No advisor assigned " }} {{ booking?.advisor?.lastName }}
+                  </a>
+                </td>
+                
+                <td class="flex space-x-1 items-center gap-2">
+                  <!-- <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button> -->
+                  <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button>
+
+                  <button class="pi pi-pencil btn btn-tertiary btn-sm text-xs"
+                    (click)="takeMeetingNotes(booking)">Remarks</button>
+                </td>
               </tr>
   
             </ng-template>
@@ -62,3 +76,65 @@
     <iframe *ngIf="webLink" [src]="webLink" width="100%" height="700" ></iframe>
   </div>
 </div>
+
+
+
+
+<app-modal [(visible)]="notes_modal" title="Remarks" helperText="Add remarks for the meeting i.e please complete your profile ...">
+  <div class="notes-section">
+    <p-editor placeholder="Write your remarks here..." [(ngModel)]="meetingNotes"></p-editor>
+  </div>
+  <button class="btn-secondary btn btn-sm mt-5 w-100" (click)="saveMeetingNotes()">Save</button>
+</app-modal>
+
+
+
+
+<app-modal [(visible)]="meeting_details" title="Meeting Details" helperText="This is the information about the meeting">
+  <div class="meeting-container">
+
+    <ng-container *ngIf="getSingleMeeting$ | async as meetingDetails">
+      <div class="meeting-container p-4 bg-white border rounded-md shadow-md">
+        <h2 class="meeting-title text-xl font-semibold mb-4">{{ meetingDetails.title }}</h2>
+        
+        <div class="meeting-details mb-6">
+          <p class="text-gray-700"><strong>Hosted by:</strong> {{ meetingDetails.hostDisplayName }}</p>
+          <p class="text-gray-700"><strong>Email:</strong> {{ meetingDetails.hostEmail }}</p>
+          <p class="text-gray-700"><strong>Start Time:</strong> {{ meetingDetails.start | date: 'EEEE, d MMMM y' }}</p>
+          <p class="text-gray-700"><strong>End Time:</strong> {{ meetingDetails.end | date: 'EEEE, d MMMM y' }}</p>
+        </div>
+    
+        <div class="join-section bg-light p-4 rounded-md cta__group">
+          <button class="btn btn-primary btn-sm w-100" (click)="redirectToWebexMeeting()">Click To Join</button>
+        </div>
+      </div>
+    </ng-container>
+    
+    
+  </div>
+</app-modal>
+
+
+
+
+<app-modal [(visible)]="advisor_details" title="Advisor Details" helperText="This is the information of the advisor incharge of your advisory session ...">
+
+<div class="advisor-profile" *ngIf="advisor_details">
+  <div class="profile-detail">
+    <span class="label">First Name: </span>
+    <span class="value">{{advisor.firstName}}</span>
+  </div>
+  
+  <div class="profile-detail">
+    <span class="label">Last Name: </span>
+    <span class="value">{{advisor.lastName}}</span>
+  </div>
+  
+  <div class="profile-detail">
+    <span class="label">Email: </span>
+    <span class="value">{{advisor.username}}</span>
+  </div>
+  
+</div>
+
+</app-modal>

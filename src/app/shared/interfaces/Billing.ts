@@ -57,10 +57,12 @@ export interface Payment{
 
 export interface Booking {
     id:number,
-    calendlyEventId: number
+    calendlyEventId: string
     payment: Payment
     createdAt: Date,
-    advisor:Advisor
+    advisor:Advisor,
+    notes:string,
+    user:User
 }
 
 export interface PaymentPlan extends Payment{
