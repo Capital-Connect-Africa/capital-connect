@@ -31,9 +31,24 @@
     </div>
     <ng-container *ngIf="voucherRules.length">
         <ul class="card__item__details" *ngFor="let rule of voucher.rules">
-            <div class="card__item__detail">
-                <p>{{ voucher.code }}</p>
+          <li class="card__item__detail">
+            <div>
+              <label>Property:</label>
+              <p>{{ rule.userProperty | titlecase}}</p>
             </div>
+            <div>
+                <label>Value:</label>
+                <p>{{ rule.value | titlecase}}</p>
+            </div>
+            <div>
+              <label>Operator:</label>
+              <p>{{ rule.operator | uppercase}}</p>
+          </div>
+          <div class="col-span-3 py-3">
+            <label>Description:</label>
+            <p>{{ rule.description}}</p>
+          </div>
+        </li>
         </ul>
     </ng-container>
     

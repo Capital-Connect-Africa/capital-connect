@@ -32,7 +32,7 @@ export class VoucherRulesComponent {
   private _fb =inject(FormBuilder);
   helperText ="";
   heading ="New Constraint";
-  visible =true;
+  visible =false;
   createRule$ =new Observable();
   updateVoucherRule$ =new Observable();
   private _rulesService =inject(RulesService);

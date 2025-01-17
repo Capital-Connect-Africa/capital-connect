@@ -24,7 +24,10 @@
           </button>
           <div class="child__links" *ngIf="signalService.expandedLink() ===$index" >
             <div *ngFor="let child of link.children" ngClass="">
-              <a [routerLink]="child.href" [routerLinkActiveOptions]="{ exact: !!child?.exact }" routerLinkActive="active__label">
+              <a [routerLink]="child.href" *ngIf="!child.external" [routerLinkActiveOptions]="{ exact: !!child?.exact }" routerLinkActive="active__label">
+                <mat-icon *ngIf="child.icon">{{child.icon}}</mat-icon> <span>{{child.label}}</span>
+              </a>
+              <a [href]="child.href" target="_blank" *ngIf="child.external">
                 <mat-icon *ngIf="child.icon">{{child.icon}}</mat-icon> <span>{{child.label}}</span>
               </a>
             </div>

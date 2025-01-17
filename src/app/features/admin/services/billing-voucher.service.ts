@@ -7,8 +7,11 @@ import { Injectable } from "@angular/core";
 export class BillingVoucherService extends BaseHttpService{
 
     getBillingVouchers(page:number =1, limit:number =10){
-        return this.read(`${BASE_URL}/vouchers?page=${page}&limit=${limit}`).pipe(map(res =>{
-            return res as Voucher[]
+        return this.read(`${BASE_URL}/vouchers?page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+            return res as {
+                data: Voucher[],
+                total_count: number
+            }
         }))
     }
 
