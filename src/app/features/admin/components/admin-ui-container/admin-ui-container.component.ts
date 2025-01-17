@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../../../../core';
+import { BASE_URL, NavbarComponent } from '../../../../core';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { Link } from '../../../../shared/interfaces/link.interface';
 import { UiSharedComponent } from '../../../../shared/components/ui/ui.component';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
 import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
+import { AuthStateService } from '../../../auth/services/auth-state.service';
 
 @Component({
   selector: 'app-admin-ui-container',
@@ -17,6 +18,7 @@ import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-das
 export class AdminUiContainerComponent implements OnInit {
   isInvestor: boolean = false;
   links: Link[] = [];
+  private _authStateService =inject(AuthStateService)
 
   constructor() {
     let investor = sessionStorage.getItem('profileId');
@@ -59,7 +61,7 @@ export class AdminUiContainerComponent implements OnInit {
               { label: 'Referrals', href: '/referrals', exact: false, icon: 'screen_share' ,display:true},
               { label: 'Sections', href: '/questions', exact: false, icon: 'help' ,display:true},
               { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' ,display:true},
-              { label: 'Task Manager', href: '/task-manager', exact: false, icon: 'add_to_queue' ,display:true},
+              { label: 'Task Manager', href: `${BASE_URL}/admin/queues?authorization=${this._authStateService.authToken}`, exact: false, icon: 'add_to_queue' ,display:true, external: true},
             ]},
             
         ]

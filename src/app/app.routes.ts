@@ -159,12 +159,6 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
   },
   {
-    path: 'task-manager',
-    loadChildren: () => import('./features/admin/modules/task-manager.routing.module').then(m => m.TaskManagerRoutingModule),
-    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
-    canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
-  },
-  {
     path: 'business-investors',
     loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
