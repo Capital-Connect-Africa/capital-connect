@@ -23,7 +23,7 @@
 
         <div class="p-6 bg-gray-50 rounded">
           <div class="financial-container">
-            <h2><strong>Financial Information</strong></h2>
+            <h2><strong>Financials</strong></h2>
             <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
           </div>
 
@@ -50,11 +50,14 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>              
-                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales' }" style="width: 300px;">{{ row.description }}</td>
-                <!-- <td *ngFor="let year of years">{{ row[year] ? (row[year] | currency) : "-" }}</td> -->
-                <td *ngFor="let year of years">
+                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales' }" 
+                 style="width: 300px;">{{ row.description }}</td>
+
+                <td *ngFor="let year of years" 
+                    [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
                   {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
                 </td>
+
               </tr>
             </ng-template>
           </p-table>
