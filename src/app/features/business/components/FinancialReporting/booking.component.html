@@ -23,7 +23,7 @@
 
         <div class="p-6 bg-gray-50 rounded">
           <div class="financial-container">
-            <h2><strong>Financials</strong></h2>
+            <h2><strong>Profit And Loss Statement</strong></h2>
             <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
           </div>
 
@@ -71,8 +71,7 @@
               <tr>
                 <th>
                   <span style="display: flex; align-items: center;"> Operating Expenses
-                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()"
-                    matTooltip="Click to add an operating expense"
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()" matTooltip="Click to add an operating expense"
                     >add</mat-icon>
                   </span>
                 </th>
@@ -87,7 +86,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA'}" style="width: 300px;">{{ row.description }}</td>
+                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA'
+                || row.description === 'Total Operating Expenses'
+                }" style="width: 300px;">{{ row.description }}</td>
                   <td *ngFor="let year of years">
                     {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
                   </td>
