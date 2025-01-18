@@ -235,8 +235,6 @@
     </div>
 
     <div class="input__wrapper">
-      <!-- <label for="revenues" class="input-label">Revenue  <span><small>add</small></span></label> -->
-
       <label for="revenues" class="input-label flex justify-between items-center">
         <span>Revenues</span> 
         <span >Revenue not found?
@@ -247,6 +245,11 @@
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
         [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input-label">Cost Of Sales</label>
+      <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
     </div>
     
 
@@ -264,24 +267,11 @@
     </div>
   
 
-    <div class="input__wrapper">
-      <label for="year" class="input-label">Cost Of Sales</label>
-      <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
-    </div>
+  
 
     <div class="input__wrapper">
       <label for="year" class="input-label">Taxes</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input-label">EDITDA</label>
-      <input id="ebitda" type="number" class="input__field" placeholder="0" formControlName="ebitda" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input-label">EBIT</label>
-      <input id="ebit" type="number" class="input__field" placeholder="0" formControlName="ebit" />
     </div>
 
     <div class="cta__group">
@@ -365,6 +355,12 @@
 
 
     <div class="input__wrapper">
+      <label for="year" class="input__label">Cost Of Sales</label>
+      <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
+    </div>
+
+
+    <div class="input__wrapper">
       <!-- <label for="notes" class="input__label">Opex Records</label> -->
       <label for="revenues" class="input-label flex justify-between items-center">
         <span>Operating Expenses</span> 
@@ -377,22 +373,7 @@
         [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Operating Expenses">
       </p-multiSelect>
     </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">Cost Of Sales</label>
-      <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
-    </div>
-
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EDITDA</label>
-      <input id="ebitda" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebitda" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EBIT</label>
-      <input id="ebit" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebit" />
-    </div>
+    
 
     <div class="input__wrapper">
       <label for="year" class="input__label">TAXES</label>
