@@ -427,6 +427,10 @@ export class FinancialReporting {
   
         // Add to revenue totals
         revenue_totals[year] = (revenue_totals[year] || 0) + rev.value;
+
+
+        // revenue_totals[year] = (revenue_totals[year] || 0) - rev.value;
+
       });
   
       // Handle opex
