@@ -65,14 +65,14 @@ export class BillingVouchersComponent {
   heading ='CREATE VOUCHER';
   helperText ='Enter new voucher details';
   rules$ =new Observable<Rule[]>();
-  vouchers$ =new Observable<Voucher[]>();
+  vouchers$ =new Observable();
 
   private _rulesService =inject(RulesService);
   private _voucherService =inject(BillingVoucherService);
 
   getVouchers(page: number =1, limit:number =10){
-    this.vouchers$ =this._voucherService.getBillingVouchers(page, limit).pipe(tap(vouchers =>{
-      this.vouchers =vouchers;
+    this.vouchers$ =this._voucherService.getBillingVouchers(page, limit).pipe(tap(payload =>{
+      this.vouchers =payload.data;
       this.updateDisplayedData();
     }))
   }

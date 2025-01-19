@@ -75,6 +75,7 @@ export const routes: Routes = [
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isAdminCanActivateChildGuard]
   },
+  
 
   {
     path: 'sectors',
@@ -157,7 +158,6 @@ export const routes: Routes = [
     canActivate: [isLoggedInCanActivateGuard, isInvestorGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard, isInvestorGuard]
   },
-
   {
     path: 'business-investors',
     loadChildren: () => import('./features/business-investors/modules/business-investors.route').then(m => m.BusinessInvestorsRoutingModule),

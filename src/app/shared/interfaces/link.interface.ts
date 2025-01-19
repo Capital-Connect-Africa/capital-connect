@@ -4,6 +4,7 @@ export interface LinkItem{
     exact?: boolean,
     icon?: string,
     display?: boolean,
+    external?: boolean
 }
 
 export interface Link extends LinkItem{

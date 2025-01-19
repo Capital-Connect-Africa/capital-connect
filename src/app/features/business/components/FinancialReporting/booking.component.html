@@ -23,7 +23,7 @@
 
         <div class="p-6 bg-gray-50 rounded">
           <div class="financial-container">
-            <h2><strong>Financial Information</strong></h2>
+            <h2><strong>Profit And Loss Statement</strong></h2>
             <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
           </div>
 
@@ -50,11 +50,14 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>              
-                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales' }" style="width: 300px;">{{ row.description }}</td>
-                <!-- <td *ngFor="let year of years">{{ row[year] ? (row[year] | currency) : "-" }}</td> -->
-                <td *ngFor="let year of years">
+                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales' }" 
+                 style="width: 300px;">{{ row.description }}</td>
+
+                <td *ngFor="let year of years" 
+                    [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
                   {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
                 </td>
+
               </tr>
             </ng-template>
           </p-table>
@@ -68,9 +71,7 @@
               <tr>
                 <th>
                   <span style="display: flex; align-items: center;"> Operating Expenses
-                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()"
-                    matTooltip="Click to add an operating expense"
-                    >add</mat-icon>
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()" matTooltip="Click to add an operating expense">add</mat-icon>
                   </span>
                 </th>
                 <th *ngFor="let year of years">
@@ -84,8 +85,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA'}" style="width: 300px;">{{ row.description }}</td>
-                  <td *ngFor="let year of years">
+                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses' }" style="width: 300px;">{{ row.description }}</td>
+                  
+                  <td *ngFor="let year of years" [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
                     {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
                   </td>
 
@@ -232,8 +234,6 @@
     </div>
 
     <div class="input__wrapper">
-      <!-- <label for="revenues" class="input-label">Revenue  <span><small>add</small></span></label> -->
-
       <label for="revenues" class="input-label flex justify-between items-center">
         <span>Revenues</span> 
         <span >Revenue not found?
@@ -244,6 +244,11 @@
       <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="revenues"
         [options]="filteredRevenueRecords" optionLabel="description" optionValue="id" placeholder="Select Revenues">
       </p-multiSelect>
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input-label">Cost Of Sales</label>
+      <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
     </div>
     
 
@@ -261,24 +266,11 @@
     </div>
   
 
-    <div class="input__wrapper">
-      <label for="year" class="input-label">Cost Of Sales</label>
-      <input id="costOfSales" type="number" class="input__field" placeholder="0" formControlName="costOfSales" />
-    </div>
+  
 
     <div class="input__wrapper">
       <label for="year" class="input-label">Taxes</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input-label">EDITDA</label>
-      <input id="ebitda" type="number" class="input__field" placeholder="0" formControlName="ebitda" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input-label">EBIT</label>
-      <input id="ebit" type="number" class="input__field" placeholder="0" formControlName="ebit" />
     </div>
 
     <div class="cta__group">
@@ -362,6 +354,12 @@
 
 
     <div class="input__wrapper">
+      <label for="year" class="input__label">Cost Of Sales</label>
+      <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
+    </div>
+
+
+    <div class="input__wrapper">
       <!-- <label for="notes" class="input__label">Opex Records</label> -->
       <label for="revenues" class="input-label flex justify-between items-center">
         <span>Operating Expenses</span> 
@@ -374,22 +372,7 @@
         [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Operating Expenses">
       </p-multiSelect>
     </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">Cost Of Sales</label>
-      <input id="costOfSales" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.costOfSales" />
-    </div>
-
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EDITDA</label>
-      <input id="ebitda" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebitda" />
-    </div>
-
-    <div class="input__wrapper">
-      <label for="year" class="input__label">EBIT</label>
-      <input id="ebit" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.ebit" />
-    </div>
+    
 
     <div class="input__wrapper">
       <label for="year" class="input__label">TAXES</label>
