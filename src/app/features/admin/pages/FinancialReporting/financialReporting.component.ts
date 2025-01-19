@@ -3,7 +3,7 @@ import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { PaginatorModule, PaginatorState } from 'primeng/paginator';
-import { Payment, Plan } from '../../../../shared/interfaces/Billing';
+import { Plan } from '../../../../shared/interfaces/Billing';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { UserStatisticsService } from '../../services/user.statistics.service';
 import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviation.pipe";

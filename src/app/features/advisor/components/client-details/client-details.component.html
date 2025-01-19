@@ -1,0 +1,64 @@
+
+<!-- <ng-container *ngIf="company_details$ | async"></ng-container> -->
+
+
+<app-admin-ui-container [bg_gray]="true" [title]="'Advisor'">
+  <div class="main">
+    <main class="stats">
+      <ng-container>
+        <div>
+          <h3><a>Back to Sessions</a></h3>
+
+          <ng-container *ngIf="company_details$ | async as result">
+          <div class="flex flex-col bg-white  bio_info">
+            <h2>{{result.name}}</h2>
+            <p><mat-icon>mail</mat-icon>{{result.user.username}}</p>
+            <section>
+                <img [src]="result.companyLogo.path" class="logo" alt="Logo" *ngIf="result.companyLogo"/>
+                  <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Name:</label>
+                      <p>{{result.name}}</p>
+                    </div>
+                    <div>
+                      <label>Country:</label>
+                      <p>{{result.country}}</p>
+                    </div>
+                    <div>
+                      <label>Growth Stage:</label>
+                      <p>{{result.growthStage}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label>Employees:</label>
+                      <p>{{result.numberOfEmployees}}</p>
+                    </div>
+                    <div>
+                      <label>Sector:</label>
+                      <p>{{result.businessSector}}</p>
+                    </div>
+                    <div>
+                      <label>Sub-sector:</label>
+                      <p>{{result.businessSubsector}}</p>
+                    </div>
+                  </div>
+                </div>
+                <p>
+                </p>
+              </section>
+          </div>
+        </ng-container>
+
+
+
+        </div>
+      </ng-container>
+    </main>
+  </div>
+
+
+</app-admin-ui-container>

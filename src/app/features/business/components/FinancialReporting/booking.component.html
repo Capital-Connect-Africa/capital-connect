@@ -71,8 +71,7 @@
               <tr>
                 <th>
                   <span style="display: flex; align-items: center;"> Operating Expenses
-                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()" matTooltip="Click to add an operating expense"
-                    >add</mat-icon>
+                    <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addOpexRecord()" matTooltip="Click to add an operating expense">add</mat-icon>
                   </span>
                 </th>
                 <th *ngFor="let year of years">
@@ -86,10 +85,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA'
-                || row.description === 'Total Operating Expenses'
-                }" style="width: 300px;">{{ row.description }}</td>
-                  <td *ngFor="let year of years">
+                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses' }" style="width: 300px;">{{ row.description }}</td>
+                  
+                  <td *ngFor="let year of years" [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
                     {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
                   </td>
 
