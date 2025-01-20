@@ -81,6 +81,15 @@ export interface Company extends CompanyInput {
 }
 
 
+export interface ScoreSummary {
+  businessFinancials: string;
+  investorEligibility: string;
+  investorPreparedness: string;
+  impactAssessment: string;
+}
+
+
+
 
 export type CompanyDashBoardData  = 'ownerInfo' | 'companyInfo'  | 'submissionInfo'
 
