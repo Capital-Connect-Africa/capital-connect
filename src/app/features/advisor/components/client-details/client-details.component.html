@@ -1,5 +1,13 @@
 
-<!-- <ng-container *ngIf="company_details$ | async"></ng-container> -->
+<ng-container *ngIf="company_details$ | async"></ng-container>
+
+
+<!-- <ng-container *ngIf="scoring$ | async"></ng-container> -->
+<!-- <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
+<ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container> -->
+<!-- <ng-container *ngIf="preparednessSubmissions$ | async"></ng-container>
+<ng-container *ngIf="esgSubmissions$ | async"></ng-container>
+<ng-container *ngIf="factSheetSubmissions$ | async"></ng-container> -->
 
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Advisor'">
@@ -47,6 +55,24 @@
                     </div>
                   </div>
                 </div>
+
+
+                <div class="card__item__details" details>
+                  <div class="card__item__detail_info">
+                    <div>
+                      <label class="btn btn-sm pi pi-check" (click)="showDialog(investorEligibilityScore)"> Investor Eligibility</label>
+                    </div>
+                    <div>
+                      <label class="btn btn-sm pi pi-book" (click)="showDialog(investorPreparednessScore)"> Investor Preparedness</label>
+                    </div>
+                    <div>
+                      <label class="btn btn-sm pi pi-chart-line" (click)="setDialog('impactAssesment')"> Impact Assessment</label>
+                    </div>
+                    <div>
+                      <label class="btn btn-sm pi pi-file"  (click)="setDialog('factSheet')"> Business Fact Sheet</label>
+                    </div>                    
+                  </div>
+                </div>
                 <p>
                 </p>
               </section>
@@ -62,3 +88,225 @@
 
 
 </app-admin-ui-container>
+
+
+
+
+
+<app-modal [visible]="visible">
+
+  <div #content>
+    <img src="../../../../../../assets/img/logo.png" alt="logo" />
+    <section class="brand-details">
+      <h2>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility Report"
+          :currentModal==="preparedness"?"Your Investor/Funder Preparedness Report":""}}</h2>
+      <h3>{{ currentCompany.name }}</h3>
+      <p>Country - {{ currentCompany.country }}</p>
+      <p>Sector - {{ currentCompany.businessSector }}</p>
+    </section>
+    <div class="content">
+      <a routerLink="/business/investor-eligibility" class="edit__cta__btn" *ngIf="currentModal === 'eligibility' && eligibilityAnswers.length > 0">Edit Submission</a>
+      <a routerLink="/business/investor-preparedness" class="edit__cta__btn" *ngIf="currentModal === 'preparedness' && preparednessAnswers.length > 0">Edit Submission</a>
+      <section class="score-section">
+        <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
+        <h2>{{currentModal==="eligibility"? investorEligibilityScore
+          :currentModal==="preparedness"? investorPreparednessScore:""}}%</h2>
+      </section>
+      <h2 class="title">Feedback and recommendations</h2>
+
+      <div
+        *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length > 0) || (currentModal === 'preparedness' && preparednessAnswers.length > 0)">
+        <ul class="responses">
+          <li *ngFor="let submission of (currentModal === 'eligibility' ? eligibilityAnswers : preparednessAnswers)">
+            <h3>{{ submission.question.text | removeQuotes }}</h3>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
+            <p>{{ submission.explanation | removeQuotes }}</p>
+          </li>
+        </ul>
+      </div>
+      <div
+        *ngIf="(currentModal === 'eligibility' && eligibilityAnswers.length === 0) || (currentModal === 'preparedness' && preparednessAnswers.length === 0)">
+        <p>No submissions found.  
+          Ask the client to add the details
+        </p>
+      </div>
+    </div>
+
+
+
+    <div class="executive-summary">
+      <section class="score-section">
+        <h3>Score</h3>
+        <h2>{{currentModal==="eligibility" && InvestorEligibilitygeneralSummary ?
+          InvestorEligibilitygeneralSummary.score
+          :currentModal==="preparedness" && InvestorPreparednessgeneralSummary
+          ?InvestorPreparednessgeneralSummary.score:""}}</h2>
+      </section>
+
+      <p>{{currentModal==="eligibility" && InvestorEligibilitygeneralSummary ? InvestorEligibilitygeneralSummary.comment
+        :currentModal==="preparedness" && InvestorPreparednessgeneralSummary
+        ?InvestorPreparednessgeneralSummary.comment:""}}</p>
+
+      <h2 class="title implication">Implication</h2>
+      <p>{{currentModal==="eligibility" && InvestorEligibilitygeneralSummary ?
+        InvestorEligibilitygeneralSummary.implication
+        :currentModal==="preparedness" &&
+        InvestorPreparednessgeneralSummary?InvestorPreparednessgeneralSummary.implication:""}}</p>
+      <h2 class="title">Action</h2>
+
+      <p>{{currentModal==="eligibility" && InvestorEligibilitygeneralSummary ? InvestorEligibilitygeneralSummary.action
+        :currentModal==="preparedness" &&
+        InvestorPreparednessgeneralSummary?InvestorPreparednessgeneralSummary.action:""}}</p>
+      <h2 class="title">Recommendation</h2>
+
+      <p>{{currentModal==="eligibility" && InvestorEligibilitygeneralSummary?
+        InvestorEligibilitygeneralSummary.recommendation
+        :currentModal==="preparedness" &&
+        InvestorPreparednessgeneralSummary?InvestorPreparednessgeneralSummary.recommendation:""}}</p>
+    </div>
+
+
+    <div class="disclaimer">
+      <p class="italic text-red-500 ">Disclaimer: It is recommended that once a suitable investor has been identified, a
+        transaction advisor should be engaged to oversee the capital structuring process until the final investment.
+        This advisory role is crucial in ensuring that the capital structure is optimized to meet the goals and
+        objectives of the business and business owners whilst minimizing the risks. The transaction advisor will work
+        closely with all parties involved in the transaction, including the business, potential financer, and other
+        advisors including the legal and tax</p>
+    </div>
+    <footer>
+      <p>Capital Connect Africa | Email: services&#64;capitalconnect.africa | Address:4th Floor, CVS Plaza Lenana Road,
+        Nairobi</p>
+    </footer>
+  </div>
+
+</app-modal>
+
+
+
+<app-modal [visible]="factSheetVisible">
+
+  <div #business_content>
+    <img src="../../../../../../assets/img/logo.png" alt="logo" />
+    <section class="brand-details">
+      <h2>Business Fact Sheet Report</h2>
+      <h3>{{ currentCompany.name }}</h3>
+      <p>Country - {{ currentCompany.country }}</p>
+      <p>Sector - {{ currentCompany.businessSector }}</p>
+    </section>
+    <div class="content">
+      <a routerLink="/business/financials" class="edit__cta__btn" *ngIf="factSheetAnswers.length > 0">Edit Submission</a>
+      <h2 class="title">Feedback and recommendations</h2>
+
+      <div *ngIf="(factSheetAnswers.length > 0)">
+        <ul class="responses">
+          <li *ngFor="let submission of  factSheetAnswers ">
+            <h3>{{ submission.question.text | removeQuotes }}</h3>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
+            <p>{{ submission.explanation | removeQuotes }}</p>
+          </li>
+        </ul>
+      </div>
+      <div
+        *ngIf="(factSheetAnswers.length === 0)">
+        <p>No submissions found.  Ask th client to add the details </p>
+      </div>
+    </div>
+
+
+    <div class="disclaimer">
+      <p class="italic text-red-500 ">Disclaimer: It is recommended that once a suitable investor has been identified, a
+        transaction advisor should be engaged to oversee the capital structuring process until the final investment.
+        This advisory role is crucial in ensuring that the capital structure is optimized to meet the goals and
+        objectives of the business and business owners whilst minimizing the risks. The transaction advisor will work
+        closely with all parties involved in the transaction, including the business, potential financer, and other
+        advisors including the legal and tax</p>
+    </div>
+    <footer>
+      <p>Capital Connect Africa | Email: services&#64;capitalconnect.africa | Address:4th Floor, CVS Plaza Lenana Road,
+        Nairobi</p>
+    </footer>
+  </div>
+
+</app-modal>
+
+
+
+<!-- Impact Element Report -->
+<app-modal [visible]="impactElementVisible">
+
+  <div #impact_content>
+    <img src="../../../../../../assets/img/logo.png" alt="logo" />
+    <section class="brand-details">
+      <h2>Impact Element Assesment Report</h2>
+      <h3>{{ currentCompany.name }}</h3>
+      <p>Country - {{ currentCompany.country }}</p>
+      <p>Sector - {{ currentCompany.businessSector }}</p>
+    </section>
+    <div class="content">
+      <a routerLink="/business/impact-assessment" class="edit__cta__btn" *ngIf="impactElementAnswers.length > 0">Edit Submission</a>
+      <h2 class="title">Feedback and recommendations</h2>
+
+      <div *ngIf="(impactElementAnswers.length > 0)">
+        <ul class="responses">
+          <li *ngFor="let submission of  impactElementAnswers ">
+            <h3>{{ submission.question.text | removeQuotes }}</h3>
+            @if ((submission?.answers?.length || 0) >1) {
+              <div class="list">
+                <h4 *ngFor="let answer of submission?.answers">{{ answer.text | removeQuotes }}</h4>
+              </div>
+            }@else{
+              <h4>{{ submission.answer.text == "OPEN"? submission.text : submission.answer.text | removeQuotes }}</h4>
+            }
+            <p>{{ submission.explanation | removeQuotes }}</p>
+          </li>
+        </ul>
+      </div>
+      <div
+        *ngIf="(impactElementAnswers.length === 0)">
+        <p>No submissions found.  Ask the client to add the details</p>
+      </div>
+    </div>
+
+
+    <div class="disclaimer">
+      <p class="italic text-red-500 ">Disclaimer: It is recommended that once a suitable investor has been identified, a
+        transaction advisor should be engaged to oversee the capital structuring process until the final investment.
+        This advisory role is crucial in ensuring that the capital structure is optimized to meet the goals and
+        objectives of the business and business owners whilst minimizing the risks. The transaction advisor will work
+        closely with all parties involved in the transaction, including the business, potential financer, and other
+        advisors including the legal and tax</p>
+    </div>
+    <footer>
+      <p>Capital Connect Africa | Email: services&#64;capitalconnect.africa | Address:4th Floor, CVS Plaza Lenana Road,
+        Nairobi</p>
+    </footer>
+  </div>
+
+</app-modal>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
