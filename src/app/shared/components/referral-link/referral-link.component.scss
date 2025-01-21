@@ -1,0 +1,23 @@
+.header__section{
+    h3{
+      text-transform: uppercase;
+      font-size: 1.2rem;
+      line-height: 1.25;
+      padding: 0;
+      margin: 0;
+      &.h3{
+        font-weight: 600;
+        font-size: 1.5rem;
+      }
+    }
+    p{
+      font-size: .8rem;
+      font-weight: 300;
+    }
+  }
+  
+  .link__input{
+    padding: .75rem 2rem;
+    border-radius: .5rem;
+    border: 1px solid #8080804d;
+  }
