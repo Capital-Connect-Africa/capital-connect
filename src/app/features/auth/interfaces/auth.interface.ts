@@ -31,6 +31,7 @@ export interface Profile{
   lastName: string;
   username: string;
   firstName: string;
+  referralToken: string;
   hasAcceptedTerms: boolean;
   mobileNumbers: MobileNumber[];
 }
