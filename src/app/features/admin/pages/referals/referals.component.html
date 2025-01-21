@@ -1,3 +1,4 @@
+<ng-container *ngIf="referrals$ | async"></ng-container>
 <app-admin-ui-container title="Referrals" [bg_gray]="true">
     <div class="flex flex-col gap-8">
         <div class="header__section">
@@ -82,7 +83,7 @@
                 <p>Share this referral link to invite users</p>
             </div>
             <div class="flex items-center gap-6">
-                <div class="block w-max text-sm font-light link__input cursor-pointer" (click)="copyToClipboard()" #textDiv>https://app.capitalconnect.africa/signup?referralId=1234567</div>
+                <div class="block text-sm font-light link__input cursor-pointer" (click)="copyToClipboard()" #textDiv>{{link}}{{token | slice:0:15}}...</div>
                 <button class="text-sm text-blue-500 " (click)="copyToClipboard()">
                     <span *ngIf="!linkCopied">Copy Link</span>
                     <span class="flex gap-1 items-center text-xs" *ngIf="linkCopied">
