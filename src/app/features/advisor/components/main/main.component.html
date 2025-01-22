@@ -28,10 +28,6 @@
                     <td>{{ booking.createdAt | date: 'EEEE, d MMMM y' }}</td>
 
                     <td>
-                      <!-- <a [routerLink]="['client-details', booking.user.id]" class="user-link">
-                        {{ booking.user.firstName }} {{ booking.user.lastName }}
-                      </a> -->
-
                       <a [routerLink]="['/advisor', 'client-details', booking.user.id]" class="user-link">
                         {{ booking.user.firstName }} {{ booking.user.lastName }}
                       </a>

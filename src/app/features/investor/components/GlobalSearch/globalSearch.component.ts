@@ -139,10 +139,6 @@ export class GlobalSearchComponent {
     this.impactElementAnswers = submissions
   }))
 
-  // declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(tap(reasons => {
-  //   this.declineReasons = reasons
-  // }))
-
 
   declineReasons$ = this._businessMatchingService.getDeclineReasons().pipe(
     map(reasons => reasons.filter(reason => reason.declineRole === "investor")),
