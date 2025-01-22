@@ -25,7 +25,7 @@ function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
   const url = state.url;
   const { referralId } =route.queryParams;
   if (url === '/') {
-    window.history.pushState(null, '', '/');
+    if(referralId) window.history.pushState(null, '', '/');
     if (authStateService.isLoggedIn && !authStateService.userIsAdmin) {
       router.navigateByUrl('/user-profile');
       return false;
