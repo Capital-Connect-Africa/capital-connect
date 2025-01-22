@@ -123,10 +123,11 @@ export class SignUpFormComponent {
       roles: formValue.accountType as USER_ROLES,
       firstName: formValue.firstName as string,
       lastName: formValue.lastName as string,
-      referralToken: this._referralTokenService.getReferralToken(),
+      referralToken: this._referralTokenService.getReferralToken()?.token,
     }
 
     this.signUp$ = this._authService.signUpUser(input).pipe(tap((res) => {
+      this._referralTokenService.removeToken();
       this._router.navigateByUrl('/verify-email', { state: { mode: 'unverified' } });
     }), catchError(err => {
       console.error(err);
