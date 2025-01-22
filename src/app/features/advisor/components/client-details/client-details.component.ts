@@ -15,6 +15,9 @@ import { groupUserSubmissions } from '../../../../core/utils/group-user-submissi
 import { RemoveQuotesPipe } from '../../../../shared/pipes/remove-quotes.pipe';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
 import { GrowthStage } from '../../../organization/interfaces';
+import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
+import { BusinessAndInvestorMatchingService } from '../../../../shared/business/services/busines.and.investor.matching.service';
+import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 
 
 @Component({
@@ -29,6 +32,7 @@ export class ClientDetails {
   //vars
   investorEligibilityScore: string = '0';
   investorPreparednessScore: string = '0';
+  impactAssessmentScore: string = '0';
   currentModal: 'eligibility' | 'preparedness' = 'eligibility';
   currentCompany!: CompanyResponse;
   preparednessAnswers: UserSubmissionResponse[] = [];
@@ -39,6 +43,7 @@ export class ClientDetails {
   InvestorEligibilitygeneralSummary: GeneralSummary | undefined;
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   eligibilityScore = parseFloat(this.investorEligibilityScore);
+  submissions: UserSubmissionResponse[] = []
 
 
 
@@ -47,73 +52,89 @@ export class ClientDetails {
   private _companyService = inject(CompanyHttpService)
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
-
-  //observables
-  company_details$ = new Observable<CompanyResponse>()
-  scoring$ = new Observable<ScoreSummary>()
+  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
 
   //booleans
   visible = false;
   factSheetVisible = false;
   impactElementVisible = false;
+
+
+  //streams
+  company_details$ = new Observable<CompanyResponse>()
+  scoring$ = new Observable<Scoring>();
+  submissions$ = new Observable<UserSubmissionResponse[]>
+  investorEligibilityScore$ = new Observable<unknown>()
+  investorPreparednessScore$ =  new Observable<unknown>()
+  impactAssessmentScore$ = new Observable<unknown>()
+  investorPreparednessGeneralSummary$ = new Observable<GeneralSummary>()
+  investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
+
   
 
-  // esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
-  //   this.impactElementAnswers = groupUserSubmissions(submissions)
-  // }))
+  esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
+    this.impactElementAnswers = groupUserSubmissions(submissions)
+  }))
 
   // factSheetSubmissions$ = this._submissionStateService.getFactSheetSubmissionsPerSection().pipe(tap(submissions => {
   //   this.factSheetAnswers = groupUserSubmissions(submissions)
   // }))
 
 
-  // companyGrowthStage:unknown = GrowthStage[this.currentCompany.growthStage as keyof typeof GrowthStage];
-  
-
-  // investorPreparednessGeneralSummary$ = this.scoring$.pipe(
-  //   tap(scores => {
-  //     this.preparednessScore = parseFloat(scores.investorPreparedness);
-  //   }),
-  //   switchMap(() => this._scoringService.getGeneralSummary(this.preparednessScore, "PREPAREDNESS")),
-  //   tap(generalSummary => {
-  //     this.InvestorPreparednessgeneralSummary = generalSummary;
-  //   })
-  // );
-
-
-
-  // investorEligibilityGeneralSummary$ = this.scoring$.pipe(
-  //   tap(scores => {
-  //     this.eligibilityScore = parseFloat(scores.investorEligibility);
-  //   }),
-  //   switchMap(() => this._scoringService.getGeneralSummary(this.eligibilityScore, "ELIGIBILITY")),
-  //   tap(generalSummary => {
-  //     this.InvestorEligibilitygeneralSummary = generalSummary;
-  //   })
-  // );
-
-
+ 
   preparednessSubmissions$ = this._submissionStateService.getUserPreparednessSubmissionsPerSection().pipe(tap(submissions => {
     this.preparednessAnswers = groupUserSubmissions(submissions)
   }))
 
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');
+
+
     if(id){
-    this.company_details$ = this._companyService.getCompanyOfUser(Number(id)).pipe(tap(res=>{
-      this.currentCompany = res 
-
-      // const companyGrowthStage = GrowthStage[this.currentCompany.growthStage as keyof typeof GrowthStage];
-      // console.log("The growth stage is",this.companyGrowthStage)
-
-      // this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,this.currentCompany.user.id).pipe(tap(scores => {
-      //   this.investorEligibilityScore = scores.investorEligibility;
-      //   this.investorPreparednessScore = scores.investorPreparedness;
-      // }))
-
-
+      this.company_details$ = this._companyService.getCompanyOfUser(Number(id)).pipe(
+           tap(res => {
+             this.currentCompany = res
+                
+             //get the questions
+             this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
+               this.submissions =  submissions
+             }))
       
-    }))
+            const companyGrowthStage = this.getGrowthStageFromString(res.growthStage);
+             
+
+             // Get the summaries
+             this.scoring$ = this._scoringService.getOnboardingScores(companyGrowthStage,res.user.id).pipe(tap(scores => {
+               this.impactAssessmentScore =scores.impactAssessment;
+               this.investorEligibilityScore = scores.investorEligibility;
+               this.investorPreparednessScore = scores.investorPreparedness;
+             }))
+             
+             
+             this.investorPreparednessGeneralSummary$ = this.scoring$.pipe(
+               tap(scores => {
+                 this.preparednessScore = parseFloat(scores.investorPreparedness);
+               }),
+               switchMap(() => this._scoringService.getGeneralSummary(this.preparednessScore, "PREPAREDNESS")),
+               tap(generalSummary => {
+                 this.InvestorPreparednessgeneralSummary = generalSummary;
+               })
+             );
+      
+             this.eligibilityScore = parseFloat(this.investorEligibilityScore);
+      
+             this.investorEligibilityGeneralSummary$ = this.scoring$.pipe(
+               tap(scores => {
+                 this.eligibilityScore = parseFloat(scores.investorEligibility);
+               }),
+               switchMap(() => this._scoringService.getGeneralSummary(this.eligibilityScore, "ELIGIBILITY")),
+               tap(generalSummary => {
+                 this.InvestorEligibilitygeneralSummary = generalSummary;
+               })
+             );
+          
+           })
+         )
     }
   }
 
@@ -133,6 +154,12 @@ export class ClientDetails {
     }else if(dialog = "impactAssesment"){
       this.impactElementVisible = !this.impactElementVisible
     }
+  }
+
+
+  getGrowthStageFromString(value: string): GrowthStage | undefined {
+    const stage = Object.values(GrowthStage).find(stage => stage === value);
+    return stage as GrowthStage | undefined;
   }
 
 
