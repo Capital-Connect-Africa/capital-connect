@@ -3,9 +3,10 @@ import { AdminUiContainerComponent } from "../../components/admin-ui-container/a
 import { PieChartComponent } from "../../../../shared/components/charts/pie-chart/pie-chart.component";
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ReferralsService } from '../../services/referrals.service';
 import { ReferralLinkComponent } from "../../../../shared/components/referral-link/referral-link.component";
+import { ReferralLeader } from '../../interfaces/referral.leader.interface';
 
 @Component({
   selector: 'app-referals',
@@ -18,35 +19,14 @@ export class ReferalsComponent {
   @ViewChild('textDiv') textDiv!: ElementRef<HTMLDivElement>;
   private _referralsService =inject(ReferralsService);
   cols =[
-    {header: 'RNK', field: 'rnk'},
-    {header: 'User', field: 'user'},
+    {header: 'RNK', field: 'rank'},
+    {header: 'User', field: 'name'},
     {header: 'Clicks', field: 'clicks'},
     {header: 'Visits', field: 'visits'},
-    {header: 'Conversions', field: 'conversions'},
+    {header: 'Signups', field: 'signups'},
+    {header: 'Rate', field: 'rate'},
   ]
-  referrals =[
-    {
-      user: "John Doe",
-      referrals: 80,
-      conversions: 3,
-    },
-    {
-      user: "Jane Doe",
-      referrals: 60,
-      conversions: 2,
-    },
-    {
-      user: "Foo Bar",
-      referrals: 10,
-      conversions: 3,
-    },
-    {
-      user: "Jane Smith",
-      referrals: 30,
-      conversions: 3,
-    },
-   
-  ]
+  referrals:ReferralLeader[] =[]
 
   referrals$ =new Observable();
 
@@ -55,7 +35,9 @@ export class ReferalsComponent {
   }
 
   getLeadersBoard(page =1, limit =10){
-    this.referrals$ =this._referralsService.getLeadersBoard(page, limit)
+    this.referrals$ =this._referralsService.getLeadersBoard(page, limit).pipe(tap(referrals =>{
+      this.referrals =referrals
+    }))
   }
   
 }

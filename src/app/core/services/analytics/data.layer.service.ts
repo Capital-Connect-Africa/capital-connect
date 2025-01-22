@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { WindowReferenceService } from './window.reference.service';
+import { ReferralsService } from '../../../features/admin/services/referrals.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +8,7 @@ import { WindowReferenceService } from './window.reference.service';
 export class DataLayerService {
   private _windowService =inject(WindowReferenceService);
   private _window =this._windowService.nativeWindow;
+  private _referralService =inject(ReferralsService);
 
   private _hitPage(obj: any): void {
     if (this._window && this._window.dataLayer) {
@@ -14,11 +16,12 @@ export class DataLayerService {
     }
   }
 
-  logPageView(url: string): void {
+  async logPageView(url: string): Promise<void>{
     const hit = {
       event: 'content-view',
       pageName: url
     };
+    await this._referralService.updateMetrics(url, true, false);
     this._hitPage(hit);
   }
 
