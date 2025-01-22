@@ -12,6 +12,7 @@ import { Router, RouterModule } from '@angular/router';
 import { InvestorProfile } from '../../../../../shared/interfaces/Investor';
 import { InvestorScreensService } from '../../../services/investor.screens.service';
 import { Profile } from '../../../../../shared/interfaces/profile.interface';
+import { ReferralLinkComponent } from "../../../../../shared/components/referral-link/referral-link.component";
 
 @Component({
   standalone: true,
@@ -20,12 +21,11 @@ import { Profile } from '../../../../../shared/interfaces/profile.interface';
   styleUrls: ['./investor-page.component.scss'],
   imports: [NavbarComponent,
     MatIcon,
-    NavbarComponent,  
+    NavbarComponent,
     CommonModule,
     AlertComponent,
     AlertCardComponent,
-    RouterModule
-  ]
+    RouterModule, ReferralLinkComponent]
 })
 export class InvestorPageComponent implements OnInit {
   @Input() showBanner =false;
