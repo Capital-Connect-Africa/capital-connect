@@ -34,8 +34,7 @@ export class ReferralsService extends BaseHttpService{
             let visiting =visits && !pages.includes(page);
             if(visiting) {
                 pages.push(page)
-                referral.pages =pages;
-                localStorage.setItem('referral', JSON.stringify(referral));
+                localStorage.setItem('referral', JSON.stringify({...referral, pages}));
             }
             if(clicks || visiting) {
                 return await firstValueFrom(this.update(`${BASE_URL}/referrals/metrics`, token, {visits: visiting, clicks}));
