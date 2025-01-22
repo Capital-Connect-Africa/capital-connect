@@ -17,6 +17,7 @@ import { OrganizationOnboardService } from '../../../../organization/services/or
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FormsModule } from '@angular/forms';
 import { CompanyHttpService } from '../../../../organization/services/company.service';
+import { ReferralLinkComponent } from "../../../../../shared/components/referral-link/referral-link.component";
 
 @Component({
   selector: 'app-main',
@@ -30,7 +31,8 @@ import { CompanyHttpService } from '../../../../organization/services/company.se
     AlertComponent,
     AlertCardComponent,
     InputSwitchModule,
-    FormsModule
+    FormsModule,
+    ReferralLinkComponent
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'
