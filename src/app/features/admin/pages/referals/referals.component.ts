@@ -1,26 +1,28 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { PieChartComponent } from "../../../../shared/components/charts/pie-chart/pie-chart.component";
 import { CommonModule } from '@angular/common';
-import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { TableModule } from 'primeng/table';
+import { Observable } from 'rxjs';
+import { ReferralsService } from '../../services/referrals.service';
+import { ReferralLinkComponent } from "../../../../shared/components/referral-link/referral-link.component";
 
 @Component({
   selector: 'app-referals',
   standalone: true,
-  imports: [AdminUiContainerComponent, PieChartComponent, CommonModule, TableModule],
+  imports: [AdminUiContainerComponent, PieChartComponent, CommonModule, TableModule, ReferralLinkComponent],
   templateUrl: './referals.component.html',
   styleUrl: './referals.component.scss'
 })
 export class ReferalsComponent {
   @ViewChild('textDiv') textDiv!: ElementRef<HTMLDivElement>;
-  linkCopied =false;
+  private _referralsService =inject(ReferralsService);
   cols =[
     {header: 'RNK', field: 'rnk'},
     {header: 'User', field: 'user'},
-    {header: 'Referrals', field: 'referrer'},
-    {header: 'Conversions', field: 'referrer'},
-    {header: 'Conversion Rate', field: 'joined'},
+    {header: 'Clicks', field: 'clicks'},
+    {header: 'Visits', field: 'visits'},
+    {header: 'Conversions', field: 'conversions'},
   ]
   referrals =[
     {
@@ -46,22 +48,14 @@ export class ReferalsComponent {
    
   ]
 
-  async copyToClipboard(): Promise<void> {
-    const range = document.createRange();
-    const selection = window.getSelection();
-  
-    if (this.textDiv.nativeElement && selection) {
-      range.selectNodeContents(this.textDiv.nativeElement);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      const textToCopy = this.textDiv.nativeElement.textContent || '';
-      try {
-        await navigator.clipboard.writeText(textToCopy)
-        this.linkCopied = true;
-      } catch (error) {
-        this.linkCopied = false;
-      }
-    }
+  referrals$ =new Observable();
+
+  ngOnInit(){
+    this.getLeadersBoard();
+  }
+
+  getLeadersBoard(page =1, limit =10){
+    this.referrals$ =this._referralsService.getLeadersBoard(page, limit)
   }
   
 }

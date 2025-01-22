@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CreateUserInput, MobileNumber, Profile } from '../interfaces/auth.interface';
-import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
+import { BASE_URL, BaseHttpService, FeedbackService, JwtService } from '../../../core';
 import { Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators'
 import { AuthStateService } from './auth-state.service';
@@ -10,10 +10,11 @@ import { OrganizationOnboardService } from '../../organization/services/organiza
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseHttpService {
 
+  private _jwtSetvice =inject(JwtService);
   private _feedBackService = inject(FeedbackService);
   private _authStateService = inject(AuthStateService);
   private _organizationService =inject(OrganizationOnboardService);
-
+  
   constructor(private _httpClient: HttpClient) {
     super(_httpClient)
   }
@@ -29,22 +30,24 @@ export class AuthService extends BaseHttpService {
   }
 
   login(loginInfo: { username: string, password: string }) {
-    return this.create(`${BASE_URL}/auth/login`, JSON.stringify(loginInfo)).pipe(switchMap((res) => {
+    return this.create(`${BASE_URL}/auth/login`, JSON.stringify(loginInfo)).pipe(switchMap((res:any) => {
+      const access_token:string =res.access_token;
       this._authStateService.reset();
       this._organizationService.reset()
       this._feedBackService.success('Logged In Successfully, Welcome.')
       this._authStateService.initToken((res as { access_token: string }).access_token)
-      return this.getUserProfile();
-    }), tap(userProfile => {
-      this._authStateService.initUser(userProfile);
-      const mobileNumbers: MobileNumber[] =((userProfile.mobileNumbers)??[]).map(phoneNo =>{
-        return {
-          phoneNo: phoneNo.phoneNo,
-          isVerified: phoneNo.isVerified,
-        }
-      });
-      sessionStorage.setItem('mobile_numbers', JSON.stringify(mobileNumbers)??[]);
-    })) as Observable<Profile>
+      return this.getUserProfile().pipe(tap(userProfile => {
+        const decodedToken: any =this._jwtSetvice.decodeToken(access_token);
+        this._authStateService.initUser({...userProfile, referralToken: decodedToken?.referralToken});
+        const mobileNumbers: MobileNumber[] =((userProfile.mobileNumbers)??[]).map(phoneNo =>{
+          return {
+            phoneNo: phoneNo.phoneNo,
+            isVerified: phoneNo.isVerified,
+          }
+        });
+        sessionStorage.setItem('mobile_numbers', JSON.stringify(mobileNumbers)??[]);
+      })) as Observable<Profile>
+    }))
   }
 
   forgotPassword(email: string) {

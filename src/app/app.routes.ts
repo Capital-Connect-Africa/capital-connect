@@ -11,6 +11,11 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'signup',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
+  {
     path: 'callbacks',
     loadChildren: () => import('./features/callbacks/modules/callbacks.routing.module').then(m => m.CallbacksRoutingModule),
     canActivate: [isLoggedInCanActivateGuard]

@@ -23,8 +23,9 @@ function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
   // Check if the URL is empty
   const url = state.url;
-
+  const { referralId } =route.queryParams;
   if (url === '/') {
+    if(referralId) window.history.pushState(null, '', '/');
     if (authStateService.isLoggedIn && !authStateService.userIsAdmin) {
       router.navigateByUrl('/user-profile');
       return false;
@@ -35,10 +36,23 @@ function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return true;
   }
 
-
   if (authStateService.isLoggedIn) {
     return true;
   }
-  router.navigateByUrl('/', { state: { mode: FORM_TYPE.SIGNIN } });
+    
+    
+  if(referralId){
+    const now =new Date();
+    const then =new Date();
+    then.setDate(now.getDate() +90);
+    const referral =JSON.parse(localStorage.getItem('referral') as string)
+    if(!referral){
+      localStorage.setItem('referral', JSON.stringify({
+        token: referralId,
+        exp: then,
+      }))
+    }
+  }
+  router.navigateByUrl('/', { state: { mode: FORM_TYPE.SIGNIN  } });
   return false;
 }
