@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateChildFn, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
 import { AuthStateService } from '../../features/auth/services/auth-state.service';
 import { FORM_TYPE } from '../../features/auth/interfaces/auth.interface';
+import { ReferralsService } from '../../features/admin/services/referrals.service';
 
 export const isLoggedInCanActivateGuard: CanActivateFn = (
   route: ActivatedRouteSnapshot,
@@ -17,9 +18,10 @@ export const isLoggedInCanActivateChildGuard: CanActivateChildFn = (
   return checkLogin(route, state);
 }
 
-function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+async function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
   const authStateService = inject(AuthStateService);
   const router = inject(Router);
+  const referralService =inject(ReferralsService);
 
   // Check if the URL is empty
   const url = state.url;
@@ -39,20 +41,13 @@ function checkLogin(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
   if (authStateService.isLoggedIn) {
     return true;
   }
-    
+  let signup =false;  
     
   if(referralId){
-    const now =new Date();
-    const then =new Date();
-    then.setDate(now.getDate() +90);
-    const referral =JSON.parse(localStorage.getItem('referral') as string)
-    if(!referral){
-      localStorage.setItem('referral', JSON.stringify({
-        token: referralId,
-        exp: then,
-      }))
-    }
+    signup =true;
+    await referralService.updateMetrics('', false, true, referralId);
   }
-  router.navigateByUrl('/', { state: { mode: FORM_TYPE.SIGNIN  } });
+  
+  router.navigateByUrl('/', { state: { mode: signup? FORM_TYPE.SIGNUP : FORM_TYPE.SIGNIN  } });
   return false;
 }

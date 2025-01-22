@@ -4,6 +4,7 @@ export interface CreateUserInput {
   firstName: string;
   lastName: string;
   roles: string;
+  referralToken?: string;
   hasAcceptedTerms: string;
   hasAcceptedPrivacyPolicy: string,
 }

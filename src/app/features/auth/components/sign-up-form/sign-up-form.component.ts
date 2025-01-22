@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { CreateUserInput, FORM_TYPE, PASSWORD_STRENGTH } from '../../interfaces/auth.interface';
 import { USER_ROLES } from '../../../../shared/interfaces/user.interface';
 import { Router } from '@angular/router';
+import { ReferralTokenService } from '../../../../shared/services/referral-token.service';
 
 @Component({
   selector: 'app-sign-up-form',
@@ -19,6 +20,7 @@ export class SignUpFormComponent {
   private _formBuilder = inject(FormBuilder);
   private _authService = inject(AuthService);
   private _router = inject(Router);
+  private _referralTokenService =inject(ReferralTokenService);
 
   @Output() changeFormTypeEvent = new EventEmitter<FORM_TYPE>();
 
@@ -121,9 +123,11 @@ export class SignUpFormComponent {
       roles: formValue.accountType as USER_ROLES,
       firstName: formValue.firstName as string,
       lastName: formValue.lastName as string,
+      referralToken: this._referralTokenService.getReferralToken()?.token,
     }
 
     this.signUp$ = this._authService.signUpUser(input).pipe(tap((res) => {
+      this._referralTokenService.removeToken();
       this._router.navigateByUrl('/verify-email', { state: { mode: 'unverified' } });
     }), catchError(err => {
       console.error(err);
