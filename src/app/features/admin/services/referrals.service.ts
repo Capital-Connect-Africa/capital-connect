@@ -4,6 +4,7 @@ import { firstValueFrom, map, Observable } from "rxjs";
 import { ReferralTokenService } from "../../../shared/services/referral-token.service";
 import { AuthStateService } from "../../auth/services/auth-state.service";
 import { ReferralLeader } from "../interfaces/referral.leader.interface";
+import { ReferralStats } from "../interfaces/referral.stats.interface";
 
 @Injectable({providedIn: 'root'})
 
@@ -18,8 +19,8 @@ export class ReferralsService extends BaseHttpService{
                 clicks: referral.clicks,
                 visits: referral.visits,
                 signups: referral.user.referredUsers.length,
-                rate: `${Math.round((referral.user.referredUsers.length/referral.clicks) *100)}%`
-            })).sort((a, b) =>a.signups - b.signups).map((referral, index) =>({rank: index+1, ...referral}))
+                rate: referral.user.referredUsers.length/referral.clicks *100
+            })).sort((a, b) =>b.signups - a.signups || b.rate - a.rate || b.clicks - a.clicks).map((referral, index) =>({rank: index+1, ...referral}))
         }))
     }
 
@@ -40,6 +41,13 @@ export class ReferralsService extends BaseHttpService{
                 return await firstValueFrom(this.update(`${BASE_URL}/referrals/metrics`, token, {visits: visiting, clicks}));
             }
         }
+    }
+
+    getStats(): Observable<ReferralStats>{
+        return this.read(`${BASE_URL}/referrals/stats`).pipe(map((res:any) =>{
+            const rate =(res.signups /res.clicks)*100;
+            return {...res, rate}
+        }))
     }
 
 }
