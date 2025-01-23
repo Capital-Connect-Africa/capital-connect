@@ -556,3 +556,13 @@ p-table td {
 .red_txt{
   color: red;
 }
+
+.year{
+  cursor: pointer;
+}
+
+
+.year:hover{
+  opacity: .7;
+  transform: scale(1.1);
+}

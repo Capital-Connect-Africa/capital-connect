@@ -10,6 +10,7 @@ import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from './onboarding.questions.ser
 import {BUSINESS_INFORMATION_SUBSECTION_IDS } from './onboarding.questions.service';
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from './onboarding.questions.service';
 import { SignalsService } from '../../../core/services/signals/signals.service';
+import { GrowthStage } from '../../../features/organization/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class SubMissionStateService {
@@ -48,7 +49,14 @@ export class SubMissionStateService {
     return EMPTY;
   }
 
-  getUserSubmissionsPerSection() {
+  getUserSubmissionsPerSection(user_id?:number,growthStage?:GrowthStage) {
+    if(user_id && growthStage){
+      const sectionId = getInvestorEligibilitySubsectionIds(growthStage)
+      return this._submissionService.fetchSubmissionsByUserPerSection(user_id, sectionId.ID).pipe(tap(res => {
+        this.setCurrentUserSubmission(res);
+      }));
+    }
+
     const sectionId = getInvestorEligibilitySubsectionIds(this._companyService.currentCompany.growthStage)
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     if (userId) {
@@ -59,7 +67,14 @@ export class SubMissionStateService {
     return EMPTY;
   }
 
-  getUserPreparednessSubmissionsPerSection() {
+
+  getUserPreparednessSubmissionsPerSection(user_id?:number,growthStage?:GrowthStage) {
+    if(user_id && growthStage){
+      return this._submissionService.fetchSubmissionsByUserPerSection(user_id, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(res => {
+        this.setCurrentUserSubmission(res);
+      }));
+    }
+
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     if (userId) {
       return this._submissionService.fetchSubmissionsByUserPerSection(userId, INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID).pipe(tap(res => {
@@ -70,7 +85,13 @@ export class SubMissionStateService {
   }
 
 
-  getEsgSubmissionsPerSection() {
+  getEsgSubmissionsPerSection(user_id?:number,growthStage?:GrowthStage) {
+    if(user_id && growthStage){
+      return this._submissionService.fetchSubmissionsByUserPerSection(user_id, IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(res => {
+        this.setCurrentUserSubmission(res);
+      }));
+    }
+    
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     if (userId) {
       return this._submissionService.fetchSubmissionsByUserPerSection(userId, IMPACT_ASSESMENT_SUBSECTION_IDS.ID).pipe(tap(res => {
@@ -80,7 +101,13 @@ export class SubMissionStateService {
     return EMPTY;
   }
 
-  getFactSheetSubmissionsPerSection() {
+  getFactSheetSubmissionsPerSection(user_id?:number,growthStage?:GrowthStage) {
+    if(user_id && growthStage){
+      return this._submissionService.fetchSubmissionsByUserPerSection(user_id, BUSINESS_INFORMATION_SUBSECTION_IDS.ID).pipe(tap(res => {
+        this.setCurrentUserSubmission(res);
+      }));
+    }
+    
     const userId = this._currentUserId && this._currentUserId > 0 ? this._currentUserId : Number(sessionStorage.getItem('userId'));
     if (userId) {
       return this._submissionService.fetchSubmissionsByUserPerSection(userId, BUSINESS_INFORMATION_SUBSECTION_IDS.ID).pipe(tap(res => {

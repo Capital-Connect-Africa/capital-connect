@@ -295,11 +295,11 @@ export class FinancialReporting {
     this.title =
       action === 'view_financial_info'
         ? 'View Financial Information'
-        : 'Update Financial Information';
+        : 'View Financial Information';
     this.helperText =
       action === 'view_financial_info'
         ? 'View details of the financial record.'
-        : 'Update the details of the financial record.';
+        : 'View the details of the financial record.';
     this.showFinancialModal = true;
   }
 
@@ -413,6 +413,16 @@ export class FinancialReporting {
     const opex_totals: any = {}; // To store the total opexes for each year
     const taxes_row: any = { description: 'Taxes' };
     const ebit_row: any = { description: 'EBIT' };
+
+    const amortisation_row: any = { description: 'Amortisation' };
+    const depreciation_row: any = { description: 'Depreciation' };
+    const interests_row: any = { description: 'Interests' };
+    const profit_before_tax: any = { description: 'Profit before Tax' };
+    const net_profit: any = { description: 'Net Profit' };
+
+
+
+
     const ebitda_row: any = { description: 'EBITDA' };
     const costOfSales_row: any = { description: 'Cost of Sales' };
   
@@ -444,10 +454,21 @@ export class FinancialReporting {
       });
   
       // Handle taxes, ebit, ebitda, and costOfSales
-      taxes_row[year] = entry.taxes || 0;
-      ebit_row[year] = entry.ebit || 0;
+      
+     
       ebitda_row[year] = entry.ebitda || 0;
+      amortisation_row[year] = 0
+      depreciation_row[year] = 0
+      ebit_row[year] = entry.ebit || 0;
+      interests_row[year] = 0
+      profit_before_tax[year] = 0
+      taxes_row[year] = entry.taxes || 0;    
+      net_profit[year] = 0
+
+
       costOfSales_row[year] = entry.costOfSales || 0;
+   
+     
     });
   
     // Add total revenues row
@@ -461,7 +482,7 @@ export class FinancialReporting {
   
     // Add additional rows to opexData
     this.revenueData.push(costOfSales_row)
-    this.opexData.push(ebitda_row,ebit_row,taxes_row);
+    this.opexData.push(ebitda_row,amortisation_row,depreciation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
   }
   
 
@@ -508,11 +529,15 @@ export class FinancialReporting {
   }
 
 
-  handleYearClick(year: number) {
+  handleYearClick(year: number,view?:boolean) {
     this.updateRecordsByYear(year)
     const foundRecord = this.financialInfoRecords.find(record => record.year === year);
     if (foundRecord) {
-      this.showModalFuncFinancial(foundRecord, 'update_financial_info');
+      if(view){
+        this.showModalFuncFinancial(foundRecord, 'view_financial_info');
+      }else{
+        this.showModalFuncFinancial(foundRecord, 'update_financial_info');
+      }
     } else {
       console.error('Record not found for year:', year);
     }
