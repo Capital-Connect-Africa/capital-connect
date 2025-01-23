@@ -1,3 +1,4 @@
+<ng-container *ngIf="stats$ | async"></ng-container>
 <ng-container *ngIf="referrals$ | async"></ng-container>
 <app-admin-ui-container title="Referrals" [bg_gray]="true">
     <div class="flex flex-col gap-8">
@@ -8,28 +9,28 @@
         <section class="grid grid-cols-4 gap-8">
             <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
                 <div>
-                    <h3 class="h3">180</h3>
+                    <h3 class="h3">{{stats.clicks}}</h3>
                     <p>Clicks</p>
                 </div>
                 <i class="pi pi-bolt text-4xl font-light text-[#13501B]"></i>
             </div>
             <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
                 <div>
-                    <h3 class="h3">120</h3>
+                    <h3 class="h3">{{stats.visits}}</h3>
                     <p>Visits</p>
                 </div>
                 <i class="pi pi-wave-pulse text-4xl font-light text-[#762db1]"></i>
             </div>
             <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
                 <div>
-                    <h3 class="h3">90</h3>
+                    <h3 class="h3">{{stats.signups}}</h3>
                     <p>Signups</p>
                 </div>
                 <i class="pi pi-briefcase text-4xl font-light text-[#e9a901]"></i>
             </div>
             <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
                 <div>
-                    <h3 class="h3">50%</h3>
+                    <h3 class="h3">{{stats.rate | number: '1.1-1'}}%</h3>
                     <p>Signup Rate</p>
                 </div>
                 <i class="pi pi-chart-scatter text-3xl font-light text-[#762db1]"></i>
@@ -38,9 +39,9 @@
         <section class="bg-white flex justify-start rounded-xl p-8 gap-12">
             <div>
                 <app-pie-chart [width]="300" [height]="300" legendPosition="bottom" [data]="{
-                'Visits': 10,
-                'Clicks': 20,
-                'Signups': 15,
+                'Visits': stats.visits,
+                'Clicks': stats.clicks,
+                'Signups': stats.signups,
               }" [colors]="['#13501B', '#e9a901', '#762db1']" />
             </div>
             <div class="w-full">
@@ -67,7 +68,7 @@
                             <td>{{referral.clicks}}</td>
                             <td>{{referral.visits}}</td>
                             <td>{{referral.signups}}</td>
-                            <td>{{referral.rate}}</td>
+                            <td>{{referral.rate | number: '1.1-1'}}%</td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="emptymessage">
