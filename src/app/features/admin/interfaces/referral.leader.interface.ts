@@ -4,5 +4,5 @@ export interface ReferralLeader{
     clicks: number;
     visits: number;
     signups: number;
-    rate: string;
+    rate: number;
 }
