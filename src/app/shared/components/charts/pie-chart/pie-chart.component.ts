@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { GoogleChartsModule, ChartType } from 'angular-google-charts';
 
 @Component({
@@ -44,8 +44,16 @@ export class PieChartComponent implements OnInit {
 
     this.transformData();
   }
+
+  
   transformData(): void {
     this.pieChartData = Object.entries(this.data);
     this.pieChartData.sort((a, b) => (b[1] as number) - (a[1] as number));
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes['data']){
+      this.transformData()
+    }
   }
 }
