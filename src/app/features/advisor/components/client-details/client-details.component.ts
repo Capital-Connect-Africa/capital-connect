@@ -64,6 +64,10 @@ export class ClientDetails {
   company_details$ = new Observable<CompanyResponse>()
   scoring$ = new Observable<Scoring>();
   submissions$ = new Observable<UserSubmissionResponse[]>
+  factSheetSubmissions$  = new Observable<UserSubmissionResponse[]>
+  esgSubmissions$  = new Observable<UserSubmissionResponse[]>
+  preparednessSubmissions$  = new Observable<UserSubmissionResponse[]>
+
   investorEligibilityScore$ = new Observable<unknown>()
   investorPreparednessScore$ =  new Observable<unknown>()
   impactAssessmentScore$ = new Observable<unknown>()
@@ -72,19 +76,6 @@ export class ClientDetails {
 
   
 
-  esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection().pipe(tap(submissions => {
-    this.impactElementAnswers = groupUserSubmissions(submissions)
-  }))
-
-  // factSheetSubmissions$ = this._submissionStateService.getFactSheetSubmissionsPerSection().pipe(tap(submissions => {
-  //   this.factSheetAnswers = groupUserSubmissions(submissions)
-  // }))
-
-
- 
-  preparednessSubmissions$ = this._submissionStateService.getUserPreparednessSubmissionsPerSection().pipe(tap(submissions => {
-    this.preparednessAnswers = groupUserSubmissions(submissions)
-  }))
 
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');
@@ -94,13 +85,29 @@ export class ClientDetails {
       this.company_details$ = this._companyService.getCompanyOfUser(Number(id)).pipe(
            tap(res => {
              this.currentCompany = res
-                
-             //get the questions
-             this.submissions$ = this._businessMatchingService.getSubmisionByIds(res.user.id,CONNECTED_COMPANIES_QUESTION_IDS).pipe(tap(submissions=>{
-               this.submissions =  submissions
-             }))
-      
             const companyGrowthStage = this.getGrowthStageFromString(res.growthStage);
+
+                
+            if(companyGrowthStage){
+              this.submissions$ = this._submissionStateService.getUserSubmissionsPerSection(Number(id),companyGrowthStage).pipe(tap(submissions => {
+                this.eligibilityAnswers = groupUserSubmissions(submissions)
+              }))
+
+
+              this.preparednessSubmissions$ = this._submissionStateService.getUserPreparednessSubmissionsPerSection(Number(id),companyGrowthStage).pipe(tap(submissions => {
+                this.preparednessAnswers = groupUserSubmissions(submissions)
+              }))
+            
+            
+              this.esgSubmissions$ = this._submissionStateService.getEsgSubmissionsPerSection(Number(id),companyGrowthStage).pipe(tap(submissions => {
+                this.impactElementAnswers = groupUserSubmissions(submissions)
+              }))
+            
+              this.factSheetSubmissions$ = this._submissionStateService.getFactSheetSubmissionsPerSection(Number(id),companyGrowthStage).pipe(tap(submissions => {
+                this.factSheetAnswers = groupUserSubmissions(submissions)
+              }))
+            }          
+      
              
 
              // Get the summaries

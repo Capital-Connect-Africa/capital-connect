@@ -43,7 +43,7 @@
                     {{ year }}
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)"
                     matTooltip="Click to update the financial records of this year"
-                    >edit</mat-icon>
+                    >visibility</mat-icon>
                   </span>
                 </th>
               </tr>
@@ -78,14 +78,19 @@
                   <span style="display: flex; align-items: center;"> {{ year }}
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)"
                     matTooltip="Click to update the financial records of this year"
-                    >edit</mat-icon>
+                    >visibility</mat-icon>
                   </span>
                 </th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses' }" style="width: 300px;">{{ row.description }}</td>
+                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses'
+                  || row.description === 'Amortisation' || row.description === 'Depreciation' || row.description === 'Interests' || row.description === 'Profit before Tax'
+                  || row.description === 'Net Profit'
+
+
+                 }" style="width: 300px;">{{ row.description }}</td>
                   
                   <td *ngFor="let year of years" [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
                     {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
