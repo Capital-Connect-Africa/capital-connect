@@ -7,6 +7,7 @@ import { Observable, tap } from 'rxjs';
 import { ReferralsService } from '../../services/referrals.service';
 import { ReferralLinkComponent } from "../../../../shared/components/referral-link/referral-link.component";
 import { ReferralLeader } from '../../interfaces/referral.leader.interface';
+import { ReferralStats } from '../../interfaces/referral.stats.interface';
 
 @Component({
   selector: 'app-referals',
@@ -27,16 +28,29 @@ export class ReferalsComponent {
     {header: 'Rate', field: 'rate'},
   ]
   referrals:ReferralLeader[] =[]
-
+  stats:ReferralStats ={
+    clicks: 0,
+    signups: 0,
+    visits: 0,
+    rate: 0
+  }
   referrals$ =new Observable();
+  stats$ =new Observable();
 
   ngOnInit(){
     this.getLeadersBoard();
+    this.getStats()
   }
 
   getLeadersBoard(page =1, limit =10){
     this.referrals$ =this._referralsService.getLeadersBoard(page, limit).pipe(tap(referrals =>{
       this.referrals =referrals
+    }))
+  }
+
+  getStats(){
+    this.stats$ =this._referralsService.getStats().pipe(tap(stats =>{
+      this.stats =stats;
     }))
   }
   

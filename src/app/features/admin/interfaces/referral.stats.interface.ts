@@ -1,6 +1,4 @@
-export interface ReferralLeader{
-    rank: number;
-    name: string;
+export interface ReferralStats{
     clicks: number;
     visits: number;
     signups: number;
