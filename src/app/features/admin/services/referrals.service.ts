@@ -43,4 +43,11 @@ export class ReferralsService extends BaseHttpService{
         }
     }
 
+    getStats(): Observable<ReferralStats>{
+        return this.read(`${BASE_URL}/referrals/stats`).pipe(map((res:any) =>{
+            const rate =(res.signups /res.clicks)*100;
+            return {...res, rate}
+        }))
+    }
+
 }
