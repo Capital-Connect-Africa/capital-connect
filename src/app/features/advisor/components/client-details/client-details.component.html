@@ -7,7 +7,8 @@
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="preparednessSubmissions$ | async"></ng-container>
 <ng-container *ngIf="esgSubmissions$ | async"></ng-container>
-<!-- <ng-container *ngIf="factSheetSubmissions$ | async"></ng-container> -->
+<ng-container *ngIf="submissions$ | async"></ng-container>
+<ng-container *ngIf="factSheetSubmissions$ | async"></ng-container>
 
 
 <app-admin-ui-container [bg_gray]="true" [title]="'Advisor'">
