@@ -45,8 +45,6 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (isFinancialReportsPage(error.url as string)) {
-        console.log("Handling financial reports error interceptions")
-
         return EMPTY;
       }
       

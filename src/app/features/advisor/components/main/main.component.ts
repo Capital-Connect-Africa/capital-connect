@@ -85,12 +85,10 @@ export class MainComponent {
     this.getMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
       this.meetingDetails = res
     }))
-    // this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
   }
 
 
   takeMeetingNotes(booking:Booking){
-    // console.log("The booking is", booking)
     this.meetingNotes = booking.notes
     this.notes_modal = true
     this.bookingId = booking.id
@@ -107,7 +105,6 @@ export class MainComponent {
     this.saveNotes$ = this._webExService.saveMeetingNotes(data,this.bookingId).pipe(tap(res=>{
       this._feedbackService.success("Meeting notes added Successfully")
     }))
-    // Logic to persist meeting notes goes here (e.g., API call)
   }
 
 

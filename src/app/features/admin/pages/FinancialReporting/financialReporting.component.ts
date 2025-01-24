@@ -178,8 +178,6 @@ export class FinancialReportingComponent {
 
 
   saveUpdatesFinancial(){
-    console.log("The current financial record is", this.currentFinancialRecord)
-
     let notes:AddNotesToFinancialecords = {
       notes:this.currentFinancialRecord.notes
     }
