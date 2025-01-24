@@ -74,6 +74,21 @@
                     </div>                    
                   </div>
                 </div>
+
+
+
+                  <ul class="progress__bars" *ngIf="progress$ | async">
+                    <li *ngFor="let prog of progress">
+                      <div class="values">
+                        <span>{{prog.section}}</span>
+                        <span>{{prog.progress+'%'}}</span>
+                      </div>
+                      <div class="bar"><div class="progress" [style]="'width:'+prog.progress+'%'"></div></div>
+                    </li>
+                  </ul>
+             
+
+
                 <p>
                 </p>
               </section>
@@ -98,7 +113,7 @@
 
   <div #content>
     <img src="../../../../../../assets/img/logo.png" alt="logo" />
-    <section class="brand-details">
+    <section class="brand-details" *ngIf="currentCompany">
       <h2>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility Report"
           :currentModal==="preparedness"?"Your Investor/Funder Preparedness Report":""}}</h2>
       <h3>{{ currentCompany.name }}</h3>
@@ -195,7 +210,7 @@
 
   <div #business_content>
     <img src="../../../../../../assets/img/logo.png" alt="logo" />
-    <section class="brand-details">
+    <section class="brand-details" *ngIf="currentCompany">
       <h2>Business Fact Sheet Report</h2>
       <h3>{{ currentCompany.name }}</h3>
       <p>Country - {{ currentCompany.country }}</p>
@@ -250,7 +265,7 @@
 
   <div #impact_content>
     <img src="../../../../../../assets/img/logo.png" alt="logo" />
-    <section class="brand-details">
+    <section class="brand-details" *ngIf="currentCompany">
       <h2>Impact Element Assesment Report</h2>
       <h3>{{ currentCompany.name }}</h3>
       <p>Country - {{ currentCompany.country }}</p>

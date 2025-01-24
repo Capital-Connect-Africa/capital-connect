@@ -86,7 +86,7 @@
             <ng-template pTemplate="body" let-row>
               <tr>
                 <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses'
-                  || row.description === 'Amortisation' || row.description === 'Depreciation' || row.description === 'Interests' || row.description === 'Profit before Tax'
+                  || row.description === 'Depreciation and Amortisation' || row.description === 'Depreciation' || row.description === 'Interests' || row.description === 'Profit before Tax'
                   || row.description === 'Net Profit'
 
 
@@ -274,7 +274,17 @@
   
 
     <div class="input__wrapper">
-      <label for="year" class="input-label">Taxes</label>
+      <label for="year" class="input-label">Depreciation And Amortisation(Total value lost within this financial year)</label>
+      <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input-label">Interests(Interest earned within this financial year)</label>
+      <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input-label">Taxes(Amount of taxes paid wthiin this financial year)</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
     </div>
 
@@ -377,10 +387,20 @@
         [options]="filteredOpexRecords" optionLabel="description" optionValue="id" placeholder="Select Operating Expenses">
       </p-multiSelect>
     </div>
-    
+
 
     <div class="input__wrapper">
-      <label for="year" class="input__label">TAXES</label>
+      <label for="year" class="input-label">Depreciation And Amortisation(Total value lost within this financial year)</label>
+      <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input-label">Interests(Interest earned within this financial year)</label>
+      <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="taxes" />
+    </div>
+
+    <div class="input__wrapper">
+      <label for="year" class="input__label">Taxes(Amount of taxes paid wthiin this financial year)</label>
       <input id="taxes" type="number" class="input__field" placeholder="0" [(ngModel)]="newFinancialRecord.taxes" />
     </div>
 

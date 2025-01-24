@@ -18,6 +18,7 @@ import { GrowthStage } from '../../../organization/interfaces';
 import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
 import { BusinessAndInvestorMatchingService } from '../../../../shared/business/services/busines.and.investor.matching.service';
 import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
+import { Progress } from '../../../business/interfaces/progress.interface';
 
 
 @Component({
@@ -73,6 +74,7 @@ export class ClientDetails {
   impactAssessmentScore$ = new Observable<unknown>()
   investorPreparednessGeneralSummary$ = new Observable<GeneralSummary>()
   investorEligibilityGeneralSummary$ = new Observable<GeneralSummary>()
+  progress$ =new Observable<any>();
 
   
 
@@ -80,15 +82,20 @@ export class ClientDetails {
   ngOnInit() {
     const id = this._route.snapshot.paramMap.get('id');
 
+   
 
     if(id){
       this.company_details$ = this._companyService.getCompanyOfUser(Number(id)).pipe(
            tap(res => {
              this.currentCompany = res
-            const companyGrowthStage = this.getGrowthStageFromString(res.growthStage);
+             const companyGrowthStage = this.getGrowthStageFromString(res.growthStage);
 
-                
+                          
             if(companyGrowthStage){
+              this.progress$ =this._scoringService.advisorProgressView(companyGrowthStage,res.id,Number(id)).pipe(tap(res =>{
+                this.progress =res.sort((a, b) => a.progress - b.progress);
+              }))
+
               this.submissions$ = this._submissionStateService.getUserSubmissionsPerSection(Number(id),companyGrowthStage).pipe(tap(submissions => {
                 this.eligibilityAnswers = groupUserSubmissions(submissions)
               }))
@@ -169,5 +176,27 @@ export class ClientDetails {
     return stage as GrowthStage | undefined;
   }
 
+  progress:Progress[] =[
+    {
+      section: 'Investor Eligibility',
+      progress: 0
+    },
+    {
+      section: 'Investor Preparedness',
+      progress: 0
+    },
+    {
+      section: 'Impact Assessment',
+      progress: 0
+    },
+    {
+      section: 'Business Information',
+      progress: 0
+    },
+    {
+      section: 'Business Profile',
+      progress: 0
+    }
+  ]
 
 }

@@ -414,8 +414,7 @@ export class FinancialReporting {
     const taxes_row: any = { description: 'Taxes' };
     const ebit_row: any = { description: 'EBIT' };
 
-    const amortisation_row: any = { description: 'Amortisation' };
-    const depreciation_row: any = { description: 'Depreciation' };
+    const amortisation_row: any = { description: 'Depreciation and Amortisation' };
     const interests_row: any = { description: 'Interests' };
     const profit_before_tax: any = { description: 'Profit before Tax' };
     const net_profit: any = { description: 'Net Profit' };
@@ -458,7 +457,6 @@ export class FinancialReporting {
      
       ebitda_row[year] = entry.ebitda || 0;
       amortisation_row[year] = 0
-      depreciation_row[year] = 0
       ebit_row[year] = entry.ebit || 0;
       interests_row[year] = 0
       profit_before_tax[year] = 0
@@ -482,7 +480,7 @@ export class FinancialReporting {
   
     // Add additional rows to opexData
     this.revenueData.push(costOfSales_row)
-    this.opexData.push(ebitda_row,amortisation_row,depreciation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
+    this.opexData.push(ebitda_row,amortisation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
   }
   
 

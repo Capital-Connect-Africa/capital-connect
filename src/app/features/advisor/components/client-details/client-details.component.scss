@@ -417,3 +417,43 @@ p.helper__text{
   color: #000000e8;
   font-family: $font-family-inter!important;
 }
+
+
+
+
+
+.progress__bars{
+  gap: .5rem;
+  display: flex;
+  width: 40%;
+  padding: 1rem;
+  border-radius: .5rem;
+  flex-direction: column;
+  background-color:$gray-100;
+  li{
+    color: #374A62;
+    font-size: 11px;
+    font-weight: 400;
+    font-family: $font-family-inter;
+    display: flex;
+    gap: .2rem;
+    flex-direction: column;
+    .values{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bar{
+      height: 6px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 5px;
+      background-color: $green-50;
+      .progress{
+        height: 100%;
+        border-radius: 5px;
+        background-color: $primary-color;
+      }
+    }
+  }
+}
