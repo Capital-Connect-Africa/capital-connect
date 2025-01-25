@@ -449,17 +449,18 @@ export class FinancialReporting {
 
 
   addRevenueRecord() {
-    this.newRevenueRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+    console.log("The current financial form value is", this.financialForm.value)
+    this.newRevenueRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : this.newFinancialRecord.year ? this.newFinancialRecord.year : 0,companyId:this.companyId};
     this.showCreateRecordModal = true;
   }
 
   addCostOfSalesRecord(){
-    this.newCostOfSalesRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+    this.newCostOfSalesRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : this.newFinancialRecord.year ? this.newFinancialRecord.year  : 0,companyId:this.companyId};
     this.showCreateCostOfSalesModal = true;
   }
 
   addOpexRecord() {
-    this.newOpexRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+    this.newOpexRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : this.newFinancialRecord.year ? this.newFinancialRecord.year : 0,companyId:this.companyId};
     this.showCreateOpexModal = true;
   }
 
