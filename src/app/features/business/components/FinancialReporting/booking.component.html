@@ -211,15 +211,17 @@
 <app-modal [(visible)]="showFinancialModal" [title]="title" [helperText]="helperText">
   <div *ngIf="update_financial_info" class="financial-info-card">
     <div class="card-header">
-      <p><strong>Financial Information</strong></p>
+      <p>Financial Information :<strong> {{ currentFinancialRecord.year }} </strong></p>
       <p class="edit-link" (click)="editReports()">Edit</p>
     </div>
 
     <div class="content">
-      <p><strong>Financial Year:</strong> {{ currentFinancialRecord.year }}</p>
-      <p><strong>Taxes:</strong> {{ currentFinancialRecord.taxes | currency }}</p>
+      <!-- <p><strong>Financial Year :</strong> {{ currentFinancialRecord.year }}</p> -->
+      <p><strong>EBITDA :</strong> {{ currentFinancialRecord.ebitda | currency }}</p>
+      <p><strong>Depreciation and Amortisation :</strong> {{ currentFinancialRecord.amorDep | currency }}</p>
       <p><strong>EBIT:</strong> {{ currentFinancialRecord.ebit | currency }}</p>
-      <p><strong>EBITDA:</strong> {{ currentFinancialRecord.ebitda | currency }}</p>
+      <p><strong>Interests:</strong> {{ currentFinancialRecord.interests | currency }}</p>
+      <p><strong>Taxes:</strong> {{ currentFinancialRecord.taxes | currency }}</p> 
     </div>
 
     <div class="financial-section">
