@@ -116,27 +116,8 @@ export class LandingComponent implements OnInit {
     });
 
 
-
-    // this.noMaxFunding$ = this.formGroup.get('noMaximumFunding')!.valueChanges.pipe(
-    //   tap((noMaxFunding: boolean) => {
-    //     const maxFundingControl = this.formGroup.get('maximumFunding');
-    //     if (noMaxFunding) {
-    //       this.noMaxFund = true
-    //       maxFundingControl?.disable();
-    //       maxFundingControl?.setValue(0);
-    //     } else {
-    //       maxFundingControl?.enable();
-    //       maxFundingControl?.setValue(this.investorProfile?.maximumFunding);
-    //     }
-    //   })
-    // );
-  
-
-    
-
     this.investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
       this.investorProfile = investorProfile ;
-      // this.patchForm(investorProfile);
     })  
   )
 
@@ -178,38 +159,7 @@ export class LandingComponent implements OnInit {
 
 
   onSubmit(): void { 
-    // this.formGroup.value.sectors = this.selectedSectors
     this.formGroup.value.subSectors = [...this.selectedSubSectorIds1]
-
-    console.log("The form is", this.formGroup.value)
-
-
-
-    // if (this.formGroup.value.minimumFunding) {
-    //   const minimumFundingStr = String(this.formGroup.value.minimumFunding);
-    //   if (minimumFundingStr.includes(',')) {
-    //     this.formGroup.value.minimumFunding = parseFloat(minimumFundingStr.replace(/,/g, ''));
-    //   }
-    // }
-    
-    // if (this.formGroup.value.maximumFunding) {
-    //   const maximumFundingStr = String(this.formGroup.value.maximumFunding);
-    //   if (maximumFundingStr.includes(',')) {
-    //     this.formGroup.value.maximumFunding = parseFloat(maximumFundingStr.replace(/,/g, ''));
-    //   }
-    // }
-    
-    // if (this.formGroup.value.availableFunding) {
-    //   const availableFundingStr = String(this.formGroup.value.availableFunding);
-    //   if (availableFundingStr.includes(',')) {
-    //     this.formGroup.value.availableFunding = parseFloat(availableFundingStr.replace(/,/g, ''));
-    //   }
-    // }
-
-  
-    
-    
-
 
     if (this.investorProfile) {
       this.formGroup.value.minimumFunding =  Number(this.formGroup.value.minimumFunding)
@@ -331,10 +281,6 @@ export class LandingComponent implements OnInit {
     }
   }
 
-  // onSectorChange(selectedSectorId: number): void {
-  //   this.updateSelectedSubSectorsForSector(selectedSectorId);
-  // }
-
   updateSelectedSubSectorsForSector(sectorId: number): void {
     const associatedSubSectors = this.sectorSubSectorsMap[sectorId] || [];
     this.selectedSubSectors = associatedSubSectors;
@@ -420,10 +366,7 @@ export class LandingComponent implements OnInit {
     this.tooltipVisible = false;
   }
 
-
   activeIndex: number = 0;
-
-
   selectedSectorsObjects!:Sector[]
   selectedSubSectorObjects!:String[]
 
@@ -452,7 +395,7 @@ export class LandingComponent implements OnInit {
   getSelectedSectors(sectorIds: number[]): Sector[] {
     return sectorIds
       .map(sectorId => this.sectors.find(s => s.id === sectorId))
-      .filter((sector): sector is Sector => !!sector); // Filter out undefined/null
+      .filter((sector): sector is Sector => !!sector); 
   }
 
 
@@ -461,30 +404,26 @@ export class LandingComponent implements OnInit {
     return sectorIds
       .map(sectorId => {
         const subSector = this.subSectors.find(s => s.id === sectorId);
-        return subSector ? subSector.name : null; // Return the name or null if not found
+        return subSector ? subSector.name : null; 
       })
-      .filter((name): name is string => !!name); // Filter out null values
+      .filter((name): name is string => !!name); 
   }
   
 
-  activeAccordionIndex: number | null = null; // Tracks the currently open accordion
-  selectedSubSectorIds: number[] = []; // Selected sub-sector IDs
+  activeAccordionIndex: number | null = null; 
+  selectedSubSectorIds: number[] = []; 
 
 
   handleSubSectorChange(event: any): void {
     const currentSelectedIds: number[] = event.value;
-    console.log('Updated Selected IDs:', currentSelectedIds);
     this.selectedSubSectorIds.push(...currentSelectedIds);
   }
-
 
 
   onAccordionOpen(sectorId: number): void {
     this.activeAccordionIndex = this.activeAccordionIndex === sectorId ? null : sectorId;
     this.loadSubSectors(sectorId)
     this.activeAccordionIndex ? this.activeAccordionIndex: null
-
-    console.log("The active index is", this.activeAccordionIndex)
 
     const tabs = document.querySelectorAll('.p-toggleable-content');
     tabs.forEach((tab, index) => {

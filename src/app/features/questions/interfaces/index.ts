@@ -107,15 +107,17 @@ export interface OpexRecordsPayload {
 }
 
 export interface FinancialInfoRecords {
+  amorDep: string,
+  interests: string,
+  taxes: string,
+  costOfSales:RevenueRecords []
   id: number;
   year: number;
   createdAt: string;
   updatedAt: string;
   status: string;
-  costOfSales: string,
   ebitda: string,
   ebit: string,
-  taxes: string,
   notes: string | null;
   revenues: RevenueRecords[];
   opex: OpexRecords[];
@@ -133,9 +135,9 @@ export interface FinancialInfoRecordsPayload{
   year: number,
   revenues: number[],
   opex: number[],
-  costOfSales:number,
-  ebitda:number,
-  ebit:number,
+  costOfSales:number[],
+  amorDep:number,
+  interests:number,
   taxes:number
 }
 
@@ -148,10 +150,10 @@ export interface UpdateFinancialRecords {
   revenues: number[],
   opex: number[],
   companyId: number,
-  ebit:number,
-  costOfSales:number,
+  interests:number,
+  amorDep:number, 
+  costOfSales:[],
   taxes:number,
-  ebitda:number
 }
 
 export interface AddNotesToFinancialecords{
