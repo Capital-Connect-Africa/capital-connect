@@ -1,14 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { MatIcon } from "@angular/material/icon";
 import { CommonModule } from '@angular/common';
 import { PaginationService } from 'ngx-pagination';
-import { Observable, of } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap} from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FeedbackService, NavbarComponent } from '../../../../core';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
 import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
@@ -52,6 +50,7 @@ export class FinancialReporting {
   showModal: boolean = false;
   showFinancialModal: boolean = false;
   showCreateRecordModal: boolean = false;
+  showCreateCostOfSalesModal:boolean = false
   showCreateOpexModal: boolean = false;
 
   title!: string;
@@ -65,6 +64,12 @@ export class FinancialReporting {
   revenueRecord$ = new Observable<unknown>()
   createRevenueRecord$ = new Observable<unknown>()
   UpdateRevenueRecord$ = new Observable<unknown>()
+
+  //Cost of sales records
+  costOfSalesRecords$ = new Observable<unknown>()
+  costOfSalesRecord$ = new Observable<unknown>()
+  createCostOfSaleRecord$ = new Observable<unknown>()
+  UpdateCostOfSaleRecord$ = new Observable<unknown>()
 
   //opex
   opexRecords$ = new Observable<unknown>()
@@ -85,16 +90,12 @@ export class FinancialReporting {
     this.financialForm = this._fb.group({
       revenues: [[]], // Empty array by default
       opex: [[]], // Empty array by default
-      costOfSales:[0],
-      ebit:[0],
-      ebitda:[0],
+      costOfSales:[[]],
+      interests:[0],
+      amorDep:[0],
       taxes:[0],
       year:[0]
     });
-
-
-
-
 
 
     const companyDataString = sessionStorage.getItem('currentCompany');
@@ -108,6 +109,13 @@ export class FinancialReporting {
     this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
       this.revenueRecords = res
     }))
+
+
+    this.costOfSalesRecords$ = this._fr.getCompanyRCostOfSaleRecords(this.companyId).pipe(tap(res => {
+      this.costOfSalesRecords = res
+    }))
+
+    
 
     this.opexRecords$ = this._fr.getCompanyOpexRecords(this.companyId).pipe(tap(res => {
       this.opexRecords = res
@@ -125,16 +133,19 @@ export class FinancialReporting {
 
 
   revenueRecords: RevenueRecords[] = [];
-
+  costOfSalesRecords: RevenueRecords[] = []
   opexRecords: OpexRecords[] = [];
 
   financialInfoRecords: FinancialInfoRecords[] = [];
 
   newRevenue: RevenueRecords = { id: 0, description: '', value: 0,year:0 };
   newOpex: OpexRecords = { id: 0, description: '', value: 0 ,year:0};
+  newCostOfSales: OpexRecords = { id: 0, description: '', value: 0 ,year:0};
+
 
   selectedRevenue: RevenueRecords | null = null;
   selectedOpex: OpexRecords | null = null;
+  selectedCostOfSales: OpexRecords | null = null;
 
   addRevenue() {
     const newId = this.revenueRecords.length + 1;
@@ -149,6 +160,22 @@ export class FinancialReporting {
       this.selectedRevenue = null;
     }
   }
+
+
+  addCostOfSale() {
+    const newId = this.costOfSalesRecords.length + 1;
+    this.costOfSalesRecords.push({ ...this.newCostOfSales, id: newId });
+    this.newCostOfSales = { id: 0, description: '', value: 0 ,year:0};
+  }
+
+  updateCostOfSale() {
+    if (this.selectedCostOfSales) {
+      const index = this.costOfSalesRecords.findIndex(r => r.id === this.selectedCostOfSales!.id);
+      this.costOfSalesRecords[index] = { ...this.selectedCostOfSales };
+      this.selectedCostOfSales = null;
+    }
+  }
+
 
   addOpex() {
     const newId = this.opexRecords.length + 1;
@@ -167,6 +194,10 @@ export class FinancialReporting {
 
   view_revenue_records: boolean = false
   update_revenue_records: boolean = false
+
+  view_cost_of_sales_records: boolean = false
+  update_cost_of_sales_records: boolean = false
+
   view_opex_records: boolean = false
   update_opex_records: boolean = false
 
@@ -202,6 +233,27 @@ export class FinancialReporting {
         ]))
         break;
 
+
+      case "view_cost_of_sales_records":
+          this.title = "Cost Of Sales Records";
+          this.helperText = "Cost Of Sales Record Details";
+          this.view_cost_of_sales_records = true;
+          this.update_cost_of_sales_records = false;
+          this.costOfSalesRecord$ = this._fr.getCostOfSalesRecord(record.id).pipe(tap(res => [
+            this.currentRecord = res
+          ]))
+          break;
+  
+      case "update_cost_of_sales_records":
+          this.title = "Cost Of Sales Records";
+          this.helperText = "Update Cost Of Sales Record Details";
+          this.view_revenue_records = false;
+          this.update_revenue_records = true;
+          this.costOfSalesRecord$ = this._fr.getCostOfSalesRecord(record.id).pipe(tap(res => [
+            this.currentRecord = res
+          ]))
+          break;
+
       case "view_opex_records":
         this.title = "Opex Records";
         this.helperText = "Operational Expenditure Record Details";
@@ -225,11 +277,24 @@ export class FinancialReporting {
   }
 
   saveUpdates() {
+    console.log("Revenue ....", this.update_revenue_records)
+    console.log("Cost of sales....", this.update_cost_of_sales_records)
+    console.log("Opex records.....", this.update_opex_records)
+
+
     if (this.update_revenue_records) {
+      console.log("Reached here ..... 1")
       const index = this.revenueRecords.findIndex(r => r.id === this.currentRecord.id);
       if (index !== -1) {
+        console.log("Reached here ..... 2")
+
         this.revenueRecords[index] = { ...this.currentRecord };
+
+        console.log("Reached here ..... 3")
+
         this.UpdateRevenueRecord$ = this._fr.updateRevenueRecord(this.revenueRecords[index]).pipe(tap(res => {
+          console.log("Reached here ..... 4")
+
           this._fs.success("Revenue Record Updated Successfully")
           this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
             this.revenueRecords = res
@@ -241,7 +306,24 @@ export class FinancialReporting {
           }))
         }))
       }
-    } else if (this.update_opex_records) {
+    }else if (this.update_cost_of_sales_records) {
+      const index = this.costOfSalesRecords.findIndex(r => r.id === this.currentRecord.id);
+      if (index !== -1) {
+        this.costOfSalesRecords[index] = { ...this.currentRecord };
+        this.UpdateCostOfSaleRecord$ = this._fr.updateCostOfSaleRecord(this.costOfSalesRecords[index]).pipe(tap(res => {
+          this._fs.success("Cost Of Sales Record Updated Successfully")
+          this.costOfSalesRecords$ = this._fr.getCompanyRCostOfSaleRecords(this.companyId).pipe(tap(res => {
+            this.costOfSalesRecords = res
+          }))
+
+          this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
+            this.financialInfoRecords = res
+            this.transformData();
+          }))
+        }))
+      }
+    }    
+    else if (this.update_opex_records) {
       const index = this.opexRecords.findIndex(o => o.id === this.currentRecord.id);
       if (index !== -1) {
         this.opexRecords[index] = { ...this.currentRecord };
@@ -322,12 +404,14 @@ export class FinancialReporting {
 
   newOpexRecord: OpexRecordsPayload = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0, companyId:this.companyId};
   newRevenueRecord: OpexRecordsPayload = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+  newCostOfSalesRecord: OpexRecordsPayload = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+
 
   CreateOpexRecord() {
     this.newOpexRecord.companyId = this.companyId
     this.createOpexRecord$ = this._fr.createOpexRecord(this.newOpexRecord).pipe(tap(res => {
       this.showCreateOpexModal = false;
-      this._fs.success("Opex Record Created Successfully")
+      this._fs.success("Opearting Expense Created Successfully")
       this.opexRecords$ = this._fr.getCompanyOpexRecords(this.companyId).pipe(tap(res => {
         this.opexRecords = res
         this.newOpexRecord = { description: "", value: 0 ,year:0,companyId:this.companyId}
@@ -341,10 +425,23 @@ export class FinancialReporting {
     this.newRevenueRecord.companyId = this.companyId
     this.createRevenueRecord$ = this._fr.createRevenueRecord(this.newRevenueRecord).pipe(tap(res => {
       this.showCreateRecordModal = false;
-      this._fs.success("Opex Record Created Successfully")
+      this._fs.success("Revenue Created Successfully")
       this.revenueRecords$ = this._fr.getCompanyRevenueRecords(this.companyId).pipe(tap(res => {
         this.revenueRecords = res
         this.newRevenueRecord = { description: "", value: 0 ,year:0,companyId:this.companyId}
+        this.updateRecordsByYear(this.currentFinancialRecord.year)
+      }))
+    }))
+  }
+
+  createCostOfSalesRecord() {
+    this.newCostOfSalesRecord.companyId = this.companyId
+    this.createCostOfSaleRecord$ = this._fr.createCostOfSaleRecord(this.newCostOfSalesRecord).pipe(tap(res => {
+      this.showCreateCostOfSalesModal = false;
+      this._fs.success("Cost Of Sale Created Successfully")
+      this.costOfSalesRecords$ = this._fr.getCompanyRCostOfSaleRecords(this.companyId).pipe(tap(res => {
+        this.costOfSalesRecords = res
+        this.newCostOfSalesRecord = { description: "", value: 0 ,year:0,companyId:this.companyId}
         this.updateRecordsByYear(this.currentFinancialRecord.year)
       }))
     }))
@@ -354,6 +451,11 @@ export class FinancialReporting {
   addRevenueRecord() {
     this.newRevenueRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
     this.showCreateRecordModal = true;
+  }
+
+  addCostOfSalesRecord(){
+    this.newCostOfSalesRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : 0,companyId:this.companyId};
+    this.showCreateCostOfSalesModal = true;
   }
 
   addOpexRecord() {
@@ -372,9 +474,9 @@ export class FinancialReporting {
     year: 0,
     revenues: [],
     opex: [],
-    costOfSales:0,
-    ebitda:0,
-    ebit:0,
+    costOfSales:[],
+    amorDep:0,
+    interests:0,
     taxes:0
   };
 
@@ -395,13 +497,13 @@ export class FinancialReporting {
 
   opexData: any[] = [];
   revenueData: any[] = [];
+  costOfSalesData:any[] = []
 
   reversedTableData: any[] = [];
 
   years: number[] = [];
 
   transformData() {
-    // Collect all years and sort them in descending order
     this.years = Array.from(
       new Set(this.financialInfoRecords.map((item) => item.year))
     ).sort((a, b) => b - a); // Sort numerically in descending order
@@ -409,8 +511,10 @@ export class FinancialReporting {
     // Prepare rows with descriptions and values
     const opex_rows: any = {};
     const revenue_rows: any = {};
-    const revenue_totals: any = {}; // To store the total revenues for each year
-    const opex_totals: any = {}; // To store the total opexes for each year
+    const cost_of_sales_rows: any = {};
+    const cost_of_sales_totals: any = {};
+    const revenue_totals: any = {}; 
+    const opex_totals: any = {};
     const taxes_row: any = { description: 'Taxes' };
     const ebit_row: any = { description: 'EBIT' };
 
@@ -419,11 +523,8 @@ export class FinancialReporting {
     const profit_before_tax: any = { description: 'Profit before Tax' };
     const net_profit: any = { description: 'Net Profit' };
 
-
-
-
     const ebitda_row: any = { description: 'EBITDA' };
-    const costOfSales_row: any = { description: 'Cost of Sales' };
+    
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
@@ -438,9 +539,19 @@ export class FinancialReporting {
         // Add to revenue totals
         revenue_totals[year] = (revenue_totals[year] || 0) + rev.value;
       
-        // revenue_totals[year] = (revenue_totals[year] || 0) - rev.value;
-
       });
+
+      entry.costOfSales.forEach((rev: any) => {
+        if (!cost_of_sales_rows[rev.description]) {
+          cost_of_sales_rows[rev.description] = { description: rev.description };
+        }
+        cost_of_sales_rows[rev.description][year] = rev.value;
+  
+        // Add to revenue totals
+        cost_of_sales_totals[year] = (cost_of_sales_totals[year] || 0) + rev.value;
+      
+      });
+  
   
       // Handle opex
       entry.opex.forEach((opex: any) => {
@@ -452,34 +563,27 @@ export class FinancialReporting {
 
       });
   
-      // Handle taxes, ebit, ebitda, and costOfSales
-      
-     
-      ebitda_row[year] = entry.ebitda || 0;
-      amortisation_row[year] = 0
-      ebit_row[year] = entry.ebit || 0;
-      interests_row[year] = 0
+      ebitda_row[year] = entry.ebitda;
+      amortisation_row[year] = entry.amorDep
+      ebit_row[year] = entry.ebit;
+      interests_row[year] = entry.interests
       profit_before_tax[year] = 0
-      taxes_row[year] = entry.taxes || 0;    
+      taxes_row[year] = entry.taxes;    
       net_profit[year] = 0
 
-
-      costOfSales_row[year] = entry.costOfSales || 0;
-   
-     
     });
   
     // Add total revenues row
     revenue_rows["Total Revenue"] = { description: "Total Revenue", ...revenue_totals };
     opex_rows["Total Operating Expenses"] = { description: "Total Operating Expenses", ...opex_totals };
+    cost_of_sales_rows["Total Cost Of Sales"] = {description: "Total Cost Of Sales",...cost_of_sales_totals}
 
   
     // Convert rows object to array for PrimeNG table
     this.opexData = Object.values(opex_rows);
     this.revenueData = Object.values(revenue_rows);
-  
-    // Add additional rows to opexData
-    this.revenueData.push(costOfSales_row)
+    this.costOfSalesData = Object.values(cost_of_sales_rows)
+
     this.opexData.push(ebitda_row,amortisation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
   }
   
@@ -498,9 +602,9 @@ export class FinancialReporting {
       revenues: this.financialForm.value.revenues,
       opex: this.financialForm.value.opex,
       companyId: this.companyId,
-      costOfSales:Number(this.financialForm.value.costOfSales),
-      ebit:Number(this.financialForm.value.ebit),
-      ebitda:Number(this.financialForm.value.ebitda),
+      costOfSales:this.financialForm.value.costOfSales,
+      amorDep: this.financialForm.value.amorDep,
+      interests:this.financialForm.value.interets,
       taxes:Number(this.financialForm.value.taxes)
     };
 
@@ -544,10 +648,13 @@ export class FinancialReporting {
 
   filteredRevenueRecords: RevenueRecords[] = [];
   filteredOpexRecords: OpexRecords[] = [];
+  filteredCostOfSalesRecords: OpexRecords[] = [];
+
 
   updateRecordsByYear(year: number) {   
     this.filteredOpexRecords = this.opexRecords.filter(record => +record.year === +year);
     this.filteredRevenueRecords = this.revenueRecords.filter(record => +record.year === +year);
+    this.filteredCostOfSalesRecords = this.costOfSalesRecords.filter(record => +record.year === +year)
   }
   
 
