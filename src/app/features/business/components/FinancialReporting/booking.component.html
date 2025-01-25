@@ -30,10 +30,69 @@
 
         <div class="p-6 bg-gray-50 rounded">
           <div class="financial-container">
-            <h2><strong>Profit And Loss Statement</strong></h2>
+            
+            <div class="switch_parent" *ngIf="!edit_mode">
+              <P><label>Edit Mode</label></P>                     
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleView()" /> <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="switch_parent" *ngIf="edit_mode">
+              <P><label>View Mode</label></P>                     
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleEdit()" /> <span class="slider round"></span>
+              </label>
+            </div>
+             
+            
             <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
           </div>
 
+          <app-view-financial-reporting  *ngIf="!edit_mode"  [financialInfoRecords]="financialInfoRecords"></app-view-financial-reporting>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div *ngIf="edit_mode">
+
+          
           <p-table [value]="revenueData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines">
             <ng-template pTemplate="header">
               <tr>
@@ -144,6 +203,11 @@
               </tr>
             </ng-template>
           </p-table>
+
+          </div>
+
+
+
         </div>
       </div>
     </div>
