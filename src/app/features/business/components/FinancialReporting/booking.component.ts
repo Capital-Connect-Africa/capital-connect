@@ -17,6 +17,7 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
 import { FinancialReportingService } from './FinancialReporting.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ViewFinancialReporting } from "./viewFinanciallReport/viewFinancials.component";
 
 
 @Component({
@@ -30,8 +31,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     TableModule,
     AdvertisementSpaceComponent,
     TabViewModule, SharedModule, AngularMaterialModule, FormsModule, MultiSelectModule,
-    ModalComponent,ReactiveFormsModule
-  ],
+    ModalComponent, ReactiveFormsModule,
+    ViewFinancialReporting
+],
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.scss',
   providers: [PaginationService]
@@ -52,6 +54,7 @@ export class FinancialReporting {
   showCreateRecordModal: boolean = false;
   showCreateCostOfSalesModal:boolean = false
   showCreateOpexModal: boolean = false;
+  edit_mode: boolean = false
 
   title!: string;
   helperText!: string;
@@ -464,9 +467,18 @@ export class FinancialReporting {
     this.showCreateOpexModal = true;
   }
 
+  onToggleEdit(){
+    this.edit_mode = false
+  }
+
+  onToggleView(){
+    this.edit_mode = true
+  }
+
   createFinancialModal: boolean = false;
 
   addFinancialRecord() {
+    this.edit_mode = true
     this.createFinancialModal = true
   }
 
@@ -499,6 +511,7 @@ export class FinancialReporting {
   opexData: any[] = [];
   revenueData: any[] = [];
   costOfSalesData:any[] = []
+  combinedData:any[] = []
 
   reversedTableData: any[] = [];
 
@@ -507,7 +520,7 @@ export class FinancialReporting {
   transformData() {
     this.years = Array.from(
       new Set(this.financialInfoRecords.map((item) => item.year))
-    ).sort((a, b) => b - a); // Sort numerically in descending order
+    ).sort((a, b) => a - b); // Sort numerically in descending order
   
     // Prepare rows with descriptions and values
     const opex_rows: any = {};
@@ -588,6 +601,16 @@ export class FinancialReporting {
     this.opexData.push(ebitda_row,amortisation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
   }
   
+
+
+
+
+
+
+
+
+
+
 
 
 
