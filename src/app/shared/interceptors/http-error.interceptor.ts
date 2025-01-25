@@ -45,8 +45,6 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (isFinancialReportsPage(error.url as string)) {
-        console.log("Handling financial reports error interceptions")
-
         return EMPTY;
       }
       
@@ -84,7 +82,7 @@ function isValidAuthLoginPath(path: string): boolean {
 }
 
 function isFinancialReportsPage(path: string): boolean {
-  return path.includes('opex') || path.includes('revenues');
+  return path.includes('opex') || path.includes('revenues') || path.includes('cost-of-sales') || path.includes('finances');
 }
 
 

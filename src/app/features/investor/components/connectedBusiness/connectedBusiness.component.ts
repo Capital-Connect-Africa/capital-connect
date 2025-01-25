@@ -218,7 +218,6 @@ export class ConnectedBusinessComponent {
 
 
   showDetails(business:  InterestingBusinesses): void {
-    console.log("The business is", business)
     this.table = !this.table
     this.selectedBusiness = business;
     // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
@@ -326,13 +325,9 @@ export class ConnectedBusinessComponent {
 
 
   pageChange(event: { first: number; rows: number }): void {
-    console.log("The Event Is", event)
-
     this.currentPage = event.first / event.rows;
     this.pageSize = event.rows;
   
-
-
     this.connectedCompanies$ = this._businessMatchingService.getConnectedCompanies(this.currentPage + 1, this.pageSize).pipe(
       tap(res => {
         this.connectedBusinesses = res;

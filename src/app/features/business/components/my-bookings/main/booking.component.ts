@@ -145,23 +145,15 @@ export class BookingComponent {
     this.pageChange(this.currentPage);
   }
 
-  // getMeeting(booking:Booking) {
-  //   console.log("Get meeting hit....")
-  //   this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
-  // }
-
-
    getMeeting(booking:Booking) {
       this.meeting_details = true
       this.getSingleMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
         this.meetingDetails = res
       }))
-      // this._router.navigate([`/business/my-booking/${booking.calendlyEventId}/${booking.id}`]);
     }
 
 
    takeMeetingNotes(booking:Booking){
-      console.log("The booking is", booking)
       this.meetingNotes = booking.notes
       this.notes_modal = true
       this.bookingId = booking.id

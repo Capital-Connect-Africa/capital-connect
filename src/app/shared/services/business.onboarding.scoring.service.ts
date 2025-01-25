@@ -126,9 +126,15 @@ export class BusinessOnboardingScoringService {
     }));
   }
 
-  getSectionProgress(id: number){
+  getSectionProgress(id: number,user_id?:number){
+    if(user_id){
+      return this._scoringService.getSectionSubmissionProgress(user_id, id);
+    }
     return this._scoringService.getSectionSubmissionProgress(this._authStateService.currentUserId(), id);
   }
+
+
+
 
   get progress(){
     const requests =[
@@ -168,4 +174,48 @@ export class BusinessOnboardingScoringService {
       ]
     }));
   } 
+
+
+
+
+
+  advisorProgressView(growthStage:GrowthStage,id:number,user_id:number){
+    const requests =[
+      this.getSectionProgress(getInvestorEligibilitySubsectionIds(growthStage).ID,user_id),
+      this.getSectionProgress(INVESTOR_PREPAREDNESS_SUBSECTION_IDS.ID,user_id),
+      this.getSectionProgress(BUSINESS_INFORMATION_SUBSECTION_IDS.ID,user_id),
+      this.getSectionProgress(IMPACT_ASSESMENT_SUBSECTION_IDS.ID,user_id),
+      this._scoringService.getCompanyProgress(id),
+    ];
+    return forkJoin(requests).pipe(map((res:any[]) =>{
+      
+      return [
+        {
+          section: 'Investor Eligibility',
+          progress: Math.round(res[0].completenessPercentage as number),
+        },
+
+        {
+          section: 'Investor Preparedness',
+          progress: Math.round(res[1].completenessPercentage as number),
+        },
+
+        {
+          section: 'Business Information',
+          progress: Math.round(res[2].completenessPercentage as number),
+        },
+
+        {
+          section: 'Impact Assement',
+          progress: Math.round(res[3].completenessPercentage as number),
+        },
+
+        {
+          section: 'Business Profile',
+          progress: Math.round(res[4].completeness as number),
+        }
+      ]
+    }));
+
+  }
 }

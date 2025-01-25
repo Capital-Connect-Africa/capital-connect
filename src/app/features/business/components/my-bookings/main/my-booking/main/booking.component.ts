@@ -73,8 +73,6 @@ export class MyBookingComponent {
   meetingNotes: string = ''; // Two-way binding for p-editor
 
   saveMeetingNotes(): void {
-    console.log('Meeting Notes Saved:', this.meetingNotes);
-
     let data = {
       calendlyEventId: this.calendlyId,
       notes:this.meetingNotes

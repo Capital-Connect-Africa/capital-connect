@@ -35,6 +35,29 @@ export class FinancialReportingService extends BaseHttpService {
   }
 
 
+  //Cost Of Sales
+  createCostOfSaleRecord(payload: OpexRecordsPayload) {
+    return this.create(`${BASE_URL}/cost-of-sales`, payload) as Observable<unknown>
+  }
+
+  getAllCostOfSaleRecords() :Observable<RevenueRecords[]>{
+    return this.read(`${BASE_URL}/cost-of-sales`) as Observable<RevenueRecords[]>
+  }
+
+  getCompanyRCostOfSaleRecords(companyId:number) :Observable<RevenueRecords[]>{
+    return this.read(`${BASE_URL}/cost-of-sales/company/${companyId}`) as Observable<RevenueRecords[]>
+  }
+
+  getCostOfSalesRecord(id: number):Observable<RevenueRecords>{
+    return this.readById(`${BASE_URL}/cost-of-sales`, id) as Observable<RevenueRecords>
+  }
+
+  updateCostOfSaleRecord(payload: RevenueRecords) {
+    return this.update(`${BASE_URL}/cost-of-sales`, payload.id, payload) as Observable<unknown>
+  }
+  
+
+
   //Opex records
   createOpexRecord(payload: OpexRecordsPayload) {
     return this.create(`${BASE_URL}/opex`, payload) as Observable<unknown>

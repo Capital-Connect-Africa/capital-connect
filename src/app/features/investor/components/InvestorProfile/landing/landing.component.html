@@ -165,7 +165,9 @@
             <div *ngIf="current_details==3">             
 
               <div class="input__wrapper">
-              <label class="input__label">Select Sub Sectors Of The Selected Sectors<sup>*</sup></label>              
+              <label class="input__label">Click to select the Sub Sectors Of The Selected Sectors<sup>*</sup>
+                <small class="block text-sm text-gray-500 mt-1">(Click on a sector to expand and select sub-sectors)</small>
+              </label>              
               <div class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <p-accordion [activeIndex]="activeAccordionIndex">
                   <p-accordionTab *ngFor="let sector of selectedSectorsObjects" [header]="sector.name" (click)="onAccordionOpen(sector.id)">
