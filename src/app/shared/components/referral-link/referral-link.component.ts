@@ -29,6 +29,10 @@ export class ReferralLinkComponent {
       try {
         await navigator.clipboard.writeText(this.link);
         this.linkCopied = true;
+        setTimeout(() => {
+          this.linkCopied = false;
+          selection.removeAllRanges();
+        }, 5000);
       } catch (error) {
         this.linkCopied = false;
       }
