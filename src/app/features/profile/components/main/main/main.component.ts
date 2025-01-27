@@ -25,8 +25,6 @@ import { ReferralLinkComponent } from "../../../../../shared/components/referral
   imports: [
     MatIcon,
     NavbarComponent,
-    OverviewComponent,
-    SchedulesSectionComponent,
     CommonModule,
     AlertComponent,
     AlertCardComponent,
