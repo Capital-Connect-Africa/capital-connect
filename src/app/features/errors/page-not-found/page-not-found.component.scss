@@ -1,0 +1,18 @@
+@import "../../../styles/colors.scss";
+
+.not-found {
+  height: 100svh;
+
+  .btn {
+    background-color: $secondary-color;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 0;
+    transition: all 0.2s linear;
+    &:hover {
+      background-color: $primary-color;
+    }
+  }
+}
