@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { CarouselComponent } from '../../../carousel/carousel.component';
 import { LogInFormComponent } from '../../../auth/components/log-in-form/log-in-form.component';
 import { SignUpFormComponent } from '../../../auth/components/sign-up-form/sign-up-form.component';
 import { FORM_TYPE } from '../../../auth/interfaces/auth.interface';
