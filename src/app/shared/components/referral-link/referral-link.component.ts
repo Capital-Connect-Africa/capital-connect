@@ -13,7 +13,7 @@ import { AuthStateService } from '../../../features/auth/services/auth-state.ser
 export class ReferralLinkComponent {
   @ViewChild('textDiv') textDiv!: ElementRef<HTMLDivElement>;
   private _authStateService = inject(AuthStateService);
-  link = `https://app.capitalconnect.africa/signup/${
+  link = `https://app.capitalconnect.africa/signup?r=${
     this._authStateService.currentUserProfile().referralCode
   }`;
 
