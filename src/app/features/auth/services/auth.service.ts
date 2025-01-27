@@ -9,7 +9,6 @@ import {
   BASE_URL,
   BaseHttpService,
   FeedbackService,
-  JwtService,
 } from '../../../core';
 import { Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -18,7 +17,6 @@ import { OrganizationOnboardService } from '../../organization/services/organiza
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseHttpService {
-  private _jwtSetvice = inject(JwtService);
   private _feedBackService = inject(FeedbackService);
   private _authStateService = inject(AuthStateService);
   private _organizationService = inject(OrganizationOnboardService);
@@ -49,7 +47,6 @@ export class AuthService extends BaseHttpService {
       JSON.stringify(loginInfo)
     ).pipe(
       switchMap((res: any) => {
-        const access_token: string = res.access_token;
         this._authStateService.reset();
         this._organizationService.reset();
         this._feedBackService.success('Logged In Successfully, Welcome.');
