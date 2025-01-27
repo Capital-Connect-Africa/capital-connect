@@ -5,20 +5,18 @@ import {
   MobileNumber,
   Profile,
 } from '../interfaces/auth.interface';
-import {
-  BASE_URL,
-  BaseHttpService,
-  FeedbackService,
-} from '../../../core';
+import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Observable, switchMap } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthStateService } from './auth-state.service';
 import { OrganizationOnboardService } from '../../organization/services/organization-onboard.service';
+import { ReferralTokenService } from '../../../shared/services/referral-token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService extends BaseHttpService {
   private _feedBackService = inject(FeedbackService);
   private _authStateService = inject(AuthStateService);
+  private _referralTokenService = inject(ReferralTokenService);
   private _organizationService = inject(OrganizationOnboardService);
 
   constructor(private _httpClient: HttpClient) {
@@ -31,6 +29,7 @@ export class AuthService extends BaseHttpService {
         this._feedBackService.success(
           'Signed Up Successfully, Open your email to verify.'
         );
+        this._referralTokenService.removeToken();
       })
     );
   }
