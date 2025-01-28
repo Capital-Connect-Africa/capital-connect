@@ -75,6 +75,14 @@ export class VoucherRulesComponent {
       operator: [{value: Operators.EQUAL_TO, label: 'User Is'}],
       valueType: 'select',
       options: [{value: 'user', label: 'Business'}, {value: 'investor', label: 'Investor'}]
+    },
+    
+    {
+      userPropertyName: 'Referrer',
+      userPropertyValue: UserProperties.REFERRED_BY,
+      operator: [{value: Operators.EQUAL_TO, label: 'Users Referred By'}],
+      valueType: 'select',
+      options: [{value: 'user', label: 'Business'}, {value: 'investor', label: 'Investor'}]
     }
   ]
 
