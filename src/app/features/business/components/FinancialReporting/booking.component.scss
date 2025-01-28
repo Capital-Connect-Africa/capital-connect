@@ -697,3 +697,10 @@ input:checked + .slider:before {
   display: flex;
   
 }
+
+
+.btn__group{
+ display: flex;
+ justify-content: space-between;
+ gap: 10px;
+}

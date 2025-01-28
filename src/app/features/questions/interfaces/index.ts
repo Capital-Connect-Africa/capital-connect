@@ -121,6 +121,14 @@ export interface FinancialInfoRecords {
   notes: string | null;
   revenues: RevenueRecords[];
   opex: OpexRecords[];
+  totalRevenues: string | null,
+  totalCosts: string | null,
+  grossProfit: string | null,
+  profitBeforeTax: string | null,
+  netProfit: string |  null,
+  grossMargin: string | null,
+  ebitdaMargin: string | null,
+
   company: {
     id: number;
   };
