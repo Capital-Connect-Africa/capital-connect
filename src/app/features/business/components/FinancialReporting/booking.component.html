@@ -43,51 +43,16 @@
               </label>
             </div>
              
-            
-            <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
+            <div class="btn__group">
+              <button  *ngIf="false" class="btn btn-sm mb-4 btn-success-alt" (click)="exportRecord()">Export Financials</button>
+              <button class="btn btn-sm mb-4" (click)="addFinancialRecord()">New Record</button>
+            </div>
+          
           </div>
 
-          <app-view-financial-reporting  *ngIf="!edit_mode"  [financialInfoRecords]="financialInfoRecords"></app-view-financial-reporting>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          <div   #financials_content style="width: 100%!important">
+            <app-view-financial-reporting *ngIf="!edit_mode"  [financialInfoRecords]="financialInfoRecords"></app-view-financial-reporting>
+          </div>
 
 
           <div *ngIf="edit_mode">
@@ -115,14 +80,11 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>              
-                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales' }" 
-                 style="width: 300px;">{{ row.description }}</td>
-
-                    <td *ngFor="let year of years" 
-                        [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
-                      {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
-                    </td>
-
+                <td [ngClass]="{'font-bold': row.description === 'Total Revenue' || row.description === 'Cost of Sales'}" 
+                style="width: 300px;">{{ row.description }}</td>
+            <td *ngFor="let year of years" [ngClass]="{'red_txt': row[year]?.toString().charAt(0) === '-'}">
+              {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] < 0 ? '(' + row[year].toString().slice(1) + ')' : row[year].toLocaleString()) : '-') : '-' }}
+            </td>
               </tr>
             </ng-template>
           </p-table>
@@ -159,7 +121,7 @@
 
                     <td *ngFor="let year of years" 
                         [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
-                      {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
+                      {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year]) : '-') : '-' }}
                     </td>
 
               </tr>
@@ -189,16 +151,14 @@
             </ng-template>
             <ng-template pTemplate="body" let-row>
               <tr>
-                <td  [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses'
-                  || row.description === 'Depreciation and Amortisation' || row.description === 'Depreciation' || row.description === 'Interests' || row.description === 'Profit before Tax'
-                  || row.description === 'Net Profit'
+                <td [ngClass]="{'font-bold': row.description === 'Taxes' || row.description === 'EBIT' || row.description === 'EBITDA' || row.description === 'Total Operating Expenses'
+                || row.description === 'Depreciation and Amortisation' || row.description === 'Depreciation' || row.description === 'Interests' || row.description === 'Profit before Tax'
+                || row.description === 'Net Profit' || row.description === 'EBITDA Margin' || row.description === 'Gross Margin'}"
+                    style="width: 300px;">{{ row.description }}</td>
 
-
-                 }" style="width: 300px;">{{ row.description }}</td>
-                  
-                  <td *ngFor="let year of years" [ngClass]="{'red_txt' : row[year]?.toString().charAt(0) === '-'}">
-                    {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] | currency) : '-') : '-' }}
-                  </td>
+              <td *ngFor="let year of years" [ngClass]="{'red_txt': row[year]?.toString().charAt(0) === '-'}">
+                {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] < 0 ? '(' + row[year].toString().slice(1) + ')' : row[year].toLocaleString()) : '-') : '-' }}
+              </td>
 
               </tr>
             </ng-template>
@@ -518,8 +478,7 @@
   <div class="form_content__container">
     <div class="input__wrapper">
       <label for="year" class="input__label">Financial Year</label>
-      <input id="year" type="number" class="input__field" placeholder="2025" [(ngModel)]="newFinancialRecord.year" 
-      (ngModelChange)="updateRecordsByYear($event)" 
+      <input id="year" type="number" class="input__field" placeholder="2025" [(ngModel)]="newFinancialRecord.year" (ngModelChange)="updateRecordsByYear($event)" 
       />
     </div>
 

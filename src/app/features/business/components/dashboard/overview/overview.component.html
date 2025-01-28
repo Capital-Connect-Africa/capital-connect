@@ -279,7 +279,7 @@
               <td>
                 <div class="cta__wrap">
                   <button class="btn__cta text-blue-600" (click)="viewConnectedInvestor(connectedInvestor.id)">View</button>
-                  <button class="btn__cta text-rose-600" (click)="revokeConnection(connectedInvestor.id)">Revoke</button>
+                  <!-- <button class="btn__cta text-rose-600" (click)="revokeConnection(connectedInvestor.id)">Revoke</button> -->
                 </div>
               </td>
           </tr>
@@ -307,6 +307,7 @@
       <ng-template pTemplate="body" let-connectionRequest>
           <tr>
             <td>{{ connectionRequest.investorType }}</td>
+            <p></p>
               <td>${{ connectionRequest.minimumFunding | numberabbreviation}}</td>
               <td>
                 <ng-container *ngIf="connectionRequest.noMaximumFunding; else withMaxFunding">

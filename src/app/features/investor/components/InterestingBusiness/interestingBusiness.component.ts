@@ -24,6 +24,10 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
+import { TableModule } from 'primeng/table';
+import { ViewFinancialReporting } from "../../../business/components/FinancialReporting/viewFinanciallReport/viewFinancials.component";
+import { FinancialInfoRecords } from '../../../questions/interfaces';
+import { FinancialReportingService } from '../../../business/components/FinancialReporting/FinancialReporting.service';
 
 @Component({
   selector: 'app-interesting-business',
@@ -39,7 +43,9 @@ import { DebouncedSearchComponent } from "../../../../core/components/debounced-
     DialogModule,
     NgxPaginationModule,
     MultiSelectModule, ReactiveFormsModule,
-    DebouncedSearchComponent
+    DebouncedSearchComponent,
+    TableModule,
+    ViewFinancialReporting
 ],
   templateUrl: './interestingBusiness.component.html',
   styleUrl: './interestingBusiness.component.scss',
@@ -52,11 +58,19 @@ export class InterestingBusinessComponent {
   private _company = inject(CompanyHttpService)
   private _scoringService = inject(BusinessOnboardingScoringService);
   private _router = inject(Router)
+  private _fr = inject(FinancialReportingService)
+  
 
   //booleans
   visible = false;
   decline: boolean = false;
   table:boolean = true
+
+
+  //financial info
+  financialInfoRecords$ = new Observable<unknown>()
+
+  financialInfoRecords: FinancialInfoRecords[] = [];
 
 
   //variables
@@ -192,6 +206,10 @@ export class InterestingBusinessComponent {
 
     // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
+
+    this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(business.id).pipe(tap(res => {
+      this.financialInfoRecords = res
+    }))
 
 
      //get the company details
