@@ -25,25 +25,26 @@ import { WelcomeUserPipe } from "../../../../core/pipes/welcome-user.pipe";
   styleUrl: './billing-vouchers.component.scss'
 })
 export class BillingVouchersComponent {
-  first: number = 0;
-  rows: number = 0; // set back to 10
-  showingRows =0;
+  // first: number = 0;
+  rows: number = 10;
+  rowsCount:number =0;
   currentPage:number =1;
+  
   delete$ =new Observable();
   updateVoucher$ =new Observable();
   createVoucher$ =new Observable();
-  createRule$ =new Observable();
-  rowsCount:number =this.rows;
+
   @ViewChild('dt') table!: Table;
   private _router =inject(Router);
-  private _fb =inject(FormBuilder)
+  private _fb =inject(FormBuilder);
   private _userAuthState =inject(AuthStateService);
 
-  currentUsersFirstName =this._userAuthState.currentUserProfile().firstName
+  visible =false;
   rules:Rule[] =[];
   vouchers:Voucher[] =[];
   voucherToBeEdited:Voucher | null =null;
-  visible =false;
+  currentUsersFirstName =this._userAuthState.currentUserProfile().firstName;
+
   cols =[
     { field: 'code', header: 'Code' },
     { field: 'percentageDiscount', header: 'Discount' },
@@ -58,39 +59,32 @@ export class BillingVouchersComponent {
   today: Date =new Date();
   defaultDate: Date =new Date();
 
+  end =0;
+  start =0;
   vouchersCount:number =0;
   vouchersShowingCount =0;
-  start =0;
-  end =0;
   heading ='CREATE VOUCHER';
   helperText ='Enter new voucher details';
   rules$ =new Observable<Rule[]>();
   vouchers$ =new Observable();
 
-  private _rulesService =inject(RulesService);
   private _voucherService =inject(BillingVoucherService);
 
   getVouchers(page: number =1, limit:number =10){
     this.vouchers$ =this._voucherService.getBillingVouchers(page, limit).pipe(tap(payload =>{
       this.vouchers =payload.data;
+      this.rowsCount =payload.total_count;
       this.updateDisplayedData();
     }))
   }
 
-  getRules(page: number =1, limit: number =10){
-   this.rules$ = this._rulesService.getRules(page, limit, true).pipe(tap(rules =>{
-    this.rules =rules
-   }))
-  }
 
   ngAfterViewInit(): void {
     this.getVouchers();
-    this.getRules();
   }
 
   onPageChange(event:PaginatorState){
-    this.currentPage =(event.page || 0) +1;
-    this.first =event.first || this.first;
+    this.currentPage =Number(event.page) +1;
     this.rows =event.rows || this.rows;
     this.getVouchers(this.currentPage , this.rows);
   }
@@ -131,11 +125,12 @@ export class BillingVouchersComponent {
   }
 
   updateDisplayedData() {
-      const data = this.table.filteredValue || this.vouchers;
-      const start = this.table.first??10;
-      const end = Math.min(start + (this.table.rows ?? 10), data.length);
-      this.vouchersShowingCount = start + 1;
-      this.end = end;
+    const start = this.table.first ?? 0;
+    const rows = this.table.rows ?? 10;
+    const end = Math.min(start + rows, this.rowsCount);
+    this.vouchersShowingCount = start + 1; 
+    this.end = end;
+    
   }
 
   applyFilter(event: Event) {
@@ -172,13 +167,6 @@ export class BillingVouchersComponent {
     expiresAt: [this.today, [Validators.required]]
   })
 
-  ruleForm =this._fb.group({
-    userPropery: ['', [Validators.required]],
-    description: ['', [Validators.required]],
-    operator: ['', [Validators.required]],
-    value: ['', [Validators.required]],
-  })
-
   saveVoucher(){
     if(this.voucherToBeEdited) return this.updateVoucher();
     const values =this.voucherForm.value as Partial<VoucherFormData>;
@@ -203,17 +191,6 @@ export class BillingVouchersComponent {
       this.getVouchers(this.currentPage, this.rows);
       this.resetModal();
     }))
-  }
-
-  saveRule(){
-    const values =this.voucherForm.value as Partial<RuleFormData>;
-    this.createRule$ =this._rulesService.createRule(values).pipe(tap(res =>{
-      this.getRules();
-    }))
-  }
-
-  onPage(event: TablePageEvent){
-      this.updateDisplayedData()
   }
 
   resetModal(){
