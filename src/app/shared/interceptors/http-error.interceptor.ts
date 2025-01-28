@@ -5,15 +5,19 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { EMPTY, of, throwError } from 'rxjs';
 import { FeedbackService } from '../../core';
+import { AuthStateService } from '../../features/auth/services/auth-state.service';
 
 export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const feedbackService = inject(FeedbackService);
+  const _authStateService = inject(AuthStateService);
+  
   const router = inject(Router)
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.error.statusCode === 403) {
         feedbackService.warning('You are unauthorized to perform the following action. Kindly Contact administrator.');
+        _authStateService.logout()
         return EMPTY;
       }
       if (isValidCompanyOwnerPath(error.url as string)) {
