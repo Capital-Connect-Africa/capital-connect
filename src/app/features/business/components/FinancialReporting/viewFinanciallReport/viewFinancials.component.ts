@@ -69,8 +69,11 @@ export class ViewFinancialReporting {
     const amortisationRow: any = { description: 'Depreciation and Amortisation', section: 'Operating Expenses' };
     const interestsRow: any = { description: 'Interests', section: 'Operating Expenses' };
     const profitBeforeTax: any = { description: 'Profit before Tax', section: 'Operating Expenses' };
+    const grossProfit: any ={description: 'Gross Profit', section: 'Operating Expenses' };
     const netProfit: any = { description: 'Net Profit', section: 'Operating Expenses' };
     const ebitdaRow: any = { description: 'EBITDA', section: 'Operating Expenses' };
+    const grossMargin: any = {description:'Gross Margin', section:'Operating Expenses'};
+    const ebitdaMargin : any =  {description:'EBITDA Margin', section:'Operating Expenses'};
   
     this.financialInfoRecords.forEach((entry) => {
       const year = entry.year;
@@ -111,9 +114,12 @@ export class ViewFinancialReporting {
       amortisationRow[year] = entry.amorDep;
       ebitRow[year] = entry.ebit;
       interestsRow[year] = entry.interests;
-      profitBeforeTax[year] = 0;
+      profitBeforeTax[year] = entry.profitBeforeTax;
       taxesRow[year] = entry.taxes;
-      netProfit[year] = 0;
+      netProfit[year] = entry.netProfit;
+      grossProfit[year] = entry.grossProfit,
+      grossMargin[year] = entry.grossMargin == null ? '-'  : entry.grossMargin ,
+      ebitdaMargin[year] = entry.ebitdaMargin == null ? '-' : entry.ebitdaMargin 
     });
   
     // Add total rows
@@ -126,13 +132,16 @@ export class ViewFinancialReporting {
       ...Object.values(revenueRows),
       ...Object.values(costOfSalesRows),
       ...Object.values(opexRows),
+      grossMargin,
       ebitdaRow,
+      ebitdaMargin,
       amortisationRow,
       ebitRow,
       interestsRow,
       profitBeforeTax,
       taxesRow,
-      netProfit,
+      netProfit,    
+   
     ];
   }
 

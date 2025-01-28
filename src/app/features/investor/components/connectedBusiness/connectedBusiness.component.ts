@@ -11,9 +11,6 @@ import { AngularMaterialModule, GeneralSummary, SubmissionService, SubMissionSta
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { CompanyResponse, GrowthStage } from '../../../organization/interfaces';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
-import { Score } from '../../../../shared/business/services/onboarding.questions.service';
-import { getInvestorEligibilitySubsectionIds } from '../../../../shared/business/services/onboarding.questions.service';
-import { INVESTOR_PREPAREDNESS_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { IMPACT_ASSESMENT_SUBSECTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../../../core';
@@ -32,6 +29,9 @@ import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/se
 import { RemoveQuotesPipe } from "../../../../shared/pipes/remove-quotes.pipe";
 import { DebouncedSearchComponent } from "../../../../core/components/debounced-search/debounced-search.component";
 import { TableModule } from 'primeng/table';
+import { ViewFinancialReporting } from "../../../business/components/FinancialReporting/viewFinanciallReport/viewFinancials.component";
+import { FinancialInfoRecords } from '../../../questions/interfaces';
+import { FinancialReportingService } from '../../../business/components/FinancialReporting/FinancialReporting.service';
 
 @Component({
   selector: 'app-connected-business',
@@ -50,7 +50,8 @@ import { TableModule } from 'primeng/table';
     MultiSelectModule, ReactiveFormsModule,
     RemoveQuotesPipe,
     DebouncedSearchComponent,
-    TableModule
+    TableModule,
+    ViewFinancialReporting
 ],
   templateUrl: './connectedBusiness.component.html',
   styleUrl: './connectedBusiness.component.scss',
@@ -68,6 +69,8 @@ export class ConnectedBusinessComponent {
   private _scoringService = inject(BusinessOnboardingScoringService);
   private _router = inject(Router)
   private _submissionService = inject(SubmissionService);
+
+  
 
  
 
@@ -116,6 +119,10 @@ export class ConnectedBusinessComponent {
   esgSubmissions$ = new Observable<UserSubmissionResponse[]>
   search$ = new Observable<InterestingBusinesses[]>;
 
+  //financial info
+  financialInfoRecords$ = new Observable<unknown>()
+
+  financialInfoRecords: FinancialInfoRecords[] = [];
 
 
 
@@ -222,7 +229,6 @@ export class ConnectedBusinessComponent {
     this.selectedBusiness = business;
     // const companyGrowthStage2 = GrowthStage[business.company.growthStage as keyof typeof GrowthStage];
     const companyGrowthStage = this.getGrowthStageFromString(business.company.growthStage);
-
 
      //get the company details
     this.companyDetails$ = this._company.getSingleCompany(business.company.id).pipe(

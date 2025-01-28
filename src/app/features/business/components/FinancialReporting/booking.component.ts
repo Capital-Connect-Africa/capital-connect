@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PaginationService } from 'ngx-pagination';
 import { Observable } from 'rxjs';
@@ -18,6 +18,8 @@ import { FinancialReportingService } from './FinancialReporting.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ViewFinancialReporting } from "./viewFinanciallReport/viewFinancials.component";
+import { PdfGeneratorService } from '../../../../shared/services/pdf-generator.service';
+
 
 
 @Component({
@@ -39,6 +41,7 @@ import { ViewFinancialReporting } from "./viewFinanciallReport/viewFinancials.co
   providers: [PaginationService]
 })
 export class FinancialReporting {
+  @ViewChild('financials_content', { static: false }) financials_content!: ElementRef;
   financialForm!: FormGroup;
 
 
@@ -46,6 +49,8 @@ export class FinancialReporting {
   private _fr = inject(FinancialReportingService)
   private _fs = inject(FeedbackService)
   private _fb = inject(FormBuilder)
+  private _pdfService = inject(PdfGeneratorService);
+  
 
 
   //booleans
@@ -372,7 +377,9 @@ export class FinancialReporting {
       ebit:this.currentFinancialRecord.ebit,
       ebitda:this.currentFinancialRecord.ebitda,
       costOfSales:this.currentFinancialRecord.costOfSales,
-      taxes:this.currentFinancialRecord.costOfSales
+      taxes:this.currentFinancialRecord.taxes,
+      interests:this.currentFinancialRecord.interests,
+      amorDep:this.currentFinancialRecord.amorDep
     }, this.currentFinancialRecord.year)
 
     this.view_financial_info = action === 'view_financial_info';
@@ -390,6 +397,7 @@ export class FinancialReporting {
 
 
   patchFormData(data: any, year: number): void {
+    console.log("Te data to be patched is ...", data)
     const filteredRevenues = data.revenues.filter((rec: { year: number }) => rec.year === year);
     const filteredOpex = data.opex.filter((rec: { year: number }) => rec.year === year);
     this.financialForm.patchValue({
@@ -399,7 +407,10 @@ export class FinancialReporting {
       ebit: data.ebit,
       ebitda: data.ebitda,
       taxes: data.taxes,
-      year: data.year
+      year: data.year,
+      amorDep: data.amorDep,
+      interests:data.interests,      
+
     });
   }
   
@@ -452,7 +463,6 @@ export class FinancialReporting {
 
 
   addRevenueRecord() {
-    console.log("The current financial form value is", this.financialForm.value)
     this.newRevenueRecord = { description: "", value: 0 ,year:this.currentFinancialRecord?.year ? this.currentFinancialRecord?.year : this.newFinancialRecord.year ? this.newFinancialRecord.year : 0,companyId:this.companyId};
     this.showCreateRecordModal = true;
   }
@@ -538,6 +548,12 @@ export class FinancialReporting {
     const net_profit: any = { description: 'Net Profit' };
 
     const ebitda_row: any = { description: 'EBITDA' };
+    const profitBeforeTax: any = { description: 'Profit before Tax'};
+    const grossProfit: any ={description: 'Gross Profit'};
+    const netProfit: any = { description: 'Net Profit'};
+    const grossMargin: any = {description:'Gross Margin'};
+    const ebitdaMargin : any =  {description:'EBITDA Margin'};
+  
     
   
     this.financialInfoRecords.forEach((entry) => {
@@ -583,7 +599,12 @@ export class FinancialReporting {
       interests_row[year] = entry.interests
       profit_before_tax[year] = 0
       taxes_row[year] = entry.taxes;    
-      net_profit[year] = 0
+      net_profit[year] = entry.netProfit
+      profitBeforeTax[year] = entry.profitBeforeTax;
+      grossProfit[year] = entry.grossProfit;
+      netProfit[year] = entry.netProfit;
+      grossMargin[year] = entry.grossMargin ;
+      ebitdaMargin[year] = entry.ebitdaMargin ;
 
     });
   
@@ -598,7 +619,7 @@ export class FinancialReporting {
     this.revenueData = Object.values(revenue_rows);
     this.costOfSalesData = Object.values(cost_of_sales_rows)
 
-    this.opexData.push(ebitda_row,amortisation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
+    this.opexData.push(grossMargin,ebitda_row,ebitdaMargin,amortisation_row,ebit_row,interests_row,profit_before_tax,taxes_row,net_profit);
   }
   
 
@@ -627,8 +648,8 @@ export class FinancialReporting {
       opex: this.financialForm.value.opex,
       companyId: this.companyId,
       costOfSales:this.financialForm.value.costOfSales,
-      amorDep: this.financialForm.value.amorDep,
-      interests:this.financialForm.value.interets,
+      amorDep: Number(this.financialForm.value.amorDep),
+      interests:Number(this.financialForm.value.interests),
       taxes:Number(this.financialForm.value.taxes)
     };
 
@@ -682,4 +703,14 @@ export class FinancialReporting {
   }
   
 
+
+
+  exportRecord() {
+    if (this.financials_content) {
+      const contentElement = this.financials_content.nativeElement;
+      this._pdfService.generatePDF2(contentElement, "FINANCIAL REPORT FOR");
+    } else {
+      console.error('Financial content element is not available.');
+    }
+  }
 }
