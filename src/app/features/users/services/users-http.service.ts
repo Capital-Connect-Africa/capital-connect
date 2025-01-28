@@ -49,6 +49,12 @@ export class UsersHttpService extends BaseHttpService {
       return res
     })) as Observable<MatchedInvestor[]>;
   }
+
+  getBusinessOwners(page =1, limit =1000): Observable<User[]> {
+    return this.read(`${BASE_URL}/users/role?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+      return res
+    })) as Observable<User[]>;
+  }
   // switchMap((investors: MatchedInvestor[] | any[]) => {
       //   const investorRequests = investors.map((investor: MatchedInvestor) => {
       //     return forkJoin([

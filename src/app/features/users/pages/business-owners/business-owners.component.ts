@@ -53,9 +53,9 @@ export class BusinessOwnersComponent {
   }
 
   private _initUsers() {
-    this.users$ = this._usersService.getAllUsers().pipe(
+    this.users$ = this._usersService.getBusinessOwners().pipe(
       tap(users => {
-        this.users = users.filter(user =>user.roles ==='user');
+        this.users = users;
         this.usersCount =this.users.length;
         this.usersShowingCount =this.table.value.length;
         this.updateDisplayedData();
