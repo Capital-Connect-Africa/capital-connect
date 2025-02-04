@@ -4,4 +4,5 @@ export enum USER_ROLES {
   INVESTOR = "investor",
   ADVISOR = "advisor",
   CONTACT_PERSON = "contact_person",
+  PARTNER ="partner"
 }
