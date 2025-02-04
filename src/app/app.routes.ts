@@ -91,6 +91,15 @@ export const routes: Routes = [
   },
 
   {
+    path: 'partner',
+    loadChildren: () =>
+      import('./features/partner/partner.routing').then(
+        (m) => m.PartnerRouting
+      ),
+    canActivate: [isLoggedInCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard],
+  },
+  {
     path: 'calendly-booking',
     loadChildren: () =>
       import('./features/booking/modules/booking.routing').then(
