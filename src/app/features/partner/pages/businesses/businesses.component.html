@@ -1,0 +1,30 @@
+<partner-layout title="Businesses">
+    <div class="grid__container">
+        <p-table [value]="users" [paginator]="false"> 
+          <ng-template pTemplate="header">
+            <tr>
+              <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+                <span class="header-container">
+                  <span class="header-text">
+                    {{col.header}}
+                  </span>
+                </span>
+              </th>
+            </tr>
+      </ng-template>
+        <ng-template pTemplate="body" let-user>
+          <tr class="text-sm">
+            <td>{{user.name | titlecase}}</td>
+            <td>{{user.organization | titlecase}}</td>
+            <td>{{user.email | lowercase}}</td>
+            <td>{{user.createdAt | time_ago | titlecase}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">You have no businesses yet</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      </div>
+</partner-layout>
