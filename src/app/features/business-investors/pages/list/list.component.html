@@ -8,7 +8,7 @@
       </span>
       <div class="font-light text-sm">Showing {{usersShowingCount}} - {{userShowingCountEnd}} of {{usersCount}} entries</div>
     </div>
-    <p-table #dt [value]="investors" [paginator]="true" [rows]="10" [globalFilterFields]="['organizationName', 'emailAddress', 'headOfficeLocation']" (onPage)="onPage($event)">
+    <p-table #dt [value]="investors" [paginator]="true" [rows]="10" [totalRecords]="usersCount" [globalFilterFields]="['organizationName', 'emailAddress', 'headOfficeLocation']" (onPage)="onPage($event)">
       <ng-template pTemplate="header">
         <tr class="text-sm">
           <th *ngFor="let col of cols" [pSortableColumn]="col.field">
@@ -23,12 +23,10 @@
       </ng-template>
       <ng-template pTemplate="body" let-investor>
         <tr class="text-sm font-light">
-          <td>{{investor.organizationName | titlecase}}</td>
-          <td>{{investor.emailAddress | lowercase}}</td>
-          <td>{{investor.headOfficeLocation | titlecase}}</td>
-          <td class="text-center">{{investor.matched??0}}</td>
-          <td class="text-center">{{investor.connected??0}}</td>
-          <td class="text-center">{{investor.declined??0}}</td>
+          <td>{{investor.firstName | titlecase}} {{investor.lastName | titlecase}}</td>
+          <td>{{investor.username | lowercase}}</td>
+          <td>{{investor.isEmailVerified? 'Yes' : 'No' | titlecase}}</td>
+          <td>{{investor.createdAt | time_ago}}</td>
           <td><button class="btn__cta text-blue-600" (click)="viewInvestor(investor.id)">Details</button></td>
         </tr>
       </ng-template>

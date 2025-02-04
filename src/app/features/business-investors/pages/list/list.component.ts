@@ -6,11 +6,12 @@ import { MatchedInvestor } from '../../../../shared/interfaces';
 import { Table, TableModule, TablePageEvent } from 'primeng/table';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
+import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent, TableModule],
+  imports: [CommonModule, AdminUiContainerComponent, TableModule, TimeAgoPipe],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
@@ -18,7 +19,7 @@ export class ListComponent {
   private _usersService = inject(UsersHttpService);
   private _router =inject(Router)
 
-  investors$ = new Observable<MatchedInvestor[]>();
+  investors$ = new Observable<any>();
   usersCount:number =0;
   usersShowingCount =0;
   userShowingCountEnd =0;
@@ -26,12 +27,10 @@ export class ListComponent {
 
   investors: MatchedInvestor[] = [];
   cols: any[] = [
-    { field: 'organizationName', header: 'Organization' },
-    { field: 'emailAddress', header: 'Email' },
-    { field: 'headOfficeLocation', header: 'Country' },
-    { field: 'matched', header: 'Matched' },
-    { field: 'connected', header: 'Connected' },
-    { field: 'declined', header: 'Declined' },
+    { field: 'name', header: 'Name' },
+    { field: 'username', header: 'Email' },
+    { field: 'isEmailVerified', header: 'Email Verified' },
+    { field: 'createdAt', header: 'Joined' },
   ];
 
   @ViewChild('dt') table!: Table;
@@ -43,8 +42,8 @@ export class ListComponent {
   private _init() {
     this.investors$ = this._usersService.getAllInvestors().pipe(
       tap(investors=> {
-        this.investors =investors;
-        this.usersCount =investors.length;
+        this.investors =investors.data;
+        this.usersCount =investors.total_count;
         this.usersShowingCount =this.table.value.length;
         this.updateDisplayedData();
       })

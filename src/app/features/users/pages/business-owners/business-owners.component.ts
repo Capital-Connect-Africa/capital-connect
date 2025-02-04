@@ -29,7 +29,7 @@ export class BusinessOwnersComponent {
   private _companyService = inject(CompanyHttpService);
   private _feedbackService = inject(FeedbackService);
 
-  users$ = new Observable<User[]>();
+  users$ = new Observable<any>();
   delete$ = new Observable();
   usersCount:number =0;
   usersShowingCount =0;
@@ -53,10 +53,10 @@ export class BusinessOwnersComponent {
   }
 
   private _initUsers() {
-    this.users$ = this._usersService.getAllUsers().pipe(
+    this.users$ = this._usersService.getBusinessOwners().pipe(
       tap(users => {
-        this.users = users.filter(user =>user.roles ==='user');
-        this.usersCount =this.users.length;
+        this.users = users.data;
+        this.usersCount =users.total_count;
         this.usersShowingCount =this.table.value.length;
         this.updateDisplayedData();
       })

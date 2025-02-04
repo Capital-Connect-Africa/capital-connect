@@ -44,10 +44,16 @@ export class UsersHttpService extends BaseHttpService {
       return res
     })) as Observable<any[]>
   }
-  getAllInvestors(page =1, limit =100): Observable<MatchedInvestor[]> {
-    return this.read(`${BASE_URL}/users/role?usertype=investor&page=${page}&limit=${limit}`).pipe(map((res) =>{
+  getAllInvestors(page =1, limit =1000): Observable<{data: MatchedInvestor[], total_count: number}> {
+    return this.read(`${BASE_URL}/users/role?usertype=investor&page=${page}&limit=${limit}`).pipe(map((res: any) =>{
       return res
-    })) as Observable<MatchedInvestor[]>;
+    })) as Observable<{data: MatchedInvestor[], total_count: number}>;
+  }
+
+  getBusinessOwners(page =1, limit =1000): Observable<{data: User[], total_count: number}> {
+    return this.read(`${BASE_URL}/users/role?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+      return res
+    })) as Observable<{data: User[], total_count: number}>;
   }
   // switchMap((investors: MatchedInvestor[] | any[]) => {
       //   const investorRequests = investors.map((investor: MatchedInvestor) => {

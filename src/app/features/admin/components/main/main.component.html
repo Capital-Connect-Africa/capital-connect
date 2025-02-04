@@ -12,16 +12,41 @@
         <div class="grid grid-cols-[max-content_auto] grid__wrapper">
           <div class="grid__container">
             <h3>Roles</h3>
-            <div class="">
-              <app-pie-chart [width]="300" [height]="300" legendPosition ="bottom" [data]="{
-                'Investors': stats.investors,
-                'Advisors': stats.advisors,
-                'Admins': stats.staff,
-                'Businesses': stats.business,
-              }" 
-              [colors]="['#13501B', '#e9a901', '#762db1', '#2d7b88']"
-              />
+            <ul class="grid grid-cols-2 gap-x-4 gap-y-8 w-full">
+              <li
+                *ngFor="
+                  let item of [
+                    {
+                      name: 'Investors',
+                      count: stats.investors,
+                      icon: 'pi pi-briefcase',
+                    },
+                    {
+                      name: 'Advisors',
+                      count: stats.advisors,
+                      icon: 'pi pi-ethereum',
+                    },
+                    {
+                      name: 'Staff',
+                      count: stats.staff,
+                      icon: 'pi pi-users',
+                    },
+                    {
+                      name: 'Businesses',
+                      count: stats.business,
+                      icon: 'pi pi-building',
+                    }
+                  ]
+                "
+                class="rounded-xl p-8 flex justify-between items-center gap-8 stat__card"
+              >
+              <div>
+                <h3 class="h3">{{item.count}}</h3>
+                <p>{{item.name}}</p>
             </div>
+            <i class="text-3xl font-light" [class]="item.icon"></i>
+            </li>
+            </ul>
           </div>
           <div class="grid__container">
             <h3>Recent Signups</h3>
