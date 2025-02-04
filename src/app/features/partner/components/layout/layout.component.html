@@ -1,0 +1,13 @@
+<div class="main__content" [ngClass]="{bg_gray}">
+    <app-sidenav [links]="links"/>  
+    <section>
+      <div class="navbar">
+        <app-navbar [showBanner]="false" [title]="signalService.pageTitle()" [isAdmin]="true" onDashboard="true" />
+      </div>
+      
+      <app-ui-shared [showLogo]="false" [title]="signalService.pageTitle()">
+        <ng-content></ng-content>
+      </app-ui-shared>
+    </section>
+  </div>
+  
