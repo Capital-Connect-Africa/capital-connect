@@ -1,0 +1,40 @@
+.grid__container {
+    background-color: white;
+    padding: 1rem;
+}
+
+tr {
+  height: 3rem !important;
+}
+
+:host ::ng-deep .p-datatable {
+  tr {
+    td {
+      padding: 0 0.5rem;
+      font-size: 13px;
+      font-weight: 300!important;
+      color: #333333d9!important;
+    }
+    transition: all 0.2s linear;
+    cursor: default;
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    &:hover {
+      background-color: #654f291a;
+    }
+    th {
+      background-color: #f4f4f5;
+      font-size: 14px;
+      span {
+        padding: 0 0.4rem;
+        justify-content: flex-start;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+
+.h3{
+    font-size: 0.9rem;
+}

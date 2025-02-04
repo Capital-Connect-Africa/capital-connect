@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { AppQrCodeComponent } from '../app-qr-code/app-qr-code.component';
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
 
@@ -16,6 +16,9 @@ export class ReferralLinkComponent {
   link = `https://app.capitalconnect.africa/signup?r=${
     this._authStateService.currentUserProfile().referralCode
   }`;
+
+  @Input() titleText ='Referral Link'
+  @Input() helperText ='Share this referral link to invite users'
 
   linkCopied = false;
   async copyToClipboard(): Promise<void> {
