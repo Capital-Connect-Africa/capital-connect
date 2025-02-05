@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import {  map, Observable, switchMap } from 'rxjs';
 import { BASE_URL, BaseHttpService } from '../../../core';
 import { User } from '../models';
 import { MatchedInvestor } from '../../../shared/interfaces';
@@ -33,6 +33,11 @@ export class UsersHttpService extends BaseHttpService {
     return this.read(`${BASE_URL}/matchmaking/interested/${investorId}`) as Observable<any[]>;
   }
 
+  getUserReferrees(){
+    return this.read(`${BASE_URL}/users/referrals`).pipe(map(users =>{
+      return users;
+    })) as Observable<User[]>;
+  }
 
   getAllInvestorsProfiles(){
     return this.read(`${BASE_URL}/investor-profiles`).pipe(map(res =>{
@@ -55,22 +60,6 @@ export class UsersHttpService extends BaseHttpService {
       return res
     })) as Observable<{data: User[], total_count: number}>;
   }
-  // switchMap((investors: MatchedInvestor[] | any[]) => {
-      //   const investorRequests = investors.map((investor: MatchedInvestor) => {
-      //     return forkJoin([
-      //       this.getInvestorMatchedBusinesses(investor.id),
-      //       this.getInvestorStats(investor.id),
-      //     ]).pipe(
-          
-      //       map(res => ({
-      //         ...investor,
-      //         matched: res[0].length,
-      //         ...res[1]
-      //       }))
-      //     );
-      //   });
-      //   return forkJoin(investorRequests);
-      // })
 
   getUserById(id: number) {
     return this.readById(`${BASE_URL}/users`, id) as Observable<User>
