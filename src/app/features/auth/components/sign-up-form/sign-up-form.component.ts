@@ -123,7 +123,7 @@ export class SignUpFormComponent {
       roles: formValue.accountType as USER_ROLES,
       firstName: formValue.firstName as string,
       lastName: formValue.lastName as string,
-      referralToken: this._referralTokenService.getReferralToken()?.token,
+      referralCode: this._referralTokenService.getReferralToken()?.token,
     }
 
     this.signUp$ = this._authService.signUpUser(input).pipe(tap((res) => {
