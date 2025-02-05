@@ -1,6 +1,8 @@
 <partner-layout title="Businesses">
+  <ng-container *ngIf="users$ | async"></ng-container>
     <div class="grid__container">
-        <p-table [value]="users" [paginator]="false"> 
+      <h3 class="h3">Your Businesses</h3>
+        <p-table [value]="users" [paginator]="true" [rows]="10"> 
           <ng-template pTemplate="header">
             <tr>
               <th *ngFor="let col of cols" [pSortableColumn]="col.field">
@@ -14,10 +16,11 @@
       </ng-template>
         <ng-template pTemplate="body" let-user>
           <tr class="text-sm">
-            <td>{{user.name | titlecase}}</td>
-            <td>{{user.organization | titlecase}}</td>
-            <td>{{user.email | lowercase}}</td>
+            <td>{{user.firstName | titlecase}} {{user.lastName | titlecase}}</td>
+            <td>{{(user.mobileNumbers.at(0) && user.mobileNumbers.at(0).phoneNo) ?? '-' | titlecase}}</td>
+            <td>{{user.username | lowercase}}</td>
             <td>{{user.createdAt | time_ago | titlecase}}</td>
+            <td><button class="bg-blue-500 text-white py-2 px-4 rounded-md text-xs hover:bg-blue-700" (click) ="viewBusinessDetails(user.id)">View Details</button></td>
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">

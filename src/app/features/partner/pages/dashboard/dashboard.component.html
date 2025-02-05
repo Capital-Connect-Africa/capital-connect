@@ -1,4 +1,5 @@
 <partner-layout>
+
   <section class="flex flex-col gap-8">
     <div class="flex flex-col gap-2 title__bar">
       <h2 class="text-sm h2">{{ firstName | welcome_user }}</h2>
@@ -11,22 +12,22 @@
                 let item of [
                   {
                     name: 'Investors',
-                    count: 30,
+                    count: 0,
                     icon: 'pi pi-briefcase',
                   },
                   {
                     name: 'Businesses',
-                    count: 50,
+                    count: 0,
                     icon: 'pi pi-building',
                   },
                   {
-                    name: 'Funds Raised',
-                    count: '$40M',
-                    icon: 'pi pi-wallet',
+                    name: 'Advisors',
+                    count: 0,
+                    icon: 'pi pi-ethereum',
                   },
                   {
                     name: 'Vouchers',
-                    count: 60,
+                    count: 0,
                     icon: 'pi pi-tag',
                   }
                 ]
@@ -41,7 +42,9 @@
           </li>
           </ul>
           <div class="grid__container rounded-xl">
+            <ng-container *ngIf="users$ | async"></ng-container>
             <h3 class="h3">Recent Signups</h3>
+            
             <p-table [value]="users" [paginator]="false"> 
               <ng-template pTemplate="header">
                 <tr>
@@ -56,9 +59,9 @@
           </ng-template>
             <ng-template pTemplate="body" let-user>
               <tr class="text-sm">
-                <td>{{user.name | titlecase}}</td>
-                <td>{{user.email | lowercase}}</td>
-                <td>{{user.role | roleformat | titlecase}}</td>
+                <td>{{user.firstName | titlecase}} {{user.lastName | titlecase}}</td>
+                <td>{{user.username | lowercase}}</td>
+                <td>{{user.roles | roleformat | titlecase}}</td>
                 <td>{{user.createdAt | time_ago | titlecase}}</td>
 
               </tr>
@@ -72,7 +75,7 @@
           </div>
         </div>
     </section>
-    <section cla>
+    <section *ngIf="vouchers$ | async">
       <div class="bg-white p-8 rounded flex flex-col gap-8">
         <h2 class="h2">Your discount vouchers</h2>
         <p-table [value]="vouchers" [paginator]="false"> 
@@ -107,11 +110,5 @@
       </div>
 
     </section>
-    <div class="grid grid-cols-2 gap-8">
-        <app-referral-link titleText="Boost our influence"/>
-        <div class="flex flex-col bg-white">
-            <h3 class="h3 p-4 uppercase pb-0">Businesses per sector</h3>
-            <app-horizontal-barchart xlabel="Businesses" [data]="businessData" ylabel="Sector"/>
-        </div>
-    </div>
+    <app-referral-link titleText="Boost our influence"/>
 </partner-layout>
