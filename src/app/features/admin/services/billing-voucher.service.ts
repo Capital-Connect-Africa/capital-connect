@@ -21,6 +21,12 @@ export class BillingVoucherService extends BaseHttpService{
         }))
     }
 
+    getVoucherUserVouchers(userId:number, page:number =1, limit: number =10){
+        return this.read(`${BASE_URL}/vouchers/owner/${userId}?page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+            return res as {data: Voucher[], total_count: number};
+        }))
+    }
+
     getBillingVoucherById(id: number){
         return this.readById(`${BASE_URL}/vouchers`, id).pipe(map((res:any) =>{
             return res as Voucher;
