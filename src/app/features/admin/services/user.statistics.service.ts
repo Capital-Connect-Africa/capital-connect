@@ -28,6 +28,12 @@ export class UserStatisticsService extends BaseHttpService{
         })) as Observable<Stats>
     }
 
+    fetchUserStatsByReferrer(referrerId: number){
+        this.readById(`${BASE_URL}/statistics/referrer`, referrerId).pipe(map((res:any) =>{
+            return res as {businesses: number, investors: number, advisors: number, }
+        }))
+    }
+
     fetchBusinessAndInvestorInterractionsStats(){;
         return this.read(`${BASE_URL}/matchmaking/counts`).pipe(map((res:any) =>{
             return res as {total: number}
