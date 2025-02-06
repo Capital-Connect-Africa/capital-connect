@@ -34,7 +34,7 @@ export class UsersHttpService extends BaseHttpService {
   }
 
   getUserReferrees(userType:Role | null =null, page =1, limit =1000): Observable<{data: User[], count: number}>{
-    return this.read(`${BASE_URL}/users/referrals?usertype=${userType}page=${page}&limit=${limit}`).pipe(map((users:any) =>{
+    return this.read(`${BASE_URL}/users/referrals?${userType && 'usertype='+userType+'&'}page=${page}&limit=${limit}`).pipe(map((users:any) =>{
       return users;
     })) as Observable<{data: User[], count: number}>;
   }
