@@ -30,7 +30,7 @@ export class BusinessesComponent {
     { field: 'phone', header: 'Phone' },
     { field: 'email', header: 'Email' },
     { field: 'createdAt', header: 'Joined' },
-    { field: 'action', header: 'Action' },
+    // { field: 'action', header: 'Action' },
   ];
 
   

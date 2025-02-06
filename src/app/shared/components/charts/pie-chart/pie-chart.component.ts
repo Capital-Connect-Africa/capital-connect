@@ -32,7 +32,7 @@ export class PieChartComponent implements OnInit {
       backgroundColor: 'transparent',
       fontName: 'Arial',
       fontSize: 12,
-      colors: this.colors,
+      colors: (this.colors.length && this.colors) || null,
       pieHole: this.pieHole,
       legend: {
         position: this.legendPosition,
