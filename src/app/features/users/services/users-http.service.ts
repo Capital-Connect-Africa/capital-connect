@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {  map, Observable, switchMap } from 'rxjs';
 import { BASE_URL, BaseHttpService } from '../../../core';
-import { User } from '../models';
+import { Role, User } from '../models';
 import { MatchedInvestor } from '../../../shared/interfaces';
 
 @Injectable({ providedIn: 'root' })
@@ -33,10 +33,10 @@ export class UsersHttpService extends BaseHttpService {
     return this.read(`${BASE_URL}/matchmaking/interested/${investorId}`) as Observable<any[]>;
   }
 
-  getUserReferrees(){
-    return this.read(`${BASE_URL}/users/referrals`).pipe(map(users =>{
+  getUserReferrees(userType:Role | null =null, page =1, limit =1000): Observable<{data: User[], count: number}>{
+    return this.read(`${BASE_URL}/users/referrals?usertype=${userType}page=${page}&limit=${limit}`).pipe(map((users:any) =>{
       return users;
-    })) as Observable<User[]>;
+    })) as Observable<{data: User[], count: number}>;
   }
 
   getAllInvestorsProfiles(){
@@ -57,6 +57,12 @@ export class UsersHttpService extends BaseHttpService {
 
   getBusinessOwners(page =1, limit =1000): Observable<{data: User[], total_count: number}> {
     return this.read(`${BASE_URL}/users/role?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+      return res
+    })) as Observable<{data: User[], total_count: number}>;
+  }
+
+  getReferrerBusinessOwners(page =1, limit =1000): Observable<{data: User[], total_count: number}> {
+    return this.read(`${BASE_URL}/users/referrals?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
       return res
     })) as Observable<{data: User[], total_count: number}>;
   }

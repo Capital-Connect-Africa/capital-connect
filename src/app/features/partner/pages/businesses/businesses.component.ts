@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { tap } from 'rxjs';
-import { User } from '../../../users/models';
+import { Role, User } from '../../../users/models';
 import { Router } from '@angular/router';
 
 @Component({
@@ -20,9 +20,9 @@ export class BusinessesComponent {
   users:User[] = [];
   private _router =inject(Router)
   private _usersService =inject(UsersHttpService)
-  users$ =this._usersService.getBusinessOwners(1, 100).pipe(tap(users =>{
+  users$ =this._usersService.getUserReferrees(Role.USER, 1, 100).pipe(tap(users =>{
     this.users =users.data;
-    this.total_count =users.total_count;
+    this.total_count =users.count;
   }))
 
   cols = [

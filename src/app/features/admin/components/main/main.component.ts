@@ -49,14 +49,13 @@ export class MainComponent {
   bookings: Booking[] = [];
 
   businessCountriesStats!: Record<string, number>;
-  matches!: Stats;
+  stats: {name: string, icon: string, count: number}[] =[];
 
   navigateTo(path: string) {
     this._router.navigate([path]);
   }
 
   recentSubscriptions: Plan[] = []
-  stats$ = new Observable<Stats>();
   users: User[] = [];
 
   cols = [
@@ -116,11 +115,39 @@ export class MainComponent {
   }))
 
 
-  ngOnInit(): void {
-    this.stats$ = this._statsService.fetchUserStats().pipe(tap(res => {
-      this.matches = res;
-      return res
-    }))
-  }
+  stats$ = this._statsService.fetchUserStats().pipe(tap(res => {
+    this.stats = [
+      {
+        name: 'Investors',
+        count: res.investors ??0,
+        icon: 'pi pi-briefcase',
+      },
+      {
+        name: 'Advisors',
+        count: res.advisors ??0,
+        icon: 'pi pi-ethereum',
+      },
+      {
+        name: 'Staff',
+        count: res.staff ??0,
+        icon: 'pi pi-users',
+      },
+      {
+        name: 'Businesses',
+        count: res.business ??0,
+        icon: 'pi pi-building',
+      },
+      {
+        name: 'Partners',
+        count: res.partner ??0,
+        icon: 'pi pi-crown',
+      },
+      {
+        name: 'Contact People',
+        count: res.contact_person ??0,
+        icon: 'pi pi-phone',
+      }
+    ];
+  }))
 
 }

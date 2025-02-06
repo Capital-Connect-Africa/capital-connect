@@ -9,21 +9,39 @@ import { Booking, Payment, Plan } from "../../../shared/interfaces/Billing";
 
 export class UserStatisticsService extends BaseHttpService{
 
+    getUserStats(userId:number | null =null){
+        const url =`${BASE_URL}/statistics/users${userId?'/'+userId: ''}`
+        return this.read(url).pipe(map((users:any) =>{
+            return {
+                staff: users.admin,
+                business: users.user,
+                advisors: users.advisor,
+                investors: users.investor,
+                contact_person: users.contact_person,
+                partner: users.partner,
+            } as Partial<Stats>
+        }))
+        
+    }
+    
+
     fetchUserStats(){
         const requests =[this.read(`${BASE_URL}/statistics/users`), this.read(`${BASE_URL}/statistics/matchmaking`)]
         return forkJoin(requests).pipe(map((res:any) =>{
             const users =res[0];
             const matches =res[1];
             return {
-                    staff: users.admin,
-                    business: users.user,
-                    advisors: users.advisor,
-                    investors: users.investor,
-                    declined: matches.declined,
-                    requested: matches.requested,
-                    connected: matches.connected,
-                    interesting: matches.interesting,
-                }
+                staff: users.admin,
+                business: users.user,
+                advisors: users.advisor,
+                investors: users.investor,
+                contact_person: users.contact_person,
+                partner: users.partner,
+                declined: matches.declined,
+                requested: matches.requested,
+                connected: matches.connected,
+                interesting: matches.interesting,
+            }
             
         })) as Observable<Stats>
     }
