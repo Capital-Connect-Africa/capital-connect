@@ -1,0 +1,53 @@
+<partner-layout title="Analytics">
+  <ng-container *ngIf="analytics$ | async" />
+  <section class="flex flex-col gap-4">
+    <h2 class="h2">Insights</h2>
+    <div class="grid grid-cols-2 gap-8">
+      <div class="bg-white rounded-xl p-4 grid grid-rows-[max-content_auto]">
+        <h3 class="h3">Businesses by funding type</h3>
+        <div class="bg-white rounded-xl p-4 flex items-center justify-center">
+          <app-pie-chart [data]="businessFundingType" />
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 grid grid-rows-[max-content_auto]">
+        <h3 class="h3">Investors by funding type</h3>
+        <div class="flex items-center justify-center">
+          <app-pie-chart [data]="investorFundingType" />
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 pb-0">
+        <h3 class="h3">Businesses by Sector</h3>
+        <app-horizontal-barchart [data]="businessSectors" />
+      </div>
+      <div class="bg-white rounded-xl p-4 pb-0">
+        <h3 class="h3">Investors by Sector</h3>
+        <app-horizontal-barchart [colors]="['#847cfb']" [data]="investorSectors" />
+      </div>
+      <div class="bg-white rounded-xl p-4 grid grid-rows-[max-content_auto]">
+        <h3 class="h3">Businesses by minimum funding</h3>
+        <div class="bg-white rounded-xl p-4 flex items-center justify-center">
+          <app-pie-chart [data]="businessMinFunding" [pieHole]="0" [is3d]="true" />
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 grid grid-rows-[max-content_auto]">
+        <h3 class="h3">Businesses by maximum funding</h3>
+        <div class="flex items-center justify-center">
+          <app-pie-chart [data]="businessMaxFunding" [pieHole]="0" [is3d]="true" />
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 pb-0">
+        <h3 class="h3">Businesses by stage</h3>
+        <app-horizontal-barchart [colors]="['#f3b49f']" [data]="businessStages" />
+      </div>
+      <div class="bg-white rounded-xl">
+        <h3 class="h3 pl-4">Businesses by fund raise</h3>
+        <app-column-chart [colors]="['#762db1']" [data]="businessFundRaise" />
+      </div>
+      <div class="bg-white rounded-xl p-4 col-span-2">
+        <h3 class="h3">Businesses per country</h3>
+        <app-geo-chart [data]="businessCountries" />
+      </div>
+    </div>
+    <h2 class="h2">Investor Analytics</h2>
+  </section>
+</partner-layout>
