@@ -46,6 +46,13 @@ export class PartnerLayoutComponent implements OnInit {
         icon: 'account_balance',
         display: true,
       },
+      {
+        label: 'Analytics',
+        href: '/partner/analytics',
+        exact: false,
+        icon: 'query_stats',
+        display: true,
+      },
     ];
   }
 }
