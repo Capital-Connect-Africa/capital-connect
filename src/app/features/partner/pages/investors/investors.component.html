@@ -2,7 +2,7 @@
   <ng-container *ngIf="users$ | async"></ng-container>
     <div class="grid__container">
       <h3 class="h3">Your Investors</h3>
-        <p-table [value]="users" [paginator]="true" [rows] ="10"> 
+        <p-table [value]="users" [paginator]="total_count >10" [rows] ="10"> 
           <ng-template pTemplate="header">
             <tr>
               <th *ngFor="let col of cols" [pSortableColumn]="col.field">

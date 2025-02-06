@@ -6,7 +6,7 @@ import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { Router } from '@angular/router';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { tap } from 'rxjs';
-import { MatchedInvestor } from '../../../../shared/interfaces';
+import { Role, User } from '../../../users/models';
 
 @Component({
   selector: 'app-investors',
@@ -17,12 +17,12 @@ import { MatchedInvestor } from '../../../../shared/interfaces';
 })
 export class InvestorsComponent {
   total_count =0
-    users:MatchedInvestor[] = [];
+    users:User[] = [];
     private _router =inject(Router)
     private _usersService =inject(UsersHttpService)
-    users$ =this._usersService.getAllInvestors(1, 100).pipe(tap(users =>{
+    users$ =this._usersService.getUserReferrees(Role.INVESTOR, 1, 100).pipe(tap(users =>{
       this.users =users.data;
-      this.total_count =users.total_count;
+      this.total_count =users.count;
     }))
   
     cols = [
