@@ -1,0 +1,77 @@
+@import "../../../../styles//forms.scss";
+
+
+textarea{
+    padding: .6rem 1rem;
+    border-radius: .5rem;
+    border: 1px solid #c9ddcc;
+}
+
+.title__bar {
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+  
+    p {
+      margin: 0;
+      padding: 0;
+      line-height: 1;
+      color: #404040;
+      font-size: 0.9rem;
+      font-weight: 300;
+    }
+  }
+  .h2 {
+    line-height: 0;
+    font-weight: 500;
+    color: #404040;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+  }
+  .stat__card {
+    padding: 0.5rem 1rem;
+    color: #37332d;
+    background-color: white;
+  }
+  
+  
+  .grid__container {
+      background-color: white;
+      padding: 1rem;
+  }
+  
+  tr {
+    height: 3rem !important;
+  }
+  
+  :host ::ng-deep .p-datatable {
+    tr {
+      td {
+        padding: 0 0.5rem;
+        font-size: 13px;
+        font-weight: 300!important;
+        color: #333333d9!important;
+      }
+      transition: all 0.2s linear;
+      cursor: default;
+      &:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      &:hover {
+        background-color: #654f291a;
+      }
+      th {
+        background-color: #f4f4f5;
+        font-size: 14px;
+        span {
+          padding: 0 0.4rem;
+          justify-content: flex-start;
+          background-color: transparent !important;
+        }
+      }
+    }
+  }
+  
+  .h3{
+      font-size: 0.9rem;
+  }

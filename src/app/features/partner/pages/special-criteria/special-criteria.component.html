@@ -1,3 +1,65 @@
 <partner-layout title="Special Criteria">
-
+  <section class="flex flex-col gap-8">
+    <div class="flex flex-col gap-2 title__bar">
+      <h2 class="text-sm h2">Custom matching criteria</h2>
+      <p>Develop custom business-investor matching criteria</p>
+    </div>
+    <div class="grid grid-cols-2 gap-8">
+      <ul class="grid grid-cols-2 gap-12 w-full">
+        <li
+          *ngFor="let criteria of specialCriteria"
+          class="rounded-xl p-8 flex justify-between items-center gap-8 stat__card"
+        >
+          <div>
+            <h3>{{ criteria.count }}</h3>
+            <p>{{ criteria.name }}</p>
+          </div>
+          <i class="text-xl font-light" [class]="criteria.icon"></i>
+        </li>
+      </ul>
+      <div class="grid__container rounded-xl">
+        <h3 class="h3 uppercase">Create a special criteria</h3>
+        <form [formGroup]="form" class="flex flex-col gap-4">
+          <div class="input__wrapper">
+            <label class="input__label !text-sm !font-light">Title</label>
+            <input
+              class="input__field !text-sm !font-light"
+              formControlName="title"
+              type="text"
+              placeholder="Title"
+            />
+          </div>
+          <div class="input__wrapper">
+            <label class="input__label !text-sm !font-light">Description</label>
+            <textarea
+              formControlName="description"
+              placeholder="Add a brief description"
+              class="block border border-[#333] resize-none w-full !text-sm !font-light"
+              [rows]="3"
+            ></textarea>
+          </div>
+          <div class="input__wrapper !flex !flex-row items-center !gap-4">
+            <label class="input__label !text-sm !font-light"
+              >Allow visibility to all businessess?</label
+            >
+            <input
+              class="input__field"
+              formControlName="globalVisible"
+              type="checkbox"
+              placeholder="Enter Criteria Description"
+            />
+          </div>
+          <div *ngIf="form.valid">
+            <button
+              class="btn btn-primar"
+              [disabled]="!form.valid"
+              [ngClass]="{ 'disabled-btn': !form.valid }"
+            >
+              Submit Criteria
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 </partner-layout>
