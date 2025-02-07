@@ -53,6 +53,13 @@ export class PartnerLayoutComponent implements OnInit {
         icon: 'query_stats',
         display: true,
       },
+      {
+        label: 'Special Criteria',
+        href: '/partner/special-criteria',
+        exact: false,
+        icon: 'filter_alt',
+        display: true,
+      },
     ];
   }
 }
