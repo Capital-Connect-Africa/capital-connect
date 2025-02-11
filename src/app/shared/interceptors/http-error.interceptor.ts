@@ -86,7 +86,8 @@ function isValidAuthLoginPath(path: string): boolean {
 }
 
 function isFinancialReportsPage(path: string): boolean {
-  return path.includes('opex') || path.includes('revenues') || path.includes('cost-of-sales') || path.includes('finances');
+  return path.includes('opex') || path.includes('revenues') || path.includes('cost-of-sales')
+  || path.includes('finances') || path.includes('balance-sheet');
 }
 
 
