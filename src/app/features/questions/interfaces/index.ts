@@ -87,7 +87,7 @@ export interface RevenueRecords {
   id: number,
   description: string,
   value: number,
-  year:number
+  year: number
 }
 
 
@@ -95,22 +95,61 @@ export interface OpexRecords {
   id: number,
   description: string,
   value: number,
-  year:number
+  year: number
 }
 
 
 export interface OpexRecordsPayload {
   description: string,
   value: number,
-  year:number,
-  companyId:number
+  year: number,
+  companyId: number
 }
+
+export interface BalanceSheetRecordPayload {
+  companyId: number,
+  year: number,
+  landProperty: number,
+  plantEquipment: number,
+  otherNonCurrentAssets: number,
+  tradeReceivables: number,
+  cash: number,
+  inventory: number,
+  otherCurrentAssets: number,
+  tradePayables: number,
+  otherCurrentLiabilities: number,
+  loans: number,
+  capital: number,
+  otherNonCurrentLiabilities: number
+}
+
+
+export interface BalanceSheetRecord{
+  id:number
+  year: number,
+  landProperty: number,
+  plantEquipment: number,
+  otherNonCurrentAssets: number,
+  tradeReceivables: number,
+  cash: number,
+  inventory: number,
+  otherCurrentAssets: number,
+  tradePayables: number,
+  otherCurrentLiabilities: number,
+  loans: number,
+  capital: number,
+  otherNonCurrentLiabilities: number,
+  totalAssets: number,
+  totalLiabilities: number
+}
+
+
 
 export interface FinancialInfoRecords {
   amorDep: string,
   interests: string,
   taxes: string,
-  costOfSales:RevenueRecords []
+  costOfSales: RevenueRecords[]
   id: number;
   year: number;
   createdAt: string;
@@ -125,7 +164,7 @@ export interface FinancialInfoRecords {
   totalCosts: string | null,
   grossProfit: string | null,
   profitBeforeTax: string | null,
-  netProfit: string |  null,
+  netProfit: string | null,
   grossMargin: string | null,
   ebitdaMargin: string | null,
 
@@ -138,32 +177,32 @@ export interface FinancialInfoRecords {
 }
 
 
-export interface FinancialInfoRecordsPayload{
+export interface FinancialInfoRecordsPayload {
   companyId: number,
   year: number,
   revenues: number[],
   opex: number[],
-  costOfSales:number[],
-  amorDep:number,
-  interests:number,
-  taxes:number
+  costOfSales: number[],
+  amorDep: number,
+  interests: number,
+  taxes: number
 }
 
 
 export interface UpdateFinancialRecords {
   id: number,
-  year: number, 
+  year: number,
   status: string,
-  notes: string | null, 
+  notes: string | null,
   revenues: number[],
   opex: number[],
   companyId: number,
-  interests:number,
-  amorDep:number, 
-  costOfSales:[],
-  taxes:number,
+  interests: number,
+  amorDep: number,
+  costOfSales: [],
+  taxes: number,
 }
 
-export interface AddNotesToFinancialecords{
-  notes:string | null,
+export interface AddNotesToFinancialecords {
+  notes: string | null,
 }

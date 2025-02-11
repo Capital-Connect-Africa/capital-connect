@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../../core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mergeMap, Observable, switchMap } from 'rxjs';
-import { AddNotesToFinancialecords, FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
+import { AddNotesToFinancialecords, BalanceSheetRecord, BalanceSheetRecordPayload, FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +12,28 @@ export class FinancialReportingService extends BaseHttpService {
   constructor(private _httpClient: HttpClient) {
     super(_httpClient)
   }
+
+  /*******************************Balance Sheet************************* */
+  createBalanceSheetRecord(payload: BalanceSheetRecordPayload) {
+    return this.create(`${BASE_URL}/balance-sheet`, payload) as Observable<unknown>
+  }
+
+  getAllBalanceSheetRecords(){
+    return this.read(`${BASE_URL}/balance-sheet`) as Observable<RevenueRecords[]>
+  }
+
+  getAllBalanceSheetRecordById(id:number){
+    return this.read(`${BASE_URL}/balance-sheet/${id}`) as Observable<RevenueRecords[]>
+  }
+
+  getAllBalanceSheetRecordByCompanyId(id:number){
+    return this.read(`${BASE_URL}/balance-sheet/company/${id}`) as Observable<BalanceSheetRecord[]>
+  }
+
+  updateBalanceSheetRecord(payload: BalanceSheetRecord) {
+    return this.create(`${BASE_URL}/balance-sheet`, payload) as Observable<unknown>
+  }
+
 
   //Revenue Records
   createRevenueRecord(payload: OpexRecordsPayload) {

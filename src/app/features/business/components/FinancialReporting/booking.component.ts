@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { tap} from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FeedbackService, NavbarComponent } from '../../../../core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
 import { TabViewModule } from 'primeng/tabview';
@@ -49,6 +49,7 @@ export class FinancialReporting {
   private _fr = inject(FinancialReportingService)
   private _fs = inject(FeedbackService)
   private _fb = inject(FormBuilder)
+  private _router = inject(Router)
   private _pdfService = inject(PdfGeneratorService);
   
 
@@ -490,6 +491,11 @@ export class FinancialReporting {
   addFinancialRecord() {
     this.edit_mode = true
     this.createFinancialModal = true
+  }
+
+
+  goToYear(year: number) {
+    this._router.navigate([`business/balance-sheet/year/${year}`]);
   }
 
   newFinancialRecord: FinancialInfoRecordsPayload = {

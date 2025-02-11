@@ -1,0 +1,255 @@
+<ng-container *ngIf="createBalanceSheetRecord$ | async"></ng-container>
+<!-- <ng-container *ngIf="getAllBalanceSheetRecords$ | async"></ng-container> -->
+<!-- <ng-container *ngIf="getBalanceSheetRecordById$ | async"></ng-container> -->
+<ng-container *ngIf="getBalanceSheetRecordByCompanyId$ | async"></ng-container>
+<ng-container *ngIf="updateBalanceSheetRecord$ | async"></ng-container>
+
+
+
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true" [title]="'Financial Reports | Balance Sheet - '+current_year"></app-navbar>
+  </div>
+  <main>
+    <div class="left__col">
+      <div class="flex flex-col gap-4">
+
+        <div class="p-6 bg-gray-50 rounded">
+          <div class="financial-container">
+
+            <div class="switch_parent" *ngIf="!edit_mode">
+              <P><label>Edit Mode</label></P>
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleView()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="switch_parent" *ngIf="edit_mode">
+              <P><label>View Mode</label></P>
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleEdit()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="btn__group">
+              <!-- <button  *ngIf="false" class="btn btn-sm mb-4 btn-success-alt" (click)="exportRecord()">Export Financials</button> -->
+              <button class="btn btn-sm mb-4" (click)="addBalanceSheetRecord()">{{ edit_mode ? "Update Record": "New Record"}}</button>
+
+            </div>
+
+          </div>
+
+
+
+
+          <body>
+            <!-- <h1>BALANCE SHEET STATEMENT</h1> -->
+            <table>
+              <thead>
+                <tr>
+                  <th>ASSETS</th>
+                  <th>Amount</th>
+                  <th>LIABILITIES</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+
+              <ng-container *ngIf="getBalanceSheetRecordByCompanyId$ | async">
+                <tbody *ngIf="balanceSheetRecords">
+                  <!-- Assets Listings -->
+                  <tr>
+                    <td>Land & Property</td>
+                    <td>{{balanceSheetRecords.landProperty.toLocaleString() | currency}}</td>
+                    <td>Trade Payables</td>
+                    <td>{{balanceSheetRecords.tradePayables.toLocaleString() | currency}}</td>
+                  </tr>
+                  <tr>
+                    <td>Plant & Equipment</td>
+                    <td>{{balanceSheetRecords.plantEquipment.toLocaleString() | currency }}</td>
+                    <td>Other Current Liabilities</td>
+                    <td>{{balanceSheetRecords.otherCurrentLiabilities.toLocaleString() | currency}}</td>
+                  </tr>
+                  <tr>
+                    <td>Other Non Current Assets</td>
+                    <td>{{balanceSheetRecords.otherNonCurrentAssets.toLocaleString()}}</td>
+                    <td>Loans & Overdraft</td>
+                    <td>{{balanceSheetRecords.loans.toLocaleString() | currency}}</td>
+                  </tr>
+                  <tr>
+                    <td>Trade Receivables</td>
+                    <td>{{balanceSheetRecords.tradeReceivables.toLocaleString() | currency}}</td>
+                    <td>Capital & Reserves</td>
+                    <td>{{balanceSheetRecords.capital.toLocaleString() | currency}}</td>
+                  </tr>
+                  <tr>
+                    <td>Inventory</td>
+                    <td>{{balanceSheetRecords.inventory.toLocaleString() | currency}}</td>
+                    <td>Other Non Current Liabilities</td>
+                    <td>{{balanceSheetRecords.otherNonCurrentLiabilities.toLocaleString() | currency}}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Cash</td>
+                    <td>{{balanceSheetRecords.cash.toLocaleString() | currency}}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+
+                  <tr>
+                    <td>Other Current Assets</td>
+                    <td>{{balanceSheetRecords.otherCurrentAssets.toLocaleString() | currency }}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+
+                  <!-- Separator Row -->
+                  <tr class="separator-row">
+                    <td colspan="2"></td>
+                    <td colspan="2"></td>
+                  </tr>
+
+                  <!-- Totals Row -->
+                  <tr class="total-row">
+                    <td>Total Assets</td>
+                    <td>{{balanceSheetRecords.totalAssets.toLocaleString() | currency}}</td>
+                    <td>Total Liabilities</td>
+                    <td>{{balanceSheetRecords.totalLiabilities.toLocaleString() | currency}}</td>
+                  </tr>
+                </tbody>
+              </ng-container>
+
+            </table>
+          </body>
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="right__col">
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+  </main>
+</div>
+
+
+
+
+
+<app-modal [(visible)]="createBalanceSheetModal" title="Balance Sheet Details"
+  helperText="Add New Balance Sheet Details">
+  <div class="form_content__container" [formGroup]="balanceSheetForm">
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Financial Year</label>
+        <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year" readonly/>
+      </div>
+
+
+      <div class="input__wrapper">
+        <label for="year" class="input-label">Land Property</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="landProperty" />
+      </div>
+    </div>
+
+
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input-label">Plant Equipment</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="plantEquipment" />
+      </div>
+
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Non Current Assets</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherNonCurrentAssets" />
+      </div>
+
+    </div>
+
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Trade Receivables</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="tradeReceivables" />
+      </div>
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Cash</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="cash" />
+      </div>
+    </div>
+
+
+
+     <div class="form_row">
+        <div class="input__wrapper">
+          <label for="year" class="input__label">Inventory</label>
+          <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="inventory" />
+        </div>
+
+        <div class="input__wrapper">
+          <label for="year" class="input__label">Other Current Assets</label>
+          <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherCurrentAssets">
+        </div>
+     </div>
+
+
+
+     
+     <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Trade Payables</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="tradePayables" />
+      </div>
+
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Current Liabilities</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherCurrentLiabilities" />
+      </div>
+    </div>
+
+
+    
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Loans</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="loans" />
+      </div>
+  
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Capital</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="capital" />
+      </div>
+    </div>
+
+
+    
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Non Current Liabilities</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0"
+          formControlName="otherNonCurrentLiabilities" />
+      </div>
+    </div>
+
+   
+    <div class="form_row">
+      <div class="input__wrapper">
+        <button class="btn btn-primary mt-2 save__btn" (click)="createBalanceSheet()">Save</button>
+      </div>
+    </div>
+
+  </div>
+</app-modal>

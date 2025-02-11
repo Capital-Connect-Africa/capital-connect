@@ -19,7 +19,7 @@
               <mat-icon *ngIf="link.icon">{{link.icon}}</mat-icon>
               <span>{{link.label}}</span>
             </span>
-            <i class="pi pi-angle-left" *ngIf="signalService.expandedLink() !==$index"></i>
+            <i class="pi pi-angle-right" *ngIf="signalService.expandedLink() !==$index"></i>
             <i class="pi pi-angle-down" *ngIf="signalService.expandedLink() ===$index"></i>
           </button>
           <div class="child__links" *ngIf="signalService.expandedLink() ===$index" >
