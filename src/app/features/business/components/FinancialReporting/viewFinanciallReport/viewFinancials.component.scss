@@ -502,7 +502,9 @@ td {
 
 /* Remove borders */
 td, th {
+  width: 2cm;
   border: none;
+  max-width: 2.5cm !important;
 }
 
 /* Bottom border for totals, profit/loss, and taxes */
@@ -523,4 +525,8 @@ td, th {
 /* Remove dollar signs and ensure comma-separated values */
 .currency-value {
   font-family: Arial, sans-serif;
+}
+
+.td_description{
+  min-width: 5cm;
 }

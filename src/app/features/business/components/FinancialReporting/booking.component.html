@@ -61,14 +61,14 @@
           <p-table [value]="revenueData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines">
             <ng-template pTemplate="header">
               <tr>
-                <th>
-                  <span style="display: flex; align-items: center;">
+                <th style="width: 2cm;">
+                  <span style="display: flex; align-items: center; width: 2cm;">
                     Revenues
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px;cursor: pointer;" (click)="addRevenueRecord()"
                     matTooltip="Click to add a revenue record" >add</mat-icon>
                   </span>
                 </th>
-                <th *ngFor="let year of years">
+                <th *ngFor="let year of years" style="width: 2cm;">
                   <span style="display: flex; align-items: center;">
                     {{ year }}
                     <mat-icon class="small-icon" style="font-size: 18px; margin-left: 4px; cursor: pointer;" (click)="handleYearClick(year)"
