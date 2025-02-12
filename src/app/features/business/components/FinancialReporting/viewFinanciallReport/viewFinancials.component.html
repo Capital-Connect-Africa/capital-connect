@@ -2,20 +2,20 @@
 <p-table #financials_content [value]="combinedData" [responsiveLayout]="'scroll'" class="p-datatable-gridlines">
   <ng-template pTemplate="header">
     <tr>
-      <th>Profit And Loss Statement</th>
+      <th class="td_description">Profit & Loss</th>
       <th *ngFor="let year of years">{{ year }}</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-row let-index="rowIndex">
     <!-- Section Header -->
     <tr *ngIf="row.section !== combinedData[index - 1]?.section">
-      <td [attr.colspan]="years.length + 1" class="section-header">
+      <td [attr.colspan]="years.length + 1" class="section-header td_description">
         <strong>{{ row.section }}</strong>
       </td>
     </tr>
     <!-- Data Row -->
     <tr [ngClass]="{'total-row': row.description.includes('Total'), 'profit-loss-row': row.description === 'Net Profit', 'taxes-row': row.description === 'Taxes'}">
-      <td [ngClass]="{'font-bold': row.description.includes('Total')}">{{ row.description }}</td>
+      <td [ngClass]="{'font-bold': row.description.includes('Total')}" class="td_description">{{ row.description }}</td>
       <td *ngFor="let year of years" [ngClass]="{'negative': row[year]?.toString().charAt(0) === '-'}">
         <span class="currency-value">
           {{ row[year] !== undefined && row[year] !== null ? (row[year] !== "0" ? (row[year] < 0 ? '(' + (row[year] * -1).toLocaleString() + ')' : row[year].toLocaleString()) : '-') : '-' }}
