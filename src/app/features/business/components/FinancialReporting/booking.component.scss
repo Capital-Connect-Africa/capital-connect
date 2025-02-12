@@ -616,7 +616,13 @@ td {
 
 /* Remove borders */
 td, th {
+  width: 1.5cm;
   border: none;
+  max-width: 1.5cm !important;
+}
+
+.td_description{
+  min-width: 5cm;
 }
 
 /* Bottom border for totals, profit/loss, and taxes */
