@@ -4,20 +4,20 @@ import { PaginationService } from 'ngx-pagination';
 import { Observable } from 'rxjs';
 import { tap} from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { FeedbackService, NavbarComponent } from '../../../../../core';
+import { FeedbackService, NavbarComponent } from '../../../../../../core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
-import { AdvertisementSpaceComponent } from "../../../../../shared/components/advertisement-space/advertisement-space.component";
+import { AdvertisementSpaceComponent } from "../../../../../../shared/components/advertisement-space/advertisement-space.component";
 import { TabViewModule } from 'primeng/tabview';
 import { SharedModule } from 'primeng/api';
-import { AngularMaterialModule } from '../../../../../shared';
+import { AngularMaterialModule } from '../../../../../../shared';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
-import { FinancialReportingService } from '.././FinancialReporting.service';
+import { ModalComponent } from "../../../../../../shared/components/modal/modal.component";
+import { FinancialReportingService } from '../../FinancialReporting.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ViewFinancialReporting } from ".././viewFinanciallReport/viewFinancials.component";
-import { BalanceSheetRecord } from '../../../../questions/interfaces';
+import { ViewFinancialReporting } from "../../viewFinanciallReport/viewFinancials.component";
+import { BalanceSheetRecord } from '../../../../../questions/interfaces';
 
 
 @Component({
