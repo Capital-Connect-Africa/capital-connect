@@ -29,8 +29,8 @@ export const BusinessLinks = [
     { label: 'My Bookings', href: '/business/my-bookings', exact: false, icon: 'event', display: true },
     { label: 'Financials', href: '', exact: true,   icon: 'bar_chart',  display: true,
       children: [
-        { label: 'Profit and Loss Statement', href: '/business/financial-reporting', exact: true, icon: 'show_chart' }, // Updated icon
-        // { label: 'Balance Sheet', href: '/business/balance-sheet', exact: true, icon: 'account_balance' },
+        { label: 'Income Statement', href: '/business/financial-reporting', exact: true, icon: 'show_chart' }, // Updated icon
+        { label: 'Balance Sheet', href: '/business/balance-sheets', exact: true, icon: 'account_balance' },
         // { label: 'Cash Flows', href: '/business/financial-reporting/cashflows', exact: true, icon: 'swap_horiz' }
       ]
      },
