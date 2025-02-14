@@ -69,7 +69,7 @@ export class ViewFinancialReporting {
     const amortisationRow: any = { description: 'Depreciation and Amortisation', section: 'Operating Expenses' };
     const interestsRow: any = { description: 'Interests', section: 'Operating Expenses' };
     const profitBeforeTax: any = { description: 'Profit before Tax', section: 'Operating Expenses' };
-    const grossProfit: any ={description: 'Gross Profit', section: 'Operating Expenses' };
+    const grossProfit: any ={description: 'Gross Profit', section: '' };
     const netProfit: any = { description: 'Net Profit', section: 'Operating Expenses' };
     const ebitdaRow: any = { description: 'EBITDA', section: 'Operating Expenses' };
     const grossMargin: any = {description:'Gross Margin', section:'Operating Expenses'};
@@ -131,6 +131,7 @@ export class ViewFinancialReporting {
     this.combinedData = [
       ...Object.values(revenueRows),
       ...Object.values(costOfSalesRows),
+      grossProfit,
       ...Object.values(opexRows),
       grossMargin,
       ebitdaRow,
