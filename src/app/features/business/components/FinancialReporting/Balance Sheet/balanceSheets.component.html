@@ -31,16 +31,20 @@
 
             <div class="btn__group">
               <button class="btn btn-sm mb-4" (click)="addBalanceSheetRecord()">
-                {{ edit_mode ? "Update Record" : "New Record" }}
+                New Record
               </button>
             </div>
           </div>
 
           <table>
+
             <thead>
               <tr>
-                <th></th>
-                <th *ngFor="let year of sortedYears">{{ year }}</th>
+                <th>Balance Sheet</th>
+                <th *ngFor="let year of sortedYears">
+                  {{ year }}
+                 <mat-icon class="small-icon" *ngIf="edit_mode"  (click)="addBalanceSheetRecord(year)"><small>edit</small></mat-icon>
+                </th>
               </tr>
             </thead>
 
@@ -158,15 +162,119 @@
   </main>
 </div>
 
-<app-modal [(visible)]="createBalanceSheetModal" title="Balance Sheet Details" helperText="Add New Balance Sheet Details">
+
+
+
+
+
+
+
+
+<app-modal [(visible)]="createBalanceSheetModal" title="Balance Sheet Details"
+  helperText="Add New Balance Sheet Details">
   <div class="form_content__container" [formGroup]="balanceSheetForm">
-    <!-- Keep existing form structure -->
     <div class="form_row">
       <div class="input__wrapper">
         <label for="year" class="input__label">Financial Year</label>
-        <input id="year" type="number" class="input__field" formControlName="year" />
+        <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"/>
       </div>
-      <!-- Rest of form fields remain same -->
+
+
+      <div class="input__wrapper">
+        <label for="year" class="input-label">Land Property</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="landProperty" />
+      </div>
     </div>
+
+
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input-label">Plant Equipment</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="plantEquipment" />
+      </div>
+
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Non Current Assets</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherNonCurrentAssets" />
+      </div>
+
+    </div>
+
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Trade Receivables</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="tradeReceivables" />
+      </div>
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Cash</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="cash" />
+      </div>
+    </div>
+
+
+
+     <div class="form_row">
+        <div class="input__wrapper">
+          <label for="year" class="input__label">Inventory</label>
+          <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="inventory" />
+        </div>
+
+        <div class="input__wrapper">
+          <label for="year" class="input__label">Other Current Assets</label>
+          <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherCurrentAssets">
+        </div>
+     </div>
+
+
+
+     
+     <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Trade Payables</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="tradePayables" />
+      </div>
+
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Current Liabilities</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="otherCurrentLiabilities" />
+      </div>
+    </div>
+
+
+    
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Loans</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="loans" />
+      </div>
+  
+  
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Capital</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0" formControlName="capital" />
+      </div>
+    </div>
+
+
+    
+
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Other Non Current Liabilities</label>
+        <input id="taxes" type="number" class="input__field" placeholder="0"
+          formControlName="otherNonCurrentLiabilities" />
+      </div>
+    </div>
+
+   
+    <div class="form_row">
+      <div class="input__wrapper">
+        <button class="btn btn-primary mt-2 save__btn" (click)="createBalanceSheet()">Save</button>
+      </div>
+    </div>
+
   </div>
 </app-modal>
