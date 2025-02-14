@@ -1,4 +1,7 @@
-@import "../../styles/main.scss";
+@import "../../../styles/main.scss";
+@import '../../../../business/styles/business.components.steps.scss';
+
+
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 
@@ -34,6 +37,65 @@ h2{
 }
 
 
+
+
+
+
+.form_row{
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-evenly;
+  gap: 1cm;
+}
+
+
+
+.save__btn{
+  margin-top: 1cm;
+}
+
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+h1 {
+  text-align: center;
+  font-size: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+th {
+  background-color: #f2f2f2;
+}
+.total-row td {
+  border-top: 2px solid #000; /* Line above the totals */
+  font-weight: bold;
+}
+.separator-row td {
+  border-bottom: 2px solid #000; /* Horizontal border separating listings and totals */
+}
+
+
+
+
+
+
+
+
+
+
 @include when-screen-is-atleast(medium) {
   .main {
 
@@ -120,7 +182,7 @@ h2{
 }
 
 
-@import '../../../business/styles/business.components.steps.scss';
+
 
 // tables 
 :host ::ng-deep .p-paginator {
@@ -616,13 +678,7 @@ td {
 
 /* Remove borders */
 td, th {
-  width: 1.5cm;
   border: none;
-  max-width: 1.5cm !important;
-}
-
-.td_description{
-  min-width: 5cm;
 }
 
 /* Bottom border for totals, profit/loss, and taxes */
