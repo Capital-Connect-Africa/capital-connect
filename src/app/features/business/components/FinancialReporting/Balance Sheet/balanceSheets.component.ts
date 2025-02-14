@@ -175,12 +175,25 @@ export class BalanceSheets {
     const record = this.balanceSheetData[year];
     if (record) {
       this.balanceSheetForm.patchValue(record);
-      this.edit_mode = true;
     }
   }
 
-  addBalanceSheetRecord() {
-    this.balanceSheetForm.reset({ companyId: this.companyId });
+  // addBalanceSheetRecord(year? : number) {
+  //   this.balanceSheetForm.reset({ companyId: this.companyId });
+  //   this.createBalanceSheetModal = true;
+  // }
+
+  addBalanceSheetRecord(year?: number) {
+    if (year) {
+      const record = this.balanceSheetData[year];
+      if (record) {
+        this.balanceSheetForm.patchValue(record);
+        this.edit_mode = true;
+      }
+    } else {
+      this.balanceSheetForm.reset({ companyId: this.companyId });
+      this.edit_mode = false;
+    }
     this.createBalanceSheetModal = true;
   }
 
@@ -201,6 +214,11 @@ export class BalanceSheets {
     });
   }
 
-  onToggleView() { /* Implement view toggle logic if needed */ }
-  onToggleEdit() { /* Implement edit toggle logic if needed */ }
+  onToggleEdit(){
+    this.edit_mode = false
+  }
+
+  onToggleView(){
+    this.edit_mode = true
+  }
 }
