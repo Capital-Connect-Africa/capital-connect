@@ -60,7 +60,8 @@ export interface VoucherFormRuleFields{
     userPropertyName: string,
     userPropertyValue: UserProperties,
     operator: OperatorOption[],
-    valueType: 'text' | 'number' | 'select' | 'date',
-    options?: any
+    valueType: 'text' | 'number' | 'select' | 'date' | 'search',
+    options?: any,
+    placeholder?: string,
 }
 
