@@ -112,20 +112,28 @@ export class AuthStateService {
     this.currentUserName.set(userName);
   }
 
-  logout() {
-    return this._confirmationService
-      .confirm('Are you sure you want to log out?')
-      .pipe(
-        tap((confirmation) => {
-          if (confirmation) {
-            this.reset();
-            this._feedBackService.success('Logged Out! See you soon!');
-            this._router.navigateByUrl('/', {
-              state: { mode: FORM_TYPE.SIGNIN },
-            });
-          }
-        })
-      );
+  private clearSession(feedback: boolean =true){
+    this.reset();
+    if(feedback) this._feedBackService.success('Logged Out! See you soon!');
+    this._router.navigateByUrl('/', {
+      state: { mode: FORM_TYPE.SIGNIN },
+    });
+  }
+
+  logout(silent =false) {
+    if(!silent){
+      return this._confirmationService
+        .confirm('Are you sure you want to log out?')
+        .pipe(
+          tap((confirmation) => {
+            if (confirmation) {
+              this.clearSession()
+            }
+          })
+        );
+    }
+    this.clearSession(false)
+    return of() as any
   }
 
   saveUserPhoneNumberAddedStatus(phoneNo: string) {

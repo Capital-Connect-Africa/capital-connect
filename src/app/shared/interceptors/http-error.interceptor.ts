@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { EMPTY, of, throwError } from 'rxjs';
@@ -10,38 +10,43 @@ import { AuthStateService } from '../../features/auth/services/auth-state.servic
 export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const feedbackService = inject(FeedbackService);
   const _authStateService = inject(AuthStateService);
-  
-  const router = inject(Router)
+
+  const router = inject(Router);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.error.statusCode === 401) {
         feedbackService.info('Your session expired.');
-        _authStateService.logout()
+        _authStateService.logout(true);
         return EMPTY;
       }
       if (error.error.statusCode === 403) {
-        feedbackService.warning('You are unauthorized to perform the following action. Kindly Contact administrator.');
-        _authStateService.logout()
+        feedbackService.warning(
+          'You are unauthorized to perform the following action. Kindly Contact administrator.'
+        );
+        _authStateService.logout(true);
         return EMPTY;
       }
       if (isValidCompanyOwnerPath(error.url as string)) {
         if (error.error.statusCode === 404) {
-          router.navigateByUrl('/organization/setup')
+          router.navigateByUrl('/organization/setup');
         }
-        feedbackService.info('Kindly add your company details.')
+        feedbackService.info('Kindly add your company details.');
         return EMPTY;
       }
 
       if (isGettingActiveSubscription(error.url as string)) {
         if (error.error.statusCode === 404) {
-          return throwError(() =>error.error.message || error.error);
+          return throwError(() => error.error.message || error.error);
         }
         return EMPTY;
       }
 
       if (isValidInvestorProfilePath(error.url as string)) {
-        if (router.url !== '/investor/investor-details' && router.url !== '/investor/onboarding') {
+        if (
+          router.url !== '/investor/investor-details' &&
+          router.url !== '/investor/onboarding'
+        ) {
           router.navigateByUrl('/investor/onboarding');
         }
         return EMPTY;
@@ -49,14 +54,14 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (isValidAuthLoginPath(error.url as string)) {
         if (error.error.message.includes('Your email is not verified')) {
-          router.navigateByUrl('/verify-email')
+          router.navigateByUrl('/verify-email');
         }
       }
 
       if (isFinancialReportsPage(error.url as string)) {
         return EMPTY;
       }
-      
+
       let errorMessage = 'An unknown error occurred!';
 
       if (error?.error?.message) {
@@ -80,21 +85,24 @@ function isValidInvestorProfilePath(path: string): boolean {
   return regex.test(path);
 }
 
-function isGettingActiveSubscription(path: string): boolean{
+function isGettingActiveSubscription(path: string): boolean {
   const regex = /^.+\/subscriptions\/user\/\d+$/;
   return regex.test(path);
 }
-
 
 function isValidAuthLoginPath(path: string): boolean {
   return path.includes('login');
 }
 
 function isFinancialReportsPage(path: string): boolean {
-  return path.includes('opex') || path.includes('revenues') || path.includes('cost-of-sales')
-  || path.includes('finances') || path.includes('balance-sheet');
+  return (
+    path.includes('opex') ||
+    path.includes('revenues') ||
+    path.includes('cost-of-sales') ||
+    path.includes('finances') ||
+    path.includes('balance-sheet')
+  );
 }
-
 
 // {
 //   "message": "Invalid username or password",
