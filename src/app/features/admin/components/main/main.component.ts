@@ -26,7 +26,6 @@ import { SubscriptionsService } from '../../services/subscriptions.service';
   imports: [
     SharedModule, CommonModule,
     AdminUiContainerComponent,
-    PieChartComponent,
     TableModule,
     UserRoleFormatPipe,
     NumberAbbriviationPipe,
@@ -44,7 +43,7 @@ export class MainComponent {
 
   private _statsService = inject(UserStatisticsService);
   private _subscriptionsService = inject(SubscriptionsService);
-  subscriptions!: Record<string, number>;
+  subscriptions: {name: string, icon: string, count: number}[] =[]
   payments: Payment[] = [];
   bookings: Booking[] = [];
 
@@ -101,7 +100,29 @@ export class MainComponent {
   }))
 
   summary$ = this._statsService.getSummary().pipe(tap(summary => {
-    this.subscriptions = summary.subscription_counts;
+    const stats =summary.subscription_counts;
+    this.subscriptions = [
+      {
+        name: 'Basic',
+        count: stats['basic'] ??0,
+        icon: 'pi pi-star',
+      },
+      {
+        name: 'Pro',
+        count: stats['pro'] ??0,
+        icon: 'pi pi-cog',
+      },
+      {
+        name: 'Elite',
+        count: stats['elite'] ??0,
+        icon: 'pi pi-shield',
+      },
+      {
+        name: 'Plus',
+        count: stats['plus'] ??0,
+        icon: 'pi pi-plus',
+      }
+    ]
   }))
 
 
@@ -149,5 +170,12 @@ export class MainComponent {
       }
     ];
   }))
+
+  // {
+  //   Basic: subscriptions['basic'],
+  //   Pro: subscriptions['pro'],
+  //   Elite: subscriptions['elite'],
+  //   Plus: subscriptions['plus']
+  // }
 
 }
