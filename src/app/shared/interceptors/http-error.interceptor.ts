@@ -15,6 +15,11 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      if (error.error.statusCode === 401) {
+        feedbackService.info('Your session expired.');
+        _authStateService.logout()
+        return EMPTY;
+      }
       if (error.error.statusCode === 403) {
         feedbackService.warning('You are unauthorized to perform the following action. Kindly Contact administrator.');
         _authStateService.logout()
