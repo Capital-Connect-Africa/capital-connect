@@ -17,7 +17,7 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       if (error.error.statusCode === 401) {
         feedbackService.info('Your session expired.');
-        _authStateService.logout()
+        _authStateService.logout(true)
         return EMPTY;
       }
       if (error.error.statusCode === 403) {
