@@ -136,6 +136,7 @@ export class VoucherRulesComponent {
   handleUserPropertyChange(event: any) {
     const { value } = event;
     this.ruleForm.get('value')?.setValue('');
+    this.ruleForm.get('operator')?.setValue('');
     if (value) {
       const operators = this.formFields.find(
         (field) => field.userPropertyValue == value
@@ -158,6 +159,7 @@ export class VoucherRulesComponent {
   handleOperatorChange(event: any) {
     const { value } = event;
     this.ruleForm.get('value')?.setValue('');
+    
     if (value) {
       this.operator = value;
     } else {
