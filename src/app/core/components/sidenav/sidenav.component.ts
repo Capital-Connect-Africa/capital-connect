@@ -2,7 +2,6 @@ import { Component, HostListener, inject, Input } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { CommonModule } from "@angular/common";
 import { Observable, tap } from "rxjs";
-import { ProBadgeComponent } from "../pro-badge/pro-badge.component";
 import { SharedModule } from "../../../shared";
 import { NavbarToggleService } from "../../services/navbar-toggle/navbar.toggle.service";
 import { AuthStateService } from '../../../features/auth/services/auth-state.service';
