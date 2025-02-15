@@ -11,7 +11,7 @@
           <h3>Users</h3>
           <div class="grid grid-cols-2 gap-8">
             <div class="grid__container">
-              <ul class="grid grid-cols-2 gap-8 w-full">
+              <ul class="grid grid-cols-2 gap-7 w-full">
                 <li
                   *ngFor="let item of stats"
                   class="rounded-md flex justify-between items-center gap-8 stat__card"
@@ -57,25 +57,8 @@
         </div>
         <div>
           <h3>Billing</h3>
-          <div class="grid grid-cols-[max-content_auto] grid__wrapper">
-            <div class="grid__container">
-              <h3>Subscriptions</h3>
-              <div class="">
-                <app-pie-chart
-                  [width]="300"
-                  [height]="300"
-                  legendPosition="bottom"
-                  [data]="{
-                    Basic: subscriptions['basic'],
-                    Pro: subscriptions['pro'],
-                    Elite: subscriptions['elite'],
-                    Plus: subscriptions['plus']
-                  }"
-                  [colors]="['#13501B', '#e9a901', '#762db1', '#2d7b88']"
-                />
-              </div>
-            </div>
-            <div class="grid__container">
+          <section class="grid grid-cols-2 gap-8">
+            <div class="grid__container bg-white rounded-md p__1rem">
               <h3>Recent Subscriptions</h3>
               <p-table [value]="recentSubscriptions" [paginator]="false">
                 <ng-template pTemplate="header">
@@ -117,53 +100,7 @@
                 </ng-template>
               </p-table>
             </div>
-          </div>
-        </div>
-        <div>
-          <h3>Payments</h3>
-          <div class="grid grid__wrapper">
-            <div class="grid__container">
-              <h3>Recent Transactions</h3>
-              <p-table [value]="payments" [paginator]="false">
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th
-                      *ngFor="let col of payment_cols"
-                      [pSortableColumn]="col.field"
-                    >
-                      <span class="header-container">
-                        <span class="header-text">
-                          {{ col.header }}
-                        </span>
-                      </span>
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-payment>
-                  <tr class="text-sm">
-                    <td>{{ payment.id }}</td>
-                    <td>
-                      {{ payment.currency }}
-                      {{ payment.amount | numberabbreviation }}
-                    </td>
-                    <td>{{ payment.status | titlecase }}</td>
-                    <td>{{ payment.createdAt | time_ago }}</td>
-                    <td>{{ payment.description }}</td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr>
-                    <td colspan="5">No trasactions recorded recently.</td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
-          </div>
-        </div>
-        <div>
-          <h3>Bookings</h3>
-          <div class="grid grid__wrapper">
-            <div class="grid__container">
+            <div class="grid__container bg-white rounded-md p__1rem">
               <h3>Recent Bookings</h3>
               <p-table [value]="bookings" [paginator]="false">
                 <ng-template pTemplate="header">
@@ -195,8 +132,64 @@
                 </ng-template>
               </p-table>
             </div>
+          </section>
+        </div>
+        <section class="grid grid-cols-2 gap-8">
+        <div class="grid">
+          <h3>Transactions</h3>
+          <div class="grid__container bg-white rounded-md p__1rem">
+            <h3>Recent Transactions</h3>
+            <p-table [value]="payments" [paginator]="false">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th
+                    *ngFor="let col of payment_cols"
+                    [pSortableColumn]="col.field"
+                  >
+                    <span class="header-container">
+                      <span class="header-text">
+                        {{ col.header }}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-payment>
+                <tr class="text-sm">
+                  <td>{{ payment.id }}</td>
+                  <td>
+                    {{ payment.currency }}
+                    {{ payment.amount | numberabbreviation }}
+                  </td>
+                  <td>{{ payment.status | titlecase }}</td>
+                  <td>{{ payment.createdAt | time_ago }}</td>
+                  <td>{{ payment.description }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="5">No trasactions recorded recently.</td>
+                </tr>
+              </ng-template>
+            </p-table>
           </div>
         </div>
+        <div class="grid__container">
+          <h3>Packages</h3>
+          <ul class="grid grid-cols-2 gap-8 w-full">
+            <li
+              *ngFor="let item of subscriptions"
+              class="rounded-md flex justify-between items-center gap-8 stat__card"
+            >
+              <div>
+                <h3 class="h3">{{ item.count || 0 }}</h3>
+                <p>{{ item.name }}</p>
+              </div>
+              <i class="text-xl font-light" [class]="item.icon"></i>
+            </li>
+          </ul>
+        </div>
+      </section>
       </ng-container>
     </main>
   </div>
