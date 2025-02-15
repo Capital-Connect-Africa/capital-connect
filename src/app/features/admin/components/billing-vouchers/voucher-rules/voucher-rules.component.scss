@@ -1,39 +1,43 @@
 @import "../../../../../styles/select-fields.scss";
 
-.card__item__details{
-    gap: 2rem;
-    display: flex;
-    flex-direction: column;
-  
-    .card__item__detail {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      border-bottom: 1px solid #ddd;
-      div {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        label {
-          font-weight: bold;
-        }
-    
-        p {
-          margin: 0.25rem 0;
-          color: #555;
-        }
+.card__item__details {
+  gap: 2rem;
+  display: flex;
+  flex-direction: column;
+
+  .card__item__detail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid #ddd;
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      label {
+        font-weight: bold;
+      }
+
+      p {
+        margin: 0.25rem 0;
+        color: #555;
       }
     }
+  }
 }
 
-.h3{
+.h3 {
   margin: 0;
   padding: 0;
   font-size: 1.35rem;
   font-weight: bold;
 }
 
-textarea{
-  padding: .6rem 1rem;
-  border-radius: .5rem;
+textarea {
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
   border: 1px solid #c9ddcc;
+}
+
+:host ::ng-deep .p-listbox-item {
+  padding: 8px 4px !important;
 }
