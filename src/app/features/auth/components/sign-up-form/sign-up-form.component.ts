@@ -1,4 +1,4 @@
-import {booleanAttribute, Component, EventEmitter, inject, Output} from '@angular/core';
+import {booleanAttribute, Component, EventEmitter, inject, Input, Output, SimpleChanges} from '@angular/core';
 import { AuthModule } from '../../modules/auth.module';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -22,7 +22,19 @@ export class SignUpFormComponent {
   private _router = inject(Router);
   private _referralTokenService =inject(ReferralTokenService);
 
+  @Input() userRole!:USER_ROLES.PARTNER | USER_ROLES.ADVISOR;
   @Output() changeFormTypeEvent = new EventEmitter<FORM_TYPE>();
+
+  ngOnChanges(changes: SimpleChanges): void {
+      if(changes['userRole']){
+        this.userRole =changes['userRole'].currentValue;
+        if([USER_ROLES.PARTNER, USER_ROLES.ADVISOR].includes(this.userRole)){
+          this.signUpForm.patchValue({
+            accountType: this.userRole
+          })
+        }
+      }
+  }
 
   signUpForm = this._formBuilder.group({
     accountType: ['', Validators.required],
@@ -125,7 +137,6 @@ export class SignUpFormComponent {
       lastName: formValue.lastName as string,
       referralCode: this._referralTokenService.getReferralToken()?.token,
     }
-
     this.signUp$ = this._authService.signUpUser(input).pipe(tap((res) => {
       this._referralTokenService.removeToken();
       this._router.navigateByUrl('/verify-email', { state: { mode: 'unverified' } });

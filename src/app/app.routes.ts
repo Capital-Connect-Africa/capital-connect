@@ -21,6 +21,13 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'register/:special-role',
+    loadComponent: () =>
+      import(
+        './features/auth/pages/special-signup/special-signup.component'
+      ).then((c) => c.SpecialSignupComponent),
+  },
+  {
     path: 'callbacks',
     loadChildren: () =>
       import('./features/callbacks/modules/callbacks.routing.module').then(
