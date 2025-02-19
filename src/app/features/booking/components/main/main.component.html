@@ -10,8 +10,10 @@
       <div class="advisory-page">
         <div class="form_content__container add-session-form">
           <div class="iframe-container">
-            <!-- <iframe src="https://calendly.com/investor-eligibility/advisory-sessions?month=2025-02"></iframe> -->
-            <iframe [src]="'https://calendly.com/investor-eligibility/advisory-sessions?month=2025-02&utm_content=' + bookingId"></iframe>
+            <!-- <iframe [src]="'https://calendly.com/investor-eligibility/advisory-sessions?month=2025-02&utm_content=' + bookingId"></iframe> -->
+
+            <iframe [src]="safeUrl"></iframe>
+
           </div>
         </div>
       </div>

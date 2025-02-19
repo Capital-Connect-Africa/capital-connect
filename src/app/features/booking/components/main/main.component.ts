@@ -4,16 +4,15 @@ import { MatIcon } from "@angular/material/icon";
 import { NavbarComponent } from "../../../../core";
 import { OverviewComponent } from "../../../business/components/dashboard/overview/overview.component";
 import { SchedulesSectionComponent } from "../../../../shared/components/schedules-section/schedules-section.component";
-import { CommonModule, Location } from "@angular/common";
+import { CommonModule} from "@angular/common";
 import { ActivatedRoute } from '@angular/router';
-import { PesapalService } from '../../../../shared/services/pesapal.service';
-import { Observable,tap } from 'rxjs';
-import { FormArray, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { WebExService } from '../../../../shared/services/webex.service';
 import { AlertComponent } from "../../../../shared/components/alert/alert.component";
 import { CardComponent } from "../../../../shared/components/card/card.component";
 import { AdvertisementSpaceComponent } from "../../../../shared/components/advertisement-space/advertisement-space.component";
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-main',
@@ -25,9 +24,9 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class MainComponent {
   //Services
   private _activatedRoute = inject(ActivatedRoute);
-  private _feedbackService = inject(FeedbackService);
   private _formBuilder = inject(FormBuilder);
-  private _webExService = inject(WebExService)
+  private _sanitizer = inject(DomSanitizer);
+  
 
 
   //Observables
@@ -59,6 +58,12 @@ export class MainComponent {
     }
     this.bookingId = bookingId;
 
+  }
+
+
+  get safeUrl(): SafeUrl {
+    const url = `https://calendly.com/investor-eligibility/advisory-sessions?month=2025-02&utm_content=${this.bookingId}`;
+    return this._sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
 }
