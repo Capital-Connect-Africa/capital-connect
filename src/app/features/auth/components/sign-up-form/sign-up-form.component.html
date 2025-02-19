@@ -4,7 +4,7 @@
 
 
 <form [formGroup]="signUpForm" class="user__auth__form">
-  <div class="input__wrapper">
+  <div class="input__wrapper" *ngIf="!userRole">
     <label class="input__label">Account type</label>
     <div class="radio__buttons">
       <div class="radio__button">
@@ -17,6 +17,7 @@
       </div>
     </div>
   </div>
+  <div style="height: 50px;" *ngIf="userRole"></div>
   <div class="flex gap-4 flex-col md:flex-row w-full">
   <div class="input__wrapper w-full">
     <label class="input__label">First Name</label>
