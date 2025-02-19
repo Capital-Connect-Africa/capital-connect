@@ -36,8 +36,8 @@ import { PdfGeneratorService } from '../../../../shared/services/pdf-generator.s
     ModalComponent, ReactiveFormsModule,
     ViewFinancialReporting
 ],
-  templateUrl: './booking.component.html',
-  styleUrl: './booking.component.scss',
+  templateUrl: './financial.component.html',
+  styleUrl: './financial.component.scss',
   providers: [PaginationService]
 })
 export class FinancialReporting {
