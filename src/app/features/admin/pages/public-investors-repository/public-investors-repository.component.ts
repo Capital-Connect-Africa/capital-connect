@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { PublicInvestorsRepositoryService } from '../../../../core/services/investors/public-investors-repository.service';
 import { PublicInvestor } from '../../../../shared/interfaces/public.investor.interface';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { formatDistanceToNow } from 'date-fns';
@@ -36,6 +36,11 @@ export class PublicInvestorsRepositoryComponent {
     pagination: true,
     theme: this.theme,
     rowSelection: { mode: "multiRow" },
+    onCellValueChanged: cell =>{
+      if(!cell.newValue) return;
+      const payload:Partial<PublicInvestor> ={[cell.column.getColId()]: cell.newValue, id: Number(cell.data.id)};
+      this.updateInvestorDetails(payload);
+    },
     columnDefs: [
       { field: "name"},
       { field: "type", },
@@ -67,7 +72,9 @@ export class PublicInvestorsRepositoryComponent {
         valueFormatter: (params: ValueFormatterParams) => {
           return formatDistanceToNow(new Date(params.value),{addSuffix: true});
         },
-         headerName: 'Created'},
+         headerName: 'Created'
+        },
+      
 
     ] as ColDef[],
     defaultColDef: {
@@ -77,7 +84,8 @@ export class PublicInvestorsRepositoryComponent {
 }
 
  ;
-
+ 
+  updatePublicInvestor$ =new Observable();
   publicInvestors:PublicInvestor[] =[]
 
   private _publicInvestorService =inject(PublicInvestorsRepositoryService)
@@ -85,5 +93,9 @@ export class PublicInvestorsRepositoryComponent {
   publicInvestors$ =this._publicInvestorService.getInvestors().pipe(tap(res =>{
     this.publicInvestors =res
   }))
+
+  updateInvestorDetails(payload: Partial<PublicInvestor>){
+    this.updatePublicInvestor$ =this._publicInvestorService.updateInvestor(payload, Number(payload.id))
+  }
 
 }
