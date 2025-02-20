@@ -208,6 +208,18 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'repository',
+    loadChildren: () =>
+      import('./features/admin/modules/repository.routing').then(
+        (m) => m.RepositoryRoutes
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+  {
     path: 'bookings',
     loadChildren: () =>
       import('./features/admin/modules/bookings.routing.module').then(

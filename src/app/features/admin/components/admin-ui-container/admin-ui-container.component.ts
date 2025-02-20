@@ -59,6 +59,7 @@ export class AdminUiContainerComponent implements OnInit {
             ]},
             {label: 'Operations', display: true, href: '/referrals', icon: 'trending_up', children: [
               { label: 'Referrals', href: '/referrals', exact: false, icon: 'screen_share' ,display:true},
+              { label: 'Investors DB', href: '/repository/investors', exact: false, icon: 'backup' ,display:true},
               { label: 'Sections', href: '/questions', exact: false, icon: 'help' ,display:true},
               { label: 'Sectors', href: '/sectors', exact: false, icon: 'group_work' ,display:true},
               { label: 'Task Manager', href: `${BASE_URL}/admin/queues?authorization=${this._authStateService.authToken}`, exact: false, icon: 'add_to_queue' ,display:true, external: true},
