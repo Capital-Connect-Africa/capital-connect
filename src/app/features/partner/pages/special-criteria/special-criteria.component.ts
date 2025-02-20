@@ -7,6 +7,7 @@ import { TableModule } from 'primeng/table';
 import { Observable, tap } from 'rxjs';
 import { SliceTextPipe } from "../../../../core/pipes/slice-text.pipe";
 import { SpecialCriteriaService } from '../../services/special.criteria.service';
+import { SpecialCriteriasService } from '../../../investor/services/special-criteria.services';
 
 @Component({
   selector: 'app-special-criteria',
@@ -32,6 +33,7 @@ export class SpecialCriteriaComponent {
   specialCriteria:SpecialCriteria[] =[]
 
   private _specialCriteriaService =inject(SpecialCriteriaService)
+  private _specialCriteriasService =inject(SpecialCriteriasService)
 
   cols = [
     { field: 'title', header: 'Title' },
@@ -61,16 +63,14 @@ export class SpecialCriteriaComponent {
   }
 
   handleSubmit() {
-    const values = this.form.value as Partial<SpecialCriteria>;
+    const values = this.form.value as SpecialCriteria;
     if(this.selectedCriteria){
-      this.editCriteria$ =this._specialCriteriaService.edit(this.selectedCriteria.id, values).pipe(tap(res =>{
-        this.selectedCriteria =res;
+      this.editCriteria$ =this._specialCriteriasService.updateSpecialCriteria(this.selectedCriteria.id, values).pipe(tap(_ =>{
         this.reset();
       }))
       return;
     }
-    this.saveCriteria$ =this._specialCriteriaService.save(values).pipe(tap(res =>{
-      this.selectedCriteria =res;
+    this.saveCriteria$ =this._specialCriteriasService.createSpecialCriteria(values).pipe(tap(_ =>{
       this.reset();
     }))
   }
@@ -112,9 +112,10 @@ export class SpecialCriteriaComponent {
   }
 
   fetchCriteria(page:number =1, limit:number =10){
-    this.getCriteria$ =this._specialCriteriaService.findAll(page, limit).pipe(tap(res =>{
-      this.specialCriteria =res;
-    }))
+    // this.getCriteria$ =this._specialCriteriasService()
+    // this._specialCriteriaService.findAll(page, limit).pipe(tap(res =>{
+      // this.specialCriteria =res;
+    // }))
   }
   
 }
