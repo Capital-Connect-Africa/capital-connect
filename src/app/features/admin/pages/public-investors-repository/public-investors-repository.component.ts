@@ -78,6 +78,7 @@ export class PublicInvestorsRepositoryComponent {
       { field: "investees",},
       { field: "createdAt",
         editable: false,
+        pinned: 'right',
         valueFormatter: (params: ValueFormatterParams) => {
           return formatDistanceToNow(new Date(params.value),{addSuffix: true});
         },
