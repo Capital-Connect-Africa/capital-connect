@@ -1,9 +1,32 @@
 <app-admin-ui-container title="Investors Database" [bg_gray]="true">
     <ng-container *ngIf="publicInvestors$ | async"></ng-container>
     <ng-container *ngIf="updatePublicInvestor$ | async"></ng-container>
-    <ag-grid-angular
-        style="min-width: 100%; height: 80vh;"
-        [rowData] ="publicInvestors"
-        [gridOptions]="gridOptions"
-        />
+    <section class="flex flex-col gap-1">
+        <div class="flex items-center justify-between">
+            <h2 class="h2">Global Investors</h2>
+            <div class="flex items-center gap-4">
+                <button class="flex gap-2 items-center border p-1 bg-[#1f2836] text-white hover:bg-black transition-all rounded cta__btn">
+                    <i class="pi pi-download text-sm"></i>
+                    <span class="text-xs font-normal">Download CSV</span>
+                </button>
+                <button class="flex gap-2 items-center border p-1 bg-purple-500 text-white hover:bg-purple-800 transition-all rounded cta__btn">
+                    <i class="pi pi-chart-line text-xs"></i>
+                    <span class="text-xs font-normal">Insights</span>
+                </button>
+                <button class="flex gap-2 items-center border p-1 bg-teal-500 text-white hover:bg-teal-800 transition-all rounded cta__btn">
+                    <i class="pi pi-upload text-sm"></i>
+                    <span class="text-xs font-normal">Import</span>
+                </button>
+                <button class="flex gap-2 items-center border p-1 bg-blue-500 text-white hover:bg-blue-800 transition-all rounded cta__btn">
+                    <i class="pi pi-plus text-xs"></i>
+                    <span class="text-xs font-normal">Add new</span>
+                </button>
+            </div>
+        </div>
+        <ag-grid-angular
+            style="min-width: 100%; height: 72vh;"
+            [rowData] ="publicInvestors"
+            [gridOptions]="gridOptions"
+            />
+    </section>
 </app-admin-ui-container>
