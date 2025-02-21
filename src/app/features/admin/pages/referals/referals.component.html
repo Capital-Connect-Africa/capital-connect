@@ -6,77 +6,30 @@
             <h3>Referral Stats</h3>
             <p>Here's how we're doing</p>
         </div>
-        <section class="grid grid-cols-4 gap-8">
-            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
-                <div>
-                    <h3 class="h3">{{stats.clicks}}</h3>
-                    <p>Clicks</p>
-                </div>
-                <i class="pi pi-bolt text-4xl font-light text-[#13501B]"></i>
-            </div>
-            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
-                <div>
-                    <h3 class="h3">{{stats.visits}}</h3>
-                    <p>Visits</p>
-                </div>
-                <i class="pi pi-wave-pulse text-4xl font-light text-[#762db1]"></i>
-            </div>
-            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
-                <div>
-                    <h3 class="h3">{{stats.signups}}</h3>
-                    <p>Signups</p>
-                </div>
-                <i class="pi pi-briefcase text-4xl font-light text-[#e9a901]"></i>
-            </div>
-            <div class="header__section bg-white rounded-xl p-8 flex justify-between items-center gap-8">
-                <div>
-                    <h3 class="h3">{{stats.rate | number: '1.1-1'}}%</h3>
-                    <p>Signup Rate</p>
-                </div>
-                <i class="pi pi-chart-scatter text-3xl font-light text-[#762db1]"></i>
-            </div>
-        </section>
+        <ul class="grid grid-cols-4 gap-8">
+                <li
+                  *ngFor="let item of stats"
+                  class="rounded-md flex justify-between items-center gap-8 stat__card"
+                >
+                  <div>
+                    <h3 class="h3">{{ item.count || 0 }}</h3>
+                    <p>{{ item.name }}</p>
+                  </div>
+                  <i class="text-xl font-light" [class]="item.icon"></i>
+                </li>
+        </ul>
         <section class="bg-white flex justify-start rounded-xl p-8 gap-12">
-            <div>
-                <app-pie-chart [width]="300" [height]="300" legendPosition="bottom" [data]="{
-                'Visits': stats.visits,
-                'Clicks': stats.clicks,
-                'Signups': stats.signups,
-              }" [colors]="['#13501B', '#e9a901', '#762db1']" />
-            </div>
             <div class="w-full">
                 <div class="header__section">
                     <h3>Leaders board</h3>
                     <p>The following have referred people to us</p>
                 </div>
-                <p-table [value]="referrals" [paginator]="false">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th *ngFor="let col of cols" [pSortableColumn]="col.field">
-                                <span class="header-container">
-                                    <span class="header-text">
-                                        {{col.header}}
-                                    </span>
-                                </span>
-                            </th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-referral>
-                        <tr class="text-sm">
-                            <td>{{referral.rank}}</td>
-                            <td>{{referral.name | titlecase}}</td>
-                            <td>{{referral.clicks}}</td>
-                            <td>{{referral.visits}}</td>
-                            <td>{{referral.signups}}</td>
-                            <td>{{referral.rate | number: '1.1-1'}}%</td>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="emptymessage">
-                        <tr>
-                            <td colspan="5">No recent referrals recorded.</td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                <ag-grid-angular
+            style="min-width: 100%; height: 72vh;"
+            [rowData] ="referrals"
+            [context]="{ componentParent: this }"
+            [gridOptions]="gridOptions"
+            />
             </div>
         </section>
         <app-referral-link />
