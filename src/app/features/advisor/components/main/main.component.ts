@@ -77,6 +77,10 @@ export class MainComponent {
 
 
   ngOnInit(): void {
+    this._router.navigate(["advisor/create-profile"])
+    // create-profile
+
+
     this.getBookings();
   }
 

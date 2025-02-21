@@ -1,0 +1,142 @@
+
+<!-- <ng-container *ngIf="advisorProfile$ | async as advisorProfile"> -->
+
+
+  <div class="main">
+    <div class="navbar">
+      <app-navbar [showBanner]="showBanner" onDashboard="true" />
+    </div>
+      <div class="main__content">
+        <ng-container *ngIf="userProfile$ | async as userProfile">
+            <div class="flex flex-col gap-4 shadow rounded-[.5rem] overflow-hidden">
+            <section class="cover__background">
+              <div class="profile__card">
+                <img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALAAAACUCAMAAAAEVFNMAAAAMFBMVEXk5ueutLfp6uu+w8WrsbTHy821ur3h4+SorrLKztC5vsHe4OLr7e7b3t/S1dfV2Nr5rpp2AAAEJklEQVR4nO2c25KkIAxAJVxFkf//20Xty3Q72w0EE6bK8zbzdCoVQ4DQw3BxcXFxcXFxcXFxcXFx8cexCW6HLGCY4jJquaLHJU7pP/0CELT0Qj0RRo4TdOoMgzZCKPFK+tssXYZ50u5d9o5T48St9wZYfYjti7IYuRVfmBfzSXdLDR9mbs0n8pvuFmXNrXknfA3vzdj3kckx0zelhQkdlIuYq7sp8xtHV+CbjCO3b0l8NwKrbyjVTXnM6Wuzv7efxnxpPGfV33f46jEsZR/cg4UpxlOdblqlmXr7qoTYjHmSorxCPI1ZQlwd4CQsGbI4VH5xuzH98gG+PsAJ+hBPKF9hqDtN0ChfochrsUcKS+JCEXG+CWLhEZfCqaOgbYwtogjvKEkrbJC+yZh01z9hVo0dR+lbupP7VZh0sdPYFE4pMRJWYpBoXyE0pTBy2digbCfmBr7CUwrjUzj1P5fw2cJ0vn8wwg18ST86wLcSxMK4Dd0O6bbury3NQ+2p2g9oO3jUocRNmHSPZNG+wpE28Bbf/VAWiaHBV+do73JhwQbYER/9oHeh1Ifa2D0H+Zk2LMgkJr9gBJwv7THKJowKMf3hZQIVYY6LL0Q/QXwSeMNW95jKc/hiFg+mGYTa4xSme8XVuConmBJiEy4f71iFJ8YxmoqmzZFujQ4UXx3wJfAOFBpz+yaKqrGj7yEOlFwo9eC73uJmGqteRlzTkpejrExkHwu8AUF+b4Sc5Ky/Bxb1LcjcM4xvrAPw/3VWyuj+JvdhGv2vykr5patseGKDVm+T+8oJzTse+hkAu2wHAEasBxdGjnbuM7hPIBlOIcYY7DD3l7kHIDHfga6Fk5wNcX2H5L1JeO+350hh6Ex7FZ3Cor1wK+r1m9v+lXI5hsn28MIHIAVVrq4fFw6lVmu9BF7n9XWXN+LrIvewFsbIOLC9mDlW3Sxt5xf64VYYohYVtjtOySVQfolzWoWzOsr/hzllNJkyTPL4zq/CWXiaI8zgq1PhHSdOz2aIMrcmZKH8aE8MM1jZIBdejZU5LzGsbhrdh7M5qVuOraP7MHYn5EUqDSfpbsrNCwacFt67cuM5QY0fN/iCa/j8EqYWEzPfUM3eVEE4OR0eyo3SAntJW2Dc4qwQ0OP5Jcb464+Z0reBMWl8WxhT+yKN8YMyNcb1E4OAfNFVa6xrd6kNhtPqjGtXkDPbnc9UnXeSF4gndR+eZfOtm3xtMtNcTfkYXvUz9kYUJ0WD92coSitF9u3macKFo461vxPQDrcUBZivpD0oeuaBnFNsQtFsW4MHiXgKQtzkuRwalV+LubqeN7KXO5Y2+Eh+R1E6eHQWJrdpa/DmoQ25q11gXpbvqMwRIfR4eyuyf9Khg2VuJ7ef4G58nuQJW6k6IbONt/sPmXZA7m8MQjfk+fbNP0nUOaYuq8XQAAAAAElFTkSuQmCC"
+                class="avatar" alt="profile" />
+              </div>
+            </section>
+<!--             
+            <div class="flex flex-col bg-white  bio_info">
+              <h2>{{userProfile.name}}</h2>
+              <p> <button class="text-blue-600 font-bold" mat-button [routerLink]="['/investor/onboarding']" style="margin-top: 1rem;">
+                <mat-icon >edit</mat-icon> Update Profile
+              </button></p>
+  
+              <p><mat-icon>call</mat-icon>{{ uniqueMobileNumber }}</p>
+              <p><mat-icon>mail</mat-icon>{{userProfile.email}}</p>
+              <p>
+                <img *ngIf="userProfile.company.companyLogo" width="24px" height="24px" [src]="userProfile.company.companyLogo" alt="company logo"/>
+                <mat-icon *ngIf="!userProfile.company.companyLogo">location_city</mat-icon> 
+                <span>{{investorProfile.organizationName}}, {{investorProfile.headOfficeLocation}} </span></p>
+  
+                <section>
+                  <h2>Investor</h2>
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Fund Description:</label>
+                        <p>{{investorProfile.fundDescription}}</p>
+                      </div>
+                      <div>
+                        <label>Available Funding:</label>
+                        <p>{{getLocalized(investorProfile.availableFunding)}} $(USD)</p>
+                      </div>
+                      <div>
+                        <label>Investor Type:</label>
+                        <p>{{investorProfile.investorType}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Maximum Funding:</label>
+                        <p>{{getLocalized(investorProfile.maximumFunding)}} $(USD)</p>
+                      </div>
+                      <div>
+                        <label>Minimum Funding:</label>
+                        <p>{{getLocalized(investorProfile.minimumFunding)}} $(USD)</p>
+                      </div>
+                      <div>
+                        <label>No maximum funding</label>
+                        <p>{{investorProfile.noMaximumFunding}}</p>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Sectors Of Investment:</label>
+                        <p>{{getItems(investorProfile.sectors)}}</p>
+                      </div>
+                      <div>
+                        <label>Sub Sectors Of investment:</label>
+                        <p>{{getItems(investorProfile.subSectors)}}</p>
+                      </div>
+                      <div>
+                        <label>ESG focus areas</label>
+                        <p>{{investorProfile.esgFocusAreas}}</p>
+                      </div>
+                    </div>
+                  </div>
+  
+                  
+  
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Registration Structures:</label>
+                        <p>{{investorProfile.registrationStructures}}</p>
+                      </div>
+                      <div>
+                        <label>Business Growth Stages:</label>
+                        <p>{{investorProfile.businessGrowthStages}}</p>
+                      </div>
+                      <div>
+                        <label>ESG focus areas</label>
+                        <p>{{investorProfile.esgFocusAreas}}</p>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Different Funding Vehicles:</label>
+                        <p>{{investorProfile.differentFundingVehicles}}</p>
+                      </div>                  
+                    
+                    </div>
+                  </div>
+  
+                  <div class="card__item__details" details>
+                    <div class="card__item__detail_info">
+                      <div>
+                        <label>Countries Of Investment Focus:</label>
+                        <p>{{investorProfile.countriesOfInvestmentFocus}}</p>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </section>
+  
+  
+  
+  
+            </div>
+             -->
+          </div>
+          </ng-container>
+  
+        <section class="col__right">
+          <h2><mat-icon>notifications_active</mat-icon><span>Reminder</span></h2>
+          <app-alert [action] ="showDialog" className="rounded-[.5rem]"/>
+        </section>
+      </div>
+    <main>
+    </main>
+  </div>
+  
+  
