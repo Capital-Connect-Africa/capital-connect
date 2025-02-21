@@ -8,15 +8,28 @@ import { ReferralsService } from '../../services/referrals.service';
 import { ReferralLinkComponent } from '../../../../shared/components/referral-link/referral-link.component';
 import { ReferralLeader } from '../../interfaces/referral.leader.interface';
 import { ReferralStats } from '../../interfaces/referral.stats.interface';
+import {
+  AllCommunityModule,
+  ModuleRegistry,
+  themeMaterial,
+  colorSchemeDarkBlue,
+  ColDef,
+  GridOptions,
+  ValueFormatterParams,
+  iconSetMaterial,
+  GridApi,
+} from 'ag-grid-community';
+import { AgGridAngular } from 'ag-grid-angular';
 
+ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'app-referals',
   standalone: true,
   imports: [
     AdminUiContainerComponent,
-    PieChartComponent,
     CommonModule,
     TableModule,
+    AgGridAngular,
     ReferralLinkComponent,
   ],
   templateUrl: './referals.component.html',
@@ -35,12 +48,19 @@ export class ReferalsComponent {
     { header: 'Rate', field: 'rate' },
   ];
   referrals: ReferralLeader[] = [];
-  stats: ReferralStats = {
-    clicks: 0,
-    signups: 0,
-    visits: 0,
-    rate: 0,
-  };
+
+  private gridApi!: GridApi<ReferralLeader>;
+  selectedColumns: string[] = [];
+  theme = themeMaterial
+    .withPart(iconSetMaterial)
+    .withPart(colorSchemeDarkBlue)
+    .withParams({
+      iconSize: 18,
+      headerTextColor: 'white',
+      rowHoverColor: 'rgba(255, 255, 255, 0.05)',
+      wrapperBorderRadius: '.5rem',
+    });
+  stats: any[] =[]
   referrals$ = new Observable();
   stats$ = new Observable();
 
@@ -49,7 +69,7 @@ export class ReferalsComponent {
     this.getStats();
   }
 
-  getLeadersBoard(page = 1, limit = 10) {
+  getLeadersBoard(page = 1, limit = 1000) {
     this.referrals$ = this._referralsService.getLeadersBoard(page, limit).pipe(
       tap((referrals) => {
         this.referrals = referrals.referrals;
@@ -61,8 +81,56 @@ export class ReferalsComponent {
   getStats() {
     this.stats$ = this._referralsService.getStats().pipe(
       tap((stats) => {
-        this.stats = stats;
+        this.stats = [
+          {
+            name: 'Clicks',
+            count: stats.clicks ??0,
+            icon: 'pi pi-bolt',
+          },
+          {
+            name: 'Visits',
+            count: stats.visits ??0,
+            icon: 'pi pi-wave-pulse',
+          },
+          {
+            name: 'Signups',
+            count: stats.signups ??0,
+            icon: 'pi pi-briefcase',
+          },
+          {
+            name: 'Signup Rate',
+            count: `${Math.round(stats.rate ??0)}%`,
+            icon: 'pi pi-chart-scatter',
+          }
+        ]
       })
     );
   }
+
+  
+
+  gridOptions: GridOptions = {
+    pagination: true,
+    theme: this.theme,
+    onGridReady: (params) => {
+      this.gridApi = params.api;
+    },
+    columnDefs: [
+      { field: 'rank', sort: 'asc' },
+      { field: 'name' },
+      { field: 'clicks' },
+      { field: 'visits' },
+      { field: 'signups' },
+      {
+        field: 'rate',
+        headerName: 'Signup Rate',
+        valueFormatter: (params: ValueFormatterParams) => {
+          return `${Math.round(params.value)}%`;
+        },
+      },
+    ] as ColDef[],
+    defaultColDef: {
+      flex: 1,
+    } as ColDef,
+  };
 }

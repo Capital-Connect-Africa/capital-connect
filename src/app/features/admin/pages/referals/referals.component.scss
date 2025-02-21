@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 1rem;
+  
   }
   
   
@@ -15,6 +16,14 @@
     width: 100%;
   }
   
+  .header__section{
+    h3{
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+  }
   
   tr {
     height: 3rem !important;
@@ -45,3 +54,17 @@
     }
 }
 
+
+.h3 {
+  font-size: 1.25rem!important;
+  font-weight: 500;
+}
+.stat__card {
+  padding: 0.5rem 1rem;
+  color: #37332d;
+  background-color: white;
+}
+
+.p__1rem {
+  padding: 1rem;
+}
