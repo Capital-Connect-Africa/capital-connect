@@ -98,7 +98,6 @@ export class PublicInvestorsRepositoryComponent {
               return button;
             
           },
-          pinned: 'right',
           width: 100,
           editable: false,
           sortable: false,
