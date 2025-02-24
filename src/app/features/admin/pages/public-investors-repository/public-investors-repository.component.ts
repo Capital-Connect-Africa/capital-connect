@@ -29,6 +29,7 @@ import { CountriesService } from '../../../../shared/services/countries.service'
 import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
 import { Sector } from '../../../sectors/interfaces';
 import { fixNumber } from '../../../../core/utils/fix-number.util';
+import { DataFilePreviewComponent } from "../../components/data-file-preview/data-file-preview.component";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -42,8 +43,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
     ModalComponent,
     MultiSelectModule,
     DropdownModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    DataFilePreviewComponent
+],
   templateUrl: './public-investors-repository.component.html',
   styleUrl: './public-investors-repository.component.scss',
 })
