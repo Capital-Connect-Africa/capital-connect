@@ -41,7 +41,7 @@
     </section>
 
 </app-admin-ui-container>
-<app-modal [(visible)]="visible" title ="New Investor" helperText="Add a new investor to the repository">
+<app-modal [(visible)]="visible" [title] ="selectedPublicInvestor? selectedPublicInvestor.name : 'New Investor'" [helperText]="selectedPublicInvestor? 'Update details of of this investor' :'Add a new investor to the repository'">
     <form class="grid grid-cols-2 gap-4" [formGroup]="newInvestorForm" (submit) ="handleSubmit()">
         <div class="input__wrapper">
             <label class="input__label">Name</label>
@@ -134,21 +134,25 @@
         </div>
         
         <div class="input__wrapper">
-            <label class="input__label">Contact Name</label>
-             <input class="input__field" formControlName ="contactName" type="text" placeholder="Enter contact name" />
+            <label class="input__label">Contact People (optional)</label>
+             <input class="input__field" formControlName ="contactName" type="text" placeholder="e.g John Doe, Jane Doe" />
         </div>
         <div class="input__wrapper">
-            <label class="input__label">Contact Email</label>
-             <input class="input__field" formControlName ="contactEmail" type="email" placeholder="Enter contact email" />
+            <label class="input__label">Contact Emails (optional)</label>
+             <input class="input__field" formControlName ="contactEmail" type="text" placeholder="e.g john@raisin.co.ke, jane@raisin.co.ke" />
         </div>
         <div class="input__wrapper">
-            <label class="input__label">Website</label>
+            <label class="input__label">Website (optional)</label>
              <input class="input__field" formControlName ="website" type="url" placeholder="e.g www.capitalconnect.africa" />
         </div>
         <div class="input__wrapper">
-            <label class="input__label">Investees</label>
+            <label class="input__label">Investees (optional)</label>
              <input class="input__field" formControlName ="investees" type="text" placeholder="e.g Raisin, Capital Connect" />
         </div>
-        <button [disabled]="newInvestorForm.invalid" class ="btn">Submit</button>
+        <div class="input__wrapper col-span-2">
+            <label class="input__label">Description (optional)</label>
+             <textarea class="input__field resize-none" formControlName ="description" rows="3" placeholder="A brief description of the investor" ></textarea>
+        </div>
+        <button [disabled]="newInvestorForm.invalid" class ="btn">{{selectedPublicInvestor? 'Update': 'Submit'}}</button>
     </form>
 </app-modal>

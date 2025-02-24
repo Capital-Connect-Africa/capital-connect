@@ -28,6 +28,7 @@ import { InvestorScreensService } from '../../../investor/services/investor.scre
 import { CountriesService } from '../../../../shared/services/countries.service';
 import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
 import { Sector } from '../../../sectors/interfaces';
+import { fixNumber } from '../../../../core/utils/fix-number.util';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -48,6 +49,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class PublicInvestorsRepositoryComponent {
   visible = false;
+  selectedPublicInvestor:PublicInvestor | null =null;
   private _formBuilder = inject(FormBuilder);
   private _sectorsService = inject(SectorsService);
   private _countriesService = inject(CountriesService);
@@ -127,14 +129,14 @@ export class PublicInvestorsRepositoryComponent {
       headerCellHoverBackgroundColor: 'rgba(80, 40, 140, 0.66)',
       headerCellMovingBackgroundColor: 'rgb(80, 40, 140)',
       selectedRowBackgroundColor: 'rgba(0, 255, 0, 0.1)',
-      rowHoverColor: 'rgba(0, 255, 0, 0.1)',
+      rowHoverColor: 'transparent',
       wrapperBorderRadius: '.5rem',
     });
 
   gridOptions: GridOptions = {
     pagination: true,
     theme: this.theme,
-    rowSelection: { mode: 'multiRow', enableSelectionWithoutKeys: true },
+    getRowId: (params) => params.data.id,
     onGridReady: (params) => {
       this.gridApi = params.api;
     },
@@ -142,41 +144,43 @@ export class PublicInvestorsRepositoryComponent {
       if (!cell.newValue) return;
       const payload: Partial<PublicInvestor> = {
         [cell.column.getColId()]: cell.newValue,
-        id: Number(cell.data.id),
       };
-      this.updateInvestorDetails(payload);
+
+      this.updateInvestorDetails(payload, Number(cell.data.id));
     },
     columnDefs: [
       { field: 'id', hide: true, sort: 'desc' },
-      { field: 'name', pinned: 'left' },
-      { field: 'type' },
+      { field: 'name', pinned: 'left', editable: true },
+      { field: 'type', editable: true },
       {
         field: 'minFunding',
+        editable: true,
         valueFormatter: (params: ValueFormatterParams) => {
           return '$' + formatCurrency(params.value);
         },
       },
       {
         field: 'maxFunding',
+        editable: true,
         valueFormatter: (params: ValueFormatterParams) => {
           return '$' + formatCurrency(params.value);
         },
       },
       { field: 'countries' },
-      { field: 'fundingVehicle' },
+      { field: 'fundingVehicle', editable: true },
       { field: 'useOfFunds' },
       { field: 'esgFocusAreas' },
       { field: 'businessGrowthStages' },
       { field: 'investmentStructures' },
-      { field: 'contactName' },
+      { field: 'contactName',  },
       { field: 'contactEmail' },
-      { field: 'website' },
+      { field: 'website', editable: true },
       { field: 'sectors' },
       { field: 'subSectors' },
       { field: 'investees' },
+      { field: 'description', editable: true },
       {
         field: 'createdAt',
-        editable: false,
         pinned: 'right',
         valueFormatter: (params: ValueFormatterParams) => {
           return formatDistanceToNow(new Date(params.value), {
@@ -189,25 +193,51 @@ export class PublicInvestorsRepositoryComponent {
       {
         field: 'actions',
         cellRenderer: (params: any) => {
-          const button = document.createElement('button');
-          button.innerHTML = `
-                <i class="pi pi-times text-xs font-light"></i>
-                <span class="font-light">Remove</span>
-              `;
-          button.classList.add(
+          const div =document.createElement('div');
+          const editButton = document.createElement('button');
+          const deleteButton = document.createElement('button');
+          div.classList.add(
+            'flex',
+            'items-center',
+            'gap-3',
+          );
+          deleteButton.innerHTML = `
+            <i class="pi pi-times text-xs font-light"></i>
+            <span class="font-light">Remove</span>
+          `;
+          deleteButton.classList.add(
             'flex',
             'items-center',
             'gap-2',
             'text-rose-300',
+            'hover:text-rose-500',
             'transition-all'
           );
-          button.addEventListener('click', () =>
+          editButton.innerHTML = `
+            <i class="pi pi-pencil text-xs font-light"></i>
+            <span class="font-light">Edit</span>
+          `;
+          editButton.classList.add(
+            'flex',
+            'items-center',
+            'gap-2',
+            'text-green-300',
+            'hover:text-green-500',
+            'transition-all'
+          );
+          editButton.addEventListener('click', () => 
+            params.context.componentParent.selectInvestor(params)
+          );
+
+          deleteButton.addEventListener('click', () =>
             params.context.componentParent.deleteRow(params)
           );
 
-          return button;
+          div.appendChild(editButton)
+          div.appendChild(deleteButton)
+          return div;
         },
-        width: 100,
+        width: 200,
         editable: false,
         sortable: false,
         filter: false,
@@ -215,7 +245,6 @@ export class PublicInvestorsRepositoryComponent {
     ] as ColDef[],
     defaultColDef: {
       filter: true,
-      editable: true,
     } as ColDef,
   };
 
@@ -232,11 +261,44 @@ export class PublicInvestorsRepositoryComponent {
     })
   );
 
-  updateInvestorDetails(payload: Partial<PublicInvestor>) {
+  selectInvestor(node:any){
+    const data =node.data;
+    this.selectedPublicInvestor =data;
+    this.visible =true;
+    this.newInvestorForm.reset();
+    this.subSectors =this.selectedPublicInvestor?.sectors.map(sector =>{
+      return this.allSectors.find(s => s.name ==sector)?.subSectors?.map(sb =>sb.name);
+    }).flat() as string[];
+
+    this.newInvestorForm.patchValue({
+        name: data.name,
+        investorType: data.type,
+        minFunding: fixNumber(Number(data.minFunding)),
+        maxFunding: fixNumber(Number(data.maxFunding)),
+        countries: data.countries ?? [],
+        fundingVehicle: data.fundingVehicle,
+        useOfFunds: data.useOfFunds ?? [],
+        esgFocusAreas: data.esgFocusAreas,
+        businessGrowthStages:data.businessGrowthStages ?? [],
+        investmentStructures: data.investmentStructures ?? [],
+        contactName: data.contactName.join(','),
+        contactEmail:data.contactEmail.join(','),
+        website: data.website,
+        sectors: data.sectors ?? [],
+        subSectors: (data.subSectors ?? []),
+        investees: (data.investees ?? []).join(','),
+        description: data.description,
+    })
+  }
+
+  updateInvestorDetails(payload: Partial<PublicInvestor>, investorId:number) {
     this.updatePublicInvestor$ = this._publicInvestorService.updateInvestor(
       payload,
-      Number(payload.id)
-    );
+      investorId
+    ).pipe(tap(res =>{
+      this.reset();
+      this.gridApi.applyTransaction({ update: [res] });
+    }));
   }
 
   exportDataAsCSV() {
@@ -276,14 +338,15 @@ export class PublicInvestorsRepositoryComponent {
   }
 
   showModal() {
+    this.reset();
     this.visible = true;
   }
 
   newInvestorForm = this._formBuilder.group({
-    name: ['',[ Validators.required]],
+    name: ['', [Validators.required]],
     investorType: ['', [Validators.required]],
-    minFunding: ['', [Validators.required]],
-    maxFunding: ['', [Validators.required]],
+    minFunding: ['', [Validators.required, Validators.min(0)]],
+    maxFunding: ['', [Validators.required, Validators.min(0)]],
     countries: [[], [Validators.required]],
     fundingVehicle: ['', [Validators.required]],
     useOfFunds: [[], [Validators.required]],
@@ -291,21 +354,32 @@ export class PublicInvestorsRepositoryComponent {
     businessGrowthStages: [[], [Validators.required]],
     investmentStructures: [[], [Validators.required]],
     contactName: ['',],
-    contactEmail: [''],
+    contactEmail: ['',],
     website: [''],
     sectors: [[], [Validators.required]],
     subSectors: [[], [Validators.required]],
     investees: [''],
+    description: [''],
   });
 
   handleSubmit(){
     const values =this.newInvestorForm.value;
-    const investees =`${values.investees??''}`.split(',').map(i =>i.trim())
-    const payload:Partial<PublicInvestor> ={...values, investees} as Partial<PublicInvestor>
+    const investees =`${values.investees??''}`.split(',').map(i =>i.trim());
+    const contactName =`${values.contactName??''}`.split(',').map(i =>i.trim());
+    const contactEmail =`${values.contactEmail??''}`.split(',').map(i =>i.trim());
+    const payload:Partial<PublicInvestor> ={...values, contactName, contactEmail, investees} as Partial<PublicInvestor>
+    if(this.selectedPublicInvestor){
+      return this.updateInvestorDetails(payload, this.selectedPublicInvestor.id)
+    }
     this.createPublicInvestor$ =this._publicInvestorService.createInvestor(payload).pipe(tap(res =>{
       this.gridApi.applyTransaction({ add: [res] });
-      this.newInvestorForm.reset()
-      this.visible =false;
+      this.reset();
     }))
+  }
+
+  reset(){
+    this.newInvestorForm.reset();
+    this.selectedPublicInvestor =null;
+    this.visible =false;
   }
 }
