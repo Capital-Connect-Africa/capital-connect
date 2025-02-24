@@ -35,7 +35,7 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
 
   updateInvestor(payload:Partial<PublicInvestor>, investorId:number){
     return this.update(`${BASE_URL}/investors-repository`, investorId, payload).pipe(map(res =>{
-      return res as PublicInvestor[]
+      return res as PublicInvestor;
     }))
   }
 
