@@ -3,7 +3,6 @@ import { NavbarComponent } from "../../../../core/components/navbar/navbar.compo
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
-import { AlertCardComponent } from '../../../profile/components/alert-card/alert-card.component';
 import { ProfileService } from '../../../profile/services/profile.service';
 import { RoutingService } from '../../../../shared/business/services/routing.service';
 import { tap } from 'rxjs';
@@ -11,44 +10,66 @@ import { SignalsService } from '../../../../core/services/signals/signals.servic
 import { Router, RouterModule } from '@angular/router';
 import { InvestorProfile } from '../../../../shared/interfaces/Investor';
 import { Profile } from '../../../../shared/interfaces/profile.interface';
+import { Observable } from 'rxjs';
+import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
+import { AdvisorService } from '../../services/advisor-profile.service';
+import { AdvisorUiContainerComponent } from "../admin-ui-container/advisor-ui-container.component";
+
+
+
 
 @Component({
   standalone: true,
-  selector: 'app-investor-page',
+  selector: 'app-advisor-profile',
   templateUrl: './advisor-profile.component.html',
   styleUrls: ['./advisor-profile.component.scss'],
   imports: [NavbarComponent,
     MatIcon,
-    NavbarComponent,  
+    NavbarComponent,
     CommonModule,
     AlertComponent,
-    RouterModule
-  ]
+    AdvisorUiContainerComponent,
+    RouterModule]
 })
 export class AdvisorProfileComponent implements OnInit {
   @Input() showBanner =false;
+
+  //services
   private _profileService =inject(ProfileService);
-  private _routingService =inject(RoutingService)
+  private _advisorService = inject(AdvisorService) 
+  private _router = inject(Router);
+
+  //vars
   investorProfile: InvestorProfile | null = null;
-  private router = inject(Router)
   private userProfile!:Profile;
+  userId: number = 0;
+
+  //booleans
+  investorProfileExists: boolean = false;
+  
+  //streams
+  advisorProfile$ = new Observable<AdvisorProfile>()
+
+
 
   constructor() { }
 
-  investorProfileExists: boolean = false;
 
 
   ngOnInit() {
-      this.investorProfileExists = !!sessionStorage.getItem('profileId');
+      const userId = sessionStorage.getItem('userId');
+      if (userId) {
+        this.userId = parseInt(userId);
 
-      if(!this.investorProfileExists){
-        this.router.navigate(['/investor/onboarding']);
+        this.advisorProfile$ = this._advisorService.getAdvisorProfileByUserId(this.userId).pipe(tap(res => {
+          if(!res.id){
+          this._router.navigate(['advisor/create-profile']);
+          }
+        }))
       }
   }
 
-  // advisorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile => {
-  //   this.advisorProfile = investorProfile ;
-  // }))
+
 
   signalsService =inject(SignalsService);
   showDialog(){

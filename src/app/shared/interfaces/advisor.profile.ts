@@ -1,4 +1,5 @@
 export interface AdvisorProfile{
+    id:number;
     userId: number,
     fullName: String,
     roles: string[],

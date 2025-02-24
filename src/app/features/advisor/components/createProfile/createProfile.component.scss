@@ -12,7 +12,7 @@
 }
 
 .form_content__container{
-  margin-top: 2cm;
+  // margin-top: .5cm;
 }
 
 @include when-screen-is-atleast(large){
@@ -22,6 +22,10 @@
   }
 }
 
+
+.input__label{
+font-size: small !important;
+}
 
 
 .input__wrapper {

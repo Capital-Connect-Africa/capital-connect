@@ -36,7 +36,6 @@ import { TooltipModule } from 'primeng/tooltip';
 })
 export class LandingComponent implements OnInit {
   private _formBuilder = inject(FormBuilder);
-  private _httpClient = inject(HttpClient);
   private _feedbackService = inject(FeedbackService)
   private _screenService = inject(InvestorScreensService)
   private _countries = inject(CountriesService)

@@ -1,11 +1,8 @@
 
-<!-- <ng-container *ngIf="advisorProfile$ | async as advisorProfile"> -->
+<app-admin-ui-container [bg_gray]="false" [title]="'Advisor'">
 
-
+<ng-container *ngIf="advisorProfile$ | async as advisorProfile">
   <div class="main">
-    <div class="navbar">
-      <app-navbar [showBanner]="showBanner" onDashboard="true" />
-    </div>
       <div class="main__content">
         <ng-container *ngIf="userProfile$ | async as userProfile">
             <div class="flex flex-col gap-4 shadow rounded-[.5rem] overflow-hidden">
@@ -16,10 +13,10 @@
                 class="avatar" alt="profile" />
               </div>
             </section>
-<!--             
+            
             <div class="flex flex-col bg-white  bio_info">
               <h2>{{userProfile.name}}</h2>
-              <p> <button class="text-blue-600 font-bold" mat-button [routerLink]="['/investor/onboarding']" style="margin-top: 1rem;">
+              <p> <button class="text-blue-600 font-bold" mat-button [routerLink]="['/advisor/create-profile']" style="margin-top: 1rem;">
                 <mat-icon >edit</mat-icon> Update Profile
               </button></p>
   
@@ -28,84 +25,84 @@
               <p>
                 <img *ngIf="userProfile.company.companyLogo" width="24px" height="24px" [src]="userProfile.company.companyLogo" alt="company logo"/>
                 <mat-icon *ngIf="!userProfile.company.companyLogo">location_city</mat-icon> 
-                <span>{{investorProfile.organizationName}}, {{investorProfile.headOfficeLocation}} </span></p>
+                <span>{{advisorProfile.fullName}}</span></p>
   
                 <section>
-                  <h2>Investor</h2>
+                  <h2>Advisor</h2>
                   <div class="card__item__details" details>
                     <div class="card__item__detail_info">
                       <div>
-                        <label>Fund Description:</label>
-                        <p>{{investorProfile.fundDescription}}</p>
+                        <label>Personal Pitch:</label>
+                        <p>{{advisorProfile.personalPitch}}</p>
                       </div>
                       <div>
-                        <label>Available Funding:</label>
-                        <p>{{getLocalized(investorProfile.availableFunding)}} $(USD)</p>
+                        <label>Professiona Summary:</label>
+                        <p>{{advisorProfile.professionalSummary}}</p>
                       </div>
                       <div>
-                        <label>Investor Type:</label>
-                        <p>{{investorProfile.investorType}}</p>
+                        <label>Website:</label>
+                        <p>{{advisorProfile.website}}</p>
                       </div>
                     </div>
                   </div>
-                  <div class="card__item__details" details>
+                  <!-- <div class="card__item__details" details>
                     <div class="card__item__detail_info">
                       <div>
                         <label>Maximum Funding:</label>
-                        <p>{{getLocalized(investorProfile.maximumFunding)}} $(USD)</p>
+                        <p>{{getLocalized(advisorProfile.maximumFunding)}} $(USD)</p>
                       </div>
                       <div>
                         <label>Minimum Funding:</label>
-                        <p>{{getLocalized(investorProfile.minimumFunding)}} $(USD)</p>
+                        <p>{{getLocalized(advisorProfile.minimumFunding)}} $(USD)</p>
                       </div>
                       <div>
                         <label>No maximum funding</label>
-                        <p>{{investorProfile.noMaximumFunding}}</p>
+                        <p>{{advisorProfile.noMaximumFunding}}</p>
                       </div>
                     </div>
-                  </div>
-  
+                  </div> -->
+<!--   
                   <div class="card__item__details" details>
                     <div class="card__item__detail_info">
                       <div>
                         <label>Sectors Of Investment:</label>
-                        <p>{{getItems(investorProfile.sectors)}}</p>
+                        <p>{{getItems(advisorProfile.sectors)}}</p>
                       </div>
                       <div>
                         <label>Sub Sectors Of investment:</label>
-                        <p>{{getItems(investorProfile.subSectors)}}</p>
+                        <p>{{getItems(advisorProfile.subSectors)}}</p>
                       </div>
                       <div>
                         <label>ESG focus areas</label>
-                        <p>{{investorProfile.esgFocusAreas}}</p>
+                        <p>{{advisorProfile.esgFocusAreas}}</p>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
   
                   
-  
+<!--   
                   <div class="card__item__details" details>
                     <div class="card__item__detail_info">
                       <div>
                         <label>Registration Structures:</label>
-                        <p>{{investorProfile.registrationStructures}}</p>
+                        <p>{{advisorProfile.registrationStructures}}</p>
                       </div>
                       <div>
                         <label>Business Growth Stages:</label>
-                        <p>{{investorProfile.businessGrowthStages}}</p>
+                        <p>{{advisorProfile.businessGrowthStages}}</p>
                       </div>
                       <div>
                         <label>ESG focus areas</label>
-                        <p>{{investorProfile.esgFocusAreas}}</p>
+                        <p>{{advisorProfile.esgFocusAreas}}</p>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
   
-                  <div class="card__item__details" details>
+                  <!-- <div class="card__item__details" details>
                     <div class="card__item__detail_info">
                       <div>
                         <label>Different Funding Vehicles:</label>
-                        <p>{{investorProfile.differentFundingVehicles}}</p>
+                        <p>{{advisorProfile.differentFundingVehicles}}</p>
                       </div>                  
                     
                     </div>
@@ -115,18 +112,20 @@
                     <div class="card__item__detail_info">
                       <div>
                         <label>Countries Of Investment Focus:</label>
-                        <p>{{investorProfile.countriesOfInvestmentFocus}}</p>
+                        <p>{{advisorProfile.countriesOfInvestmentFocus}}</p>
                       </div>
                     
                     </div>
-                  </div>
+                  </div> -->
+
+
                 </section>
   
   
   
   
             </div>
-             -->
+            
           </div>
           </ng-container>
   
@@ -138,5 +137,6 @@
     <main>
     </main>
   </div>
+  </ng-container>
   
-  
+</app-admin-ui-container>

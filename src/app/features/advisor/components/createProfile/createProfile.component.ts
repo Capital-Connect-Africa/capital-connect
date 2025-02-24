@@ -1,12 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ReactiveFormsModule } from '@angular/forms';
-import { catchError, Observable, tap } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { FeedbackService } from '../../../../core';
 import { Router } from '@angular/router';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -15,9 +13,12 @@ import { TooltipModule } from 'primeng/tooltip';
 import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
 import { AdvisorService } from '../../services/advisor-profile.service';
 import { LayoutComponent } from "../../../../shared/business/layout/layout.component";
-
-
-
+import { CountriesService } from '../../../../shared/services/countries.service';
+import { Country } from '../../../../shared/interfaces/countries';
+import { InvestmentStructureOptions } from '../../../../shared/interfaces/Investor';
+import { InvestorScreensService } from '../../../investor/services/investor.screens.service';
+import { SectorsService } from '../../../sectors/services/sectors/sectors.service';
+import { Sector } from '../../../sectors/interfaces';
 
 @Component({
   selector: 'app-landing',
@@ -32,6 +33,9 @@ export class createAdvisorProfileComponent implements OnInit {
   private _feedbackService = inject(FeedbackService)
   private _router = inject(Router)
   private _advisorService = inject(AdvisorService)
+  private _countries = inject(CountriesService)
+  private _screenService = inject(InvestorScreensService)
+  private _sectorService = inject(SectorsService)
 
 
   //vars
@@ -40,20 +44,51 @@ export class createAdvisorProfileComponent implements OnInit {
   userEmail: string = ''
   formGroup!: FormGroup;
   userId: number = 0
+  profileRoles: string[] = []
+  profileServices: string[] = []
+  profileFeeStructure: string[] = []
+  countryOptions: Country[] = []
+  capitalStrategies : InvestmentStructureOptions[] = []
+  sectors: Sector[] = []
+
+  //booleans
+  advisorProfileExists:boolean = false  
 
 
   //streams
   submit$ = new Observable<unknown>()
+  profileRoles$ = this._advisorService.getAllAdvisorProfileRoles().pipe(
+    tap(res => {
+      this.profileRoles = res as any[]
+    })
+  )
 
-  //booleans
-  advisorProfileExists:boolean = false  
-roles: any[]|undefined;
-countryOptions: any[]|undefined;
-capitalStrategies: any[]|undefined;
-industryOptions: any[]|undefined;
-caseStudyOptions: any[]|undefined;
-teamMemberOptions: any[]|undefined;
-feeStructureOptions: any[]|undefined;
+  profileServices$ = this._advisorService.getAllAdvisorProfileServices().pipe(
+    tap(res => {
+      this.profileServices = res as any[]
+    })
+  )
+
+  profileFeeStructure$ = this._advisorService.getAllAdvisorProfileFeeStructure().pipe(
+    tap(res => {
+      this.profileFeeStructure = res as any[]
+    })
+  )
+
+  countries$ = this._countries.getCountries().pipe(tap(countries => {
+    this.countryOptions = countries
+  }))
+
+
+  investmentStructureOptions$ = this._screenService.getInvestmentStructures().pipe(tap(structures => {
+    this.capitalStrategies = structures
+  }))
+
+  sectors$ = this._sectorService.getAllSectors().pipe(tap(sectors => {
+    this.sectors = sectors
+  }))
+
+
 
 
 
@@ -86,6 +121,7 @@ feeStructureOptions: any[]|undefined;
       totalYearsExperience: [0, Validators.required],
       keyTeamMembers: [[], Validators.required],
       feeStructure:[[],Validators.required],
+      servicesOffered: [[], Validators.required],
     });
 
  
@@ -111,12 +147,13 @@ feeStructureOptions: any[]|undefined;
       totalYearsExperience: advisorProfile.totalYearsExperience,
       keyTeamMembers: advisorProfile.keyTeamMembers,
       feeStructure:advisorProfile.feeStructure,
+      servicesOffered: advisorProfile.servicesOffered,
     });
 
   }
 
 
-  onSubmit(): void { 
+  onSubmit(): void {   
     if (this.advisorProfileExists) {
       if (this.formGroup.valid) {
         const formData = this.formGroup.value;
@@ -132,6 +169,8 @@ feeStructureOptions: any[]|undefined;
     else {
       if (this.formGroup.valid) {
         const formData = this.formGroup.value;
+        console.log("The advisor profile form data is",formData)
+
         this.submit$ = this._advisorService.createAdvisorProfile(formData).pipe(
           tap(res => {
             this._feedbackService.success("Advisor Profile Created Sucessfully")
