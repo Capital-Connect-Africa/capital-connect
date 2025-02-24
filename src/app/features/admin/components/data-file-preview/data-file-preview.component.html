@@ -1,0 +1,8 @@
+<app-modal [(visible)]="visible" title ="File Preview" helperText="Size: , Records: ">
+    <ag-grid-angular
+            style="min-width: 100%; height: 72vh;"
+            [rowData] ="records"
+            [context]="{ componentParent: this }"
+            [gridOptions]="gridOptions"
+            />
+</app-modal>
