@@ -1,0 +1,277 @@
+<ng-container *ngIf="submit$ | async"></ng-container>
+<ng-container *ngIf="profileFeeStructure$ | async"></ng-container>
+<ng-container *ngIf="profileRoles$ | async"></ng-container>
+<ng-container *ngIf="profileServices$ | async"></ng-container>
+<ng-container *ngIf="countries$ | async"></ng-container>
+<ng-container *ngIf="sectors$ | async"></ng-container>
+<ng-container *ngIf="investmentStructureOptions$ | async"></ng-container>
+<ng-container *ngIf="getAdvisorProfileById$ | async"></ng-container>
+
+
+<app-layout >
+  <div class="main__content">
+    <div class="content__container">
+
+<div class="container">
+  <div class="content">
+    <p class="brand__details">{{ advisorProfileExists ? "Update Your Advisor Profile":"Create Your Advisor Profile"}}</p>
+    
+    <ng-container>
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <div class="form_content__container">
+          <div class="header">
+            <div class="steps__bar">
+              <p>Step {{current_details}} of 3</p>
+              <ul class="indicators">
+                <li *ngFor="let step of cur_det; let i = index" [class.active]="(i + 1) <= current_details"></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="w-full">
+            <!-- STEP 1: Basic Information -->
+            <div *ngIf="current_details==1" class="section1 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Full Name -->
+              <div class="input__wrapper">
+                <label class="input__label">Full Name<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="fullName" type="text" placeholder="Enter full name" />
+                <div *ngIf="formGroup.controls['fullName']?.touched && formGroup.controls['fullName']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['fullName']?.errors?.['required']">Full Name is required</small>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="input__wrapper">
+                <label class="input__label">Email<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="email" type="email" placeholder="Enter email" />
+                <div *ngIf="formGroup.controls['email']?.touched && formGroup.controls['email']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['email']?.errors?.['required']">Email is required</small>
+                </div>
+              </div>
+
+              <!-- Phone -->
+              <div class="input__wrapper">
+                <label class="input__label">Phone<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="phone" type="text" placeholder="Enter phone" />
+                <div *ngIf="formGroup.controls['phone']?.touched && formGroup.controls['phone']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['phone']?.errors?.['required']">Phone is required</small>
+                </div>
+              </div>
+
+              <!-- Website -->
+              <div class="input__wrapper">
+                <label class="input__label">Website<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="website" type="text" placeholder="Enter website" />
+                <div *ngIf="formGroup.controls['website']?.touched && formGroup.controls['website']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['website']?.errors?.['required']">Website is required</small>
+                </div>
+              </div>
+
+              <!-- Roles -->
+              <div class="input__wrapper">
+                <label class="input__label">Roles<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <p-multiSelect [options]="profileRoles"  class="input__field"
+                  styleClass="w-full gap-4" formControlName="roles" placeholder="Select roles" />
+                <div *ngIf="formGroup.controls['roles']?.touched && formGroup.controls['roles']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['roles']?.errors?.['required']">At least one role is required</small>
+                </div>
+              </div>
+
+              <!-- Country Focus -->
+              <div class="input__wrapper">
+                <label class="input__label">Country Focus<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                  formControlName="countryFocus" [options]="countryOptions" optionLabel="name"
+                  placeholder="Select countries"></p-multiSelect>
+                <div *ngIf="formGroup.controls['countryFocus']?.touched && formGroup.controls['countryFocus']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['countryFocus']?.errors?.['required']">At least one country must be selected</small>
+                </div>
+              </div>
+
+              <!-- Professional Summary -->
+              <div class="input__wrapper">
+                <label class="input__label">Professional Summary<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field" formControlName="professionalSummary" placeholder="Enter professional summary" rows="3"></textarea>
+                <div *ngIf="formGroup.controls['professionalSummary']?.touched && formGroup.controls['professionalSummary']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['professionalSummary']?.errors?.['required']">Professional summary is required</small>
+                </div>
+              </div>
+
+              <!-- Personal Pitch -->
+              <div class="input__wrapper">
+                <label class="input__label">Personal Pitch<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field" formControlName="personalPitch" placeholder="Enter personal pitch" rows="3"></textarea>
+                <div *ngIf="formGroup.controls['personalPitch']?.touched && formGroup.controls['personalPitch']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['personalPitch']?.errors?.['required']">Personal pitch is required</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: Capital & Industry -->
+            <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Total Capital Raised -->
+              <div class="input__wrapper">
+                <label class="input__label">Total Capital Raised (USD)<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <input class="input__field" formControlName="totalCapitalRaised" type="number" placeholder="Enter amount" />
+                <div *ngIf="formGroup.controls['totalCapitalRaised']?.touched && formGroup.controls['totalCapitalRaised']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['totalCapitalRaised']?.errors?.['required']">This field is required</small>
+                </div>
+              </div>
+
+
+              <!-- Total Years Experience -->
+              <div class="input__wrapper">
+                <label class="input__label">Total Years Experience<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <input class="input__field" formControlName="totalYearsExperience" type="number" placeholder="Enter years" />
+                <div *ngIf="formGroup.controls['totalYearsExperience']?.touched && formGroup.controls['totalYearsExperience']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['totalYearsExperience']?.errors?.['required']">This field is required</small>
+                </div>
+              </div>
+
+              <!-- Capital Raising Strategies -->
+              <div class="input__wrapper">
+                <label class="input__label">Capital Raising Strategies<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                  formControlName="capitalRaisingStrategies" [options]="capitalStrategies"
+                  optionLabel="title" placeholder="Select strategies"></p-multiSelect>
+                <div *ngIf="formGroup.controls['capitalRaisingStrategies']?.touched && formGroup.controls['capitalRaisingStrategies']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['capitalRaisingStrategies']?.errors?.['required']">At least one strategy is required</small>
+                </div>
+              </div>
+
+              <!-- Industry Focus -->
+              <div class="input__wrapper">
+                <label class="input__label">Industry Focus<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                  formControlName="industryFocus" [options]="sectors"
+                  optionLabel="name" placeholder="Select industries"></p-multiSelect>
+                <div *ngIf="formGroup.controls['industryFocus']?.touched && formGroup.controls['industryFocus']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['industryFocus']?.errors?.['required']">At least one industry is required</small>
+                </div>
+              </div>
+
+               <!-- Past Projects -->
+               <div class="input__wrapper">
+                <label class="input__label">Past Projects<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field" formControlName="pastProjects" placeholder="Describe past projects" rows="4"></textarea>
+                <div *ngIf="formGroup.controls['pastProjects']?.touched && formGroup.controls['pastProjects']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['pastProjects']?.errors?.['required']">Past projects description is required</small>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- STEP 3: Projects & Team -->
+            <div *ngIf="current_details==3" class="section3 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+              <!-- Roles -->
+              <div class="input__wrapper">
+                <label class="input__label">Services Offered<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <p-multiSelect [options]="profileServices"  class="input__field"
+                  styleClass="w-full gap-4" formControlName="servicesOffered" placeholder="Select Services Offered" />
+                <div *ngIf="formGroup.controls['servicesOffered']?.touched && formGroup.controls['roles']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['servicesOffered']?.errors?.['required']">At least one service is required</small>
+                </div>
+              </div>
+
+
+              <div class="input__wrapper">
+                <label class="input__label">Fee Structure<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                  formControlName="feeStructure" [options]="profileFeeStructure"
+                   placeholder="Select fee structures"></p-multiSelect>
+                <div *ngIf="formGroup.controls['feeStructure']?.touched && formGroup.controls['feeStructure']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['feeStructure']?.errors?.['required']">Fee structure is required</small>
+                </div>
+              </div>
+             
+
+              <!-- Case Studies -->
+              <div class="input__wrapper">
+                <label class="input__label">Case Studies<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field w-full gap-4" formControlName="caseStudies" placeholder="Enter case studies"></textarea>
+                <div *ngIf="formGroup.controls['caseStudies']?.touched && formGroup.controls['caseStudies']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['caseStudies']?.errors?.['required']">Case studies are required</small>
+                </div>
+              </div>
+
+
+
+
+
+              <!-- Key Team Members -->
+              <div class="input__wrapper">
+                <label class="input__label">Key Team Members<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field w-full gap-4" formControlName="keyTeamMembers" placeholder="Enter key team members"></textarea>
+                <div *ngIf="formGroup.controls['keyTeamMembers']?.touched && formGroup.controls['keyTeamMembers']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['keyTeamMembers']?.errors?.['required']">Key team members are required</small>
+                </div>
+              </div>
+
+
+
+              
+              <!-- Total Team Members -->
+              <div class="input__wrapper">
+                <label class="input__label">Total Team Members<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <input class="input__field" formControlName="totalTeamMembers" type="number" placeholder="Enter number" />
+                <div *ngIf="formGroup.controls['totalTeamMembers']?.touched && formGroup.controls['totalTeamMembers']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['totalTeamMembers']?.errors?.['required']">This field is required</small>
+                </div>
+              </div>
+
+
+
+           
+            </div>
+
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-4 mt-6">
+          <div class="cta__group">
+            <button class="btn btn-primary outline" type="button" [disabled]="current_details==1" (click)="setPrevDetails()">Back</button>
+          </div>
+          <div *ngIf="current_details!=3">
+            <button class="btn btn-primary" type="button" (click)="setNextDetails()">Next</button>
+          </div>
+          <button type="submit" *ngIf="current_details==3" [disabled]="!formGroup.valid" class="btn">{{ advisorProfileExists ? "Update" : "Submit" }}</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>
+
+</div>
+</div>
+</app-layout>

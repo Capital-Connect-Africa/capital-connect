@@ -174,6 +174,18 @@ export const routes: Routes = [
     ],
   },
 
+
+  {
+    path: 'admin/advisors',
+    loadChildren: () =>
+      import('./features/users/modules/advisors.routes').then((m) => m.AdvisorsAdminRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+
   {
     path: 'dashboard',
     loadChildren: () =>

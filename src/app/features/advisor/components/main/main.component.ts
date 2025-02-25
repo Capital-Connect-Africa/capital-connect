@@ -77,6 +77,7 @@ export class MainComponent {
 
 
   ngOnInit(): void {
+
     this.getBookings();
   }
 

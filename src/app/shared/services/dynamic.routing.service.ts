@@ -240,54 +240,6 @@ export class DynamicRoutingService {
 
   getInvestorSubmissions() {
     this._route.navigateByUrl('/investor/onboarding')
-    return;
-    this._loadingService.setLoading(true)
-    const questionsOfInvestorOnboarding$ = this._questionService.getSectionQuestions(INVESTOR_ONBOARDING_SUBSECTION_IDS.ID);
-    const userSubmissions$ = this._submissionStateService.getUserSubmissions()
-    const init$ = combineLatest([userSubmissions$, questionsOfInvestorOnboarding$]).pipe(map(([userSubmissions, questionsOfInvestorOnboarding]) => {
-      const userSubmissionQuestionIds = userSubmissions.map(us => us.question.id);
-
-
-      const missingInvestorOnboardingIds = questionsOfInvestorOnboarding
-        .filter(question => !userSubmissionQuestionIds.includes(question.id))
-        .map(question => question.subSection.id);
-
-
-      if (missingInvestorOnboardingIds.length > 0) {
-        const url = '/investor/onboarding'
-        if (missingInvestorOnboardingIds.includes(INVESTOR_ONBOARDING_SUBSECTION_IDS.LANDING)) {
-
-
-          this._route.navigateByUrl(url, { state: { data: { page: 1, step: 1 } } })
-        } else if (missingInvestorOnboardingIds.includes(INVESTOR_ONBOARDING_SUBSECTION_IDS.STEP_ONE)) {
-
-
-          this._route.navigateByUrl(url, { state: { data: { page: 2, step: 1 } } })
-        }
-        else if (missingInvestorOnboardingIds.includes(INVESTOR_ONBOARDING_SUBSECTION_IDS.STEP_TWO)) {
-
-
-          this._route.navigateByUrl(url, { state: { data: { page: 2, step: 2 } } })
-        }
-        else if (missingInvestorOnboardingIds.includes(INVESTOR_ONBOARDING_SUBSECTION_IDS.STEP_THREE)) {
-
-
-          this._route.navigateByUrl(url, { state: { data: { page: 2, step: 3 } } })
-        }
-
-
-        this._loadingService.setLoading(false)
-        return (false)
-      }
-      this._route.navigateByUrl('/investor')
-      this._loadingService.setLoading(false)
-      return true
-    }))
-
-
-    return init$
-
-
   }
 
 
