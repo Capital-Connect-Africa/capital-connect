@@ -21,10 +21,11 @@
                     <i class="pi pi-chart-line text-xs"></i>
                     <span class="text-xs font-normal">Insights</span>
                 </button>
-                <button class="flex gap-2 items-center border p-1 bg-teal-500 text-white hover:bg-teal-800 transition-all rounded cta__btn">
+                <button (click)="fileInput.click()" class="flex gap-2 items-center border p-1 bg-teal-500 text-white hover:bg-teal-800 transition-all rounded cta__btn">
                     <i class="pi pi-upload text-sm"></i>
                     <span class="text-xs font-normal">Import</span>
                 </button>
+                <input type ="file" #fileInput (change)="uploadFile($event)" accept=".csv, .json, .xlsx, .xls, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden/>
                 <button (click) ="showModal()" class="flex gap-2 items-center border p-1 bg-blue-500 text-white hover:bg-blue-800 transition-all rounded cta__btn">
                     <i class="pi pi-plus text-xs"></i>
                     <span class="text-xs font-normal">Add new</span>
@@ -157,4 +158,4 @@
     </form>
 </app-modal>
 
-<data-file-preview />
+<data-file-preview [file] ="file" (onUpload)="getUploadedData($event)"/>

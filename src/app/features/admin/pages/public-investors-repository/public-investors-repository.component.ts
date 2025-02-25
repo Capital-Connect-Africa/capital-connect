@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { PublicInvestorsRepositoryService } from '../../../../core/services/investors/public-investors-repository.service';
 import { PublicInvestor } from '../../../../shared/interfaces/public.investor.interface';
 import { EMPTY, Observable, switchMap, tap } from 'rxjs';
@@ -51,6 +51,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class PublicInvestorsRepositoryComponent {
   visible = false;
+  file!:File;
+  @ViewChild('fileInput') fileInput: any;
   selectedPublicInvestor:PublicInvestor | null =null;
   private _formBuilder = inject(FormBuilder);
   private _sectorsService = inject(SectorsService);
@@ -127,12 +129,12 @@ export class PublicInvestorsRepositoryComponent {
     .withPart(colorSchemeDarkBlue)
     .withParams({
       iconSize: 18,
+      wrapperBorderRadius: '.5rem',
       headerTextColor: 'dodgerblue',
       headerCellHoverBackgroundColor: 'rgba(80, 40, 140, 0.66)',
       headerCellMovingBackgroundColor: 'rgb(80, 40, 140)',
       selectedRowBackgroundColor: 'rgba(0, 255, 0, 0.1)',
       rowHoverColor: 'transparent',
-      wrapperBorderRadius: '.5rem',
     });
 
   gridOptions: GridOptions = {
@@ -383,5 +385,18 @@ export class PublicInvestorsRepositoryComponent {
     this.newInvestorForm.reset();
     this.selectedPublicInvestor =null;
     this.visible =false;
+  }
+
+  uploadFile(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (!target.files || target.files.length === 0) return;
+    this.file = target.files[0];
+    if (this.fileInput) {
+      this.fileInput.nativeElement.value = '';
+    }
+  }
+
+  getUploadedData(payload:PublicInvestor[]){
+    this.publicInvestors =[...this.publicInvestors, ...payload]
   }
 }
