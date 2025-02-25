@@ -5,7 +5,7 @@
 .main {
   gap: 1rem;
   display: grid;
-  padding: 1rem;
+//   padding: 1rem;
   grid-template-rows: max-content auto;
   .logo {
     display: flex;
@@ -23,6 +23,7 @@
     text-align: center;
     flex-direction: column;
     font-family: $font-family-sans-serif;
+    margin-top: -2cm;
 
     > h2 {
       font-size: 1.25rem;
@@ -42,7 +43,7 @@
     .content {
       gap: 3rem;
       display: flex;
-      padding: 3rem 1rem;
+    //   padding: 3rem 1rem;
       border-radius: 1rem;
       flex-direction: column;
       border: 1px solid #eff0f6;
@@ -155,7 +156,7 @@
 
 @include when-screen-is-atleast(large) {
   .main {
-    padding: 2rem 3rem;
+    // padding: 2rem 3rem;
     .logo {
       padding: 0 4rem;
       justify-content: flex-start;
@@ -261,3 +262,34 @@
 .input__field{
   min-width: 100%;
 }
+
+.currency-group {
+    .p-inputgroup {
+      gap: 0.5rem;
+      
+      .p-inputnumber {
+        flex: 1;
+      }
+      
+      .p-dropdown {
+        width: 120px;
+        .p-dropdown-label {
+          padding: 0.75rem;
+        }
+      }
+    }
+    
+    .validation-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .disabled-btn, .disabled-btn:hover {
+    color: $white;
+    border: none;
+    outline: none;
+    cursor: not-allowed !important;
+    background-color: $gray-550  !important;
+  }
