@@ -14,7 +14,7 @@ export class AdvisorService extends BaseHttpService {
     }
 
     //get advisor profile by id
-    getAdvisorProfileBy(id: number) {
+    getAdvisorProfileById(id: number) {
         return this.readById(`${BASE_URL}/advisor-profile`, id).pipe(map((res: any) => {
             return res as AdvisorProfile;
         }))
@@ -58,8 +58,8 @@ export class AdvisorService extends BaseHttpService {
     }
 
     //update advisor profile
-    updateAdvisorProfile(advisorProfile: AdvisorProfile) {
-        return this.putPost(`${BASE_URL}/advisor-profile`, advisorProfile).pipe(map((res: any) => {
+    updateAdvisorProfile(advisorProfile: AdvisorProfile,id:number) {
+        return this.putPost(`${BASE_URL}/advisor-profile/${id}`, advisorProfile).pipe(map((res: any) => {
             return res as unknown;
         }))
     }

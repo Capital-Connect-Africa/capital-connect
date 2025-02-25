@@ -26,7 +26,7 @@ export class AdvisorUiContainerComponent implements OnInit {
   ngOnInit(): void {
     this.signalService.pageTitle.set(this.title);
     this.links = [ 
-      { label: 'Sessions', href: '/advisor', exact: false, icon: 'grid_view' ,display:true } ,
+      { label: 'Sessions', href: '/advisor/sessions', exact: false, icon: 'grid_view' ,display:true } ,
       { label: 'Profile', href: '/advisor/profile', exact: false, icon: 'person' ,display:true } 
 
     ]

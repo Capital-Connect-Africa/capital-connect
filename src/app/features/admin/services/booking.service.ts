@@ -41,7 +41,7 @@ export class BookingsService extends BaseHttpService{
     }
 
 
-    assignBookingToInvestor(bookingId:number, payload:unknown){
+    assignBookingToAdvisor(bookingId:number, payload:unknown){
         return this.putPost(`${BASE_URL}/bookings/${bookingId}/assign-advisor`, payload) as Observable <unknown>
     }
 }

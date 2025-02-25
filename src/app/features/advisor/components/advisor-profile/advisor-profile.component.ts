@@ -4,7 +4,6 @@ import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
 import { ProfileService } from '../../../profile/services/profile.service';
-import { RoutingService } from '../../../../shared/business/services/routing.service';
 import { tap } from 'rxjs';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { Router, RouterModule } from '@angular/router';
@@ -15,90 +14,83 @@ import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
 import { AdvisorService } from '../../services/advisor-profile.service';
 import { AdvisorUiContainerComponent } from "../admin-ui-container/advisor-ui-container.component";
 
-
-
-
 @Component({
   standalone: true,
   selector: 'app-advisor-profile',
   templateUrl: './advisor-profile.component.html',
   styleUrls: ['./advisor-profile.component.scss'],
-  imports: [NavbarComponent,
+  imports: [
+    NavbarComponent,
     MatIcon,
     NavbarComponent,
     CommonModule,
     AlertComponent,
     AdvisorUiContainerComponent,
-    RouterModule]
+    RouterModule
+  ]
 })
 export class AdvisorProfileComponent implements OnInit {
-  @Input() showBanner =false;
+  @Input() showBanner = false;
 
-  //services
-  private _profileService =inject(ProfileService);
-  private _advisorService = inject(AdvisorService) 
+  // services
+  private _profileService = inject(ProfileService);
+  private _advisorService = inject(AdvisorService);
   private _router = inject(Router);
 
-  //vars
+  // vars
   investorProfile: InvestorProfile | null = null;
-  private userProfile!:Profile;
+  private userProfile!: Profile;
   userId: number = 0;
 
-  //booleans
+  // booleans
   investorProfileExists: boolean = false;
-  
-  //streams
-  advisorProfile$ = new Observable<AdvisorProfile>()
 
+  // streams
+  advisorProfile$ = new Observable<AdvisorProfile>();
 
-
-  constructor() { }
-
-
+  constructor() {}
 
   ngOnInit() {
-      const userId = sessionStorage.getItem('userId');
-      if (userId) {
-        this.userId = parseInt(userId);
+    const userId = sessionStorage.getItem('userId');
+    if (userId) {
+      this.userId = parseInt(userId);
 
-        this.advisorProfile$ = this._advisorService.getAdvisorProfileByUserId(this.userId).pipe(tap(res => {
-          if(!res.id){
-          this._router.navigate(['advisor/create-profile']);
+      this.advisorProfile$ = this._advisorService.getAdvisorProfileByUserId(this.userId).pipe(
+        tap(res => {
+          localStorage.setItem('advisorProfileId',res.id.toString());
+          if (!res.id) {
+            this._router.navigate(['advisor/create-profile']);
           }
-        }))
-      }
+        })
+      );
+    }
   }
 
-
-
-  signalsService =inject(SignalsService);
-  showDialog(){
-    this.signalsService.showDialog.set(true)
+  signalsService = inject(SignalsService);
+  showDialog() {
+    this.signalsService.showDialog.set(true);
   }
 
-  userProfile$ =this._profileService.get().pipe(tap(res =>{
-    this.userProfile = res
-    return res;
-
-  }))
+  userProfile$ = this._profileService.get().pipe(
+    tap(res => {
+      this.userProfile = res;
+      return res;
+    })
+  );
 
   getLocalized(number: number): string {
     return Number(number).toLocaleString();
   }
 
-
   get uniqueMobileNumber(): string {
     if (this.userProfile.mobileNumber) {
-      // Split the string by commas, remove duplicates with Set, and join it back into a string
       const uniqueNumbers = Array.from(
         new Set(this.userProfile.mobileNumber.split(',').map(num => num.trim()))
       );
       return uniqueNumbers.join(', ');
     }
-    // Return 'Add phone' if no number is available
     return 'Add phone';
   }
-
 
   getItems(items: unknown): string {
     if (Array.isArray(items)) {
@@ -109,6 +101,35 @@ export class AdvisorProfileComponent implements OnInit {
     }
     return '';
   }
-  
 
+
+  parseJsonArray(value: any): any {
+    try {
+      if (typeof value === "string") {
+        const parsedValue = JSON.parse(value);
+  
+        if (Array.isArray(parsedValue)) {
+          return parsedValue.map(item => 
+            typeof item === "string" && (item.startsWith("{") || item.startsWith("[")) 
+              ? JSON.parse(item) 
+              : item
+          );
+        }
+        return parsedValue;
+      }
+  
+      if (Array.isArray(value)) {
+        return value.map(item => 
+          typeof item === "string" && (item.startsWith("{") || item.startsWith("[")) 
+            ? JSON.parse(item) 
+            : item
+        );
+      }
+    } catch (e) {
+      console.error("Failed to parse JSON:", e, value);
+    }
+    return value;
+  }
+  
+  
 }

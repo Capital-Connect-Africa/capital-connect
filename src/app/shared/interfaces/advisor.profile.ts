@@ -1,3 +1,5 @@
+import { User } from "../../features/users/models";
+
 export interface AdvisorProfile{
     id:number;
     userId: number,
@@ -19,5 +21,6 @@ export interface AdvisorProfile{
     totalYearsExperience: number,
     keyTeamMembers: string,
     feeStructure: string
+    user:User
 
 }

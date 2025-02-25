@@ -44,6 +44,7 @@ export class createAdvisorProfileComponent implements OnInit {
   userEmail: string = ''
   formGroup!: FormGroup;
   userId: number = 0
+  advisorProfileId: number = 0
   profileRoles: string[] = []
   profileServices: string[] = []
   profileFeeStructure: string[] = []
@@ -57,6 +58,7 @@ export class createAdvisorProfileComponent implements OnInit {
 
   //streams
   submit$ = new Observable<unknown>()
+  getAdvisorProfileById$ = new Observable<AdvisorProfile>()
   profileRoles$ = this._advisorService.getAllAdvisorProfileRoles().pipe(
     tap(res => {
       this.profileRoles = res as any[]
@@ -101,6 +103,19 @@ export class createAdvisorProfileComponent implements OnInit {
       this.userId = id
     }
 
+    const advisorProfileId = localStorage.getItem("advisorProfileId")
+    if(advisorProfileId){
+      this.advisorProfileId = Number(advisorProfileId)
+      this.advisorProfileExists = true
+      this.getAdvisorProfileById$ = this._advisorService.getAdvisorProfileById(Number(advisorProfileId)).pipe(
+        tap(res => {
+          this.patchForm(res)
+        }
+        )
+      )
+
+    }
+
 
     this.formGroup = this._formBuilder.group({
       userId: this.userId,
@@ -137,9 +152,9 @@ export class createAdvisorProfileComponent implements OnInit {
       website: advisorProfile.website,
       professionalSummary: advisorProfile.professionalSummary,
       personalPitch: advisorProfile.personalPitch,
-      capitalRaisingStrategies: advisorProfile.capitalRaisingStrategies,
-      industryFocus: advisorProfile.industryFocus,
-      countryFocus: advisorProfile.countryFocus,
+      capitalRaisingStrategies: this.parseJsonArray(advisorProfile.capitalRaisingStrategies),
+      industryFocus: this.parseJsonArray(advisorProfile.industryFocus),
+      countryFocus: this.parseJsonArray(advisorProfile.countryFocus),
       pastProjects: advisorProfile.pastProjects,    
       totalCapitalRaised:advisorProfile.totalCapitalRaised,
       caseStudies: advisorProfile.caseStudies,
@@ -153,12 +168,41 @@ export class createAdvisorProfileComponent implements OnInit {
   }
 
 
+  parseJsonArray(value: any): any {
+    try {
+      if (typeof value === "string") {
+        const parsedValue = JSON.parse(value);
+  
+        if (Array.isArray(parsedValue)) {
+          return parsedValue.map(item => 
+            typeof item === "string" && (item.startsWith("{") || item.startsWith("[")) 
+              ? JSON.parse(item) 
+              : item
+          );
+        }
+        return parsedValue;
+      }
+  
+      if (Array.isArray(value)) {
+        return value.map(item => 
+          typeof item === "string" && (item.startsWith("{") || item.startsWith("[")) 
+            ? JSON.parse(item) 
+            : item
+        );
+      }
+    } catch (e) {
+      console.error("Failed to parse JSON:", e, value);
+    }
+    return value;
+  }
+
+
   onSubmit(): void {   
     if (this.advisorProfileExists) {
       if (this.formGroup.valid) {
         const formData = this.formGroup.value;
 
-        this.submit$ = this._advisorService.updateAdvisorProfile(formData).pipe(
+        this.submit$ = this._advisorService.updateAdvisorProfile(formData,this.advisorProfileId).pipe(
           tap(res => {
             this._feedbackService.success("Advisor Profile Updated Sucessfully")
             this._router.navigate(['/advisor/profile']);

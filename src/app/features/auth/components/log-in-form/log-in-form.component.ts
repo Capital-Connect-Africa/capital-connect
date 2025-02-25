@@ -74,7 +74,7 @@ export class LogInFormComponent {
         case USER_ROLES.CONTACT_PERSON:
           return this._dynamicRoutingService.routeContactPerson()     
         case USER_ROLES.ADVISOR:
-          return  this._router.navigateByUrl('/advisor');
+          return  this._router.navigateByUrl('/advisor/profile');
           case USER_ROLES.PARTNER:
             return this._router.navigateByUrl('/partner');
         case USER_ROLES.ADMIN:

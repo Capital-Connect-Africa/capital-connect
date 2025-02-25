@@ -47,12 +47,12 @@ export class AdvisorsAdminComponent {
 
   users: User[] = [];
   cols: any[] = [
-    { field: 'firstName', header: 'First Name' },
-    { field: 'lastName', header: 'Last Name' },
-    { field: 'username', header: 'Email' },
-    { field: 'isEmailVerified', header: 'Email Verified' },
-    { field: 'createdAt', header: 'Joined' },
-    { field: 'actions', header: 'Actions' }
+    { field: 'fullName', header: 'Full Name' },
+    { field: 'email', header: 'Email' },
+    { field: 'phone', header: 'Phone Number' },
+    { field: 'totalCapitalRaised', header: 'Total Capital Raised' },
+    { field: 'totalYearsExperience', header: 'Total Years Of Experience' },
+    // { field: 'actions', header: 'Actions' }
   ];
 
   @ViewChild('dt') table!: Table;

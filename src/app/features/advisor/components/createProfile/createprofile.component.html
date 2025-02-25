@@ -5,6 +5,7 @@
 <ng-container *ngIf="countries$ | async"></ng-container>
 <ng-container *ngIf="sectors$ | async"></ng-container>
 <ng-container *ngIf="investmentStructureOptions$ | async"></ng-container>
+<ng-container *ngIf="getAdvisorProfileById$ | async"></ng-container>
 
 
 <app-layout >
@@ -13,7 +14,7 @@
 
 <div class="container">
   <div class="content">
-    <p class="brand__details">{{ advisorProfileExists ? "Update Your Advisor Profile":"Kindly create your advisor profile to proceed"}}</p>
+    <p class="brand__details">{{ advisorProfileExists ? "Update Your Advisor Profile":"Create Your Advisor Profile"}}</p>
     
     <ng-container>
       <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
