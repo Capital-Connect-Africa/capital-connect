@@ -16,10 +16,10 @@ import { RemoveQuotesPipe } from '../../../../shared/pipes/remove-quotes.pipe';
 import { BusinessOnboardingScoringService } from '../../../../shared/services/business.onboarding.scoring.service';
 import { GrowthStage } from '../../../organization/interfaces';
 import { Scoring } from '../../../../shared/business/services/onboarding.questions.service';
-import { BusinessAndInvestorMatchingService } from '../../../../shared/business/services/busines.and.investor.matching.service';
-import { CONNECTED_COMPANIES_QUESTION_IDS } from '../../../../shared/business/services/onboarding.questions.service';
 import { Progress } from '../../../business/interfaces/progress.interface';
-
+import { ViewChild } from '@angular/core';
+import { ElementRef } from '@angular/core';
+import { PdfGeneratorService } from '../../../../shared/services/pdf-generator.service';
 
 @Component({
   selector: 'app-client-details',
@@ -45,6 +45,9 @@ export class ClientDetails {
   InvestorPreparednessgeneralSummary: GeneralSummary | undefined;
   eligibilityScore = parseFloat(this.investorEligibilityScore);
   submissions: UserSubmissionResponse[] = []
+  @ViewChild('content', { static: false }) content!: ElementRef;
+  @ViewChild('business_content', { static: false }) business_content!: ElementRef;
+  @ViewChild('impact_content', { static: false }) impact_content!: ElementRef;
 
 
 
@@ -53,7 +56,8 @@ export class ClientDetails {
   private _companyService = inject(CompanyHttpService)
   private _submissionStateService = inject(SubMissionStateService);
   private _scoringService = inject(BusinessOnboardingScoringService);
-  private _businessMatchingService = inject(BusinessAndInvestorMatchingService)
+  private _pdfService = inject(PdfGeneratorService);
+  
 
   //booleans
   visible = false;
@@ -169,6 +173,44 @@ export class ClientDetails {
       this.impactElementVisible = !this.impactElementVisible
     }
   }
+
+  generateBusinessInformationReport() {
+    if (this.business_content && this.business_content.nativeElement) {
+      const contentElement = this.business_content.nativeElement;
+      var reportName: string = '';
+      reportName = "BUSINESS INFORMATION REPORT"
+      this._pdfService.generatePDF(contentElement, reportName);
+    } else {
+      console.error('Content element is null or undefined.');
+    }
+  }
+
+  generateImpactElementReport() {
+    if (this.impact_content && this.impact_content.nativeElement) {
+      const contentElement = this.impact_content.nativeElement;
+      var reportName: string = '';
+      reportName = "IMPACT ELEMENT ASSESMENT REPORT"
+      this._pdfService.generatePDF(contentElement, reportName);
+    } else {
+      console.error('Content element is null or undefined.');
+    }
+  }
+
+  generatePDF() {
+    if (this.content && this.content.nativeElement) {
+      const contentElement = this.content.nativeElement;
+      var reportName: string = '';
+      if (this.currentModal === 'eligibility') {
+        reportName = "INVESTOR ELIGIBILITY REPORT"
+      } else if (this.currentModal === 'preparedness') {
+        reportName = "INVESTOR PREPAREDNES REPORT"
+      }
+      this._pdfService.generatePDF(contentElement, reportName);
+    } else {
+      console.error('Content element is null or undefined.');
+    }
+  }
+
 
 
   getGrowthStageFromString(value: string): GrowthStage | undefined {
