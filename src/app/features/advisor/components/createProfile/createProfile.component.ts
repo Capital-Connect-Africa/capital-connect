@@ -201,7 +201,7 @@ export class createAdvisorProfileComponent implements OnInit {
     if (this.advisorProfileExists) {
       if (this.formGroup.valid) {
         const formData = this.formGroup.value;
-
+        delete formData.userId
         this.submit$ = this._advisorService.updateAdvisorProfile(formData,this.advisorProfileId).pipe(
           tap(res => {
             this._feedbackService.success("Advisor Profile Updated Sucessfully")
