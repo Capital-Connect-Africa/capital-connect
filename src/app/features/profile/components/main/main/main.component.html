@@ -22,8 +22,17 @@
             <p><mat-icon>call</mat-icon>{{result.profile.mobileNumber || 'Add phone'}}</p>
             <p><mat-icon>mail</mat-icon>{{result.profile.email}}</p>
             <section>
-                <h2>Business</h2>
+              <div class="flex justify-start gap-3">
                 <button class="btn__cta text-blue-600 font-bold" title="Details" (click)="editOrganizationProfile()">Edit Business Details</button>
+                <br/>
+                
+                <a [routerLink]="'/organization/valuation'" class="btn__cta text-blue-600 font-bold" title="Valuation">
+                Get Business Valuation
+                </a>
+
+              </div>
+       
+
                 <div class="card__item__details" details>
                   <div class="card__item__detail_info">
                     <div>
