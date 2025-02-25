@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseHttpService } from '../../http/base/base.http.service';
 import { map } from 'rxjs';
-import { PublicInvestor, UserSearch } from '../../../shared/interfaces/public.investor.interface';
+import { BulkCreateResponse, PublicInvestor, UserSearch } from '../../../shared/interfaces/public.investor.interface';
 import { BASE_URL } from '../../http/base/constants';
 
 @Injectable({
@@ -48,6 +48,12 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
   searchInvestors(payload:Partial<UserSearch>){
     return this.create(`${BASE_URL}/investors-repository/search`, payload).pipe(map(res =>{
       return res as PublicInvestor[]
+    }))
+  }
+
+  uploadInvestors(payload:FormData){
+    return this.create(`${BASE_URL}/investors-repository/upload`, payload).pipe(map(res =>{
+      return res as BulkCreateResponse
     }))
   }
 }
