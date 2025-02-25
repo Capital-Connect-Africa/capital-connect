@@ -16,7 +16,7 @@
     <main class="stats">
       <ng-container>
         <div>
-          <h3><a routerLink="/advisor">Back to Sessions</a></h3>
+          <h3><a class="btn btn-primary-alt btn-sm pi pi-arrow-left" routerLink="/advisor">Back to Sessions</a></h3>
 
           <ng-container *ngIf="company_details$ | async as result">
           <div class="flex flex-col bg-white  bio_info">
@@ -202,6 +202,23 @@
     </footer>
   </div>
 
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action flex gap-6 items-center">
+      <a href="mailto: services@capitalconnect.africa">Contact your account manager</a>
+      <a href="javascript:void(0);" (click)="generatePDF()">Download Report</a>
+      <a href="mailto:?subject=Investor%20Ready%20Report&body=Attached%20is%20the%20Investor%20Ready%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
+        target="_blank">Email Report</a>
+
+    </div>
+  </div>
+
 </app-modal>
 
 
@@ -254,6 +271,23 @@
       <p>Capital Connect Africa | Email: services&#64;capitalconnect.africa | Address:4th Floor, CVS Plaza Lenana Road,
         Nairobi</p>
     </footer>
+  </div>
+
+
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action flex gap-8 items-center">
+      <a href="mailto: services@capitalconnect.africa">Contact your account manager</a>
+      <a href="javascript:void(0);" (click)="generateBusinessInformationReport()">Download Report</a>
+      <a href="mailto:?subject=Business%20Information%20Report&body=Attached%20is%20the%20Business%20Information%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
+        target="_blank">Email Report</a>
+    </div>
   </div>
 
 </app-modal>
@@ -311,6 +345,22 @@
     </footer>
   </div>
 
+
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action flex gap-8 items-center">
+      <a href="mailto: services@capitalconnect.africa">Contact your account manager</a>
+      <a href="javascript:void(0);" (click)="generateImpactElementReport()">Download Report</a>
+      <a href="mailto:?subject=Impact%20Element%20Assesment%20Report&body=Attached%20is%20the%20Impact%20Element%20Assement%20Report%20you%20requested.%0D%0A%0D%0AKind%20regards,%0D%0A%0D%0A{{currentCompany.name}}"
+        target="_blank">Email Report</a>
+    </div>
+  </div>
 </app-modal>
 
 
