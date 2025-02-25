@@ -7,80 +7,67 @@ import { SliderModule } from 'primeng/slider';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
-
-interface ValuationQuestion {
-  id: string;
-  type: string;
-  question: string;
-  required?: boolean;
-  options?: any[];
-  placeholder?: string;
-  validationRule?: string;
-  questions?: ValuationQuestion[];
-  value?: any;
-  questionText?: string;
-  numberFormat?: boolean;
-  min?: number;
-  max?: number;
-  lowRiskName?: string;
-  highRiskName?: string;
-}
-
-interface ValuationResponse {
-  questions: ValuationQuestion[];
-}
+import { ValuationQuestion ,ValuationResponse} from './valuation.interface';
+import { Observable } from 'rxjs';
+import { ValuationHttpService } from '../../services/valuation.service';
+import { inject } from '@angular/core';
+import { tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-valuation',
   templateUrl: './valuation.component.html',
   styleUrls: ['./valuation.component.scss'],
-  imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    DropdownModule,
-    InputNumberModule,
-    SliderModule,
-    ButtonModule,
-    InputTextModule
-  ]
+  imports: [ ReactiveFormsModule, CommonModule, DropdownModule, InputNumberModule,SliderModule, ButtonModule, InputTextModule]
 })
 export class ValuationComponent implements OnInit {
+  //services
+  private _valuticoService = inject(ValuationHttpService)
+  private _router = inject(Router)
+  //vars
   valuationForm: FormGroup;
   questions: ValuationQuestion[] = [];
   current_step = 1;
   totalSteps = 0;
   steps: string[] = [];
+
+  //booleans
   isLoading = true;
 
-  constructor(private http: HttpClient,private fb: FormBuilder) {this.valuationForm = this.fb.group({});}
+  //streams
+  valuticoQuestions$ = new Observable<ValuationResponse>()
+  submit$ = new Observable<any>()
+
+  constructor(private http: HttpClient,private fb: FormBuilder) {
+    this.valuationForm = this.fb.group({
+      client_email: [null, Validators.required],
+      client_phone: [null, Validators.required], // Initialize here
+    });
+    
+    // this.valuationForm = this.fb.group({});
+  }
 
   ngOnInit(): void {
-    this.http.get<ValuationResponse>('https://capitalconnect-0060e0fb0eb4.herokuapp.com/valutico').subscribe({
-      next: (response) => {
-        this.questions = response.questions;
-        this.initializeForm();
-        // this.totalSteps = Math.ceil(this.questions.length / 6);
-        this.totalSteps = this.calculateTotalSteps(); // Updated calculation
+    this.valuticoQuestions$ = this._valuticoService.getValuticoQuestions().pipe(tap(res=>{
+      this.questions = res.questions;
+      this.initializeForm();
+      this.totalSteps = this.calculateTotalSteps(); // Updated calculation
 
-        this.steps = Array(this.totalSteps).fill('').map((_, i) => `${i + 1}`);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to fetch questions:', err);
-        this.isLoading = false;
-      }
-    });
+      this.steps = Array(this.totalSteps).fill('').map((_, i) => `${i + 1}`);
+      this.isLoading = false;
+    }))
   }
 
 
 
-
   private initializeForm() {
+    this.valuationForm.addControl("client_email", this.fb.control(null, Validators.required));
+    this.valuationForm.addControl("client_phone", this.fb.control(null, Validators.required));
     this.questions.forEach(question => {
       if (question.type === 'input_with_select') {
         this.valuationForm.addControl(`${question.id}_value`, this.fb.control(null, this.getValidators(question)));
-        this.valuationForm.addControl(`${question.id}_currency`, this.fb.control(null, this.getValidators(question)));
+        // this.valuationForm.addControl(`${question.id}_currency`, this.fb.control(null, Validators.required));
       } else if (question.type === 'free_form_question') {
         this.valuationForm.addControl(question.id, this.fb.control(null, this.getValidators(question)));
         if (this.hasEditableOption(question)) {
@@ -174,24 +161,31 @@ export class ValuationComponent implements OnInit {
     return this.getCurrentStepQuestions().every(question => {
       if (!question.required) return true;
       if (question.type === 'input_with_select') {
-        return this.valuationForm.get(`${question.id}_value`)?.valid &&
-               this.valuationForm.get(`${question.id}_currency`)?.valid;
+        return this.valuationForm.get(`${question.id}_value`)?.valid
+        //  &&   this.valuationForm.get(`${question.id}_currency`)?.valid;
       }
       return this.valuationForm.get(question.id)?.valid;
     });
   }
 
   setStep(stepChange: number) {
-    console.log("Set step called")
     const newStep = this.current_step + stepChange;
     if (newStep > 0 && newStep <= this.totalSteps) {
       this.current_step = newStep;
     }
   }
 
+
   getCurrencyOptions(question: ValuationQuestion) {
-    return question.options?.flatMap((group: any) => group.options) || [];
+    return question.options?.flatMap((group: any) => 
+      group.options.map((opt: any) => ({
+        label: opt.label,
+        value: opt.value // Ensure this matches the API response structure
+      }))
+    ) || [];
   }
+
+
 
   getDropdownOptions(question: ValuationQuestion) {
     return question.options?.map(opt => ({
@@ -225,41 +219,84 @@ getSliderOptions(question: ValuationQuestion): any[] {
   }
 
   submitValuation() {
-    console.log('Submission Data:', this.prepareSubmissionData());
-  
+    // const submissionData = this.prepareSubmissionData();
+    // console.log("The submission data is", submissionData);
     if (this.valuationForm.valid) {
       const submissionData = this.prepareSubmissionData();
-      console.log('Submission Data:', submissionData);
+      this.submit$ = this._valuticoService.submitValuationData(submissionData).pipe(tap((res: any) => {
+        console.log("The response from valutico is", res)
+      }))
     }
   }
 
   private prepareSubmissionData() {
-    const data: any = {};
-    this.questions.forEach(question => {
-      if (question.type === 'input_with_select') {
-        data[question.id] = {
-          value: this.valuationForm.get(`${question.id}_value`)?.value,
-          currency: this.valuationForm.get(`${question.id}_currency`)?.value
-        };
-      } else if (question.type === 'free_form_question') {
-        const selected = this.valuationForm.get(question.id)?.value;
-        data[question.id] = selected?.editable 
-          ? this.valuationForm.get(`${question.id}_other`)?.value 
-          : selected?.label;
-      } else {
-        data[question.id] = this.valuationForm.get(question.id)?.value;
+    const baseData = {
+      client_email: this.valuationForm.get('client_email')?.value,
+      client_phone: this.valuationForm.get('client_phone')?.value,
+      locale: "en"
+    };
+
+    const questionnaire = this.questions.map(question => {
+      const entry: any = { 
+        id: question.id,
+        type: question.type,
+        question: question.question,
+        required: question.required
+      };
+
+      switch(question.type) {
+        case 'remote_autocomplete':
+          entry.value = this.valuationForm.get(question.id)?.value?.value || null;
+          break;
+        case 'input_with_select':
+          entry.value = this.valuationForm.get(`${question.id}_value`)?.value;
+          entry.selectedValue = this.valuationForm.get(`${question.id}_currency`)?.value;
+          break;
+        case 'free_form_question':
+          const selected = this.valuationForm.get(question.id)?.value;
+          entry.value = selected?.editable 
+            ? this.valuationForm.get(`${question.id}_other`)?.value 
+            : selected;
+          break;
+        case 'input':
+          entry.value = this.valuationForm.get(question.id)?.value;
+          break;
+        case 'group_slider':
+          entry.questions = question.questions?.map(subQ => ({
+            id: subQ.id,
+            value: this.valuationForm.get(subQ.id)?.value
+          }));
+          break;
       }
+
+      return entry;
     });
-    return data;
+
+    return { ...baseData, questionnaire };
   }
+
+
+
+
 
   cancel() {
     console.log('Valuation cancelled');
+    this._router.navigate(['/user-profile'])
     this.valuationForm.reset();
     this.current_step = 1;
   }
 
+  getValuticoCountries$ = this._valuticoService.getValuticoCountries().pipe(tap(res=>{
+    console.log("The valutico countries are ", res)
+  }))
 
+  getValuticoIndustries$ = this._valuticoService.getValuticoIndustries().pipe(tap(res=>{
+    console.log("The valutico Industries are ", res)
+  }))
+
+  getValuticoPeers$ = this._valuticoService.getValuticoPeers().pipe(tap(res=>{
+    console.log("The valutico Peers are ", res)
+  }))
 
   getDummyCountries() {
     return [
@@ -274,6 +311,18 @@ getSliderOptions(question: ValuationQuestion): any[] {
   }
   
   getDummyIndustries() {
+    return [
+      { value: 'tech', label: 'Technology' },
+      { value: 'finance', label: 'Financial Services' },
+      { value: 'manufacturing', label: 'Manufacturing' },
+      { value: 'healthcare', label: 'Healthcare' },
+      { value: 'retail', label: 'Retail' },
+      { value: 'energy', label: 'Energy' },
+      { value: 'construction', label: 'Construction' }
+    ];
+  }
+
+  getDummyPeers() {
     return [
       { value: 'tech', label: 'Technology' },
       { value: 'finance', label: 'Financial Services' },

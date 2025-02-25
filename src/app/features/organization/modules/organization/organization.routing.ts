@@ -5,6 +5,9 @@ import { isInvestorGuard } from '../../../../shared/guards/isInvestorGuard';
 
 
 const routes: Routes = [
+  { path: 'valuation',
+    loadComponent: () => import('../../pages/valuation/valuation.component').then(c => c.ValuationComponent) },
+
   { path: 'setup',
     loadComponent: () => import('../../pages/setup/setup.component').then(c => c.SetupComponent) },
   {
