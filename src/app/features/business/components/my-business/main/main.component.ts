@@ -37,17 +37,25 @@ export class MainComponent {
   task_one =[
     {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
+    {name: 'Verify', action: ''},
+
   ]
   task_two =[
     {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
-    {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
+    {name: 'Validate', action: ''},
+    {name: 'Verify', action: ''},
+
   ]
   task_three =[
     {name: 'Get Expert Document Prep', action: 'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
+    {name: 'Verify', action: ''},
+
   ]
   task_four =[
     {name: 'Get Expert Document Prep', action:'mailto: services@capitalconnect.africa'},
     {name: 'Validate', action: 'mailto: services@capitalconnect.africa'},
+    {name: 'Verify', action: ''},
+
   ]
 }

@@ -16,20 +16,21 @@
         <h2 class="title">{{title}}</h2>
         <p class="description">{{description}}</p>
       </div>
-
-
-
-
     </div>
 
     <div class="flex gap-4 div__2">
-      @for(action of actions; track  $index){
-        <a [href] ="action.action"  class="action-btn block w-max rounded-[6px] px-[30px] py-[8px]" [ngClass]="{active: $index ==0}">{{ action.name }}</a>
-      }
-  
+      <ng-container *ngFor="let action of actions; let i = index; trackBy: trackByIndex">
+        <a *ngIf="action.name !== 'Verify'" [href]="action.action"
+           class="action-btn block w-max rounded-[6px] px-[30px] py-[8px]"
+           [ngClass]="{active: i === 0 || i === 2 }">
+          {{ action.name }}
+        </a>
+        <button *ngIf="action.name === 'Verify'" (click)="onActionClick(action)"
+                class="action-btn block w-max rounded-[6px] px-[30px] py-[8px]"
+                [ngClass]="{active: i === 0 || i === 2 }">
+          {{ action.name }}
+        </button>
+      </ng-container>
     </div>
-
   </div>
-
 </div>
-
