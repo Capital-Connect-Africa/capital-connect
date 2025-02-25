@@ -3,6 +3,11 @@
 <ng-container *ngIf="users$ | async"></ng-container>
 <ng-container *ngIf="assignBooking$ | async"></ng-container>
 
+<ng-container *ngIf="advisors$ | async" />
+
+
+
+
 
 
 <app-admin-ui-container [title]="'Bookings'">
@@ -32,9 +37,8 @@
                 <div class="flex gap-1 items-center cta__btns">
                   <button title ="Open" class="block text-center text-blue-500 hover:text-blue-800 transition-all" (click)="openBooking(booking.id)"><i class="pi pi-info-circle"></i></button>
                   <button title ="Remove" class="block text-center text-rose-500 hover:text-rose-800 transition-all" (click)="removeBooking(booking.id)"><i class="pi pi-trash"></i></button>
-                  <button *ngIf="!booking.advisor" title="Assign Advisor" class="cursor-pointer block text-center text-green-500 hover:text-green-800 transition-all"
-                   (click)="assignAdvisor(booking.id)"><i class="pi pi-user-plus"></i></button>               
-                
+                  <button title="Assign Advisor" *ngIf="!booking.advisor"   class="cursor-pointer block text-center text-green-500 hover:text-green-800 transition-all"
+                   (click)="assignAdvisor(booking.id)"><i class="pi pi-user-plus"></i></button>                       
                 </div>
             </td>
         </tr>
@@ -64,9 +68,8 @@
         <div class="input__wrapper">
             <label class="input__label uppercase font-bold">ADVISORS</label>
             <p-dropdown
-                    [options]="users"
+                    [options]="advisors"
                     optionLabel="fullName"
-                    optionValue="id"
                     class ="input__field"
                     styleClass ="w-full gap-4"
                     [(ngModel)]="advisor"
