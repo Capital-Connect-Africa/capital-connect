@@ -31,5 +31,17 @@ export interface UserSearch {
   targetAmount?: number;
   useOfFunds: string;
   matches: number;
-  createdAt: Date; 
+  createdAt: Date;
+}
+
+export interface BulkCreateResponse {
+  message: string;
+  savedCount: number;
+  failedCount: number;
+  failedInvestors: {
+    investorData: Partial<PublicInvestor>,
+    error: string;
+
+  }[];
+  savedInvestors: PublicInvestor[];
 }
