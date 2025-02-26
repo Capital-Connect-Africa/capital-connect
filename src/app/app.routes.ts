@@ -108,7 +108,7 @@ export const routes: Routes = [
   },
   {
     // path: 'calendly-booking',
-    path: 'calendly-booking/:orderTrackingId',
+    path: 'calendly-booking',
     loadChildren: () =>
       import('./features/booking/modules/booking.routing').then(
         (m) => m.BookingRoutingModule
