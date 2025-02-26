@@ -107,7 +107,8 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard],
   },
   {
-    path: 'calendly-booking',
+    // path: 'calendly-booking',
+    path: 'calendly-booking/:orderTrackingId',
     loadChildren: () =>
       import('./features/booking/modules/booking.routing').then(
         (m) => m.BookingRoutingModule
