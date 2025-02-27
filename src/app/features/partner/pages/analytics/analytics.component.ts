@@ -36,6 +36,5 @@ export class AnalyticsComponent {
     this.businessCountries =analytics.countries
     this.businessFundingType =analytics.funding.companies
     this.investorFundingType =analytics.funding.investors
-    debugger
   }))
 }
