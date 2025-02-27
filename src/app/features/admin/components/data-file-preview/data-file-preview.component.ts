@@ -237,7 +237,6 @@ export class DataFilePreviewComponent {
           }, {});
         })
         .map((record) => this.convertArraysToStrings(record));
-        debugger
     } catch (error: any) {
       this.reset();
       this._feedbackService.error(
