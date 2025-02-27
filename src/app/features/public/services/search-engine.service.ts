@@ -12,7 +12,8 @@ import { PublicInvestorsRepositoryService } from '../../../core/services/investo
 @Injectable({ providedIn: 'root' })
 export class SearchEngineService {
 
-    results$ =new BehaviorSubject<{q?: string, data?: PublicInvestor[]}>({})
+    private results$$ =new BehaviorSubject<{query?: string, investors?: PublicInvestor[]}>({})
+    results$ =this.results$$.asObservable();
 
     private _sectorsService = inject(SectorsService);
     private _countriesService = inject(CountriesService);
@@ -32,7 +33,10 @@ export class SearchEngineService {
     }
 
     searchInvestors(payload: Partial<UserSearch>){
-        return this._publicInvestorService.searchInvestors(payload)
+        return this._publicInvestorService.searchInvestors(payload).pipe(map(res =>{
+            this.results$$.next(res);
+            return res
+        }))
     }
 
 }
