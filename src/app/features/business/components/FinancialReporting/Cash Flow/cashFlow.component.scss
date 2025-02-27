@@ -1,0 +1,765 @@
+@import "../../../styles/main.scss";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+
+
+.main {
+  height: 100%;
+  display: grid;
+  background-color: #F9FAFB;
+
+  .navbar {
+    display: flex;
+    padding-left: 1rem;
+    align-items: center;
+    background-color: white;
+    justify-content: space-between;
+
+    button {
+      display: flex;
+      background: none;
+    }
+  }
+  .cta{
+    margin-bottom: .5cm;
+  }
+}
+
+h2{
+  color: $primary-color;
+  font-family: $font-family-roboto;
+  font-size: 1rem;
+  margin-bottom: -.5cm;
+}
+
+
+
+
+
+
+.form_row{
+  display: flex;
+  flex-wrap: wrap; 
+  justify-content: space-evenly;
+  gap: 1cm;
+}
+
+
+
+.save__btn{
+  margin-top: 1cm;
+}
+
+
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+h1 {
+  text-align: center;
+  font-size: 20px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+}
+th {
+  background-color: #f2f2f2;
+}
+.total-row td {
+  border-top: 2px solid #000; /* Line above the totals */
+  font-weight: bold;
+}
+.separator-row td {
+  border-bottom: 2px solid #000; /* Horizontal border separating listings and totals */
+}
+
+
+
+
+
+
+
+
+
+
+@include when-screen-is-atleast(medium) {
+  .main {
+
+    .navbar {
+      padding: 0;
+      display: block;
+
+      button {
+        display: none;
+      }
+    }
+
+    main {
+      .brand__name {
+        display: none;
+      }
+
+      .right__col {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  .main {
+    grid-template-rows: max-content auto;
+
+    main {
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+
+      .right__col {
+        display: flex;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+@include when-screen-is-atleast(medium) {
+  .main {
+
+    .navbar {
+      padding: 0;
+      display: block;
+
+      button {
+        display: none;
+      }
+    }
+
+    main {
+      .brand__name {
+        display: none;
+      }
+
+      .right__col {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  .main {
+    grid-template-rows: max-content auto;
+
+    main {
+      grid-template-columns: auto 360px;
+      padding: 1rem 2rem;
+
+      .right__col {
+        display: flex;
+      }
+    }
+  }
+}
+
+
+@import '../../../../business/styles/business.components.steps.scss';
+
+// tables 
+:host ::ng-deep .p-paginator {
+  padding-top: 2rem;
+  justify-content: flex-start !important;
+}
+
+:host ::ng-deep .p-datatable {
+  tr {
+    transition: all .2s linear;
+    cursor: default;
+
+    &:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    &:hover {
+      background-color: #654f291a;
+    }
+
+    td,
+    th {
+      padding: 1rem 0 1rem .5rem;
+    }
+
+    th {
+      background-color: #f4f4f5;
+
+      span {
+        padding: 0 .5rem;
+        justify-content: flex-start;
+        background-color: transparent !important;
+      }
+    }
+  }
+}
+
+
+
+/* Style for the overall TabView */
+:host ::ng-deep .p-tabview {
+  // border: 1px solid $gray-300;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba($black, 0.1);
+  background-color: $white;
+}
+
+/* Style for individual tab headers */
+:host ::ng-deep .p-tabview-nav li {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  margin-right: 5px;
+  color: black;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+/* Active tab header style */
+:host ::ng-deep .p-tabview-nav li.p-highlight {
+  color: $primary-color;
+  border-color: $primary-color;
+}
+
+/* Hover effect for tab headers */
+:host ::ng-deep .p-tabview-nav li:hover {
+  color: $secondary-color;
+}
+
+/* Style for tab content */
+:host ::ng-deep .p-tabview-panel {
+  padding: 1.5rem;
+  font-size: 1rem;
+  color: $text-color;
+  background-color: $gray-100;
+  border-top: 1px solid $gray-300;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Optional: Style for specific text within the tab content */
+:host ::ng-deep .p-tabview-panel p {
+  line-height: 1.6;
+  // color: $text-muted;
+}
+
+
+:host ::ng-deep .p-tabview-nav li.p-highlight {
+  border-radius: 0;
+}
+
+:host ::ng-deep .p-tabview-title{
+  padding: .2rem;
+}
+
+
+
+.record-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    .record-title {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .record-value {
+      color: #007bff;
+    }
+  }
+}
+
+/* Styling specific to TabView */
+:host ::ng-deep .p-tabview {
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+:host ::ng-deep .p-tabview-nav li {
+  font-size: 1rem;
+  font-family: $font-family-roboto;
+  color: #555;
+  font-weight: 300;
+}
+
+:host ::ng-deep .p-tabview-panel {
+  background-color: #f9f9f9;
+}
+
+.cta__group{
+  margin-bottom: .5cm;
+}
+
+
+.mat-icon{
+  cursor: pointer;
+  size: 22rem;
+  color: green;
+}
+
+h3{
+  color: $primary-color;
+}
+
+.mat-icon:hover{
+  opacity: .6;
+}
+
+
+
+.financial-info-card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+
+  .header {
+    text-align: center;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+      color: #333;
+    }
+  }
+
+  .content {
+    p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      strong {
+        color: #555;
+      }
+    }
+
+    .status {
+      font-weight: bold;
+      color: $primary-color; /* Green for positive status */
+    }
+  }
+
+  .financial-section {
+    margin-top: 20px;
+
+    h3 {
+      font-size: 1.2rem;
+      color: $primary-color;
+      margin-bottom: 10px;
+      // text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
+
+      li {
+        margin-bottom: 5px;
+        font-size: 0.95rem;
+
+        .value {
+          font-weight: bold;
+          color: $primary-color; /* Blue for monetary values */
+        }
+      }
+    }
+  }
+}
+
+
+.mt-55{
+  margin-top: .5cm;
+}
+
+.financial-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: .5cm;
+}
+
+.edit_financials{
+  color: $info-color;
+  cursor: pointer;
+}
+
+
+/* Apply to all ng-container elements */
+ng-container {
+  font-family: 'Roboto', sans-serif; /* Choose a clean, professional font */
+  font-size: 16px; /* Set a consistent font size */
+  letter-spacing: 0.5px; /* Slightly increase letter spacing for readability */
+  line-height: 1.5; /* Improve line height for better text flow */
+}
+
+/* Style headers */
+h2 {
+  font-size: 20px; /* Larger size for emphasis */
+  font-weight: bold; /* Make it bold */
+  margin-bottom: 10px; /* Add spacing below */
+}
+
+/* Style buttons inside financial container */
+.financial-container .btn {
+  font-size: 14px; /* Smaller text size for buttons */
+  letter-spacing: 0.3px; /* Subtle spacing for clarity */
+}
+
+/* Style table headers */
+p-table th {
+  font-family: 'Roboto', sans-serif; 
+  font-size: 14px;
+  font-weight: bold;
+  // text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #555; /* Softer color for readability */
+}
+
+/* Style table body cells */
+p-table td {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  padding: 10px; /* Add padding for spacing */
+}
+
+/* Style labels and inputs */
+.input__wrapper label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 5px;
+
+}
+
+.input__wrapper .input__field {
+  font-size: 14px;
+  // padding: 8px;
+  border: 1px solid #ddd; /* Subtle border for inputs */
+  border-radius: 4px;
+}
+
+
+
+
+
+
+
+.financial-info-card {
+  background-color: #f9f9f9; /* Subtle background for contrast */
+  // padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  
+  .content {
+    p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+      color: #333;
+      
+      strong {
+        font-weight: 600;
+        color: #555;
+      }
+    }
+  }
+  
+  .financial-section {
+    margin-top: 1.5rem;
+    
+    .status {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #444;
+      margin-top: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p-table {
+      th, td {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        color: #222;
+      }
+
+      mat-icon {
+        color: #007bff; /* Action icons in a noticeable blue */
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #0056b3;
+        }
+      }
+    }
+  }
+
+
+  .cta__group {
+    text-align: right;
+
+    .btn {
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0.5rem 1rem;
+
+    }
+  }
+}
+
+
+.financial-info-card {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    p {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .edit-link {
+      font-size: 0.9rem;
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+
+  .content {
+    p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+
+      strong {
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .financial-section {
+    margin-top: 1.5rem;
+
+    .status {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    p-table {
+      th, td {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+    }
+
+    .empty-state {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+
+.red_txt{
+  color: red;
+}
+
+.year{
+  cursor: pointer;
+}
+
+
+.year:hover{
+  opacity: .7;
+  transform: scale(1.1);
+}
+
+
+
+.section-header {
+  background-color: #f2f2f2; /* Light gray background */
+  font-size: 16px; /* Larger font size */
+  font-weight: bold; /* Bold text */
+  padding: 10px; /* Add padding */
+  text-align: start; /* Align text to the left */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+///latest
+/// /* General table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  margin: 20px 0;
+}
+
+/* Header row with years */
+th {
+  background-color: #203764ff !important; /* Dark blue background */
+  color: white !important; /* White text */
+  text-align: left;
+  font-weight: bold;
+}
+
+/* Table cell styling */
+td {
+  padding: 8px;
+  text-align: left;
+}
+
+/* Remove borders */
+td, th {
+  border: none;
+}
+
+/* Bottom border for totals, profit/loss, and taxes */
+.total-row, .profit-loss-row, .taxes-row {
+  border-bottom: 2px solid #203764ff; /* Dark blue bottom border */
+}
+
+/* Bold and underline totals */
+.total-row {
+  font-weight: bold;
+}
+
+/* Negative values in brackets */
+.negative {
+  color: red;
+}
+
+/* Remove dollar signs and ensure comma-separated values */
+.currency-value {
+  font-family: Arial, sans-serif;
+}
+
+
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px; /* Adjusted width of the toggle switch */
+  height: 20px; /* Adjusted height of the toggle switch */
+  margin-left: 10px; /* Space between the switch and the title */
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* Background color when switch is off */
+  transition: .4s;
+  border-radius: 20px; /* Rounded corners */
+}
+
+/* The slider before the toggle */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px; /* Adjusted height of the inner circle */
+  width: 14px; /* Adjusted width of the inner circle */
+  left: 3px; /* Distance from the left */
+  bottom: 3px; /* Distance from the bottom */
+  background-color: white; /* Inner circle color */
+  transition: .4s;
+  border-radius: 50%; /* Make it round */
+}
+
+/* Checkbox checked state */
+input:checked + .slider {
+  background-color: $primary-color; /* Background color when switch is on */
+}
+
+/* Move the inner circle to the right when checked */
+input:checked + .slider:before {
+  transform: translateX(20px); /* Adjusted movement to fit the smaller size */
+}
+
+.switch_parent{
+  display: flex;
+  
+}
+
+
+.btn__group{
+ display: flex;
+ justify-content: space-between;
+ gap: 10px;
+}

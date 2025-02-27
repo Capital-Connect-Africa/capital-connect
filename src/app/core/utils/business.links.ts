@@ -31,7 +31,7 @@ export const BusinessLinks = [
       children: [
         { label: 'Income Statement', href: '/business/financial-reporting', exact: true, icon: 'show_chart' }, // Updated icon
         { label: 'Balance Sheet', href: '/business/balance-sheets', exact: true, icon: 'account_balance' },
-        // { label: 'Cash Flows', href: '/business/financial-reporting/cashflows', exact: true, icon: 'swap_horiz' }
+        { label: 'Cash Flows', href: '/business/cash-flow', exact: true, icon: 'swap_horiz' }
       ]
      },
     { label: 'My Profile', href: '/user-profile', exact: true, icon: 'person', display: true },
