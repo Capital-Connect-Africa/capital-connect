@@ -143,6 +143,31 @@ export interface BalanceSheetRecord{
   totalLiabilities: number
 }
 
+export interface CashFlowRecords {
+  id: number;
+  year: number;
+  companyId: number;
+  profitBeforeTax: number;
+  depreciationAmortisation: number;
+  taxesPaid: number;
+  operatingCashFlow: number;
+  changeInReceivables: number;
+  changeInPayables: number;
+  netCashFromOperations: number;
+  propertyPlantEquipment: number;
+  netCashFromInvesting: number;
+  movementInBorrowings: number;
+  changeInEquity: number;
+  netCashFromFinancing: number;
+  netCashFlow: number;
+  openingCash: number;
+  endingCash: number;
+}
+
+export interface CashFlowRecordsPayload { 
+  year: number;
+  companyId: number;
+}
 
 
 export interface FinancialInfoRecords {

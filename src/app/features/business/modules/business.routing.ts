@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'financial-reporting', loadComponent: () => import('../pages/FinancialReporting/financials.component').then(c => c.FinancialReportingPage) },
   { path: 'balance-sheet/year/:year', loadComponent: () => import('../pages/BalanceSheet/BalanceSheet.component').then(c => c.BalanceSheetPage) },
   { path: 'balance-sheets', loadComponent: () => import('../pages/BalanceSheets/BalanceSheets.component').then(c => c.BalanceSheetsPage) },
+  {path: 'cash-flow', loadComponent: () => import('../pages/CashFlow/cashFlow.component').then(c => c.CashFlowPage) },
 
 
 
