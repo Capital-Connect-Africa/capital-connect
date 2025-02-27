@@ -34,6 +34,10 @@ export const routes: Routes = [
   },
 
   {
+    path: 'signup',
+    redirectTo: 'auth/signup',
+  },
+  {
     path: 'auth',
     loadChildren: () =>
       import('./features/landing/modules/landing/landing.routing.module').then(
