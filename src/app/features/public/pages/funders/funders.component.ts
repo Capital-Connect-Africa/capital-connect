@@ -36,7 +36,6 @@ export class FundersComponent {
   q =this._activatedRoute.snapshot.params['q']
   searchedResults$ =this._searchEngineService.results$.pipe(tap(res =>{
     if(res.investors){
-      debugger
       this.publicInvestors =res.investors
     }else{
       this.getPublicInvestors()

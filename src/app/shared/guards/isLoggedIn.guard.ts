@@ -34,8 +34,7 @@ async function checkLogin(
   // Check if the URL is empty
   const url = state.url;
   const { r } = route.queryParams; // r: stands referral id
-  if (url === '/') {
-    window.history.pushState(null, '', '/');
+  if (url.split("?").at(0) === '/auth') {
     if (authStateService.isLoggedIn && !authStateService.userIsAdmin) {
       router.navigateByUrl('/user-profile');
       return false;
@@ -49,14 +48,14 @@ async function checkLogin(
   if (authStateService.isLoggedIn) {
     return true;
   }
-  let signup = false;
+  let signup = url.split('/').includes('signup');
 
   if (r) {
-    signup = true;
+    signup =true;
     await referralService.updateMetrics('', false, true, r);
   }
 
-  router.navigateByUrl('/', {
+  router.navigateByUrl('/auth', {
     state: { mode: signup ? FORM_TYPE.SIGNUP : FORM_TYPE.SIGNIN },
   });
   return false;
