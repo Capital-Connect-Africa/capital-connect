@@ -20,7 +20,7 @@ import {
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModalComponent } from '../../../../shared/components/modal/modal.component';
 import { PublicInvestor } from '../../../../shared/interfaces/public.investor.interface';
-import { read, utils } from 'xlsx';
+import { read, utils, write } from 'xlsx';
 import { FeedbackService } from '../../../../core';
 import { PublicInvestorsRepositoryService } from '../../../../core/services/investors/public-investors-repository.service';
 import { Observable, tap } from 'rxjs';
@@ -169,9 +169,9 @@ export class DataFilePreviewComponent {
   parseFile(file: File, data: any) {
     const fileType = file.name.split('.').pop()?.toLowerCase();
     switch (fileType) {
-      case 'csv':
-        this.parseCSV(data);
-        break;
+      // case 'csv':
+      //   this.parseCSV(data);
+      //   break;
       case 'json':
         this.parseJSON(data);
         break;
@@ -237,6 +237,7 @@ export class DataFilePreviewComponent {
           }, {});
         })
         .map((record) => this.convertArraysToStrings(record));
+        debugger
     } catch (error: any) {
       this.reset();
       this._feedbackService.error(
@@ -289,22 +290,58 @@ export class DataFilePreviewComponent {
         if(item[col]) 
           itm[col as keyof PublicInvestor] =item[col].split(',')
       })
-      return {...item, ...itm}
+      const investorType =item.type;
+      delete item.type;
+      return {...item, ...itm, investorType}
     })
     const jsonString = JSON.stringify(content);
     return new Blob([jsonString], { type: 'application/json' });
   }
 
+
+convertToExcelFile(data: any[]): Blob {
+    const content = data.map(item => {
+        const itm: Partial<PublicInvestor> = {};
+        this.arrayCols.forEach(col => {
+            if (item[col]) 
+            itm[col as keyof PublicInvestor] = item[col].split(',');
+        });
+        const investorType = item.type;
+        delete item.type;
+        return { ...item, ...itm, investorType };
+    });
+    const worksheet =utils.json_to_sheet(content);
+    const workbook = utils.book_new();
+    utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    const excelBuffer = write(workbook, { bookType: 'xlsx', type: 'array' });
+    return new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
+
   submit() {
     const data = this.getGridData();
-    const file = this.convertToJsonFile(data);
-    const formData = new FormData();
     const [name, ext] =this.fileName.split('.')
-    formData.append('file', file, `${name}.${ext}`);
+    
+    let payload;
+    switch(ext){
+      case 'json':
+        payload =this.convertToJsonFile(data)
+        break
+      case 'xlsx':
+      case 'xls':
+        payload =this.convertToExcelFile(data)
+        break
+      default:
+        break
+    } 
+    if(!payload) return this._feedbackService.warning('No file selected', 'Upload');
+    this.convertToJsonFile(data);
+    const formData = new FormData();
+    formData.append('file', payload as Blob, `${name}.${ext}`);
     this.upload$ = this._publicInvestorService.uploadInvestors(formData).pipe(
       tap((res) => {
         if(res.savedCount >0){
-          this._feedbackService.success( res.message, 'Investors');
+          this._feedbackService.success( `${res.message} ${res.savedCount} added`, 'Investors');
         }
         if(res.savedCount >0){
           this.reset();
