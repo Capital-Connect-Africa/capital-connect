@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BaseHttpService } from '../../http/base/base.http.service';
 import { map } from 'rxjs';
-import { PublicInvestor, UserSearch } from '../../../shared/interfaces/public.investor.interface';
+import { BulkCreateResponse, PublicInvestor, UserSearch } from '../../../shared/interfaces/public.investor.interface';
 import { BASE_URL } from '../../http/base/constants';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,7 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
 
   updateInvestor(payload:Partial<PublicInvestor>, investorId:number){
     return this.update(`${BASE_URL}/investors-repository`, investorId, payload).pipe(map(res =>{
-      return res as PublicInvestor[]
+      return res as PublicInvestor;
     }))
   }
 
@@ -47,7 +48,14 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
 
   searchInvestors(payload:Partial<UserSearch>){
     return this.create(`${BASE_URL}/investors-repository/search`, payload).pipe(map(res =>{
-      return res as PublicInvestor[]
+      return res as {q: string, investors:PublicInvestor[]}
+    }))
+  }
+
+  uploadInvestors(payload:FormData){
+    const headers = new HttpHeaders({ 'enctype': 'multipart/form-data'});
+    return this.create(`${BASE_URL}/investors-repository/upload`, payload, headers).pipe(map(res =>{
+      return res as BulkCreateResponse;
     }))
   }
 }

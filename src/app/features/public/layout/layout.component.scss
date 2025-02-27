@@ -1,0 +1,16 @@
+.public__container{
+    gap: 2rem;
+    display: grid;
+    min-height: 100svh;
+    grid-template-rows: max-content auto max-content;
+}
+
+.bg__container{
+    background: linear-gradient(
+        -45deg,  
+        rgba(76, 175, 79, 0.318) 0%,
+        #f5f6fa 25%,
+        #f0bc621f 50%,
+        rgba(46, 125, 50, 0.078) 100%
+    );
+}

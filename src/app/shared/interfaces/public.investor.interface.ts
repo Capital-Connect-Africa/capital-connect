@@ -10,16 +10,16 @@ export interface PublicInvestor {
   investees: string[];
   subSectors: string[];
   website: string;
-  contactEmail?: string;
-  contactName: string;
+  contactEmail: string[];
+  contactName: string[];
   minFunding: number;
   maxFunding: number;
   currency: Currency;
-  fundingVehicle?: string;
+  fundingVehicle: string;
   useOfFunds: string[];
   investmentStructures: string[];
   esgFocusAreas: string[];
-  description?: string;
+  description: string;
   createdAt: Date;
 }
 
@@ -31,5 +31,18 @@ export interface UserSearch {
   targetAmount?: number;
   useOfFunds: string;
   matches: number;
+  query?: string,
   createdAt: Date;
+}
+
+export interface BulkCreateResponse {
+  message: string;
+  savedCount: number;
+  failedCount: number;
+  failedInvestors: {
+    investorData: Partial<PublicInvestor>,
+    error: string;
+
+  }[];
+  savedInvestors: PublicInvestor[];
 }

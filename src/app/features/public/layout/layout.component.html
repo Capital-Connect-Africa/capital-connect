@@ -1,0 +1,29 @@
+<div class ="bg-[#f5f6fa] bg__container">
+    <div class ="public__container py-6 pr-8 pl-[10%]">
+        <header class ="flex items-center justify-between">
+            <a class ="block" routerLink="/">
+                <img src="assets/img/logo.png" alt ="logo" class ="block w-24" />
+            </a>
+            <ul class ="flex items-center gap-3">
+                <li><a routerLink ="/auth">Sign in</a></li>
+                <li><a routerLink ="/auth/signup" class ="block w-max bg-[#519259] text-white px-4 py-2 rounded-full text-sm">Sign up</a></li>
+            </ul>
+        </header>
+        <main><router-outlet /></main>
+        <footer class ="flex items-center justify-between">
+            <!-- <ul class="flex items-center gap-8">
+                <li *ngFor="let partner of partners">
+                    <a [href]="partner.url" target="_blank">
+                        <img [src]="partner.logo" [alt]="partner.name" class="block" [class]="partner.height">
+                    </a>
+                </li>
+            </ul> -->
+            <ul class ="flex gap-3">
+                <li><a href="" target="_blank">Terms & Conditions</a></li>
+                <li><a href="" target="_blank">Privacy Policy</a></li>
+            </ul>
+        </footer>
+    
+    </div>
+
+</div>

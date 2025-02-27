@@ -8,18 +8,15 @@ import {
   isAdminCanActivateGuard,
 } from './shared/guards/isAdminGuard';
 import { isInvestorGuard } from './shared/guards/isInvestorGuard';
+import { PublicLayoutComponent } from './features/public/layout/layout.component';
 
 export const routes: Routes = [
   {
     path: 'landing',
-    redirectTo: '',
+    redirectTo: 'auth',
     pathMatch: 'full',
   },
-  {
-    path: 'signup',
-    redirectTo: '',
-    pathMatch: 'full',
-  },
+
   {
     path: 'register/:special-role',
     loadComponent: () =>
@@ -37,13 +34,35 @@ export const routes: Routes = [
   },
 
   {
-    path: '',
+    path: 'signup',
+    redirectTo: 'auth/signup',
+  },
+  {
+    path: 'auth',
     loadChildren: () =>
       import('./features/landing/modules/landing/landing.routing.module').then(
         (m) => m.LandingRoutingModule
       ),
     canActivate: [isLoggedInCanActivateGuard],
+  },
+
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    loadChildren: () =>
+      import('./features/public/public.routes').then(
+        (m) => m.PublicRoutes
+      ),
     pathMatch: 'full',
+  },
+
+  {
+    path: 'funders',
+    component: PublicLayoutComponent,
+    loadChildren: () =>
+      import('./features/public/funders.routes').then(
+        (m) => m.FundersRoutes
+      ),
   },
 
   {
