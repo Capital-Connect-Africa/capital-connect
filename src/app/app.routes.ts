@@ -16,11 +16,7 @@ export const routes: Routes = [
     redirectTo: 'auth',
     pathMatch: 'full',
   },
-  {
-    path: 'signup',
-    redirectTo: '',
-    pathMatch: 'full',
-  },
+
   {
     path: 'register/:special-role',
     loadComponent: () =>
@@ -44,7 +40,6 @@ export const routes: Routes = [
         (m) => m.LandingRoutingModule
       ),
     canActivate: [isLoggedInCanActivateGuard],
-    pathMatch: 'full',
   },
 
   {
