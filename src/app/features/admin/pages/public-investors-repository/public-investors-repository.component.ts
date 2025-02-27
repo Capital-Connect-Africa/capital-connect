@@ -140,7 +140,7 @@ export class PublicInvestorsRepositoryComponent {
   gridOptions: GridOptions = {
     pagination: true,
     theme: this.theme,
-    getRowId: (params) => params.data.id,
+    getRowId: (params) => `${params.data.id}`,
     onGridReady: (params) => {
       this.gridApi = params.api;
     },
@@ -285,8 +285,8 @@ export class PublicInvestorsRepositoryComponent {
         esgFocusAreas: data.esgFocusAreas,
         businessGrowthStages:data.businessGrowthStages ?? [],
         investmentStructures: data.investmentStructures ?? [],
-        contactName: data.contactName.join(','),
-        contactEmail:data.contactEmail.join(','),
+        contactName: (data.contactName?? []).join(','),
+        contactEmail:(data.contactEmail?? []).join(','),
         website: data.website,
         sectors: data.sectors ?? [],
         subSectors: (data.subSectors ?? []),
