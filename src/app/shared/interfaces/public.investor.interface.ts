@@ -31,6 +31,7 @@ export interface UserSearch {
   targetAmount?: number;
   useOfFunds: string;
   matches: number;
+  query?: string,
   createdAt: Date;
 }
 
