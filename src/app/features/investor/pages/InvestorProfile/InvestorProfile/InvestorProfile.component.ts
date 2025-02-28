@@ -13,7 +13,6 @@ import {SuccessScreenComponent} from "../../../components/onboarding/success-scr
   standalone: true,
   imports: [
     LayoutComponent,
-    IndexLayoutComponent,
     LandingComponent,
     CommonModule,
     StepsComponent,

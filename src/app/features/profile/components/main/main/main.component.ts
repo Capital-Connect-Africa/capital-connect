@@ -12,7 +12,7 @@ import { ProfileService } from '../../../services/profile.service';
 import { forkJoin, map, Observable, switchMap, tap } from 'rxjs';
 import { RoutingService } from '../../../../../shared/business/services/routing.service';
 import { AlertCardComponent } from "../../alert-card/alert-card.component";
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { OrganizationOnboardService } from '../../../../organization/services/organization-onboard.service';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FormsModule } from '@angular/forms';
@@ -30,7 +30,8 @@ import { ReferralLinkComponent } from "../../../../../shared/components/referral
     AlertCardComponent,
     InputSwitchModule,
     FormsModule,
-    ReferralLinkComponent
+    ReferralLinkComponent,
+    RouterModule
 ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.scss'

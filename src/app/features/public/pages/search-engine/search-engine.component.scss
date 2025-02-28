@@ -1,0 +1,30 @@
+@import '../../../../styles/forms.scss';
+@import '../../../../styles/select-fields.scss';
+
+.grid__container{
+    gap: 3rem;
+    overflow: hidden;
+    .hero__text h2{
+        font-size: 3.5rem;
+        line-height: 4rem;
+    }
+    .hero__image{
+        clip-path: polygon(50% 0%, 80% 10%, 100% 35%, 100% 70%, 80% 90%, 50% 100%, 20% 90%, 0% 70%, 0% 35%, 20% 10%);
+        img{
+            mix-blend-mode: multiply;
+        }
+    }
+    .btn{
+        gap: 1rem;
+        display: flex;
+        padding: .5rem 1rem;
+        align-items: center;
+        background-color: transparent;
+        border: none!important;
+        color: $primary_color;
+        &:focus {
+            outline: 0!important;
+            box-shadow: none!important;
+          }
+    }
+}

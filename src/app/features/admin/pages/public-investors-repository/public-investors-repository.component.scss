@@ -1,0 +1,15 @@
+@import '../../../../styles/forms.scss';
+@import '../../../../styles/select-fields.scss';
+
+section{
+    .h2{
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+    
+    .cta__btn{
+        padding: .5rem 1rem!important;
+    }
+
+}

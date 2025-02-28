@@ -60,6 +60,7 @@ export interface BusinessGrowthStageOptions {
 export interface InvestorTypeOptions {
     name: string,
     value: string,
+    title?: string,
 }
 
 export interface InvestmentStructureOptions {

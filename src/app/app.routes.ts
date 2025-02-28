@@ -8,18 +8,15 @@ import {
   isAdminCanActivateGuard,
 } from './shared/guards/isAdminGuard';
 import { isInvestorGuard } from './shared/guards/isInvestorGuard';
+import { PublicLayoutComponent } from './features/public/layout/layout.component';
 
 export const routes: Routes = [
   {
     path: 'landing',
-    redirectTo: '',
+    redirectTo: 'auth',
     pathMatch: 'full',
   },
-  {
-    path: 'signup',
-    redirectTo: '',
-    pathMatch: 'full',
-  },
+
   {
     path: 'register/:special-role',
     loadComponent: () =>
@@ -37,13 +34,35 @@ export const routes: Routes = [
   },
 
   {
-    path: '',
+    path: 'signup',
+    redirectTo: 'auth/signup',
+  },
+  {
+    path: 'auth',
     loadChildren: () =>
       import('./features/landing/modules/landing/landing.routing.module').then(
         (m) => m.LandingRoutingModule
       ),
     canActivate: [isLoggedInCanActivateGuard],
+  },
+
+  {
+    path: '',
+    component: PublicLayoutComponent,
+    loadChildren: () =>
+      import('./features/public/public.routes').then(
+        (m) => m.PublicRoutes
+      ),
     pathMatch: 'full',
+  },
+
+  {
+    path: 'funders',
+    component: PublicLayoutComponent,
+    loadChildren: () =>
+      import('./features/public/funders.routes').then(
+        (m) => m.FundersRoutes
+      ),
   },
 
   {
@@ -107,6 +126,7 @@ export const routes: Routes = [
     canActivateChild: [isLoggedInCanActivateChildGuard],
   },
   {
+    // path: 'calendly-booking',
     path: 'calendly-booking',
     loadChildren: () =>
       import('./features/booking/modules/booking.routing').then(
@@ -174,6 +194,18 @@ export const routes: Routes = [
     ],
   },
 
+
+  {
+    path: 'admin/advisors',
+    loadChildren: () =>
+      import('./features/users/modules/advisors.routes').then((m) => m.AdvisorsAdminRoutingModule),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+
   {
     path: 'dashboard',
     loadChildren: () =>
@@ -200,6 +232,18 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/admin/modules/analytics.routing.module').then(
         (m) => m.AnalyticsRoutingModule
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+  {
+    path: 'repository',
+    loadChildren: () =>
+      import('./features/admin/modules/repository.routing').then(
+        (m) => m.RepositoryRoutes
       ),
     canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
     canActivateChild: [

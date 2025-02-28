@@ -1,0 +1,161 @@
+<app-admin-ui-container title="Investors Database" [bg_gray]="true">
+    <ng-container *ngIf="publicInvestors$ | async"></ng-container>
+    <ng-container *ngIf="updatePublicInvestor$ | async"></ng-container>
+    <ng-container *ngIf="createPublicInvestor$ | async"></ng-container>
+    <ng-container *ngIf="useOfFunds$ | async"></ng-container>
+    <ng-container *ngIf="esgFocusAreas$ | async"></ng-container>
+    <ng-container *ngIf="investorTypes$ | async"></ng-container>
+    <ng-container *ngIf="investmentStructures$ | async"></ng-container>
+    <ng-container *ngIf="businessGrowthStages$ | async"></ng-container>
+    <ng-container *ngIf="countries$ | async"></ng-container>
+    <ng-container *ngIf="sectors$ | async"></ng-container>
+    <section class="flex flex-col gap-1">
+        <div class="flex items-center justify-between">
+            <h2 class="h2">Global Investors</h2>
+            <div class="flex items-center gap-4">
+                <button (click) ="exportDataAsCSV()" class="flex gap-2 items-center border p-1 bg-[#1f2836] text-white hover:bg-black transition-all rounded cta__btn">
+                    <i class="pi pi-download text-sm"></i>
+                    <span class="text-xs font-normal">Download CSV</span>
+                </button>
+                <button class="flex gap-2 items-center border p-1 bg-purple-500 text-white hover:bg-purple-800 transition-all rounded cta__btn">
+                    <i class="pi pi-chart-line text-xs"></i>
+                    <span class="text-xs font-normal">Insights</span>
+                </button>
+                <button (click)="fileInput.click()" class="flex gap-2 items-center border p-1 bg-teal-500 text-white hover:bg-teal-800 transition-all rounded cta__btn">
+                    <i class="pi pi-upload text-sm"></i>
+                    <span class="text-xs font-normal">Import</span>
+                </button>
+                <input type ="file" #fileInput (change)="uploadFile($event)" accept=".json, .xlsx, application/vnd.ms-excel" hidden/>
+                <button (click) ="showModal()" class="flex gap-2 items-center border p-1 bg-blue-500 text-white hover:bg-blue-800 transition-all rounded cta__btn">
+                    <i class="pi pi-plus text-xs"></i>
+                    <span class="text-xs font-normal">Add new</span>
+                </button>
+            </div>
+        </div>
+        <ag-grid-angular
+            style="min-width: 100%; height: 72vh;"
+            [rowData] ="publicInvestors"
+            [context]="{ componentParent: this }"
+            [gridOptions]="gridOptions"
+            />
+            <ng-container *ngIf="deletePublicInvestor$ | async"></ng-container>
+    </section>
+
+</app-admin-ui-container>
+<app-modal [(visible)]="visible" [title] ="selectedPublicInvestor? selectedPublicInvestor.name : 'New Investor'" [helperText]="selectedPublicInvestor? 'Update details of of this investor' :'Add a new investor to the repository'">
+    <form class="grid grid-cols-2 gap-4" [formGroup]="newInvestorForm" (submit) ="handleSubmit()">
+        <div class="input__wrapper">
+            <label class="input__label">Name</label>
+             <input class="input__field" formControlName ="name" type="text" placeholder="Enter name" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Type</label>
+            <p-dropdown
+                [options]="investorTypes"
+                class ="input__field"
+                formControlName ="investorType"
+                styleClass ="w-full gap-4"
+                placeholder="Select option" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Min Funding (USD)</label>
+             <input class="input__field" formControlName ="minFunding" type="number" placeholder="Enter minimum funding" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Max Funding (USD)</label>
+             <input class="input__field" formControlName ="maxFunding" type="number" placeholder="Enter maximum funding" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Funding Vehicle</label>
+            <input class="input__field" formControlName ="fundingVehicle" type="text" placeholder="Enter your funding vehicle" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Use Of Funds</label>
+            <p-multiSelect
+            formControlName ="useOfFunds"
+                [options] ="useOfFunds"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Sectors</label>
+            <p-multiSelect
+            formControlName ="sectors"
+            (onChange) ="handleSectorChange($event)"
+            [options] ="sectors"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Subsectors</label>
+            <p-multiSelect
+            formControlName ="subSectors"
+            [options] ="subSectors"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Countries</label>
+            <p-multiSelect
+            formControlName ="countries"
+            [options] ="countries"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">ESG Focus Areas</label>
+            <p-multiSelect
+            formControlName ="esgFocusAreas"
+            [options] ="esgFocusAreas"
+            class ="input__field"
+            styleClass ="w-full gap-4"
+            placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Business Growth Stages</label>
+            <p-multiSelect
+            formControlName ="businessGrowthStages"
+            [options]="businessGrowthStages"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Investment Structures</label>
+            <p-multiSelect
+            formControlName ="investmentStructures"
+            [options]="investmentStructures"
+                class ="input__field"
+                styleClass ="w-full gap-4"
+                placeholder="Select option(s)" />
+        </div>
+        
+        <div class="input__wrapper">
+            <label class="input__label">Contact People (optional)</label>
+             <input class="input__field" formControlName ="contactName" type="text" placeholder="e.g John Doe, Jane Doe" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Contact Emails (optional)</label>
+             <input class="input__field" formControlName ="contactEmail" type="text" placeholder="e.g john@raisin.co.ke, jane@raisin.co.ke" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Website (optional)</label>
+             <input class="input__field" formControlName ="website" type="url" placeholder="e.g www.capitalconnect.africa" />
+        </div>
+        <div class="input__wrapper">
+            <label class="input__label">Investees (optional)</label>
+             <input class="input__field" formControlName ="investees" type="text" placeholder="e.g Raisin, Capital Connect" />
+        </div>
+        <div class="input__wrapper col-span-2">
+            <label class="input__label">Description (optional)</label>
+             <textarea class="input__field resize-none" formControlName ="description" rows="3" placeholder="A brief description of the investor" ></textarea>
+        </div>
+        <button [disabled]="newInvestorForm.invalid" class ="btn">{{selectedPublicInvestor? 'Update': 'Submit'}}</button>
+    </form>
+</app-modal>
+
+<data-file-preview [file] ="file" (onUpload)="getUploadedData($event)"/>

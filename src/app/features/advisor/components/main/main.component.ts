@@ -67,8 +67,8 @@ export class MainComponent {
 
   getBookings(page: number = 1, limit: number = 10) {
     this.bookings$ = this._bookingService.getBookings(page, limit).pipe(tap(bookings => {
-      // this.bookings = bookings.data;
-      this.bookings = bookings.data.filter(item => item.calendlyEventId !== "ueiuwiiwu");
+      this.bookings = bookings.data;
+      // this.bookings = bookings.data.filter(item => item.calendlyEventId !== "ueiuwiiwu");
       // this.updateDisplayedData();
       // this.rowsCount = bookings.total;
     }))
@@ -77,6 +77,7 @@ export class MainComponent {
 
 
   ngOnInit(): void {
+
     this.getBookings();
   }
 

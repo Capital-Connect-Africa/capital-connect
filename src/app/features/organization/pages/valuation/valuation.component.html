@@ -1,0 +1,230 @@
+
+
+<ng-container *ngIf="valuticoQuestions$ | async"></ng-container>
+
+<ng-container *ngIf="getValuticoCountries$ | async"></ng-container>
+<ng-container *ngIf="getValuticoPeers$ | async"></ng-container>
+<ng-container *ngIf="getValuticoIndustries$ | async"></ng-container>
+<ng-container *ngIf="submit$ | async"></ng-container>
+
+
+ 
+
+<main class="main">
+  <div class="logo"><img alt="logo" src="assets/img/logo.png" /></div>
+  <section class="main__content__section">
+    <div class="title__bar">
+      <!-- <h2>Discover Your Business's True Value</h2> -->
+      <p>Discover Your Business's True Value, Lets get started...</p>
+    </div>
+
+    
+
+    
+    <div class="content">
+      <ul class="steps">
+        @for (step of steps; track $index) {
+        <li class="step" [class.active]="current_step == $index+1" [class.done]="current_step > $index+1">{{step}}</li>
+        }
+      </ul>
+      <div class="hr"></div>
+
+     
+
+
+
+
+
+      <form [formGroup]="valuationForm" class="form__grid">
+        <div class="w-full input__wrapper" *ngIf="current_step===1">
+          <label class="input__label">Email<sup>*</sup></label>
+          <input pInputText type="email" formControlName="client_email" placeholder="example@gmail.com"  class="input__field"/>
+        </div>
+      
+
+        <div class="w-full input__wrapper"  *ngIf="current_step===1">
+          <label class="input__label">Phone<sup>*</sup></label>
+          <input pInputText type="number" formControlName="client_phone" placeholder="Enter Phone"  class="input__field"/>
+        </div>
+
+
+        @for (question of getCurrentStepQuestions(); track question.id) {
+        <div class="" [ngSwitch]="question.type">
+          <label class="input__label">{{question.question}}<sup *ngIf="question.required">*</sup></label>
+
+
+          <div *ngSwitchCase="'remote_autocomplete'" class="w-full input__wrapper">
+            @if (question.id === '25642a58-77e9-4794-9203-18a9aaf2d438') {
+              <p-dropdown [options]="getDummyCountries()"
+                        [formControlName]="question.id"
+                        placeholder="Select country"
+                        optionLabel="label"
+                        optionValue="value"
+                        class="input__field w-full">
+              </p-dropdown>
+            }
+            @else if (question.id === 'e5b9a792-8e08-4d29-9083-54e5f563f629') {
+              <p-dropdown [options]="getDummyIndustries()"
+                        [formControlName]="question.id"
+                        placeholder="Select industry"
+                        optionLabel="label"
+                        optionValue="value"
+                        class="input__field w-full">
+              </p-dropdown>
+            }
+            @else if (question.id === 'c60395c0-b63c-466f-91fa-95efcbb25416') {
+              <input pInputText [formControlName]="question.id" [placeholder]="question.placeholder"  class="input__field"/>
+            }
+            
+            <div *ngIf="valuationForm.get(question.id)?.invalid && valuationForm.get(question.id)?.touched" 
+                 class="text-red-500 text-sm mt-1">
+              This field is required
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'input_with_select'" class="grid w-full gap-4 input__wrapper">
+            <div class="col-8 w-full">
+              <p-inputNumber [formControlName]="question.id + '_value'" 
+                           [placeholder]="question.placeholder" 
+                           [min]="0"  
+                           class="input__field w-full"
+                           mode="decimal"></p-inputNumber>
+              <div *ngIf="valuationForm.get(question.id+'_value')?.invalid && valuationForm.get(question.id+'_value')?.touched" 
+                   class="text-red-500 text-sm mt-1">
+                Valid number required
+              </div>
+            </div>
+            <div class="col-8 w-full">
+
+
+              <!-- <p-dropdown [formControlName]="question.id + '_currency'" 
+                        [options]="getCurrencyOptions(question)" 
+                        class="input__field w-full"
+                        placeholder="Currency"></p-dropdown>
+              <div *ngIf="valuationForm.get(question.id+'_currency')?.invalid && valuationForm.get(question.id+'_currency')?.touched" 
+                   class="text-red-500 text-sm mt-1">
+                Currency selection required
+              </div> -->
+            </div>
+          </div>
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div *ngSwitchCase="'free_form_question'" class="w-full input__wrapper">
+            <p-dropdown [options]="getDropdownOptions(question)" 
+                       [formControlName]="question.id" 
+                       optionLabel="label"  
+                       class="input__field w-full"
+                       [showClear]="!question.required" 
+                       placeholder="Select an option">
+            </p-dropdown>
+            <div *ngIf="valuationForm.get(question.id)?.invalid && valuationForm.get(question.id)?.touched" 
+                 class="text-red-500 text-sm mt-1">
+              Selection is required
+            </div>
+            @if (hasEditableOption(question)) {
+            <div *ngIf="valuationForm.get(question.id + '_other')?.invalid && valuationForm.get(question.id + '_other')?.touched" 
+                 class="text-red-500 text-sm mt-1">
+              Please enter a reason
+            </div>
+            }
+          </div>
+
+          <div *ngSwitchCase="'group_slider'" class="group-slider w-full space-y-4 input__wrapper">
+            @for (subQuestion of question.questions; track subQuestion.id) {
+            <div class="input__wrapper w-full">
+              <label class="input__label">{{subQuestion.questionText}}</label>
+              <p-dropdown [options]="getSliderOptions(subQuestion)" 
+                          [formControlName]="subQuestion.id"
+                          placeholder="Select risk level"
+                          optionLabel="label"  
+                          class="input__field w-full"
+                          optionValue="value">
+              </p-dropdown>
+              <div *ngIf="valuationForm.get(subQuestion.id)?.invalid && valuationForm.get(subQuestion.id)?.touched" 
+                   class="text-red-500 text-sm mt-1">
+                Risk level selection required
+              </div>
+            </div>
+            }
+          </div>
+
+          <div *ngSwitchCase="'input'" class="w-full input__wrapper">
+            <input pInputText  
+                 [formControlName]="question.id" 
+                 [placeholder]="question.placeholder" 
+                 class="input__field w-full"
+                 [type]="question.numberFormat ? 'number' : 'text'" />
+            <div *ngIf="valuationForm.get(question.id)?.invalid && valuationForm.get(question.id)?.touched" class="text-red-500 text-sm mt-1">Valid input required
+            </div>
+          </div>
+          <div *ngSwitchDefault class="unsupported-type">Unsupported question type: {{question.type}}
+          </div>
+        </div>
+        }
+
+
+      </form>
+      
+    </div>
+
+    <div class="buttons__group">
+      <button pButton 
+            type="button"
+            (click)="cancel()" 
+            label="Cancel" 
+            class="outline" 
+            *ngIf="current_step === 1"></button>
+      <button pButton 
+            type="button"
+            (click)="setStep(-1)" 
+            label="Previous" 
+            class="outline" 
+            *ngIf="current_step > 1"></button>
+      <button pButton 
+            (click)="setStep(1)" 
+            label="Next" 
+            class="outline" 
+            [disabled]="!isCurrentStepValid()"
+            *ngIf="current_step < totalSteps"></button>
+      <button pButton 
+            type="submit"
+            (click)="submitValuation()" 
+            [ngClass]="{'disabled-btn' : !valuationForm.valid }"
+            label="Submit" 
+            [disabled]="!valuationForm.valid"
+            class="outline" 
+            *ngIf="current_step === totalSteps"></button>
+    </div>
+  </section>
+</main>
+
+
+
+<!-- [disabled]="!isCurrentStepValid()"  -->
+<!-- [disabled]="!valuationForm.valid"  -->
+
+
+<!-- <div *ngSwitchCase="'remote_autocomplete'">
+  <input pInputText [formControlName]="question.id" [placeholder]="question.placeholder"  class="input__field"/>
+</div> -->
+

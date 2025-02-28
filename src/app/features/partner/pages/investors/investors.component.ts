@@ -21,7 +21,6 @@ export class InvestorsComponent {
     private _router =inject(Router)
     private _usersService =inject(UsersHttpService)
     users$ =this._usersService.getUserReferrees(Role.INVESTOR, 1, 100).pipe(tap(users =>{
-      debugger
       this.users =users.data;
       this.total_count =users.count;
     }))
