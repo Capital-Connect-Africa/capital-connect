@@ -48,13 +48,18 @@ export const routes: Routes = [
 
   {
     path: '',
-    component: PublicLayoutComponent,
-    loadChildren: () =>
-      import('./features/public/public.routes').then(
-        (m) => m.PublicRoutes
-      ),
+    redirectTo: 'auth',
     pathMatch: 'full',
   },
+  // {
+  //   path: '',
+  //   component: PublicLayoutComponent,
+  //   loadChildren: () =>
+  //     import('./features/public/public.routes').then(
+  //       (m) => m.PublicRoutes
+  //     ),
+  //   pathMatch: 'full',
+  // },
 
   {
     path: 'funders',
