@@ -109,7 +109,7 @@ export class CashFlowComponent {
             this._fs.error("Failed to fetch cash flow data");
           }, */
         }), catchError(() => {
-          this._fs.error("Failed to fetch cash flow data");
+          this._fs.info("Balance Sheet or Profit & Loss data not found for this year");
           this.createcashFlowModal = false;
           return EMPTY;
         })
