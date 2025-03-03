@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SpecialCriteria } from '../../../../shared/interfaces/Investor';
 import { TableModule } from 'primeng/table';
-import { Observable, tap } from 'rxjs';
+import { Observable, tap, switchMap, EMPTY } from 'rxjs';
 import { SliceTextPipe } from "../../../../core/pipes/slice-text.pipe";
-import { SpecialCriteriaService } from '../../services/special.criteria.service';
 import { SpecialCriteriasService } from '../../../investor/services/special-criteria.services';
+import { ConfirmationService } from '../../../../core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-special-criteria',
@@ -32,24 +33,20 @@ export class SpecialCriteriaComponent {
   selectedCriteria: SpecialCriteria | null = null;
   specialCriteria:SpecialCriteria[] =[]
 
-  private _specialCriteriaService =inject(SpecialCriteriaService)
+  private _router =inject(Router);
+  private _confirmationService =inject(ConfirmationService);
   private _specialCriteriasService =inject(SpecialCriteriasService)
 
   cols = [
     { field: 'title', header: 'Title' },
     { field: 'visibility', header: 'Visibility' },
     { field: 'questions', header: 'Questions' },
-    { field: 'respondents', header: 'Respondents' },
+    { field: 'responses', header: 'Responses' },
     { field: 'description', header: 'Description' },
     { field: 'action', header: 'Action' },
   ];
 
-  stats = [
-    { name: 'Total', icon: 'pi pi-objects-column', count: 0 },
-    { name: 'Global', icon: 'pi pi-globe', count: 0 },
-    { name: 'Responses', icon: 'pi pi-list-check', count: 0 },
-    { name: 'Private', icon: 'pi pi-unlock', count: 0 },
-  ];
+  stats:{ name: string, icon: string, count: number }[] = []
 
   private _formBuilder = inject(FormBuilder);
   form = this._formBuilder.group({
@@ -66,11 +63,13 @@ export class SpecialCriteriaComponent {
     const values = this.form.value as SpecialCriteria;
     if(this.selectedCriteria){
       this.editCriteria$ =this._specialCriteriasService.updateSpecialCriteria(this.selectedCriteria.id, values).pipe(tap(_ =>{
+        this.fetchCriteria();
         this.reset();
       }))
       return;
     }
     this.saveCriteria$ =this._specialCriteriasService.createSpecialCriteria(values).pipe(tap(_ =>{
+      this.fetchCriteria();
       this.reset();
     }))
   }
@@ -87,18 +86,24 @@ export class SpecialCriteriaComponent {
     }
   }
 
-  removeCriteria(criteriaId: number) {
-    this.removeCriteria$ =this._specialCriteriaService.remove(criteriaId).pipe(tap(_ =>{
-      this.reset();
+  removeCriteria(criteriaId:number) {
+    const criteria =this.selectCriteria(criteriaId); 
+    if(!criteria) return;
+    this.removeCriteria$ =this._confirmationService.confirm(`Remove ${criteria.title}? This action cannot be undone`).pipe(switchMap(ok =>{
+      if(!ok) return EMPTY;
+      return this._specialCriteriasService.deleteSpecialCriteria(criteriaId).pipe(tap(_ =>{
+          this.fetchCriteria();
+          this.reset();
+        }))
     }))
   }
 
   viewCriteria(criteriaId: number) {
     this.reset()
-    const selectedCriteria = this.selectCriteria(criteriaId);
+    this._router.navigateByUrl(`/partner/special-criteria/${criteriaId}`)
   }
 
-  selectCriteria(criteriaId: number) {
+  selectCriteria(criteriaId: number) { 
     this.selectedCriteria = this.specialCriteria.find(
       (criteria) => criteria.id === criteriaId
     ) as SpecialCriteria;
@@ -111,11 +116,16 @@ export class SpecialCriteriaComponent {
     this.action_title ='Create a special criteria';
   }
 
-  fetchCriteria(page:number =1, limit:number =10){
-    // this.getCriteria$ =this._specialCriteriasService()
-    // this._specialCriteriaService.findAll(page, limit).pipe(tap(res =>{
-      // this.specialCriteria =res;
-    // }))
+  fetchCriteria(){
+    this.getCriteria$ =this._specialCriteriasService.getPartnerSpecialCriteria().pipe(tap(res =>{
+      this.specialCriteria =res;
+      this.stats =[
+        { name: 'Total', icon: 'pi pi-objects-column', count: res.length },
+        { name: 'Global', icon: 'pi pi-globe', count: res.filter(criterion =>criterion.globalVisible).length },
+        { name: 'Questions', icon: 'pi pi-list-check', count: res.map(criterion =>criterion.questions).flat().length },
+        { name: 'Private', icon: 'pi pi-unlock', count: res.filter(criterion =>!criterion.globalVisible).length },
+      ];
+    }))
   }
   
 }
