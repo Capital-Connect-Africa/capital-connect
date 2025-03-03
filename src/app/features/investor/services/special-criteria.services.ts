@@ -67,9 +67,9 @@ export class SpecialCriteriasService extends BaseHttpService {
   }
 
 
-  // getAllSpecialCriteria(): Observable<SpecialCriteria[]> {
-  //   return this.read(`${BASE_URL}/special-criteria`, this.headers) as unknown as Observable<SpecialCriteria[]>;
-  // }
+  getPartnerSpecialCriteria(): Observable<SpecialCriteria[]> {
+    return this.read(`${BASE_URL}/special-criteria/partner-profile/${this.authStateService.currentUserId()}`, this.headers) as unknown as Observable<SpecialCriteria[]>;
+  }
 
 
   getAllSpecialCriteriaByInvestorProfile(id: number): Observable<SpecialCriteria[]> {
