@@ -1,0 +1,86 @@
+<partner-layout title="Special Criteria">
+    <ng-container *ngIf ="questions$ | async"></ng-container>
+    <ng-container *ngIf ="valueChanges$ | async"></ng-container>
+    <ng-container *ngIf ="specialCriteria$ | async"></ng-container>
+    <section class="flex flex-col gap-8" *ngIf ="specialCriteria">
+        <div class="flex flex-col gap-2 title__bar">
+          <h2 class="text-sm h2">{{specialCriteria.title}} - {{specialCriteria.globalVisible? 'Global': 'Private'}}</h2>
+          <p>{{specialCriteria.description}}</p>
+        </div>
+        <div class="flex flex-col gap-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-sm h2">Questions</h2>
+                <button (click) ="addQuestion()" class ="flex items-center gap-3 bg-[#13501B] text-white p-2 rounded">
+                    <i class="pi pi-plus text-xs"></i>
+                    Add Question
+                </button>
+            </div>
+            <ul class ="flex flex-col bg-white" *ngIf="specialCriteria.questions.length">
+                <li *ngFor="let question of specialCriteria.questions" class="group p-4 last:border-none border-b border-b-neutral-200 border-solid flex items-center justify-between">
+                    <span class="text-sm">{{question.text}}</span>
+                    <div class="flex items-center group-hover:opacity-100">
+                        <button class="p-1 hover:bg-blue-50 w-[30px] h-[30px] rounded-full flex items-center justify-center transition-all"><i class="pi pi-eye text-blue-500 text-xs"></i></button>
+                        <button class="p-1 hover:bg-teal-50 w-[30px] h-[30px] rounded-full flex items-center justify-center transition-all"><i class="pi pi-pencil text-xs text-teal-500"></i></button>
+                        <button class="p-1 hover:bg-rose-50 w-[30px] h-[30px] rounded-full flex items-center justify-center transition-all"><i class="pi pi-trash text-xs text-rose-500"></i></button>
+                    </div>
+                </li>
+            </ul>
+            <div class ="flex h-[400px] justify-center items-center rounded-xl" *ngIf="!specialCriteria.questions.length">
+                <span class="text-sm font-light text-gray-500">No questions listed for this criteria yet</span>
+            </div>
+        </div>
+    </section>
+    <section *ngIf="!specialCriteria" class ="flex h-[300px] justify-center items-center rounded-xl">
+        <div class="flex flex-col text-center gap-12">
+            <i class="pi pi-spin pi-compass text-xl !text-gray-300"></i>
+            <h2 class="h2 !capitalize !text-gray-400">Criteria Not Found</h2>
+        </div>
+    </section>
+</partner-layout>
+
+<app-modal [(visible)] ="isQuestionsModalVisible" title="New Question" [helperText]="'Add a new question to '+(specialCriteria && specialCriteria.title)">
+    <form class="flex flex-col gap-3" (submit) ="submit()" [formGroup] ="criteriaQuestionForm">
+        <div class="input__wrapper">
+            <label class="font-light pb-1">Select from the list</label>
+            <p-multiSelect class="input__field" [options]="questions"
+             optionValue="id"
+             styleClass="w-full"
+             formControlName ="questionIds"
+              optionLabel="text" placeholder="Select questions"/>
+        </div>
+        <div *ngIf="!isCustomQuestion">
+            OR <button type="button" class="text-sm font-light hover:underline" (click) ="toggleIsCustomQuestion()"> create a new one</button>
+        </div>
+        <div class="flex flex-col gap-3" *ngIf="isCustomQuestion">
+            <div class="flex items-center justify-between pt-2">
+                <div class="uppercase font-bold">Custom Question</div>
+                <button type="button" class="text-sm font-light" (click) ="toggleIsCustomQuestion(false)"><i class ="pi pi-times text-xs"></i></button>
+            </div>
+            <div class="input__wrapper">
+              <label class="text-sm font-light">Question:</label>
+              <input class="input__field" formControlName="text" type="text" placeholder="Enter question text" />
+            </div>
+      
+            <div class="input__wrapper">
+                <label class="text-sm font-light">Type:</label>
+                <p-dropdown class="input__field" styleClass="w-full gap-4" formControlName="type" [options]="questionTypes"
+                    optionValue ="value"
+                    optionLabel ="label"
+                    placeholder="How would you like users to respond to this question?" />
+      
+                </div>
+                <div class="input__wrapper">
+                  <label class="text-sm font-light">Order:</label>
+                  <input class="input__field" formControlName="order" type="number" placeholder="Order in which questions are listed" />
+                </div>
+      
+            <div class="input__wrapper">
+              <label class="text-sm font-light">Why do you ask this question?</label>
+              <textarea rows="2" class="input__field resize-none" formControlName="tooltip" placeholder="Add a brief description about this question"></textarea>
+            </div>
+      </div>
+        <div>  
+            <button class="btn !px-5 !py-2 !text-sm !shadow-none !outline-none" [disabled]="!isFormValid">Submit</button>
+        </div>
+    </form>
+</app-modal>
