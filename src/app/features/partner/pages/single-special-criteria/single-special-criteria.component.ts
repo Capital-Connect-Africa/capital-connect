@@ -2,14 +2,13 @@ import { Component, inject } from '@angular/core';
 import { PartnerLayoutComponent } from "../../components/layout/layout.component";
 import { SpecialCriteriasService } from '../../../investor/services/special-criteria.services';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, tap } from 'rxjs';
-import { SpecialCriteria, SpecialCriteriaQuestion } from '../../../../shared/interfaces/Investor';
+import { combineLatest, EMPTY, Observable, switchMap, tap } from 'rxjs';
+import { CustomQuestion, SpecialCriteria, SpecialCriteriaQuestion } from '../../../../shared/interfaces/Investor';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UserSubmissionResponse } from '../../../../shared';
 import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
@@ -25,27 +24,37 @@ export class SingleSpecialCriteriaComponent {
   isFormValid:boolean =false;
   specialCriteria!:SpecialCriteria;
   isCustomQuestion: boolean = false;
-  isQuestionsModalVisible:boolean =false;
-  questions:UserSubmissionResponse[] =[];
+  isQuestionsModalVisible:boolean =true;
+  questions:SpecialCriteriaQuestion[] =[];
 
   private _fb =inject(FormBuilder);
   private _activatedRoute =inject(ActivatedRoute);
   private _specialCriteriaService =inject(SpecialCriteriasService);
 
 
+  submit$ =new Observable();
+  questions$ =new Observable();
+  specialCriteria$ =new Observable();
   criteriaId =Number(this._activatedRoute.snapshot.params['id'])
 
-  specialCriteria$ =this._specialCriteriaService.getSpecialCriteriaById(this.criteriaId).pipe(tap(res =>{
-    this.specialCriteria =res;
-  }))
+  getQuestions(){
+    this.questions$ =this._specialCriteriaService.getQuestions().pipe(tap((res:any) =>{
+      this.questions =res
+    }))
+    return EMPTY;
+  }
 
-  questions$ =this._specialCriteriaService.getQuestions().pipe(tap(res =>{
-    this.questions =res
-  }))
-
+  getSpecialCriteria(){
+    this.specialCriteria$ =this._specialCriteriaService.getSpecialCriteriaById(this.criteriaId).pipe(tap(res =>{
+      this.specialCriteria =res;
+    }));
+    return EMPTY;
+  }
   valueChanges$ =new Observable();
 
   ngOnInit(){
+    this.getQuestions();
+    this.getSpecialCriteria();
     this.valueChanges$ =this.criteriaQuestionForm.valueChanges.pipe(tap(_ =>{
       this.isFormValid =this.checkFormValidity();
     }))
@@ -78,6 +87,25 @@ export class SingleSpecialCriteriaComponent {
 
   submit(){
     const values =this.criteriaQuestionForm.value;
+    const questionIds:number[] =values.questionIds
+    const requests =[]
+    if(questionIds.length) requests.push(this._specialCriteriaService.addQuestionsToSpecialCriteria({questionIds, specialCriteriaId: this.criteriaId}))
+    if(this.isCustomQuestion && this.isFormValid){
+      delete values.questionIds
+      requests.push(this._specialCriteriaService.addCustomQuestionsToSpecialCriteria(values as CustomQuestion))
+    }
+    this.submit$ =combineLatest(requests).pipe(switchMap(() =>{
+      if(this.isCustomQuestion){
+        this.isCustomQuestion =false;
+        this.criteriaQuestionForm.reset();
+        this.criteriaQuestionForm.patchValue({questionIds: questionIds})
+        return this.getQuestions() as any;
+      }
+      return this.getSpecialCriteria().pipe(tap(() =>{
+        debugger
+        this.reset()
+      }))
+    }))
   }
 
 
@@ -87,6 +115,13 @@ export class SingleSpecialCriteriaComponent {
       !!this.criteriaQuestionForm.get('order')?.value &&
       !!this.criteriaQuestionForm.get('type')?.value &&
       !!this.criteriaQuestionForm.get('tooltip')?.value);
+  }
+
+  reset(){
+    this.isCustomQuestion =false;
+    this.criteriaQuestionForm.reset();
+    this.isQuestionsModalVisible =false;
+    this.isFormValid =this.checkFormValidity();
   }
   
 }
