@@ -23,9 +23,9 @@ import { DropdownModule } from 'primeng/dropdown';
 export class SingleSpecialCriteriaComponent {
 
   isFormValid:boolean =false;
-  isCustomQuestion: boolean = true;
   specialCriteria!:SpecialCriteria;
-  isQuestionsModalVisible:boolean =true;
+  isCustomQuestion: boolean = false;
+  isQuestionsModalVisible:boolean =false;
   questions:UserSubmissionResponse[] =[];
 
   private _fb =inject(FormBuilder);
