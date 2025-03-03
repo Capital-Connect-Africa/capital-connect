@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'investors', loadComponent: () => import('./pages/investors/investors.component').then(c => c.InvestorsComponent)},
   { path: 'analytics', loadComponent: () => import('./pages/analytics/analytics.component').then(c => c.AnalyticsComponent)},
   { path: 'special-criteria', loadComponent: () => import('./pages/special-criteria/special-criteria.component').then(c => c.SpecialCriteriaComponent)},
-  // { path: 'investors/:id', loadComponent: () => import('./pages/investor-user/investor-user.component').then(c => c.InvestorUserComponent)},
+  { path: 'special-criteria/:id', loadComponent: () => import('./pages/single-special-criteria/single-special-criteria.component').then(c => c.SingleSpecialCriteriaComponent)},
   
 ];
 
