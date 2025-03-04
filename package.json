@@ -58,6 +58,7 @@
     "@types/dom-to-image": "^2.6.7",
     "@types/file-saver": "^2.0.7",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^22.13.9",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
