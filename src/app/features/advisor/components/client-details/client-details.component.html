@@ -16,8 +16,7 @@
     <main class="stats">
       <ng-container>
         <div>
-          <h3><a class="btn btn-primary-alt btn-sm pi pi-arrow-left" routerLink="/advisor">Back to Sessions</a></h3>
-
+          <h3><a class="btn btn-primary-alt btn-sm" routerLink="/advisor/sessions">Back to Sessions</a></h3>
           <ng-container *ngIf="company_details$ | async as result">
           <div class="flex flex-col bg-white  bio_info">
             <h2>{{result.name}}</h2>
