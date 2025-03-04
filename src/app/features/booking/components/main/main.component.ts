@@ -48,16 +48,12 @@ export class MainComponent {
   params = this._activatedRoute.snapshot.queryParams;
   OrderTrackingId = this.params['OrderTrackingId'];
   OrderMerchantReference = this.params['OrderMerchantReference'];
+  
 
 
 
   ngOnInit(): void {
-    const bookingId = sessionStorage.getItem('bookingId');
-    if (!bookingId) {
-      return;
-    }
-    this.bookingId = bookingId;
-
+    this.bookingId = this.params['bookingId'] || sessionStorage.getItem('bookingId') || null;
   }
 
 

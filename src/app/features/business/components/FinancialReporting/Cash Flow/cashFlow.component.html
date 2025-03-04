@@ -1,0 +1,202 @@
+<ng-container *ngIf="generateCashFlow$ | async"></ng-container>
+<ng-container *ngIf="getCashFlowRecord$ | async"></ng-container>
+<ng-container *ngIf="getAllCashFlowRecords$ | async"></ng-container>
+<ng-container *ngIf="getCashFlowRecordByCompanyId$ | async"></ng-container>
+
+
+
+
+
+<div class="main">
+  <div class="navbar">
+    <app-navbar onDashboard="true" [title]="'Financial Reports | Cash Flow '"></app-navbar>
+  </div>
+  <main>
+    <div class="left__col">
+      <div class="flex flex-col gap-4">
+
+        <div class="p-6 bg-gray-50 rounded">
+          <div class="financial-container">
+
+            <div class="switch_parent" *ngIf="!edit_mode">
+              <P><label>Edit Mode</label></P>
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleView()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="switch_parent" *ngIf="edit_mode">
+              <P><label>View Mode</label></P>
+              <label class="switch"><input type="checkbox" [(ngModel)]="edit_mode" (ngModelChange)="onToggleEdit()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+
+            <div class="btn__group">
+              <!-- <button  *ngIf="false" class="btn btn-sm mb-4 btn-success-alt" (click)="exportRecord()">Export Financials</button> -->
+              <button class="btn btn-sm mb-4" (click)="addCashFlowRecord()">
+                New Record
+              </button>
+            </div>
+
+          </div>
+
+
+          <body>
+            <!-- <h1>CASH FLOW STATEMENT</h1> -->
+            <table>
+              <thead>
+                <tr>
+                  <th>Cash Flow</th>
+                  <th *ngFor="let year of sortedYears">
+                    {{ year }}
+                   <mat-icon class="small-icon" *ngIf="edit_mode"  (click)="addCashFlowRecord()"><small>edit</small></mat-icon>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>Profit Before Tax</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].profitBeforeTax | currency }} 
+                  </td>
+                </tr>
+                <tr>
+                  <td>Depreciation & Amortisation</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].depreciationAmortisation | currency }} 
+                  </td>
+                </tr>
+                <tr>
+                  <td>Taxes Paid</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].taxesPaid | currency }}
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td>Operating Cash Flow</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].operatingCashFlow | currency }}
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>Change In Receivables</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].changeInReceivables | currency }}
+                  </td>
+                </tr>
+  
+                <tr>
+                  <td>Change In Payables</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].changeInPayables | currency }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Net Cash From Operations</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].netCashFromOperations | currency }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Property Plant Equipment</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].propertyPlantEquipment | currency }}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Net Cash From Investing</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].netCashFromInvesting | currency }}
+                </tr>
+
+                <tr>
+                  <td>Movement In Borrowings</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].movementInBorrowings | currency }}
+                </tr>
+
+                <tr>
+                  <td>Change In Equity</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].changeInEquity | currency }}
+                </tr>
+
+                <tr>
+                  <td>Net Cash From Financing</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].netCashFromFinancing | currency }}
+                </tr>
+
+                <tr>
+                  <td>Net Cash Flow</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].netCashFlow | currency }}
+                </tr>
+
+                <tr>
+                  <td>Opening Cash</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].openingCash | currency }}
+                </tr>
+
+                <tr>
+                  <td>Ending Cash</td>
+                  <td *ngFor="let year of sortedYears">
+                  {{ cashFlowData[year].endingCash | currency }}
+                </tr>
+
+              </tbody>
+
+             
+
+            </table>
+          </body>
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="right__col">
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+  </main>
+</div>
+
+
+
+
+
+<app-modal [(visible)]="createcashFlowModal" title="Cash Flow Details"
+  helperText="Generate New Cash Flow Records">
+  <form class="form_content__container" [formGroup]="cashFlowForm" (submit)="fetchCashFlow()">
+    <div class="form_row">
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Financial Year</label>
+        <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"/>
+      </div>
+      <button [disabled] = "cashFlowForm.invalid" class="btn btn-primary mt-2 save__btn">Save</button>
+    </div>
+
+    <!-- <div class="form_row">
+      <div class="input__wrapper">
+        <button class="btn btn-primary mt-2 save__btn" (click)="fetchCashFlow(year)">Save</button>
+      </div>
+    </div> -->
+
+  </form> 
+</app-modal> 
