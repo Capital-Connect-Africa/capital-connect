@@ -138,14 +138,8 @@ export class AuthStateService {
 
   saveUserPhoneNumberAddedStatus(phoneNo: string) {
     const userId = this.currentUserId();
-    return this._httpService
-      .create(BASE_URL + '/mobile-numbers', { phoneNo, userId })
-      .pipe(
-        map((res) => {
-          this._feedBackService.success(
-            'Number saved successfully',
-            'Phone number update'
-          );
+    return this._httpService.create(BASE_URL + '/mobile-numbers', { phoneNo, userId }).pipe(map((res) => {
+          this._feedBackService.success('Number saved successfully','Phone number update');
           this._signalsService.showDialog.set(false);
           this._signalsService.actionOnMobileNumbers.set(true);
           this._signalsService.actionBody.set({
@@ -154,13 +148,9 @@ export class AuthStateService {
             message: 'Please Verify your phone number',
             title: 'Action Required',
           });
-          const mobile_numbers: MobileNumber[] = JSON.parse(
-            sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([])
-          );
-          sessionStorage.setItem(
-            'mobile_numbers',
-            JSON.stringify(mobile_numbers.push({ phoneNo, isVerified: false }))
-          );
+          const mobile_numbers: MobileNumber[] = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? JSON.stringify([]));
+          sessionStorage.setItem('mobile_numbers', JSON.stringify(mobile_numbers.push({ phoneNo, isVerified: false })));
+
           return res;
         }),
         catchError((err) => {
@@ -170,20 +160,14 @@ export class AuthStateService {
   }
 
   verifyPhoneNumber(otp: string, phoneNo: string) {
-    return this._httpService
-      .create(BASE_URL + '/mobile-numbers/verify', { otp, phoneNo })
-      .pipe(
-        map((res: any) => {
+    return this._httpService.create(BASE_URL + '/mobile-numbers/verify', { otp, phoneNo }).pipe(map((res: any) => {
           const { success, message } = res;
           if (!success) {
             this._signalsService.showDialog.set(false);
             this._feedBackService.error(message, 'Phone number verification');
             return EMPTY;
           }
-          this._feedBackService.success(
-            'Phone Number verified successfully',
-            'Phone number verification'
-          );
+          this._feedBackService.success('Phone Number verified successfully','Phone number verification');
           this._signalsService.showDialog.set(false);
           this._signalsService.showInAppAlert.set(false);
           this._signalsService.actionOnMobileNumbers.set(false);

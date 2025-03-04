@@ -1,19 +1,98 @@
 <div class="main">
   <div class="navbar">
-<!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
+    <!--    <button (click)="toggleVisibility()"><mat-icon>menu</mat-icon></button>-->
     <app-navbar onDashboard="true" />
   </div>
 
   <main>
     <div class="left flex flex-col gap-12 ">
-      <div class="content">
-        <h2>My documents</h2>
+
+      <!-- <div>
+        <div class="content">
+          <h2>My documents</h2>
+        </div>
+        <div class="flex flex-col gap-12 py-12">
+          <app-task-action [title]="'Business Teaser'" [description] ="'Upload your Business teaser'" [actions]="task_one"/>
+          <app-task-action [title]="'Business Valuation'" [description] ="'Upload your Business Valuation documents'" [actions]="task_two"/>
+          <app-task-action [title]="'Pitch Deck'" [description] ="'Upload your business pitch deck'" [actions]="task_three"/>
+          <app-task-action [title]="'Financial Model'" [description] ="'Upload your financial model'" [actions]="task_four"/>
+        </div>
       </div>
-      <div class="flex flex-col gap-12 py-12">
-        <app-task-action [title]="'Business Teaser'" [description] ="'Upload your Business teaser'" [actions]="task_one"/>
-        <app-task-action [title]="'Business Valuation'" [description] ="'Upload your Business Valuation documents'" [actions]="task_two"/>
-        <app-task-action [title]="'Pitch Deck'" [description] ="'Upload your business pitch deck'" [actions]="task_three"/>
-        <app-task-action [title]="'Financial Model'" [description] ="'Upload your financial model'" [actions]="task_four"/>
+      -->
+
+
+      <div>
+        <mat-tab-group>
+          <mat-tab label="My Documents">
+            <div class="content my__docs">
+              <!-- <h2>My documents</h2> -->
+            </div>
+            <div class="flex flex-col gap-12 py-12">
+              <app-task-action [title]="'Business Teaser'" [description]="'Upload your Business teaser'"
+                [actions]="task_one"></app-task-action>
+              <app-task-action [title]="'Business Valuation'" [description]="'Upload your Business Valuation documents'"
+                [actions]="task_two"></app-task-action>
+              <app-task-action [title]="'Pitch Deck'" [description]="'Upload your business pitch deck'"
+                [actions]="task_three"></app-task-action>
+              <app-task-action [title]="'Financial Model'" [description]="'Upload your financial model'"
+                [actions]="task_four"></app-task-action>
+            </div>
+          </mat-tab>
+          <mat-tab label="Verify Documents">
+            <form [formGroup]="verificationForm" (ngSubmit)="submitForm()" class="form_content__container">
+              <div class="input__wrapper">
+                <label class="input__label">Document Number</label>
+                <input formControlName="document_number"  class ="input__field" type="text" required>
+              </div>
+
+              <div class="input__wrapper">
+                <label class="input__label">Proof</label>
+                <input formControlName="proof"  class ="input__field" type="text" required>
+              </div>
+
+              <div class="flex justify-around gap-3">
+                <div class="input__wrapper">
+                  <label class="input__label">Issue Date:</label>
+                  <input formControlName="issue_date"  class ="input__field" type="date" required>
+                </div>
+  
+                <div class="input__wrapper">
+                  <label class="input__label">Expiry Date</label>
+                  <input formControlName="expiry_date"  class ="input__field" type="date" required>
+                </div>
+              </div>
+            
+             
+
+              <div formGroupName="document">
+                <div class="input__wrapper">
+                  <label class="input__label">Country</label>
+                  <input formControlName="country"  class ="input__field" type="text" required>
+                </div>             
+               
+  
+                <div class="input__wrapper">
+                  <label class="input__label">Date of Birth</label>
+                  <input formControlName="dob"   class ="input__field" type="date" required>
+                </div>
+             
+                <div class="input__wrapper">
+                  <label class="input__label">Gender</label>
+                  <input formControlName="gender" type="text"  class ="input__field" required>
+                </div>
+
+                <div class="input__wrapper">
+                  <label class="input__label">Age</label>
+                  <input formControlName="age"  class ="input__field" type="number" required>
+                </div>
+
+              </div>
+              <div class="cta__group">
+                 <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+              </div>
+            </form>
+          </mat-tab>
+        </mat-tab-group>
       </div>
 
     </div>
@@ -24,7 +103,8 @@
       <div class="wrapper">
         <h2>Assessment Summary</h2>
         <div class="body">
-          <p>You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and effective strategy</p>                
+          <p>You need to have a proper plan in place. Reach out to one of our advisors to help you create a strong and
+            effective strategy</p>
           <!-- <a  [routerLink]="['/business']"><span>Unlock the whole summary</span><mat-icon *ngIf="component=='assessment'">chevron_right</mat-icon></a>  -->
         </div>
       </div>
@@ -35,7 +115,8 @@
         <div class="overlay">
           <h2>Advertise Here</h2>
           <p>This space is available for your advertising needs. Contact us to learn more</p>
-          <a href="mailto:services@capitalconnect.africa" class="button"><span>Book Space</span> <mat-icon>chevron_right</mat-icon></a>
+          <a href="mailto:services@capitalconnect.africa" class="button"><span>Book Space</span>
+            <mat-icon>chevron_right</mat-icon></a>
         </div>
       </section>
 
@@ -55,4 +136,3 @@
     </div>
   </main>
 </div>
-
