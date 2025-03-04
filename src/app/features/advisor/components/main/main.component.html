@@ -38,7 +38,9 @@
                     </td>
 
                     <td class="flex space-x-1 items-center gap-2">
-                      <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button>
+                      <!-- <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button> -->
+                      <button class="btn btn-sm text-xs"  [disabled]="!booking.meetingLink" (click)="getMeeting(booking)">Go To Meeting</button>
+
                       <button class="pi pi-pencil btn btn-tertiary btn-sm text-xs" (click)="takeMeetingNotes(booking)">Remarks</button>
                     </td>
                   </tr>

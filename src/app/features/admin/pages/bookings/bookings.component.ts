@@ -153,6 +153,8 @@ export class BookingsComponent {
 
     this.assignBooking$ = this._bookingService.assignBookingToAdvisor(this.currentBookingId, data).pipe(tap(res => {
       this._fs.success("Advisor Assigned Successfully")
+      this.getBookings();
+
     }),
       catchError(err => {
         this._fs.info(err.message);

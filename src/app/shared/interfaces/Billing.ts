@@ -62,7 +62,12 @@ export interface Booking {
     createdAt: Date,
     advisor:Advisor,
     notes:string,
-    user:User
+    user:User,
+    meetingEndTime:string,
+    meetingStartTime:string,
+    meetingId:string,
+    meetingLink:string,
+
 }
 
 export interface PaymentPlan extends Payment{
