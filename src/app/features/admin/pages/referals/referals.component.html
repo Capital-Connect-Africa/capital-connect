@@ -1,37 +1,62 @@
 <ng-container *ngIf="stats$ | async"></ng-container>
 <ng-container *ngIf="referrals$ | async"></ng-container>
 <app-admin-ui-container title="Referrals" [bg_gray]="true">
-    <div class="flex flex-col gap-8">
-        <div class="header__section">
-            <h3>Referral Stats</h3>
-            <p>Here's how we're doing</p>
-        </div>
-        <ul class="grid grid-cols-4 gap-8">
-                <li
-                  *ngFor="let item of stats"
-                  class="rounded-md flex justify-between items-center gap-8 stat__card"
-                >
-                  <div>
-                    <h3 class="h3">{{ item.count || 0 }}</h3>
-                    <p>{{ item.name }}</p>
-                  </div>
-                  <i class="text-xl font-light" [class]="item.icon"></i>
-                </li>
-        </ul>
-        <section class="bg-white flex justify-start rounded-xl p-8 gap-12">
-            <div class="w-full">
-                <div class="header__section">
-                    <h3>Leaders board</h3>
-                    <p>The following have referred people to us</p>
-                </div>
-                <ag-grid-angular
-            style="min-width: 100%; height: 72vh;"
-            [rowData] ="referrals"
-            [context]="{ componentParent: this }"
-            [gridOptions]="gridOptions"
-            />
-            </div>
-        </section>
-        <app-referral-link />
+  <div class="flex flex-col gap-8">
+    <div class="header__section">
+      <h3>Referral Stats</h3>
+      <p>Here's how we're doing</p>
     </div>
+    <ul class="grid grid-cols-4 gap-8">
+      <li *ngFor="let item of stats" class="rounded-md flex justify-between items-center gap-8 stat__card">
+        <div>
+          <h3 class="h3">{{ item.count || 0 }}</h3>
+          <p>{{ item.name }}</p>
+        </div>
+        <i class="text-xl font-light" [class]="item.icon"></i>
+      </li>
+    </ul>
+    <section class="bg-white flex justify-start rounded-xl p-8 gap-12">
+      <div class="w-full">
+        <div class="header__section">
+          <h3>Leaders board</h3>
+          <p>The following have referred people to us</p>
+        </div>
+        <ag-grid-angular style="min-width: 100%; height: 72vh;" [rowData]="referrals" [context]="{ componentParent: this }" [gridOptions]="gridOptions" >
+        
+        </ag-grid-angular>
+      </div>
+    </section>
+    <app-referral-link />
+  </div>
+
 </app-admin-ui-container>
+
+<app-modal [(visible)]="showReffers" title="Reffered Users" [helperText]="'These are the users reffered to us by ' + currentUser">
+
+  <div class="flex mx-auto items-center justify-center text-center no-data" *ngIf="!refferedusers?.length">
+    {{currentUser}} has not reffered any user yet <br /> check again later
+  </div>
+  <div class="flex flex-col gap-4" *ngIf="refferedusers?.length">
+    <p-table [value]="refferedusers" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="6">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Email</th>
+              <th>User Type</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-refferedUser>
+          <tr>
+              <td>{{ refferedUser.firstName }}</td>
+              <td>{{ refferedUser.lastName }}</td>
+              <td>{{refferedUser.username}}</td>
+              <td>{{refferedUser.roles }}</td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </div>
+
+
+</app-modal>
+

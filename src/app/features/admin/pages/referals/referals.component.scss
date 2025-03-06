@@ -68,3 +68,12 @@
 .p__1rem {
   padding: 1rem;
 }
+
+
+::ng-deep .ag-theme-alpine {
+  --ag-background-color: white;
+  --ag-foreground-color: black;
+  --ag-header-background-color: #f8f9fa;
+  --ag-header-foreground-color: black;
+  --ag-row-hover-color: #f1f1f1;
+}
