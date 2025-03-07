@@ -78,7 +78,7 @@ export class LogInFormComponent {
         case USER_ROLES.PARTNER:
           return this._router.navigateByUrl('/partner');
         case USER_ROLES.STAFF:
-            return this._router.navigateByUrl('/user-profile');
+            return this._router.navigateByUrl('/staff');
         case USER_ROLES.ADMIN:
           this._router.navigateByUrl('/dashboard');
       }
