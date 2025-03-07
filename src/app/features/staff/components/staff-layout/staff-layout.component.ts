@@ -32,6 +32,13 @@ export class StaffLayoutComponent {
           icon: 'grid_view',
           display: true,
         },
+        {
+          label: 'Profile',
+          href: '/staff/profile',
+          exact: true,
+          icon: 'person',
+          display: true,
+        },
       ];
     }
 }
