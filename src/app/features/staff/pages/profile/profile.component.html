@@ -28,10 +28,11 @@
             <label class="input__label">Last Name</label>
             <input class="input__field font-light" formControlName ="firstName" type="text" placeholder="Enter your first name" />
         </div>
-        <div  class="input__wrapper">
+        <!-- Disable updating email -->
+        <!-- <div  class="input__wrapper">
             <label class="input__label">Email</label>
             <input class="input__field font-light" formControlName ="username" type="email" placeholder="Enter your email address" />
-        </div>
+        </div> -->
         <div>
             <button [disabled] ="updateForm.invalid" type="submit" class="bg-blue-500 text-white text-sm px-4 py-2 font-light rounded hover:bg-blue-800 transition-all" [ngClass]="{'cursor-not-allowed bg-gray-300 hover:bg-gray-300': updateForm.invalid}">Update Profile</button>
         </div>
@@ -40,5 +41,6 @@
             <button type="button" class="text-sm font-light hover:underline transition-all" (click)="changePassword()">Change password?</button>
         </div>
         <ng-container *ngIf="updateUserProfile$ | async"></ng-container>
+        <ng-container *ngIf="requestPasswordReset$ | async"></ng-container>
     </form>
 </app-modal>
