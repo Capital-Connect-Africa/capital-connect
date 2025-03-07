@@ -9,6 +9,9 @@ import {
 } from './shared/guards/isAdminGuard';
 import { isInvestorGuard } from './shared/guards/isInvestorGuard';
 import { PublicLayoutComponent } from './features/public/layout/layout.component';
+import { isPartnerCanActivateChildGuard, isPartnerCanActivateGuard } from './shared/guards/isPartnerGuard';
+import { isStaffCanActivateChildGuard, isStaffCanActivateGuard } from './shared/guards/isStaffGuard';
+import { StaffLayoutComponent } from './features/staff/components/staff-layout/staff-layout.component';
 
 export const routes: Routes = [
   {
@@ -120,6 +123,16 @@ export const routes: Routes = [
     canActivate: [isLoggedInCanActivateGuard],
     canActivateChild: [isLoggedInCanActivateChildGuard],
   },
+  {
+    path: 'staff',
+    component: StaffLayoutComponent,
+    loadChildren: () =>
+      import('./features/staff/staff.routes').then(
+        (m) => m.StaffRoutes
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isStaffCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isStaffCanActivateChildGuard],
+  },
 
   {
     path: 'partner',
@@ -127,8 +140,8 @@ export const routes: Routes = [
       import('./features/partner/partner.routing').then(
         (m) => m.PartnerRouting
       ),
-    canActivate: [isLoggedInCanActivateGuard],
-    canActivateChild: [isLoggedInCanActivateChildGuard],
+    canActivate: [isLoggedInCanActivateGuard, isPartnerCanActivateGuard],
+    canActivateChild: [isLoggedInCanActivateChildGuard, isPartnerCanActivateChildGuard],
   },
   {
     // path: 'calendly-booking',
