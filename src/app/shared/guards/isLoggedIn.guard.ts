@@ -34,12 +34,15 @@ async function checkLogin(
   // Check if the URL is empty
   const url = state.url;
   const { r } = route.queryParams; // r: stands referral id
+  
   if (url.split("?").at(0) === '/auth') {
-    if (authStateService.isLoggedIn && !authStateService.userIsAdmin) {
-      router.navigateByUrl('/user-profile');
-      return false;
-    } else if (authStateService.userIsAdmin) {
-      router.navigateByUrl('/dashboard');
+    if (authStateService.isLoggedIn) {
+      if(authStateService.userIsAdmin) router.navigateByUrl('/dashboard');
+      else if(authStateService.userIsPartner) router.navigateByUrl('/partner');
+      else if(authStateService.userIsStaff)  {
+        router.navigateByUrl('/staff');
+      }
+      else router.navigateByUrl('/user-profile');
       return false;
     }
     return true;
