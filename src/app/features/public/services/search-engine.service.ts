@@ -1,27 +1,33 @@
-import { inject, Injectable } from '@angular/core';
-import { CountriesService } from '../../../shared/services/countries.service';
-import { InvestorScreensService } from '../../investor/services/investor.screens.service';
-import { SectorsService } from '../../sectors/services/sectors/sectors.service';
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
-import { Country } from '../../../shared/interfaces/countries';
 import { Sector } from '../../sectors/interfaces';
+import { inject, Injectable } from '@angular/core';
+import { Country } from '../../../shared/interfaces/countries';
+import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
 import { UseOfFundsOptions } from '../../../shared/interfaces/Investor';
 import { PublicInvestor, UserSearch } from '../../../shared/interfaces/public.investor.interface';
 import { PublicInvestorsRepositoryService } from '../../../core/services/investors/public-investors-repository.service';
+import { BASE_URL, BaseHttpService } from '../../../core';
 
 @Injectable({ providedIn: 'root' })
-export class SearchEngineService {
+export class SearchEngineService extends BaseHttpService{
 
     private results$$ =new BehaviorSubject<{query?: string, investors?: PublicInvestor[]}>({})
     results$ =this.results$$.asObservable();
-
-    private _sectorsService = inject(SectorsService);
-    private _countriesService = inject(CountriesService);
-    private _investorsService = inject(InvestorScreensService);
     private _publicInvestorService = inject(PublicInvestorsRepositoryService);
 
+    getAllSectors(){
+        return this.read(`${BASE_URL}/sectors/list/global?page=1&limit=100`) as Observable<Sector[]>
+    }
+
+    getAllCountries(){
+        return this.read(`${BASE_URL}/countries/list/global`) as Observable<Country[]>
+    }
+
+    getAllUseOfFunds(){
+        return this.read(`${BASE_URL}/use-funds/list/global?page=1&limit=100`) as Observable<UseOfFundsOptions[]>
+    }
+
     fetchOptions(){
-        const requests =[this._sectorsService.getAllSectors(), this._countriesService.getCountries(), this._investorsService.getUseOfFunds()]
+        const requests =[this.getAllSectors(), this.getAllCountries(), this.getAllUseOfFunds()]
         return combineLatest(requests).pipe(map(res =>{
             const [sectors, countries, useOfFunds] =res
             return {
