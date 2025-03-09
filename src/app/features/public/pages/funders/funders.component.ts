@@ -61,7 +61,7 @@ export class FundersComponent {
       .withPart(iconSetMaterial)
       .withParams({
         iconSize: 18,
-        wrapperBorderRadius: '.5rem',
+        wrapperBorderRadius: '0 .5rem .5rem .5rem',
       });
   
     gridOptions: GridOptions = {
