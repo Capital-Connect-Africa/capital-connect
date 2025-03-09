@@ -1,3 +1,4 @@
+<ng-container *ngIf="logout$ | async"></ng-container>
 <div class ="bg-[#f5f6fa] bg__container">
     <div class ="public__container py-6 pr-8 pl-[10%]">
         <header class ="flex items-center justify-between">
@@ -5,8 +6,12 @@
                 <img src="assets/img/logo.png" alt ="logo" class ="block w-24" />
             </a>
             <ul class ="flex items-center gap-3">
-                <li><a routerLink ="/auth">Sign in</a></li>
-                <li><a routerLink ="/auth/signup" class ="block w-max bg-[#519259] text-white px-4 py-2 rounded-full text-sm">Sign up</a></li>
+                <ng-container *ngIf="!isLoggedIn">
+                    <li><a routerLink ="/auth">Sign in</a></li>
+                    <li><a routerLink ="/auth/signup" class ="block w-max bg-[#519259] text-white px-4 py-2 rounded-full text-sm">Sign up</a></li>
+
+                </ng-container>
+                <li *ngIf="isLoggedIn"><button (click)="logOut()" class ="block w-max bg-[#0a0a0a] hover:bg-[#292929] transition-all text-white px-4 py-2 rounded-full text-xs">Sign out</button></li>
             </ul>
         </header>
         <main><router-outlet /></main>
@@ -18,7 +23,7 @@
                     </a>
                 </li>
             </ul> -->
-            <ul class ="flex gap-3">
+            <ul class ="flex gap-3 text-xs">
                 <li><a href="" target="_blank">Terms & Conditions</a></li>
                 <li><a href="" target="_blank">Privacy Policy</a></li>
             </ul>
