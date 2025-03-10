@@ -12,16 +12,12 @@ const routes: Routes = [
   { path: 'investor-eligibility', loadComponent: () => import('../pages/investor-eligibility/investor-eligibility.component').then(c => c.InvestorEligibilityComponent) },
   { path: 'investor-preparedness', loadComponent: () => import('../pages/investor-preparedness/investor-preparedness.component').then(c => c.InvestorPreparednessComponent) },
   { path: 'investors-db', loadComponent: () => import('../pages/investors-db/investors-db.component').then(c => c.InvestorsDbComponent) },
-  { path: 'investors-db/:searchKey', loadComponent: () => import('../pages/investors-db/investors-db.component').then(c => c.InvestorsDbComponent) },
   { path: 'impact-assessment', loadComponent: () => import('../pages/impact-assessment/impact-assessment.component').then(c => c.ImpactAssessmentComponent) },
   { path: 'special-criteria', loadComponent: () => import('../pages/special-criteria/special-criteria.component').then(c => c.SpecialCriteriaComponent) },
   { path: 'special-criteria/:id', loadComponent: () => import('../pages/special-criteria-questions/special-criteria-questions.component').then(c => c.SpecialCriteriaQuestionsComponent) },
   { path: 'financial-reporting', loadComponent: () => import('../pages/FinancialReporting/financials.component').then(c => c.FinancialReportingPage) },
   { path: 'balance-sheet/year/:year', loadComponent: () => import('../pages/BalanceSheet/BalanceSheet.component').then(c => c.BalanceSheetPage) },
   { path: 'balance-sheets', loadComponent: () => import('../pages/BalanceSheets/BalanceSheets.component').then(c => c.BalanceSheetsPage) },
-
-
-
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],
