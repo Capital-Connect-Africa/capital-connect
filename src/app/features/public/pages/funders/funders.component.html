@@ -2,10 +2,12 @@
 <ng-container *ngIf="searchedResults$ | async"></ng-container>
 
 <section class="flex h-full items-center">
-  <div class="">
-    <h2 class="!text-2xl font-bold">There are 200 of 5,280 investors investing in Africa with whom you fit their criteria</h2>
-    <p class="text-gray-600 mt-2">Sign Up/ Sign In to view these investors and obtain their details.</p>
-    <button class="block w-max bg-[#519259] text-white px-4 py-2 rounded-full text-sm"
+  <div class="max-w-[50%] mx-auto">
+    <h2 class="!text-2xl font-semibold">There are 200 of {{5280 | number}} investors investing in Africa with whom you fit their criteria</h2>
+    <p class="text-gray-600 font-light">Sign Up/ Sign In to view these investors and obtain their details.</p>
+    <button 
+        class="block w-max bg-[#519259] text-white px-6 py-3 rounded text-sm"
+        (click)="signup()"
     >Sign up now</button>
   </div>
 </section>

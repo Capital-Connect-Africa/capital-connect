@@ -33,20 +33,22 @@ export class FundersComponent {
   }))
 
   publicInvestors: PublicInvestor[] = [];
-  publicInvestors$ =new Observable()
+  publicInvestors$ =new Observable();
+  ngOnInit(){
+    if(this._authStateService.isLoggedIn){
+      this._route.navigateByUrl('/business/investors-db');
+    }
+  }
 
   getPublicInvestors(){
     this.publicInvestors$ =this._publicInvestorService.searchInvestors({query: this.q}).pipe(tap(res =>{
       this.publicInvestors =res.investors
-      this.q =res.q
+      this.q =res.q;
     }))
   }
 
   signup(){
-    if(!this._authStateService.isLoggedIn){
-      return this._route.navigateByUrl('/signup')
-    }
-    return this._route.navigateByUrl('/business/investors-db')
+    this._route.navigateByUrl('/signup');
   }
   
 }
