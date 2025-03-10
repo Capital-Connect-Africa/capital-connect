@@ -11,6 +11,8 @@ const routes: Routes = [
   { path: 'plans', loadComponent: () => import('../../billing/pages/subscription/subscription.component').then(c => c.SubscriptionComponent) },
   { path: 'investor-eligibility', loadComponent: () => import('../pages/investor-eligibility/investor-eligibility.component').then(c => c.InvestorEligibilityComponent) },
   { path: 'investor-preparedness', loadComponent: () => import('../pages/investor-preparedness/investor-preparedness.component').then(c => c.InvestorPreparednessComponent) },
+  { path: 'investors-db', loadComponent: () => import('../pages/investors-db/investors-db.component').then(c => c.InvestorsDbComponent) },
+  { path: 'investors-db/:searchKey', loadComponent: () => import('../pages/investors-db/investors-db.component').then(c => c.InvestorsDbComponent) },
   { path: 'impact-assessment', loadComponent: () => import('../pages/impact-assessment/impact-assessment.component').then(c => c.ImpactAssessmentComponent) },
   { path: 'special-criteria', loadComponent: () => import('../pages/special-criteria/special-criteria.component').then(c => c.SpecialCriteriaComponent) },
   { path: 'special-criteria/:id', loadComponent: () => import('../pages/special-criteria-questions/special-criteria-questions.component').then(c => c.SpecialCriteriaQuestionsComponent) },
