@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { SignalsService } from '../../services/signals/signals.service';
 import { booleanAttribute, Component, inject, Input } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertComponent } from '../../../shared/components/alert/alert.component';
 import { BillingService } from '../../../features/billing/services/billing.service';
 import { PermissionsService } from '../../services/permissions/permissions.service';
@@ -13,16 +13,22 @@ import { AuthStateService } from '../../../features/auth/services/auth-state.ser
 import { CompanyStateService } from '../../../features/organization/services/company-state.service';
 import { MobileNumber, UserMobileNumbersIssues } from '../../../features/auth/interfaces/auth.interface';
 import { FeedbackService } from '../../services/feedback/feedback.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [SharedModule, CommonModule, RouterModule, AlertComponent, DialogModule, ReactiveFormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, DropdownModule, CommonModule, RouterModule, AlertComponent, DialogModule, ReactiveFormsModule, ReactiveFormsModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
 
 export class NavbarComponent {
+  savedPhoneNumbers: MobileNumber[] = [];
+  selectedPhoneNumber!: string;
+  showResendOptions: boolean = false;
+
+
   @Input() showBanner =true;
   issue =UserMobileNumbersIssues;
   private _router =inject(Router);
@@ -33,11 +39,14 @@ export class NavbarComponent {
   private _feedbackService =inject(FeedbackService);
   private _authStateService =inject(AuthStateService);
   private _companyStateService =inject(CompanyStateService);
+
+
   @Input() title =this._companyStateService.currentCompany?.name;
   businessLogoUrl = this._companyStateService.currentCompany?.companyLogo?.path ?? 'assets/img/avatar.jpeg';
   activePlan$ =new Observable();
   savephoneNumber$ =new Observable<any>();
   phoneNumberPull$ =new Observable<any>();
+  resendVerification$ = new Observable<any>();
   userHasNotAcceptedTerms =!this._authStateService.currentUserProfile().hasAcceptedTerms && !this._authStateService.userIsAdmin;
 
   consent$ =new Observable();
@@ -50,6 +59,7 @@ export class NavbarComponent {
   investorProfileExists: boolean = false;
 
   ngOnInit() {
+    this.loadSavedNumbers();
     this.investorProfileExists = !!sessionStorage.getItem('profileId');
     if(this._permissions.canFetchActiveSubscription()){
       if(!this.signalsService.activePlan()){
@@ -60,14 +70,23 @@ export class NavbarComponent {
     }
   }
 
+
+  showResendOptionsfunc(){
+    this.showResendOptions = true
+  }
+
+ 
+  loadSavedNumbers() {
+    this.savedPhoneNumbers = JSON.parse(sessionStorage.getItem('mobile_numbers') ?? '[]');
+  }
+
   @Input({ transform: booleanAttribute }) onDashboard: boolean = false;
   @Input() isAdmin = false;
 
   userFirstName =this._authStateService.currentUserProfile().firstName;
   phoneUpdateForm =this._fb.group({
-    field: ['', [
-      Validators.required,
-    ]]
+    field: ['', [Validators.required,]],
+    selectedPhoneNumber:['0',[Validators.required]]
   })
 
   drawerShowing = false;
@@ -99,6 +118,18 @@ export class NavbarComponent {
 
       }
     }
+  }
+
+  resendVerificationCode() {
+    console.log("Resending the verication code", this.phoneUpdateForm.value.selectedPhoneNumber)
+    const userId = this._authStateService.currentUserId();
+    console.log("The current User id is", userId)
+    if(this.phoneUpdateForm.value.selectedPhoneNumber){
+     this.resendVerification$ =  this._authStateService.resendVerificationCode(this.phoneUpdateForm.value.selectedPhoneNumber).pipe(tap(res=>{
+
+      }))
+    }  
+
   }
 
   ngOnChanges(){

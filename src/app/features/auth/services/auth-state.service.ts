@@ -203,6 +203,14 @@ export class AuthStateService {
       );
   }
 
+  resendVerificationCode(phone:string){
+    return this._httpService.create(BASE_URL+'/mobile-numbers/resend-verification',{phoneNo : phone}).pipe(tap(res=>{
+      console.log("Response from resending otp", res)
+    }))
+  }
+
+
+
   checkPhoneNumberStatus(): Observable<any> {
     const result = this._checkPhoneNumberStatus();
     if (
