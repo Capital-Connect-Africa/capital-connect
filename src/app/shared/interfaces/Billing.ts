@@ -94,3 +94,15 @@ export interface Advisor{
     createdAt: string,
     updatedAt: string
 }
+
+export interface CustomBooking { 
+    id:number, 
+    date: Date | string, 
+    meetingLink: string, 
+    createdAt: Date,
+    starts: string, 
+    stops: string, 
+    duration: number, 
+    client: string, 
+    advisor: string
+}

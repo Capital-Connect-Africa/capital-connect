@@ -1,0 +1,28 @@
+<h2 class ="!text-xl !-mt-12 uppercase !font-bold !text-[#212529]">Reminder</h2>
+<section class="h-[300px] relative isolate rounded-lg overflow-hidden">
+    <img src="assets/img/board-room.jpg" class="block object-cover inset-0 absolute h-full w-full -z-10"/>
+    <div class="bg-black bg-opacity-35 flex flex-col justify-between h-full w-full p-8">
+        <p class="bg-slate-100 w-max p-2 text-[#212529] rounded text-sm bg-opacity-50 uppercase font-normal">Next Session: 20 May, 2025</p>
+        <div class="flex flex-col gap-3">
+            <h3 class="!text-white !text-6xl uppercase !leading-[0px]">09:30 AM</h3>
+            <p class="!text-white !text-sm !leading-[0px] font-light">An advisory session with Meltus</p>
+        </div>
+    </div>
+</section>
+
+<section class="flex pt-12 pb-4 flex-col gap-4">
+    <h2 class ="!text-xl !font-bold uppercase !text-[#212529] !leading-[0]">Quick Stats</h2>
+    <ul class="grid grid-cols-4 gap-3 xl:gap-8">
+        <li *ngFor="let stat of stats">
+            <div class="flex flex-col gap-8 rounded px-3 py-5 transition-all cursor-pointer" [class] ="stat.theme">
+                <button class="w-9 h-9 flex items-center justify-center text-white bg-white rounded bg-opacity-40 hover:bg-opacity-20">
+                    <i [class]="stat.icon"></i>
+                </button>
+                <div class="flex flex-col gap-6">
+                    <h3 class="!text-base uppercase !fonr-bold text-white !leading-[0]">{{stat.heading}}</h3>
+                    <p class="text-white text-sm !leading-[0] font-light">{{stat.paragraph}}</p>
+                </div>
+            </div>
+        </li>
+    </ul>
+</section>
