@@ -1,5 +1,6 @@
 <ng-container *ngIf="users$ | async"></ng-container>
 <ng-container *ngIf="delete$ |async"></ng-container>
+<ng-container *ngIf="updateAdvisor$ |async"></ng-container>
 
 <app-admin-ui-container [title]="'Advisors'">
   <div>
@@ -30,9 +31,9 @@
           <td>{{user.phone }}</td>
           <td>{{user.totalCapitalRaised}}</td>
           <td>{{user.totalYearsExperience}}</td>
-          <!-- <td>
+          <td>
             <div class="flex items-center gap-3">
-                <button type="button" class="p-button-text" (click)="editUser(user)"
+                <!-- <button type="button" class="p-button-text" (click)="editUser(user)"
                   title="Edit" tooltipPosition="top">
                   <i class="pi pi-pencil text-sm text-orange-600"></i>
                 </button>
@@ -43,9 +44,14 @@
                 <button type="button" class="p-button-text" (click)="deleteUser(user)"
                   title="remove">
                   <i class="pi pi-trash text-sm text-rose-600"></i>
+                </button> -->
+                <button type="button" class="p-button-text" (click)="toggleAdvisorActiveStatus(user)"
+                  [title]="user.isActive? 'Deactivate': 'Activate'">
+                  <i *ngIf="user.isActive" class="pi pi-lock text-sm text-orange-600"></i>
+                  <i *ngIf="!user.isActive" class="pi pi-lock-open text-sm text-orange-600"></i>
                 </button>
             </div>
-          </td> -->
+          </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="emptymessage">
