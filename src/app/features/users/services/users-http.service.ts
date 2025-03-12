@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {  map, Observable, switchMap } from 'rxjs';
-import { BASE_URL, BaseHttpService } from '../../../core';
+import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Role, User } from '../models';
 import { MatchedInvestor } from '../../../shared/interfaces';
 
 @Injectable({ providedIn: 'root' })
 export class UsersHttpService extends BaseHttpService {
-  constructor(private httpClient: HttpClient) {
+
+  constructor(private httpClient: HttpClient, private feedbackService: FeedbackService) {
     super(httpClient);
   }
 
@@ -81,7 +82,10 @@ export class UsersHttpService extends BaseHttpService {
 
   updateUserByAdmin(user: Partial<User>, id: number) {
     const _headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    return this.httpClient.put(`${BASE_URL}/users/${id}/admin`, (user), { headers: _headers })
+    return this.httpClient.put(`${BASE_URL}/users/${id}/admin`, (user), { headers: _headers }).pipe(map(res =>{
+      this.feedbackService.success('Operation successful', 'Update')
+      return res
+    }))
   }
 
   deletUser(id: number) {
