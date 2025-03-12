@@ -26,10 +26,24 @@ export class StaffLayoutComponent {
       this.signalService.pageTitle.set(this.title);
       this.links = [
         {
-          label: 'Dashboard',
+          label: 'Sessions',
           href: '/staff',
           exact: true,
           icon: 'grid_view',
+          display: true,
+        },
+        {
+          label: 'Upcoming',
+          href: '/staff/upcoming-sessions',
+          exact: true,
+          icon: 'event_upcoming',
+          display: true,
+        },
+        {
+          label: 'Previous',
+          href: '/staff/previous-sessions',
+          exact: true,
+          icon: 'videocam',
           display: true,
         },
         {
