@@ -6,6 +6,8 @@ export interface User {
   lastName?: string;
   roles: Role;
   name?: string,
+  fullName?: string;
+  isActive?: boolean,
   resetPasswordToken: string | null;
   resetPasswordExpires: string | null;
   isEmailVerified: boolean;
