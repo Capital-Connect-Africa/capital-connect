@@ -17,13 +17,13 @@ import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { USER_ROLES } from '../../../../shared';
 
 @Component({
-  selector: 'app-business-owners',
+  selector: 'staff-users',
   standalone: true,
   imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule, TimeAgoPipe],
-  templateUrl: './business-owners.component.html',
-  styleUrl: './business-owners.component.scss'
+  templateUrl: './staff.component.html',
+  styleUrl: './staff.component.scss'
 })
-export class BusinessOwnersComponent {
+export class StaffUsersComponent {
   private _usersService = inject(UsersHttpService);
   private _router = inject(Router);
   private _confirmationService = inject(ConfirmationService);
@@ -55,7 +55,7 @@ export class BusinessOwnersComponent {
   }
 
   private _initUsers() {
-    this.users$ = this._usersService.getUserByRole(USER_ROLES.USER).pipe(
+    this.users$ = this._usersService.getUserByRole(USER_ROLES.STAFF).pipe(
       tap(users => {
         this.users = users.data;
         this.usersCount =users.total_count;
@@ -72,10 +72,6 @@ export class BusinessOwnersComponent {
     this.updateDisplayedData();
   }
 
-  editUser(user: User) {
-    this._router.navigateByUrl(`/users/edit/${user.id}`);
-  }
-
   deleteUser(user: User) {
     this.delete$ =
       this._confirmationService.confirm(`Are you sure you want to delete ${user.username}`).pipe(switchMap(res => {
@@ -84,20 +80,6 @@ export class BusinessOwnersComponent {
         return EMPTY
 
       }), tap(() => this._initUsers()));
-  }
-
-  viewUser(user: User) {
-    if(user.roles === Role.USER) {
-      lastValueFrom(this._companyService.getCompanyOfUser(user.id).pipe(tap(company => {
-        if (company) {
-          this._router.navigateByUrl(`/organization/${company.id}`)
-        } else {
-          this._feedbackService.info(`User ${user.username} does not have a company`)
-        }
-      })))
-    } else {
-      this._feedbackService.info(`User ${user.username} does not have a company`)
-    }
   }
 
   onPage(event: TablePageEvent){

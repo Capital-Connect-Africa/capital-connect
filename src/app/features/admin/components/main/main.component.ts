@@ -132,7 +132,7 @@ export class MainComponent {
         ...user,
         name: `${user.firstName} ${user.lastName}`
       }
-    }).slice(0, 5)
+    }).slice(0, 7)
   }))
 
 
@@ -147,6 +147,11 @@ export class MainComponent {
         name: 'Advisors',
         count: res.advisors ??0,
         icon: 'pi pi-ethereum',
+      },
+      {
+        name: 'Admins',
+        count: res.admin ??0,
+        icon: 'pi pi-star-fill',
       },
       {
         name: 'Staff',

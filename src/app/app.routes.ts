@@ -211,6 +211,42 @@ export const routes: Routes = [
       isAdminCanActivateChildGuard,
     ],
   },
+  {
+    path: 'admin/manage-partners',
+    loadChildren: () =>
+      import('./features/users/modules/partners.routes').then(
+        (m) => m.PartnersRoutes
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+  {
+    path: 'admin/manage-admins',
+    loadChildren: () =>
+      import('./features/users/modules/admins.routes').then(
+        (m) => m.AdminsRoutes
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
+  {
+    path: 'admin/manage-staff',
+    loadChildren: () =>
+      import('./features/users/modules/staff.routes').then(
+        (m) => m.StaffRoutes
+      ),
+    canActivate: [isLoggedInCanActivateGuard, isAdminCanActivateGuard],
+    canActivateChild: [
+      isLoggedInCanActivateChildGuard,
+      isAdminCanActivateChildGuard,
+    ],
+  },
 
 
   {
