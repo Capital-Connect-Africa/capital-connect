@@ -1,4 +1,4 @@
-import { Observable, tap } from 'rxjs';
+import { EMPTY, Observable, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
@@ -7,6 +7,8 @@ import { Table, TableModule, TablePageEvent } from 'primeng/table';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { AdminUiContainerComponent } from "../../../admin/components/admin-ui-container/admin-ui-container.component";
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
+import { ConfirmationService } from '../../../../core';
+import { User } from '../../../users/models';
 
 @Component({
   selector: 'app-list',
@@ -17,12 +19,15 @@ import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 })
 export class ListComponent {
   private _usersService = inject(UsersHttpService);
-  private _router =inject(Router)
+  private _router =inject(Router);
+  private _confirmService =inject(ConfirmationService);
 
+  updateInvestor$ =new Observable();
   investors$ = new Observable<any>();
   usersCount:number =0;
   usersShowingCount =0;
   userShowingCountEnd =0;
+  
 
 
   investors: MatchedInvestor[] = [];
@@ -72,7 +77,17 @@ export class ListComponent {
   }
 
   viewInvestor(investorId:number){
-    let investor = sessionStorage.getItem('profileId')
     this._router.navigateByUrl(`/business-investors/${investorId}`)
+  }
+
+  toggleInvestorActiveStatus(investor:User){
+    
+    this.updateInvestor$ =this._confirmService.confirm(`Do you want to ${investor.isActive?'deactivate': 'activate'} ${investor.firstName??''} ${investor.lastName??''}? This user will ${investor.isActive?'not be': 'be'} able to login.`).pipe(switchMap((res) =>{
+      if(res)
+        return this._usersService.updateUserByAdmin({isActive: !investor.isActive}, investor.id).pipe(tap(() =>{
+          this._init();
+        }))
+      return EMPTY;
+    }))
   }
 }

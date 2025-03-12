@@ -84,7 +84,10 @@ export class ReferralsService extends BaseHttpService {
 
   getMyReferees(id:number):Observable<User[]>{
     return this.read(`${BASE_URL}/referrals/user/${id}`).pipe(
-      map((res: any) => res?.data[0].user?.referredUsers as User[]),
+      map((res: any) => {
+        const firstRow =res?.data.at(0);
+        return (firstRow && firstRow.user?.referredUsers) ?? [];
+      }),
     )
   }
 }

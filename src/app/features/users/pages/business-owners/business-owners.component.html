@@ -1,5 +1,6 @@
 <ng-container *ngIf="users$ | async"></ng-container>
 <ng-container *ngIf="delete$ |async"></ng-container>
+<ng-container *ngIf="updateUser$ |async"></ng-container>
 
 <app-admin-ui-container [title]="'Business Owners'">
   <div>
@@ -42,6 +43,11 @@
                 <button type="button" class="p-button-text" (click)="deleteUser(user)"
                   title="remove">
                   <i class="pi pi-trash text-sm text-rose-600"></i>
+                </button>
+                <button type="button" class="p-button-text" (click)="toggleUserActiveStatus(user)"
+                  [title]="user.isActive? 'Deactivate': 'Activate'">
+                  <i *ngIf="user.isActive" class="pi pi-lock text-sm text-orange-600"></i>
+                  <i *ngIf="!user.isActive" class="pi pi-lock-open text-sm text-orange-600"></i>
                 </button>
             </div>
           </td>

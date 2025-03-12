@@ -16,7 +16,7 @@ export class SpecialSignupComponent {
   private _router =inject(Router);
   specialRole =this._activatedRoute.snapshot.params['special-role'];
   ngOnInit(){
-    if(![USER_ROLES.PARTNER, USER_ROLES.ADVISOR].includes(this.specialRole)){
+    if(![USER_ROLES.PARTNER, USER_ROLES.ADVISOR, USER_ROLES.STAFF].includes(this.specialRole)){
       this._router.navigateByUrl('/')
     }
   }

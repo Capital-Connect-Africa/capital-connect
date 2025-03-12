@@ -15,13 +15,12 @@ import { ConfirmationService, FeedbackService } from '../../../../core';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { AdvisorService } from '../../../advisor/services/advisor-profile.service';
-import { Advisor } from '../../../../shared/interfaces/Billing';
 import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
 
 @Component({
   selector: 'app-business-owners',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule, TimeAgoPipe],
+  imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule],
   templateUrl: './advisors.component.html',
   styleUrls: ['./advisors.component.scss']
 })
@@ -35,6 +34,7 @@ export class AdvisorsAdminComponent {
   private _advisorService = inject(AdvisorService)
 
   //streams
+  updateAdvisor$ =new Observable();
   users$ = new Observable<any>();
   delete$ = new Observable();
   
@@ -52,7 +52,7 @@ export class AdvisorsAdminComponent {
     { field: 'phone', header: 'Phone Number' },
     { field: 'totalCapitalRaised', header: 'Total Capital Raised' },
     { field: 'totalYearsExperience', header: 'Total Years Of Experience' },
-    // { field: 'actions', header: 'Actions' }
+    { field: 'actions', header: 'Actions' }
   ];
 
   @ViewChild('dt') table!: Table;
@@ -117,5 +117,15 @@ export class AdvisorsAdminComponent {
     const end = Math.min(start + (this.table.rows ?? 10), data.length);
     this.usersShowingCount = start + 1;
     this.end = end;
+  }
+
+  toggleAdvisorActiveStatus(advisor:User){
+    this.updateAdvisor$ =this._confirmationService.confirm(`Do you want to ${advisor.isActive?'deactivate': 'activate'} ${advisor.fullName??''}? This user will ${advisor.isActive?'not be': 'be'} able to login.`).pipe(switchMap((res) =>{
+      if(res)
+        return this._usersService.updateUserByAdmin({isActive: !advisor.isActive}, advisor.id).pipe(tap(() =>{
+          this._initUsers();
+        }))
+      return EMPTY;
+    }))
   }
 }

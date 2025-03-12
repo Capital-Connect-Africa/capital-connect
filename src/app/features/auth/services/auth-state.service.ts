@@ -76,6 +76,20 @@ export class AuthStateService {
     return !!currentUser && currentUser.roles.includes('admin');
   }
 
+  get userIsPartner() {
+    const currentUser = JSON.parse(
+      sessionStorage.getItem('userProfile') as string
+    ) as Profile;
+    return !!currentUser && currentUser.roles.includes('partner');
+  }
+
+  get userIsStaff() {
+    const currentUser = JSON.parse(
+      sessionStorage.getItem('userProfile') as string
+    ) as Profile;
+    return !!currentUser && currentUser.roles.includes('staff');
+  }
+
   get userIsAdvisor() {
     const currentUser = JSON.parse(
       sessionStorage.getItem('userProfile') as string

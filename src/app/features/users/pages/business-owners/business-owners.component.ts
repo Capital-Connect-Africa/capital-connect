@@ -29,6 +29,7 @@ export class BusinessOwnersComponent {
   private _companyService = inject(CompanyHttpService);
   private _feedbackService = inject(FeedbackService);
 
+  updateUser$ =new Observable();
   users$ = new Observable<any>();
   delete$ = new Observable();
   usersCount:number =0;
@@ -108,5 +109,16 @@ export class BusinessOwnersComponent {
     const end = Math.min(start + (this.table.rows ?? 10), data.length);
     this.usersShowingCount = start + 1;
     this.end = end;
+  }
+
+  toggleUserActiveStatus(user:User){
+    
+    this.updateUser$ =this._confirmationService.confirm(`Do you want to ${user.isActive?'deactivate': 'activate'} ${user.firstName??''} ${user.lastName??''}? This user will ${user.isActive?'not be': 'be'} able to login.`).pipe(switchMap((res) =>{
+      if(res)
+        return this._usersService.updateUserByAdmin({isActive: !user.isActive}, user.id).pipe(tap(() =>{
+          this._initUsers();
+        }))
+      return EMPTY;
+    }))
   }
 }
