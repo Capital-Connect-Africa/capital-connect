@@ -1,0 +1,55 @@
+<ng-container *ngIf="users$ | async"></ng-container>
+<ng-container *ngIf="delete$ |async"></ng-container>
+<ng-container *ngIf="updateUser$ |async"></ng-container>
+
+<app-admin-ui-container [title]="'Partners'">
+  <div>
+    <div class="table-header flex items-center justify-between">
+      <span class="p-input-icon-left">
+        <input type="text" pInputText placeholder="Search partners..." (input)="applyFilter($event)">
+      </span>
+      <div class="font-light text-sm">Showing {{usersShowingCount}} - {{end}} of {{usersCount}} entries</div>
+    </div>
+    <p-table #dt [value]="users" [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]"
+      [globalFilterFields]="['firstName','username', 'lastName', 'roles']" (onPage)="onPage($event)">
+      <ng-template pTemplate="header">
+        <tr class="text-sm">
+          <th *ngFor="let col of cols" [pSortableColumn]="col.field">
+            <span class="header-container">
+              <span class="header-text">
+                {{col.header}}
+              </span>
+            </span>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr class="text-sm">
+          <td>{{user.firstName | titlecase}}</td>
+          <td>{{user.lastName | titlecase}}</td>
+          <td>{{user.username | lowercase}}</td>
+          <td>{{user.isEmailVerified ? 'Yes' : 'No'}}</td>
+          <td>{{user.createdAt | time_ago | lowercase}}</td>
+          <td>
+            <div class="flex items-center gap-3">
+                <button type="button" class="p-button-text" (click)="deleteUser(user)"
+                  title="remove">
+                  <i class="pi pi-trash text-sm text-rose-600"></i>
+                </button>
+                <button type="button" class="p-button-text" (click)="toggleUserActiveStatus(user)"
+                  [title]="user.isActive? 'Deactivate': 'Activate'">
+                  <i *ngIf="user.isActive" class="pi pi-lock text-sm text-orange-600"></i>
+                  <i *ngIf="!user.isActive" class="pi pi-lock-open text-sm text-orange-600"></i>
+                </button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5">No users found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</app-admin-ui-container>

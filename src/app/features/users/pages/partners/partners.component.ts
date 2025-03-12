@@ -17,18 +17,16 @@ import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { USER_ROLES } from '../../../../shared';
 
 @Component({
-  selector: 'app-business-owners',
+  selector: 'partner-users',
   standalone: true,
   imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule, TimeAgoPipe],
-  templateUrl: './business-owners.component.html',
-  styleUrl: './business-owners.component.scss'
+  templateUrl: './partners.component.html',
+  styleUrl: './partners.component.scss'
 })
-export class BusinessOwnersComponent {
+
+export class PartnerUsersComponent {
   private _usersService = inject(UsersHttpService);
-  private _router = inject(Router);
   private _confirmationService = inject(ConfirmationService);
-  private _companyService = inject(CompanyHttpService);
-  private _feedbackService = inject(FeedbackService);
 
   updateUser$ =new Observable();
   users$ = new Observable<any>();
@@ -55,7 +53,7 @@ export class BusinessOwnersComponent {
   }
 
   private _initUsers() {
-    this.users$ = this._usersService.getUserByRole(USER_ROLES.USER).pipe(
+    this.users$ = this._usersService.getUserByRole(USER_ROLES.PARTNER).pipe(
       tap(users => {
         this.users = users.data;
         this.usersCount =users.total_count;
@@ -72,10 +70,6 @@ export class BusinessOwnersComponent {
     this.updateDisplayedData();
   }
 
-  editUser(user: User) {
-    this._router.navigateByUrl(`/users/edit/${user.id}`);
-  }
-
   deleteUser(user: User) {
     this.delete$ =
       this._confirmationService.confirm(`Are you sure you want to delete ${user.username}`).pipe(switchMap(res => {
@@ -84,20 +78,6 @@ export class BusinessOwnersComponent {
         return EMPTY
 
       }), tap(() => this._initUsers()));
-  }
-
-  viewUser(user: User) {
-    if(user.roles === Role.USER) {
-      lastValueFrom(this._companyService.getCompanyOfUser(user.id).pipe(tap(company => {
-        if (company) {
-          this._router.navigateByUrl(`/organization/${company.id}`)
-        } else {
-          this._feedbackService.info(`User ${user.username} does not have a company`)
-        }
-      })))
-    } else {
-      this._feedbackService.info(`User ${user.username} does not have a company`)
-    }
   }
 
   onPage(event: TablePageEvent){
