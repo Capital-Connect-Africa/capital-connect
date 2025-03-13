@@ -18,6 +18,7 @@ import { of, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { customFormatDate, customFormatDuration } from '../../../../core/utils/format.date.util';
 import { CustomBooking } from '../../../../shared/interfaces/Billing';
+import { castBookingToCustomBooking } from '../../../../core/utils/booking.to.custom.booking';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -86,55 +87,6 @@ export class PreviousSessionsComponent {
           },
           headerName: 'Created',
         },
-  
-        {
-          field: 'actions',
-          cellRenderer: (params: any) => {
-            const div =document.createElement('div');
-            const remarksButton = document.createElement('button');
-            const copyButton = document.createElement('button');
-            div.classList.add( 'flex', 'items-center',  'gap-3',);
-            remarksButton.innerHTML = `
-              <i class="pi pi-comments text-sm font-light" title ="Give remarks"></i>
-            `;
-            remarksButton.classList.add(
-              'flex',
-              'items-center',
-              'gap-2',
-              'text-purple-300',
-              'hover:text-purple-500',
-              'transition-all'
-            );
-
-            copyButton.innerHTML = `
-              ${params.context.componentParent.linkCopied? '<i class="pi pi-check text-xs font-light" title ="Copy meeting link"></i>':
-              '<i class="pi pi-clone text-sm font-light" title ="Copy meeting link"></i>'}
-            `;
-            copyButton.classList.add(
-              'flex',
-              'items-center',
-              'gap-2',
-              'text-green-300',
-              'hover:text-green-500',
-              'transition-all'
-            );
-  
-            remarksButton.addEventListener('click', () =>
-              params.context.componentParent.giveRemarks(params)
-            );
-
-            copyButton.addEventListener('click', () =>
-              params.context.componentParent.copyMeetingLink(params)
-            );
-            div.appendChild(copyButton);
-            div.appendChild(remarksButton);
-            return div;
-          },
-          width: 100,
-          editable: false,
-          sortable: false,
-          filter: false,
-        },
       ] as ColDef[],
       defaultColDef: {
         filter: true,
@@ -148,36 +100,10 @@ export class PreviousSessionsComponent {
   }
 
   bookings:CustomBooking[] =[]
-  bookings$ =this._bookingService.getBookings(1, 1000).pipe(tap(bookings =>{
-    this.bookings =bookings.data.map(booking =>{
-      const starts =customFormatDate(new Date(booking.meetingStartTime), !booking.meetingStartTime);
-      const stops =customFormatDate(new Date(booking.meetingEndTime), !booking.meetingEndTime);
-      return {
-        id: booking.id,
-        date: booking.meetingStartTime,
-        starts: starts.time12hrs,
-        stops: stops.time12hrs,
-        meetingLink: booking.meetingLink,
-        duration: stops.time - starts.time,
-        createdAt: booking.createdAt,
-        client: (`${booking.user.firstName??''} ${booking.user.lastName??''}`.trim()) ?? '-',
-        advisor: (`${booking.advisor.firstName??''} ${booking.advisor.lastName??''}`.trim()) ?? '-',
-      }
-    })
+  bookings$ =this._bookingService.getBookings(1, 1000).pipe(tap(res =>{
+    const bookings =res.data;
+
+    this.bookings =bookings.filter(booking =>new Date(booking.meetingStartTime).getTime() < new Date().getTime()).map(booking =>castBookingToCustomBooking(booking) as CustomBooking)
   }))
 
-  linkCopied =false
-
-
-  async copyMeetingLink(booking: CustomBooking){
-    debugger
-    if(this.linkCopied) return;
-    await navigator.clipboard.writeText(booking.meetingLink);
-    this.linkCopied =true
-    setTimeout(() => this.linkCopied =false, 5000)
-  }
-
-  giveRemarks(booking: CustomBooking){
-
-  }
 }
