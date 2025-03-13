@@ -14,10 +14,11 @@ import {
 import { AgGridAngular } from 'ag-grid-angular';
 import { formatDistanceToNow } from 'date-fns';
 import { BookingsService } from '../../../advisor/services/booking.service';
-import { of, tap } from 'rxjs';
+import { tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { customFormatDate, customFormatDuration } from '../../../../core/utils/format.date.util';
 import { CustomBooking } from '../../../../shared/interfaces/Billing';
+import { castBookingToCustomBooking } from '../../../../core/utils/booking.to.custom.booking';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -92,7 +93,6 @@ export class UpcomingSessionsComponent {
           cellRenderer: (params: any) => {
             const div =document.createElement('div');
             const joinButton = document.createElement('button');
-            const remarksButton = document.createElement('button');
             const copyButton = document.createElement('button');
             div.classList.add( 'flex', 'items-center',  'gap-3',);
             joinButton.innerHTML = `
@@ -104,17 +104,6 @@ export class UpcomingSessionsComponent {
               'gap-2',
               'text-blue-300',
               'hover:text-blue-500',
-              'transition-all'
-            );
-            remarksButton.innerHTML = `
-              <i class="pi pi-comments text-sm font-light" title ="Give remarks"></i>
-            `;
-            remarksButton.classList.add(
-              'flex',
-              'items-center',
-              'gap-2',
-              'text-purple-300',
-              'hover:text-purple-500',
               'transition-all'
             );
 
@@ -132,20 +121,15 @@ export class UpcomingSessionsComponent {
             );
 
             joinButton.addEventListener('click', () => 
-              params.context.componentParent.joinCall(params)
-            );
-  
-            remarksButton.addEventListener('click', () =>
-              params.context.componentParent.giveRemarks(params)
+              params.context.componentParent.joinCall(params.data)
             );
 
             copyButton.addEventListener('click', () =>
-              params.context.componentParent.copyMeetingLink(params)
+              params.context.componentParent.copyMeetingLink(params.data)
             );
   
             div.appendChild(joinButton);
             div.appendChild(copyButton);
-            div.appendChild(remarksButton);
             return div;
           },
           width: 100,
@@ -166,40 +150,26 @@ export class UpcomingSessionsComponent {
   }
 
   bookings:CustomBooking[] =[]
-  bookings$ =this._bookingService.getBookings(1, 1000).pipe(tap(bookings =>{
-    this.bookings =bookings.data.map(booking =>{
-      const starts =customFormatDate(new Date(booking.meetingStartTime), !booking.meetingStartTime);
-      const stops =customFormatDate(new Date(booking.meetingEndTime), !booking.meetingEndTime);
-      return {
-        id: booking.id,
-        date: booking.meetingStartTime,
-        starts: starts.time12hrs,
-        stops: stops.time12hrs,
-        meetingLink: booking.meetingLink,
-        duration: stops.time - starts.time,
-        createdAt: booking.createdAt,
-        client: (`${booking.user.firstName??''} ${booking.user.lastName??''}`.trim()) ?? '-',
-        advisor: (`${booking.advisor.firstName??''} ${booking.advisor.lastName??''}`.trim()) ?? '-',
-      }
-    })
+  bookings$ =this._bookingService.getBookings(1, 1000).pipe(tap(res =>{
+    const bookings =res.data;
+    this.bookings =bookings.filter(booking =>new Date(booking.meetingStartTime).getTime() > new Date().getTime()).map(booking =>castBookingToCustomBooking(booking) as CustomBooking)
   }))
 
-  linkCopied =false
-
-  joinMeeting(booking: CustomBooking){
-
+  joinCall(booking: CustomBooking){
+    if(!booking.meetingLink){
+      alert('Meeting has no link')
+      return
+    }
+    window.open(booking.meetingLink, '_blank');
   }
 
 
   async copyMeetingLink(booking: CustomBooking){
-    debugger
-    if(this.linkCopied) return;
+    if(!booking.meetingLink){
+      alert('Meeting has no link')
+      return
+    }
     await navigator.clipboard.writeText(booking.meetingLink);
-    this.linkCopied =true
-    setTimeout(() => this.linkCopied =false, 5000)
-  }
-
-  giveRemarks(booking: CustomBooking){
-
+    alert('Link copied to clipboard')
   }
 }
