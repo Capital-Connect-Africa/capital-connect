@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DealsLayoutComponent } from '../components/deals-layout/deals-layout.component';
 
 
 const routes: Routes = [
@@ -24,10 +25,9 @@ const routes: Routes = [
   { path: 'view-special-criteria/:id', loadComponent: () => import('../pages/SpecialCriteria/ViewSPecialCriteriaPage/ViewSPecialCriteriaPage.component').then(c => c.ViewSPecialCriteriaPageComponent) },
   { path: 'connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
   { path: 'declined-connection-requests', loadComponent: () => import('../pages/ConnectionRequests/ConnectionRequests.component').then(c => c.ConnectionRequests) },
-  { path: 'global-search', loadComponent:()=>import('../pages/GlobalCompanySearch/GlobalCompanySearch.component').then(c=>c.GlobalCompanySearchComponnent) }
+  { path: 'global-search', loadComponent:()=>import('../pages/GlobalCompanySearch/GlobalCompanySearch.component').then(c=>c.GlobalCompanySearchComponnent) },
+  { path: 'deals-pipeline', component: DealsLayoutComponent, loadChildren:()=>import('./deals.routing').then(c=>c.DealsRoutes) }
   
-
-
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],

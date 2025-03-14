@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { AdminUiContainerComponent } from "../../components/admin-ui-container/admin-ui-container.component";
 import { Table, TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
-import { Booking } from '../../../../shared/interfaces/Billing';
+import { Advisor, Booking } from '../../../../shared/interfaces/Billing';
 import { UserStatisticsService } from '../../services/user.statistics.service';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { NumberAbbriviationPipe } from '../../../../core/pipes/number-abbreviation.pipe';
@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../../users/models';
 import { UsersHttpService } from '../../../users/services/users-http.service';
 import { FeedbackService } from '../../../../core';
+import { AdvisorService } from '../../../advisor/services/advisor-profile.service';
+import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
 
 @Component({
   selector: 'app-bookings',
@@ -25,34 +27,36 @@ import { FeedbackService } from '../../../../core';
   styleUrl: './bookings.component.scss'
 })
 export class BookingsComponent {
+  //services
+  private _router = inject(Router);
+  private _bookingService = inject(BookingsService);;
+  private _fs = inject(FeedbackService)
+  private _confirmationService = inject(ConfirmationService);
+  private _usersService = inject(UsersHttpService);
+  private _advisorService = inject(AdvisorService);
 
+
+  //vars
   first: number = 0;
   rows: number = 10;
   showingRows = 0;
   currentPage: number = 1;
-  delete$ = new Observable();
-  assignBooking$ = new Observable();
+  advisor!: AdvisorProfile
+  users: User[] = [];
+  advisors: AdvisorProfile[] = [];
   rowsCount: number = this.rows;
   @ViewChild('dt') table!: Table;
-  private _router = inject(Router);
-  private _bookingService = inject(BookingsService);;
-  private _statsService = inject(UserStatisticsService);
-  private _fs = inject(FeedbackService)
-  private _confirmationService = inject(ConfirmationService);
   bookings: Booking[] = [];
 
-  //vars
-  advisor!: number
-  users: User[] = [];
+  //streams
+  delete$ = new Observable();
+  assignBooking$ = new Observable();
+  bookings$ = new Observable<any>();
+  users$ = new Observable<User[]>();
+  advisors$ = new Observable<AdvisorProfile[]>();
 
   //booleans
   advisorModal: boolean = false
-
-  //observables
-  users$ = new Observable<User[]>();
-
-  //services
-  private _usersService = inject(UsersHttpService);
 
 
   cols = [
@@ -63,7 +67,6 @@ export class BookingsComponent {
     { field: 'actions', header: 'Actions' }
   ]
 
-  bookings$ = new Observable<any>();
 
   getBookings(page: number = 1, limit: number = 10) {
     this.bookings$ = this._bookingService.getBookings(page, limit).pipe(tap(bookings => {
@@ -75,6 +78,12 @@ export class BookingsComponent {
 
   ngOnInit(): void {
     this.getBookings();
+    this.advisors$ = this._advisorService.getAllAdvisorProfiles().pipe(
+      tap(advisors => {
+        this.advisors = advisors;
+      })
+    );
+
 
     this.users$ = this._usersService.getAllUsers().pipe(
       tap(users => {
@@ -139,11 +148,13 @@ export class BookingsComponent {
 
   saveAdvisor() {
     let data = {
-      "userId": this.advisor
+      "userId":  this.advisor.user.id
     }
 
-    this.assignBooking$ = this._bookingService.assignBookingToInvestor(this.currentBookingId, data).pipe(tap(res => {
-      this._fs.success("Advior Assigned Successfully")
+    this.assignBooking$ = this._bookingService.assignBookingToAdvisor(this.currentBookingId, data).pipe(tap(res => {
+      this._fs.success("Advisor Assigned Successfully")
+      this.getBookings();
+
     }),
       catchError(err => {
         this._fs.info(err.message);

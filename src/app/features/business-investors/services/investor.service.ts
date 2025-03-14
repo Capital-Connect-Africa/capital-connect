@@ -19,6 +19,12 @@ export class InvestorService{
         }))
     }
 
+    getInvestorProfileIdByUserId(investorId: number){
+        return this._bIService.getInvestorProfileIdByUserId(investorId).pipe(map(res =>{
+            return res;
+        }))
+    }
+
     getConnectedBusinesses(investorId:number){
         return this._userService.getInvestorConnectedBusinesses(investorId).pipe(map(res =>{
             return res;

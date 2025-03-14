@@ -120,7 +120,11 @@ export interface Booking {
   payments: Payment[];
   notes:string,
   user:User,
-  advisor:User
+  advisor:User,
+  meetingLink:string,
+  meetingEndTime:string,
+  meetingStartTime:string,
+  meetingId:string
 }
 
 export interface SaveMeetingPayload{

@@ -1,7 +1,5 @@
 
 <ng-container *ngIf="company_details$ | async"></ng-container>
-
-
 <ng-container *ngIf="scoring$ | async"></ng-container>
 <ng-container *ngIf="investorPreparednessGeneralSummary$ | async"></ng-container>
 <ng-container *ngIf="investorEligibilityGeneralSummary$ | async"></ng-container>
@@ -16,8 +14,7 @@
     <main class="stats">
       <ng-container>
         <div>
-          <h3><a routerLink="/advisor">Back to Sessions</a></h3>
-
+          <h3><a class="btn btn-primary-alt btn-sm" routerLink="/advisor/sessions">Back to Sessions</a></h3>
           <ng-container *ngIf="company_details$ | async as result">
           <div class="flex flex-col bg-white  bio_info">
             <h2>{{result.name}}</h2>
@@ -121,8 +118,6 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
-      <a routerLink="/business/investor-eligibility" class="edit__cta__btn" *ngIf="currentModal === 'eligibility' && eligibilityAnswers.length > 0">Edit Submission</a>
-      <a routerLink="/business/investor-preparedness" class="edit__cta__btn" *ngIf="currentModal === 'preparedness' && preparednessAnswers.length > 0">Edit Submission</a>
       <section class="score-section">
         <h3>{{currentModal==="eligibility"? "Your Investor/Funder Eligibility" :currentModal==="preparedness"?"Your Investor/Funder Preparedness":""}}</h3>
         <h2>{{currentModal==="eligibility"? investorEligibilityScore
@@ -202,6 +197,19 @@
     </footer>
   </div>
 
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action cta__group">
+      <a href="javascript:void(0);" (click)="generatePDF()">Download Report</a>
+    </div>
+  </div>
+
 </app-modal>
 
 
@@ -217,7 +225,6 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
-      <a routerLink="/business/financials" class="edit__cta__btn" *ngIf="factSheetAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(factSheetAnswers.length > 0)">
@@ -256,6 +263,20 @@
     </footer>
   </div>
 
+
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action cta__group">
+      <a href="javascript:void(0);" (click)="generateBusinessInformationReport()">Download Report</a>
+    </div>
+  </div>
+
 </app-modal>
 
 
@@ -272,7 +293,6 @@
       <p>Sector - {{ currentCompany.businessSector }}</p>
     </section>
     <div class="content">
-      <a routerLink="/business/impact-assessment" class="edit__cta__btn" *ngIf="impactElementAnswers.length > 0">Edit Submission</a>
       <h2 class="title">Feedback and recommendations</h2>
 
       <div *ngIf="(impactElementAnswers.length > 0)">
@@ -311,6 +331,19 @@
     </footer>
   </div>
 
+
+  <div class="details flex flex-col gap-4 pb-12">
+    <p class="sub-title">On Capital Connect Africa you can:</p>
+    <ul class="flex-col flex gap-2 actions-list">
+      <li>Get a detailed report on your company's investment readiness</li>
+      <li>Plan your next milestones to unlock more capital</li>
+      <li>Learn to speak investor and break down barriers</li>
+      <li>Match with investors and organizations that are a good fit for you</li>
+    </ul>
+    <div class="call-to-action cta__group">
+      <a href="javascript:void(0);" (click)="generateImpactElementReport()">Download Report</a>
+    </div>
+  </div>
 </app-modal>
 
 

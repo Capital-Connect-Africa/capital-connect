@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {  map, Observable, switchMap } from 'rxjs';
-import { BASE_URL, BaseHttpService } from '../../../core';
+import {  map, Observable } from 'rxjs';
+import { BASE_URL, BaseHttpService, FeedbackService } from '../../../core';
 import { Role, User } from '../models';
 import { MatchedInvestor } from '../../../shared/interfaces';
+import { USER_ROLES } from '../../../shared';
 
 @Injectable({ providedIn: 'root' })
 export class UsersHttpService extends BaseHttpService {
-  constructor(private httpClient: HttpClient) {
+
+  constructor(private httpClient: HttpClient, private feedbackService: FeedbackService) {
     super(httpClient);
   }
 
@@ -55,11 +57,14 @@ export class UsersHttpService extends BaseHttpService {
     })) as Observable<{data: MatchedInvestor[], total_count: number}>;
   }
 
-  getBusinessOwners(page =1, limit =1000): Observable<{data: User[], total_count: number}> {
-    return this.read(`${BASE_URL}/users/role?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
+  getUserByRole(role:USER_ROLES, page =1, limit =1000): Observable<{data: User[], total_count: number}>{
+    return this.read(`${BASE_URL}/users/role?usertype=${role}&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
       return res
     })) as Observable<{data: User[], total_count: number}>;
   }
+
+
+
 
   getReferrerBusinessOwners(page =1, limit =1000): Observable<{data: User[], total_count: number}> {
     return this.read(`${BASE_URL}/users/referrals?usertype=user&page=${page}&limit=${limit}`).pipe(map((res:any) =>{
@@ -81,7 +86,10 @@ export class UsersHttpService extends BaseHttpService {
 
   updateUserByAdmin(user: Partial<User>, id: number) {
     const _headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    return this.httpClient.put(`${BASE_URL}/users/${id}/admin`, (user), { headers: _headers })
+    return this.httpClient.put(`${BASE_URL}/users/${id}/admin`, (user), { headers: _headers }).pipe(map(res =>{
+      this.feedbackService.success('Operation successful', 'Update')
+      return res
+    }))
   }
 
   deletUser(id: number) {

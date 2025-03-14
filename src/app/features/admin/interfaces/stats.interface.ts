@@ -1,5 +1,6 @@
 export interface Stats {
   staff: number;
+  admin: number;
   business: number;
   investors: number;
   advisors: number;

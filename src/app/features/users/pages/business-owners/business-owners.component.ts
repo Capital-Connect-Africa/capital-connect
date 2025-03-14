@@ -14,6 +14,7 @@ import { UsersHttpService } from '../../services/users-http.service';
 import { ConfirmationService, FeedbackService } from '../../../../core';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
+import { USER_ROLES } from '../../../../shared';
 
 @Component({
   selector: 'app-business-owners',
@@ -29,6 +30,7 @@ export class BusinessOwnersComponent {
   private _companyService = inject(CompanyHttpService);
   private _feedbackService = inject(FeedbackService);
 
+  updateUser$ =new Observable();
   users$ = new Observable<any>();
   delete$ = new Observable();
   usersCount:number =0;
@@ -53,7 +55,7 @@ export class BusinessOwnersComponent {
   }
 
   private _initUsers() {
-    this.users$ = this._usersService.getBusinessOwners().pipe(
+    this.users$ = this._usersService.getUserByRole(USER_ROLES.USER).pipe(
       tap(users => {
         this.users = users.data;
         this.usersCount =users.total_count;
@@ -108,5 +110,16 @@ export class BusinessOwnersComponent {
     const end = Math.min(start + (this.table.rows ?? 10), data.length);
     this.usersShowingCount = start + 1;
     this.end = end;
+  }
+
+  toggleUserActiveStatus(user:User){
+    
+    this.updateUser$ =this._confirmationService.confirm(`Do you want to ${user.isActive?'deactivate': 'activate'} ${user.firstName??''} ${user.lastName??''}? This user will ${user.isActive?'not be': 'be'} able to login.`).pipe(switchMap((res) =>{
+      if(res)
+        return this._usersService.updateUserByAdmin({isActive: !user.isActive}, user.id).pipe(tap(() =>{
+          this._initUsers();
+        }))
+      return EMPTY;
+    }))
   }
 }

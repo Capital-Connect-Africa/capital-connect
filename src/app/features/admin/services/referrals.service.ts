@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../core';
-import { firstValueFrom, map, Observable } from 'rxjs';
+import { firstValueFrom, map, Observable, tap } from 'rxjs';
 import { ReferralTokenService } from '../../../shared/services/referral-token.service';
 import { AuthStateService } from '../../auth/services/auth-state.service';
 import {
@@ -8,6 +8,7 @@ import {
   ReferralPayload,
 } from '../interfaces/referral.leader.interface';
 import { ReferralStats } from '../interfaces/referral.stats.interface';
+import { User } from '../../users/models';
 
 @Injectable({ providedIn: 'root' })
 export class ReferralsService extends BaseHttpService {
@@ -28,6 +29,7 @@ export class ReferralsService extends BaseHttpService {
             visits: referral.visits,
             signups: referral.user.referredUsers.length,
             rate: (referral.user.referredUsers.length / referral.clicks) * 100,
+            refferers:referral.user.referredUsers
           }))
           .sort(
             (a, b) =>
@@ -78,5 +80,14 @@ export class ReferralsService extends BaseHttpService {
         return { ...res, rate };
       })
     );
+  }
+
+  getMyReferees(id:number):Observable<User[]>{
+    return this.read(`${BASE_URL}/referrals/user/${id}`).pipe(
+      map((res: any) => {
+        const firstRow =res?.data.at(0);
+        return (firstRow && firstRow.user?.referredUsers) ?? [];
+      }),
+    )
   }
 }

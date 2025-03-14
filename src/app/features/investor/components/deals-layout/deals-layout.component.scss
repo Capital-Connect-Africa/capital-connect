@@ -1,0 +1,13 @@
+@import '../../../../styles/main.scss';
+
+.main__content{
+  display: grid;
+  min-height: 100svh;
+  grid-template-columns: max-content auto;
+  .main{
+    height: 100%;
+    display: grid;
+    grid-template-rows: max-content auto;
+    background-color: #F9FAFB;
+  }
+}
