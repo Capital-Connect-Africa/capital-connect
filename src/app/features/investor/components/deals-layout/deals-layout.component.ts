@@ -2,33 +2,65 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
 import { SidenavComponent } from '../../../../core';
-import { DealsPipelinesStore } from '../../../deals-pipeline/store/deals.pipelines.store';
+import { DealsPipelinesStore, PipelineViews } from '../../../deals-pipeline/store/deals.pipelines.store';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from "../../../../shared/components/modal/modal.component";
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DealPipelineDto } from '../../../deals-pipeline/interfaces/deal.pipeline.interface';
+import { generateCryptCode } from '../../../../core/utils/crypto.code.generator';
+
+interface Field {
+  id: string, progress: string, name:string, stageId?:number, action: 'edit' | 'create', selected:boolean
+}
 
 @Component({
   selector: 'app-deals-layout',
   standalone: true,
-  imports: [RouterOutlet, SidenavComponent, CommonModule, ModalComponent, ReactiveFormsModule],
+  imports: [RouterOutlet, SidenavComponent, CommonModule, ModalComponent, ReactiveFormsModule, FormsModule],
   templateUrl: './deals-layout.component.html',
   styleUrl: './deals-layout.component.scss'
 })
 export class DealsLayoutComponent {
-  private _fb =inject(FormBuilder)
+  MAX_STAGES_COUNT:number =7;
+  
+  VIEWS =PipelineViews
+
+  private _fb =inject(FormBuilder);
+
+
   links =INVESTOR_DASHBOARD_LINKS;
-  store =inject(DealsPipelinesStore)
+  store =inject(DealsPipelinesStore);
+  stageFields:Field[] =[]
 
   isPipelineFormVisible =false;
-  isPipelineConfigModalVisible =true;
+  isPipelineConfigModalVisible =false;
 
   ngOnInit(){
     this.loadPipelines()
   }
 
+  updateStageFields(){
+    this.stageFields =[];
+    if(this.store.activePipeline()?.stages && this.store.activePipeline()?.stages.length){
+      this.store.activePipeline()?.stages.sort((a, b) =>a.progress - b.progress).forEach(stage =>{
+        if(this.stageFields.length >=(this.store.activePipeline()?.maxNumberOfStages ?? this.MAX_STAGES_COUNT)) return
+        this.stageFields.push({
+          id: generateCryptCode(),
+          name: stage.name,
+          progress: `${stage.progress}%`,
+          selected: false,
+          stageId: stage.id,
+          action: 'edit',
+        })
+      })
+    }
+    
+    else this.addInputField();
+  }
+
   async loadPipelines(){
-    await this.store.loadAll()
+    await this.store.loadAll();
+    this.updateStageFields();
   }
 
   handlePipelineChange(event: Event){
@@ -36,6 +68,7 @@ export class DealsLayoutComponent {
     const value = +target.value;
     if(!value) return;
     this.store.selectPipeline(value);
+    this.updateStageFields()
   }
 
   openPipelineSettingsModal(){
@@ -44,7 +77,7 @@ export class DealsLayoutComponent {
 
   pipelineForm =this._fb.group({
     name: ['', [Validators.required]],
-    maxNumberOfStages: [7]
+    maxNumberOfStages: [this.MAX_STAGES_COUNT]
   })
 
   async createNewPipeline(){
@@ -61,5 +94,71 @@ export class DealsLayoutComponent {
 
   openPipelineForm(){
     this.isPipelineFormVisible =true;
+  }
+
+  addInputField(){
+    if(this.stageFields.length >=(this.store.activePipeline()?.maxNumberOfStages ?? this.MAX_STAGES_COUNT) 
+      || (this.stageFields.some(field =>!field.name || !field.progress) && this.stageFields.length) ) return
+
+    this.stageFields.push({
+      id: generateCryptCode(),
+      name: '',
+      progress: '',
+      action: 'create',
+      selected: true,
+    })
+  }
+
+  async removeField(field:Field){
+    if(this.stageFields.length <=1) return
+    if(field.stageId){
+        if(confirm(`Do you want to remove ${field.name}? This action cannot be undone!`)){
+          await this.store.removeStage(field.stageId);
+          this.updateStageFields()
+        }
+      
+    }else{
+      this.stageFields =this.stageFields.filter(
+        field =>field.id !==field.id
+      )
+    }
+  }
+
+  handleFieldValueChange(payload:Field){
+    const values =payload.progress.trim().split('%');
+    const numerical =+(values.at(0) as string);
+    this.stageFields[this.stageFields.indexOf(payload)] ={
+      ...payload,
+      progress: `${numerical >100? 100: numerical <0? 0: numerical}%`
+    }
+    this.stageFields =this.stageFields.map(field =>({
+      ...field, selected: payload.id === field.id
+    })) 
+  }
+
+  async submit(){
+    const selctedField =this.stageFields.find(field =>field.selected);
+    if(selctedField){
+      const {name, progress, action, stageId} =selctedField;
+      const values =progress.trim().split('%');
+      const numerical =+(values.at(0) as string);
+      if(name && progress){
+        if(action === 'create') await this.store.addNewStage({name, progress: numerical})
+        else if (action =='edit'){
+          const payload:any ={name, progress: numerical}
+          if(this.store.activePipeline()?.stages.find(stage =>stage.name === name)) delete payload.name;
+          await this.store.updateStage(payload, stageId as number);
+        } 
+        this.updateStageFields();
+        if(action === 'edit') return
+      }
+
+    }
+
+    this.addInputField();
+  }
+
+  setView(view:PipelineViews){
+    this.store.setView(view)
   }
 }
