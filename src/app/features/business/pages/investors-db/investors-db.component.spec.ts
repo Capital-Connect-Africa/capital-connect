@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PublicLayoutComponent } from './layout.component';
+import { InvestorsDbComponent } from './investors-db.component';
 
-describe('LayoutComponent', () => {
-  let component: PublicLayoutComponent;
-  let fixture: ComponentFixture<PublicLayoutComponent>;
+describe('InvestorsDbComponent', () => {
+  let component: InvestorsDbComponent;
+  let fixture: ComponentFixture<InvestorsDbComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PublicLayoutComponent]
+      imports: [InvestorsDbComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PublicLayoutComponent);
+    fixture = TestBed.createComponent(InvestorsDbComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
