@@ -4,12 +4,12 @@
         <div class="bg-white !py-4 !px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <button class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all"><i class="pi pi-plus text-xs"></i>New Deal</button>
-                <select class=" !text-gray-600 !pl-2 !pr-8 !py-2 rounded cursor-pointer !bg-neutral-100 text-sm hover:!bg-neutral-200 hover:!text-gray-800">
-                    <option>Default Pipeline</option>
+                <select (change)="handlePipelineChange($event)" class=" !text-gray-600 !pl-2 !pr-8 !py-2 rounded cursor-pointer !bg-neutral-100 text-sm hover:!bg-neutral-200 hover:!text-gray-800">
+                    <option *ngFor="let pipeline of store.payload()" [value] ="pipeline.id" [selected] ="store.activePipeline()?.id ==pipeline.id">{{pipeline.name}}</option>
                 </select>
             </div>
             <div class="flex items-center gap-4">
-                <button class="flex items-center gap-2 !px-2 !py-2 text-gray-600 hover:text-gray-900 hover:bg-neutral-200 rounded transition-all">
+                <button (click)="openPipelineSettingsModal()" class="flex items-center gap-2 !px-2 !py-2 text-gray-600 hover:text-gray-900 hover:bg-neutral-200 rounded transition-all">
                     <i class="pi pi-cog text-sm"></i>
                     <span class="text-sm">Settings</span>
                 </button>
@@ -24,3 +24,19 @@
         </div>
     </main>
 </div>
+
+<app-modal [(visible)]="isPipelineConfigModalVisible" [title]="(store.activePipeline() && store.activePipeline()?.name)??''" helperText="Customize this pipeline your way">
+    <div class="h-full w-full grid grid-cols-2 gap-4">
+        <section class="w-full h-full flex flex-col !pt-12">
+            <p class="text-sm max-w-[90%] text-gray-600">Having multiple investment processes? You can create additional pipelines to manage your processes. We allow upto 3 pipelines.</p>
+            <div class="!pt-4" *ngIf="!isPipelineFormVisible">
+                <button [disabled]="store.payload().length >=3" (click)="openPipelineForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': store.payload().length >=3}"><i class="pi pi-plus text-xs"></i>New Pipeline</button>
+            </div>
+            <form *ngIf="isPipelineFormVisible && store.payload().length <3" class="flex flex-col gap-4 !py-4" [formGroup]="pipelineForm" (submit)="createNewPipeline()">
+                <div class=""><button (click)="closePipelineForm()" type="button" class="flex items-center justify-center rounded-full w-7 h-7 hover:bg-rose-50 hover:text-rose-500 transition-all"><i class="pi pi-times text-xs"></i></button></div>
+                <input formControlName ="name" placeholder="Enter your pipeline name" class="block !font-light placeholder:!text-sm !border !border-solid !border-gray-400 rounded !px-4 !py-2" />
+                <button [disabled]="pipelineForm.invalid" type="submit" class="bg-blue-500 w-max text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': pipelineForm.invalid}">Submit</button>
+            </form>
+        </section>
+    </div>
+</app-modal>
