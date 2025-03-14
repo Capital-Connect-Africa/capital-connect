@@ -321,22 +321,22 @@ convertToExcelFile(data: any[]): Blob {
     const data = this.getGridData();
     const [name, ext] =this.fileName.split('.')
     
-    let payload;
-    switch(ext){
-      case 'json':
-        payload =this.convertToJsonFile(data)
-        break
-      case 'xlsx':
-      case 'xls':
-        payload =this.convertToExcelFile(data)
-        break
-      default:
-        break
-    } 
+    const payload =this.convertToJsonFile(data);;
+    // switch(ext){
+    //   case 'json':
+    //     payload =this.convertToJsonFile(data)
+    //     break
+    //   case 'xlsx':
+    //   case 'xls':
+    //     payload =this.convertToExcelFile(data)
+    //     break
+    //   default:
+    //     break
+    // } 
     if(!payload) return this._feedbackService.warning('No file selected', 'Upload');
-    this.convertToJsonFile(data);
+    
     const formData = new FormData();
-    formData.append('file', payload as Blob, `${name}.${ext}`);
+    formData.append('file', payload as Blob, `${name}.json`);
     this.upload$ = this._publicInvestorService.uploadInvestors(formData).pipe(
       tap((res) => {
         if(res.savedCount >0){
