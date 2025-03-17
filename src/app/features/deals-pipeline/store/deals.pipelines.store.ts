@@ -4,7 +4,7 @@ import { patchState, signalStore, withMethods, withState} from "@ngrx/signals";
 import { DealsPipelineService } from "../services/deals-pipeline.service";
 import { FeedbackService } from "../../../core";
 import { DealStage, DealStageDto } from "../interfaces/deal.stage.interface";
-import { DealFormData } from "../interfaces/deal.interface";
+import { Deal, DealFormData } from "../interfaces/deal.interface";
 
 export enum PipelineViews {
     KANBAN_VIEW ='Kanban View',
@@ -133,7 +133,42 @@ export const DealsPipelinesStore =signalStore(
                 catch(error:any){
                     feedbackService.error(error.message)
                 }
+            },
+
+            async updateDealStage(srcStage:DealStage, dstStage:DealStage, dealId:number){
+                
+                try {
+                    const deal =await pipelineService.updateDeal({stageId: dstStage.id}, dealId) 
+                    const activePipeline =store.activePipeline() as DealPipeline
+                    const stages =activePipeline?.stages;
+                    if(!stages) return
+                    let srcId:number =-1;
+                    let src =(stages.find((stage, index) =>{
+                        srcId =index;
+                        return stage.id === srcStage.id
+                    })?.deals ?? []).filter(dl =>dl.id !== deal.id);
+    
+                    let dstId:number =-1;
+                    const dst =(stages.find((stage, index) =>{
+                        dstId =index;
+                        return stage.id === dstStage.id
+                    })?.deals ?? [])
+    
+                    stages[srcId].deals =src;
+                    stages[dstId].deals =[...dst, deal];
+                    patchState(store, {
+                        activePipeline: {
+                            ...activePipeline,
+                            stages
+                        }
+                    })
+                    
+                } catch (error:any) {
+                    feedbackService.error(error.message)
+                }
+
             }
+
         })
     )
 )
