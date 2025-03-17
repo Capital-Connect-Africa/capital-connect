@@ -12,6 +12,7 @@ export const customFormatDate =(date:Date, isNull:boolean) =>{
     const ampm = hours >= 12 ? 'PM' : 'AM';
     return {
         // TODO: add what a field of the format you want
+        mmdd: isNull? '-' :`${months[month]} ${monthDay < 10? '0'+monthDay: monthDay}`,
         wdddmmyr: isNull? '-' :`${weekDay[day]} ${monthDay < 10? '0'+monthDay: monthDay} ${months[month]}, ${year}`,
         time12hrs: isNull? '-' : `${hours12 <10? '0'+hours12 : hours12}:${minutes <10? '0'+minutes: minutes} ${ampm}`,
         time24hrs: isNull? '-' :`${hours}:${minutes <10? '0'+minutes: minutes}`,
