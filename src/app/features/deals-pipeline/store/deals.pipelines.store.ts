@@ -3,7 +3,8 @@ import { DealPipeline, DealPipelineDto } from "../interfaces/deal.pipeline.inter
 import { patchState, signalStore, withMethods, withState} from "@ngrx/signals";
 import { DealsPipelineService } from "../services/deals-pipeline.service";
 import { FeedbackService } from "../../../core";
-import { DealStageDto } from "../interfaces/deal.stage.interface";
+import { DealStage, DealStageDto } from "../interfaces/deal.stage.interface";
+import { DealFormData } from "../interfaces/deal.interface";
 
 export enum PipelineViews {
     KANBAN_VIEW ='Kanban View',
@@ -112,6 +113,26 @@ export const DealsPipelinesStore =signalStore(
                 patchState(store, {
                     currentView: view
                 })
+            },
+
+            async addDeal(payload:DealFormData){
+                const stages =(store.activePipeline()?.stages ?? []).sort((a, b) =>a.progress - b.progress)
+                const initialStage =stages.at(0) as DealStage;
+                if(!initialStage) return;
+                try{
+                    const deal =await pipelineService.createDeal({...payload, stageId: initialStage.id})
+                    stages[0].deals.push(deal);
+                    patchState(store, {
+                        activePipeline: {
+                            ...(store.activePipeline() as DealPipeline),
+                            stages: stages,
+                        }
+                    })
+                    feedbackService.success(`Deal ${deal.name} has been created successfully`);
+                }
+                catch(error:any){
+                    feedbackService.error(error.message)
+                }
             }
         })
     )
