@@ -20,4 +20,13 @@ export interface DealDto {
     status?: DealStatus;
     closureDate?: Date;
 }
-  
+
+
+export interface DealFormData{
+    name: string;
+    value: number;
+    stageId?: number;
+    contactName: string;
+    contactEmail: string;
+    contactPhone: string;
+}
