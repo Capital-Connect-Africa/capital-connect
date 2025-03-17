@@ -62,4 +62,10 @@ export class DealsPipelineService extends BaseHttpService{
       return res as Deal;
     })))
   }
+
+  async updateDeal(payload:Partial<DealDto>, dealId: number){
+    return lastValueFrom(this.update(`${this.BASE_LINK}/deals`, dealId, payload).pipe(map((res) =>{
+      return res as Deal;
+    })))
+  }
 }
