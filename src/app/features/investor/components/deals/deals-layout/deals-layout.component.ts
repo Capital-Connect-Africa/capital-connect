@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
-import { SidenavComponent } from '../../../../core';
-import { DealsPipelinesStore, PipelineViews } from '../../../deals-pipeline/store/deals.pipelines.store';
+import { INVESTOR_DASHBOARD_LINKS } from '../../../../../shared/routes/investor-dashboard-routes';
+import { SidenavComponent } from '../../../../../core';
+import { DealsPipelinesStore, PipelineViews } from '../../../../deals-pipeline/store/deals.pipelines.store';
 import { CommonModule } from '@angular/common';
-import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DealPipelineDto } from '../../../deals-pipeline/interfaces/deal.pipeline.interface';
-import { generateCryptCode } from '../../../../core/utils/crypto.code.generator';
-import { DealCustomerDto } from '../../../deals-pipeline/interfaces/deal.customer.interface';
-import { DealFormData } from '../../../deals-pipeline/interfaces/deal.interface';
+import { DealPipelineDto } from '../../../../deals-pipeline/interfaces/deal.pipeline.interface';
+import { generateCryptCode } from '../../../../../core/utils/crypto.code.generator';
+import { DealCustomerDto } from '../../../../deals-pipeline/interfaces/deal.customer.interface';
+import { DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
 
 interface Field {
   id: string, progress: string, name:string, stageId?:number, action: 'edit' | 'create', selected:boolean
