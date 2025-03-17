@@ -8,6 +8,8 @@ import { ModalComponent } from "../../../../shared/components/modal/modal.compon
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DealPipelineDto } from '../../../deals-pipeline/interfaces/deal.pipeline.interface';
 import { generateCryptCode } from '../../../../core/utils/crypto.code.generator';
+import { DealCustomerDto } from '../../../deals-pipeline/interfaces/deal.customer.interface';
+import { DealFormData } from '../../../deals-pipeline/interfaces/deal.interface';
 
 interface Field {
   id: string, progress: string, name:string, stageId?:number, action: 'edit' | 'create', selected:boolean
@@ -31,8 +33,10 @@ export class DealsLayoutComponent {
   links =INVESTOR_DASHBOARD_LINKS;
   store =inject(DealsPipelinesStore);
   stageFields:Field[] =[]
-
+  
+  isContactFormVisible =false;
   isPipelineFormVisible =false;
+  isDealFormModalVisible =false;
   isPipelineConfigModalVisible =false;
 
   ngOnInit(){
@@ -78,6 +82,20 @@ export class DealsLayoutComponent {
   pipelineForm =this._fb.group({
     name: ['', [Validators.required]],
     maxNumberOfStages: [this.MAX_STAGES_COUNT]
+  })
+
+  dealCustomerForm =this._fb.group({
+    name: ['', [Validators.required]],
+    phone: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+  });
+
+  dealForm =this._fb.group({
+    name: ['', [Validators.required]],
+    value: ['', [Validators.required]],
+    contactName: ['', [Validators.required]],
+    contactEmail: ['', [Validators.required]],
+    contactPhone: ['', [Validators.required]] 
   })
 
   async createNewPipeline(){
@@ -137,9 +155,9 @@ export class DealsLayoutComponent {
   }
 
   async submit(){
-    const selctedField =this.stageFields.find(field =>field.selected);
-    if(selctedField){
-      const {name, progress, action, stageId} =selctedField;
+    const selectedField =this.stageFields.find(field =>field.selected);
+    if(selectedField){
+      const {name, progress, action, stageId} =selectedField;
       const values =progress.trim().split('%');
       const numerical =+(values.at(0) as string);
       if(name && progress){
@@ -148,9 +166,10 @@ export class DealsLayoutComponent {
           const payload:any ={name, progress: numerical}
           if(this.store.activePipeline()?.stages.find(stage =>stage.name === name)) delete payload.name;
           await this.store.updateStage(payload, stageId as number);
+          this.updateStageFields();
+          return
         } 
         this.updateStageFields();
-        if(action === 'edit') return
       }
 
     }
@@ -158,7 +177,37 @@ export class DealsLayoutComponent {
     this.addInputField();
   }
 
+  submitDealCustomer(){
+    const values =this.dealCustomerForm.value as DealCustomerDto;
+    if(this.dealCustomerForm.valid){
+      this.dealForm.patchValue({
+        contactName: values.name,
+        contactEmail: values.email,
+        contactPhone: values.phone,
+      })
+    }
+    this.isContactFormVisible =false;
+  }
+
+  async submitDeal(){
+    if(!this.dealForm.valid) return
+    const customerDeal =this.dealForm.value as any as DealFormData;
+    await this.store.addDeal(customerDeal);
+    this.dealForm.reset();
+    this.dealCustomerForm.reset()
+    this.isDealFormModalVisible =false
+  }
+
   setView(view:PipelineViews){
     this.store.setView(view)
   }
+
+  showDealForm(){
+    this.isDealFormModalVisible =true;
+  }
+
+  showContactForm(){
+    this.isContactFormVisible =true;
+  }
+
 }
