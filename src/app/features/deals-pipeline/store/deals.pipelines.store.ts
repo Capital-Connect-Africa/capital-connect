@@ -4,11 +4,11 @@ import { patchState, signalStore, withMethods, withState} from "@ngrx/signals";
 import { DealsPipelineService } from "../services/deals-pipeline.service";
 import { FeedbackService } from "../../../core";
 import { DealStage, DealStageDto } from "../interfaces/deal.stage.interface";
-import { Deal, DealFormData } from "../interfaces/deal.interface";
+import { DealFormData } from "../interfaces/deal.interface";
 
 export enum PipelineViews {
     KANBAN_VIEW ='Kanban View',
-    LIST_VIEW ='List View' 
+    ANALYTICAL_VIEW ='Analytical View' 
 }
 
 type DealsPipelinesState ={
@@ -20,7 +20,7 @@ type DealsPipelinesState ={
 
 const initialState: DealsPipelinesState ={
     payload: [],
-    currentView: PipelineViews.KANBAN_VIEW,
+    currentView: PipelineViews.ANALYTICAL_VIEW,
     activePipeline: undefined
 }
 
