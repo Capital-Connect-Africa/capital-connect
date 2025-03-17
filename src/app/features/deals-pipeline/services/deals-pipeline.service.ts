@@ -4,6 +4,9 @@ import { AuthStateService } from '../../auth/services/auth-state.service';
 import { EMPTY, lastValueFrom, map } from 'rxjs';
 import { DealPipeline, DealPipelineDto } from '../interfaces/deal.pipeline.interface';
 import { DealStage, DealStageDto } from '../interfaces/deal.stage.interface';
+import { Deal, DealDto, DealFormData } from '../interfaces/deal.interface';
+import { DealCustomer, DealCustomerDto } from '../interfaces/deal.customer.interface';
+import { DealStatus } from '../enums/deal.status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +45,21 @@ export class DealsPipelineService extends BaseHttpService{
   async removeStage(stageId:number){
     return lastValueFrom(this.delete(`${this.BASE_LINK}/stages`, stageId).pipe(map(() =>{
       return EMPTY;
+    })))
+  }
+
+  async createDealCustomer(payload: DealCustomerDto){
+    return lastValueFrom(this.create(`${this.BASE_LINK}/customers`, payload).pipe(map((res) =>{
+      return res as DealCustomer;
+    })))
+  }
+
+  async createDeal(payload:DealFormData){
+    const {name, value, stageId, contactName, contactEmail, contactPhone} =payload;
+    const dealCustomer =await this.createDealCustomer({name: contactName, email: contactEmail, phone: contactPhone});
+    const deal:DealDto ={name, value, stageId: Number(stageId), status: DealStatus.ACTIVE, customerId: dealCustomer.id}
+    return lastValueFrom(this.create(`${this.BASE_LINK}/deals`, deal).pipe(map((res) =>{
+      return res as Deal;
     })))
   }
 }
