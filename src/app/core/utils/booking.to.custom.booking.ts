@@ -13,7 +13,7 @@ export const castBookingToCustomBooking =(booking:Booking | null) =>{
         meetingLink: booking.meetingLink,
         duration: stops.time - starts.time,
         createdAt: booking.createdAt,
-        formtedStart: starts.wdddmmyr,
+        formatedStart: starts.wdddmmyr,
         formatedStop: stops.wdddmmyr,
         client: (`${booking.user.firstName??''} ${booking.user.lastName??''}`.trim()) || '-',
         advisor: (`${booking.advisor?.firstName || ''} ${booking.advisor?.lastName || ''}`.trim()) || '-',
