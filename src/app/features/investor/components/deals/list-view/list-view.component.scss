@@ -1,0 +1,29 @@
+@import "../../../../../styles//fonts.scss";
+
+.font-family-serif{
+    font-family: $font-family-sans-serif!important;
+}
+
+.description{
+    padding: 0;
+    margin: 0;
+    font-size: .85rem;
+    line-height: 1.5rem;
+    font-family: $font-family-sans-serif!important;
+}
+
+.h3 {
+    font-size: 1.25rem!important;
+    font-weight: 500;
+}
+
+.stat__card {
+    padding: 0.5rem 1rem;
+    color: #37332d;
+    background-color: white;
+}
+  
+.p__1rem {
+    padding: 1rem;
+  }
+  
