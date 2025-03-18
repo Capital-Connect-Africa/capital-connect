@@ -3,7 +3,7 @@
     <main class="bg-neutral-100 flex flex-col gap-4">
         <div class="bg-white !py-4 !px-8 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <button (click)="showDealForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all"><i class="pi pi-plus text-xs"></i>New Deal</button>
+                <button *ngIf="(store.activePipeline()?.stages??[]).length" (click)="showDealForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all"><i class="pi pi-plus text-xs"></i>New Deal</button>
                 <select (change)="handlePipelineChange($event)" class=" !text-gray-600 !pl-2 !pr-8 !py-2 rounded cursor-pointer !bg-neutral-100 text-sm hover:!bg-neutral-200 hover:!text-gray-800">
                     <option *ngFor="let pipeline of store.payload()" [value] ="pipeline.id" [selected] ="store.activePipeline()?.id ==pipeline.id">{{pipeline.name}}</option>
                 </select>

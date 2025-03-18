@@ -45,7 +45,7 @@ export class DealsLayoutComponent {
 
   updateStageFields(){
     this.stageFields =[];
-    if(this.store.activePipeline()?.stages && this.store.activePipeline()?.stages.length){
+    if((this.store.activePipeline()?.stages??[]).length){
       this.store.activePipeline()?.stages.sort((a, b) =>a.progress - b.progress).forEach(stage =>{
         if(this.stageFields.length >=(this.store.activePipeline()?.maxNumberOfStages ?? this.MAX_STAGES_COUNT)) return
         this.stageFields.push({
@@ -161,7 +161,10 @@ export class DealsLayoutComponent {
       const values =progress.trim().split('%');
       const numerical =+(values.at(0) as string);
       if(name && progress){
-        if(action === 'create') await this.store.addNewStage({name, progress: numerical})
+        if(action === 'create'){
+          await this.store.addNewStage({name, progress: numerical})
+          this.updateStageFields();
+        }
         else if (action =='edit'){
           const payload:any ={name, progress: numerical}
           if(this.store.activePipeline()?.stages.find(stage =>stage.name === name)) delete payload.name;
@@ -169,7 +172,6 @@ export class DealsLayoutComponent {
           this.updateStageFields();
           return
         } 
-        this.updateStageFields();
       }
 
     }
