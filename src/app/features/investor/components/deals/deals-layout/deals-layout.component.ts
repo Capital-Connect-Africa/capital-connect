@@ -132,6 +132,7 @@ export class DealsLayoutComponent {
   async removeField(field:Field){
     if(this.stageFields.length <=1) return
     if(field.stageId){
+        if(field.deals) return;
         if(confirm(`Do you want to remove ${field.name}? This action cannot be undone!`)){
           await this.store.removeStage(field.stageId);
           this.updateStageFields()
