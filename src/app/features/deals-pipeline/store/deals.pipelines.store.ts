@@ -11,15 +11,25 @@ export enum PipelineViews {
     ANALYTICAL_VIEW ='Analytical View' 
 }
 
+export interface DealStats{
+    stageDealsCount: {label: string, value: number}[];
+    totalDeals: number;
+    totalStages: number;
+    pendingAmount: number;
+    paidAmount: number;
+}
+
 type DealsPipelinesState ={
     payload: DealPipeline[],
     currentView: PipelineViews,
+    stats: DealStats,
     activePipeline: DealPipeline | undefined,
 }
 
 
 const initialState: DealsPipelinesState ={
     payload: [],
+    stats: {paidAmount: 0, pendingAmount: 0, totalStages: 0, totalDeals: 0, stageDealsCount: []},
     currentView: PipelineViews.ANALYTICAL_VIEW,
     activePipeline: undefined
 }
@@ -32,15 +42,40 @@ export const DealsPipelinesStore =signalStore(
         (store, pipelineService = inject(DealsPipelineService), feedbackService =inject(FeedbackService)) =>({
             async loadAll(){
                 const pipelines =(await pipelineService.getUserPipelines()).sort((a, b) =>a.id - b.id);
-                patchState(store, {payload: pipelines, activePipeline: pipelines.at(0)})
+                const activePipeline =pipelines.at(0) as DealPipeline;
+                patchState(store, {payload: pipelines, activePipeline})
+                this.updateStats();
+            },
+
+            updateStats(activePipeline:DealPipeline =store.activePipeline() as DealPipeline){
+                const stats:DealStats ={
+                    stageDealsCount: [],
+                    pendingAmount: 0,
+                    paidAmount: 0,
+                    totalDeals: 0,
+                    totalStages: (activePipeline?.stages?? []).length
+                };
+                (activePipeline?.stages?? []).forEach(stage =>{
+                    stats.stageDealsCount.push({label: stage.name, value: stage.deals.length})
+                    stats.totalDeals +=stage.deals.length
+                    if(stage.progress <100) {
+                        stats.pendingAmount +=stage.deals.reduce((prev, curr) =>prev +Number(curr.value), 0)
+                    }else{
+                        stats.paidAmount +=stage.deals.reduce((prev, curr) =>prev +Number(curr.value), 0)
+                    }
+                })
+                patchState(store, {stats})
             },
 
             selectPipeline(pipelineId:number){
+                const selectedPipeline =store.payload().find(
+                    pipeline =>pipeline.id === pipelineId
+                )
+                if(!selectedPipeline) return;
                 patchState(store, state =>({
-                    activePipeline: state.payload.find(
-                        pipeline =>pipeline.id === pipelineId
-                    )
+                    activePipeline: selectedPipeline,
                 }))
+                this.updateStats(selectedPipeline);
             },
 
             async addNewPipeline(payload:Partial<DealPipelineDto>){
@@ -66,6 +101,7 @@ export const DealsPipelinesStore =signalStore(
                             stages: pipelineStages
                         } as DealPipeline
                     })
+                    this.updateStats()
                     feedbackService.success(`A new stage ${payload.name} has been added to ${store.activePipeline()?.name}`);
                 } catch (error:any) {
                     feedbackService.error(error.message);
@@ -86,6 +122,7 @@ export const DealsPipelinesStore =signalStore(
                             stages: pipelineStages
                         } as DealPipeline
                     })
+                    this.updateStats()
                     feedbackService.success(`Details of ${stage.name} have been updated successfully`);
                 } catch (error:any) {
                     feedbackService.error(error.message);
@@ -103,6 +140,7 @@ export const DealsPipelinesStore =signalStore(
                             stages: pipelineStages
                         } as DealPipeline
                     })
+                    this.updateStats()
                     feedbackService.success(`Stage removed successfully`);
                 } catch (error:any) {
                     feedbackService.error(error.message);
@@ -113,6 +151,7 @@ export const DealsPipelinesStore =signalStore(
                 patchState(store, {
                     currentView: view
                 })
+                this.updateStats();
             },
 
             async addDeal(payload:DealFormData){
@@ -128,6 +167,7 @@ export const DealsPipelinesStore =signalStore(
                             stages: stages,
                         }
                     })
+                    this.updateStats()
                     feedbackService.success(`Deal ${deal.name} has been created successfully`);
                 }
                 catch(error:any){
@@ -162,7 +202,7 @@ export const DealsPipelinesStore =signalStore(
                             stages
                         }
                     })
-                    
+                    this.updateStats()
                 } catch (error:any) {
                     feedbackService.error(error.message)
                 }
