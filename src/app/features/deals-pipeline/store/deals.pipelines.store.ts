@@ -4,7 +4,7 @@ import { patchState, signalStore, withMethods, withState} from "@ngrx/signals";
 import { DealsPipelineService } from "../services/deals-pipeline.service";
 import { FeedbackService } from "../../../core";
 import { DealStage, DealStageDto } from "../interfaces/deal.stage.interface";
-import { DealFormData } from "../interfaces/deal.interface";
+import { Deal, DealFormData } from "../interfaces/deal.interface";
 
 export enum PipelineViews {
     KANBAN_VIEW ='Kanban View',
@@ -94,7 +94,7 @@ export const DealsPipelinesStore =signalStore(
                 try {
                     if(!store.activePipeline()) throw new Error('Select a pipeline')
                     const newStage =await pipelineService.createNewStage({...payload, pipelineId: store.activePipeline()?.id} as DealStageDto);
-                    const pipelineStages =[...store.activePipeline()?.stages ?? [], newStage].sort((a, b) =>a.progress - b.progress)
+                    const pipelineStages =[...store.activePipeline()?.stages ?? [], {...newStage, deals: [] as Deal[]}].sort((a, b) =>a.progress - b.progress)
                     patchState(store, {
                         activePipeline: {
                             ...store.activePipeline(), 
