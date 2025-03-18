@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { NumberAbbriviationPipe } from '../../../../../core/pipes/number-abbreviation.pipe';
 import { DealStage } from '../../../../deals-pipeline/interfaces/deal.stage.interface';
 import { FormatDatePipe } from "../../../../../core/pipes/format-date.pipe";
+import { ChildEventsService } from '../../../../deals-pipeline/services/child.events.service';
 
 @Component({
   selector: 'deals-kanban-view',
@@ -17,6 +18,7 @@ import { FormatDatePipe } from "../../../../../core/pipes/format-date.pipe";
 
 export class KanbanViewComponent {
   store =inject(DealsPipelinesStore);
+  private _childEventsService =inject(ChildEventsService)
   src:DealStage | null =null;
   target: Deal | null =null;
 
@@ -26,7 +28,8 @@ export class KanbanViewComponent {
 
   async handleDrop(event:Event, stage:DealStage){
     if(!this.src || ! this.target || (this.src && stage.id === this.src.id)) return;
-    await this.store.updateDealStage(this.src, stage, this.target.id)
+    await this.store.updateDealStage(this.src, stage, this.target.id);
+    this._childEventsService.emitDealStageChangeEvent();
   }
 
   handleDragOver(event: DragEvent){

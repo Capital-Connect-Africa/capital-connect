@@ -10,6 +10,8 @@ import { DealPipelineDto } from '../../../../deals-pipeline/interfaces/deal.pipe
 import { generateCryptCode } from '../../../../../core/utils/crypto.code.generator';
 import { DealCustomerDto } from '../../../../deals-pipeline/interfaces/deal.customer.interface';
 import { DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
+import { ChildEventsService } from '../../../../deals-pipeline/services/child.events.service';
+import { tap } from 'rxjs';
 
 interface Field {
   id: string, progress: string, name:string, stageId?:number, deals: number, action: 'edit' | 'create', selected:boolean
@@ -30,14 +32,19 @@ export class DealsLayoutComponent {
   private _fb =inject(FormBuilder);
 
 
+  stageFields:Field[] =[];
   links =INVESTOR_DASHBOARD_LINKS;
   store =inject(DealsPipelinesStore);
-  stageFields:Field[] =[]
+  private _childEventsService =inject(ChildEventsService);
   
   isContactFormVisible =false;
   isPipelineFormVisible =false;
   isDealFormModalVisible =false;
   isPipelineConfigModalVisible =false;
+
+  onDealDragAndDrop$ =this._childEventsService.dealStageChange$.pipe(tap(() =>{
+    this.updateStageFields();
+  }))
 
   ngOnInit(){
     this.loadPipelines()
