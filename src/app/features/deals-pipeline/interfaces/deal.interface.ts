@@ -1,5 +1,6 @@
 import { DealStatus } from "../enums/deal.status.enum";
 import { DealCustomer } from "./deal.customer.interface";
+import { DealStage } from "./deal.stage.interface";
 
 export interface Deal{
     id: number;
@@ -29,4 +30,8 @@ export interface DealFormData{
     contactName: string;
     contactEmail: string;
     contactPhone: string;
+}
+
+export interface DealAsItem extends Deal{
+    stage: DealStage
 }
