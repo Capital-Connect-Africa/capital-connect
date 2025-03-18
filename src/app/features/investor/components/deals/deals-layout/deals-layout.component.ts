@@ -12,7 +12,7 @@ import { DealCustomerDto } from '../../../../deals-pipeline/interfaces/deal.cust
 import { DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
 
 interface Field {
-  id: string, progress: string, name:string, stageId?:number, action: 'edit' | 'create', selected:boolean
+  id: string, progress: string, name:string, stageId?:number, deals: number, action: 'edit' | 'create', selected:boolean
 }
 
 @Component({
@@ -55,6 +55,7 @@ export class DealsLayoutComponent {
           selected: false,
           stageId: stage.id,
           action: 'edit',
+          deals: stage.deals.length
         })
       })
     }
@@ -124,6 +125,7 @@ export class DealsLayoutComponent {
       progress: '',
       action: 'create',
       selected: true,
+      deals: 0,
     })
   }
 
@@ -137,7 +139,7 @@ export class DealsLayoutComponent {
       
     }else{
       this.stageFields =this.stageFields.filter(
-        field =>field.id !==field.id
+        f =>f.id !== field.id
       )
     }
   }

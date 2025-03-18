@@ -42,18 +42,18 @@
 
         <section class="w-full h-full flex flex-col !pt-8">
             <ul class="flex flex-col gap-2">
-                <li class="grid grid-cols-[30%_auto] gap-4 items-center">
+                <li class="grid w-full grid-cols-[20%_auto] gap-4 items-center">
                     <div><p class="description font-family-serif">% Progress</p></div>
-                    <div class="flex items-center justify-between">
+                    <div class="grid grid-cols-[auto_10%] !gap-4 items-center">
                         <p class="description font-family-serif">Stage Name</p>
                         <div *ngIf="stageFields.length <=(store.activePipeline()?.maxNumberOfStages ?? MAX_STAGES_COUNT)"><button (click)="submit()" title="add field" type="button" class="flex items-center justify-center rounded-lg w-7 h-7 hover:bg-blue-100 hover:text-blue-500 transition-all"><i class="pi pi-plus text-xs"></i></button></div>
                     </div>
                 </li>
-                <li class="grid grid-cols-[30%_auto] gap-4" *ngFor="let field of stageFields">
+                <li class="grid grid-cols-[20%_auto] gap-4" *ngFor="let field of stageFields">
                     <input [(ngModel)]="field.progress" placeholder="%" (change) ="handleFieldValueChange(field)" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-2 font-family-serif"/>
-                    <div class="grid grid-cols-[auto_max-content] gap-2 items-center">
+                    <div class="grid grid-cols-[auto_10%] !gap-4 items-center">
                         <input [(ngModel)]="field.name" (change) ="handleFieldValueChange(field)" placeholder="Enter stage name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-2 font-family-serif"/>
-                        <div *ngIf="stageFields.length >1"><button (click)="removeField(field)" title="Remove" type="button" class="flex items-center justify-center rounded  text-white !px-1 bg-rose-500 hover:bg-rose-700 transition-all"><i class="pi pi-minus text-xs"></i></button></div>
+                        <div *ngIf="stageFields.length >1 && field.deals <=0"><button (click)="removeField(field)" title="Remove" type="button" class="flex items-center justify-center rounded  text-white !px-1 bg-rose-500 hover:bg-rose-700 transition-all !w-7"><i class="pi pi-minus text-xs"></i></button></div>
                     </div>
                 </li>
             </ul>
