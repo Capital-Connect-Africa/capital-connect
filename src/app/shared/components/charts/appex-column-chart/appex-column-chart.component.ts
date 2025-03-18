@@ -63,7 +63,7 @@ export class AppexColumnChartComponent {
         enabled: false
       },
       stroke: {
-        width: 2
+        width: 1
       },
 
       grid: {
@@ -98,6 +98,13 @@ updateSeries(data: {value: number, label:string}[]) {
     name: "Deals",
     data: data.map(item => item.value)
   }]
-  this.chartOptions.xaxis.categories =data.map(item => item.label);
+  this.chartOptions.xaxis = {
+    labels: {
+      rotate: -45
+    },
+    tickPlacement: "on",
+    categories: data.map(item => item.label),
+  }
 }
+
 }
