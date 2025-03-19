@@ -30,8 +30,8 @@ export class FinancialReportingService extends BaseHttpService {
     return this.read(`${BASE_URL}/balance-sheet/company/${id}`) as Observable<BalanceSheetRecord[]>
   }
 
-  updateBalanceSheetRecord(payload: BalanceSheetRecord) {
-    return this.create(`${BASE_URL}/balance-sheet`, payload) as Observable<unknown>
+  updateBalanceSheetRecord(payload: BalanceSheetRecord, id:number) {
+    return this.putPost(`${BASE_URL}/balance-sheet/${id}`, payload) as Observable<unknown>
   }
 
 

@@ -140,7 +140,8 @@ export interface BalanceSheetRecord{
   capital: number,
   otherNonCurrentLiabilities: number,
   totalAssets: number,
-  totalLiabilities: number
+  totalLiabilities: number,
+  netProfit:number
 }
 
 export interface CashFlowRecords {

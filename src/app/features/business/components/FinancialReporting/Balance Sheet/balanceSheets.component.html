@@ -143,6 +143,10 @@
                   {{ balanceSheetData[year].otherNonCurrentLiabilities | currency }}
                 </td>
               </tr>
+              <tr>
+                <td>Net Profit</td>
+                <td *ngFor="let year of sortedYears">{{ balanceSheetData[year].netProfit | currency }}</td>
+              </tr>
               <tr class="total-row">
                 <td>Total Liabilities and Equity</td>
                 <td *ngFor="let year of sortedYears">

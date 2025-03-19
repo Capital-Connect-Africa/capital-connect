@@ -2,6 +2,7 @@
 <ng-container *ngIf="phoneNumberPull$ | async" />
 <ng-container *ngIf="savephoneNumber$ | async" />
 <ng-container *ngIf="consent$ | async" />
+<ng-container *ngIf="resendVerification$ | async" />
 
 
 <header class="header" [ngClass]="{ on__dashboard: onDashboard}">
@@ -41,13 +42,69 @@
 </div>
 
 
-<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
+<!-- <p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class ="p-8">
   <form class="dialog-input" [formGroup]="phoneUpdateForm">
       <label for="field" class="font-semibold w-6rem">{{signalsService.actionBody().issue ==issue.EMPTY? 'Add your phone number': 'Verify your phone number' }}</label>
       <input formControlName="field" class="border" [placeholder]="signalsService.actionBody().issue ==issue.EMPTY? 'E.g +254xxxxxxxxx': 'Enter otp code sent to your phone'"/>
       <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click) ="savePhoneNumber()">{{signalsService.actionBody().command}}</button>
   </form>
+</p-dialog> -->
+
+
+
+
+
+
+
+<p-dialog header="Action" [modal]="true" [(visible)]="signalsService.showDialog" [style]="{ width: '25rem' }" class="p-8">
+  <form class="dialog-input" [formGroup]="phoneUpdateForm">
+    <label for="field" class="font-semibold w-6rem">
+      {{ signalsService.actionBody().issue == issue.EMPTY ? 'Add your phone number' : 'Verify your phone number' }}
+    </label>
+
+    <!-- Verification Form -->
+    <ng-container *ngIf="!showResendOptions">
+      <input
+        formControlName="field"
+        class="border"
+        [placeholder]="signalsService.actionBody().issue == issue.EMPTY ? 'E.g +254xxxxxxxxx' : 'Enter OTP code sent to your phone'"
+      />
+
+      <div class="flex justify-between mt-3">
+        <button class="cta__btn" [disabled]="phoneUpdateForm.invalid" (click)="savePhoneNumber()">
+          {{ signalsService.actionBody().command }}
+        </button>
+
+        <a class="text-xs text-blue-500 cursor-pointer" (click)="showResendOptionsfunc()">Didn't receive a verification code? Resen </a>
+      </div>
+    </ng-container>
+
+    <!-- Resend Code Section -->
+    <ng-container *ngIf="showResendOptions">
+      <div class="phone__container input__wrapper">
+        <p-dropdown
+        class="border input__field"
+        [options]="savedPhoneNumbers"
+        optionLabel="phoneNo"
+        optionValue="phoneNo"
+        formControlName="selectedPhoneNumber"
+        placeholder="Select a phone number"
+      ></p-dropdown>
+      </div>
+      
+
+      <button class="cta__btn mt-3" (click)="resendVerificationCode()">
+        Resend Verification Code
+      </button>
+    </ng-container>
+  </form>
 </p-dialog>
+
+
+
+
+
+
 
 <p-dialog 
     header="User consent" 

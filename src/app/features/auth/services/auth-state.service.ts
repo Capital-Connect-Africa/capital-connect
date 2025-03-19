@@ -126,28 +126,29 @@ export class AuthStateService {
     this.currentUserName.set(userName);
   }
 
-  private clearSession(feedback: boolean =true){
+  private clearSession(feedback: boolean =true, redirectUser:boolean =true){
     this.reset();
     if(feedback) this._feedBackService.success('Logged Out! See you soon!');
-    this._router.navigateByUrl('/', {
-      state: { mode: FORM_TYPE.SIGNIN },
-    });
+    if(redirectUser)
+      this._router.navigateByUrl('/', {
+        state: { mode: FORM_TYPE.SIGNIN },
+      });
   }
 
-  logout(silent =false) {
+  logout(silent =false, redirectUser:boolean =true) {
     if(!silent){
       return this._confirmationService
         .confirm('Are you sure you want to log out?')
         .pipe(
           tap((confirmation) => {
             if (confirmation) {
-              this.clearSession()
+              this.clearSession(redirectUser)
             }
           })
         );
     }
-    this.clearSession(false)
-    return of() as any
+    this.clearSession(false, redirectUser)
+    return of() as any;
   }
 
   saveUserPhoneNumberAddedStatus(phoneNo: string) {
@@ -202,6 +203,14 @@ export class AuthStateService {
         })
       );
   }
+
+  resendVerificationCode(phone:string){
+    return this._httpService.create(BASE_URL+'/mobile-numbers/resend-verification',{phoneNo : phone}).pipe(tap(res=>{
+      console.log("Response from resending otp", res)
+    }))
+  }
+
+
 
   checkPhoneNumberStatus(): Observable<any> {
     const result = this._checkPhoneNumberStatus();
