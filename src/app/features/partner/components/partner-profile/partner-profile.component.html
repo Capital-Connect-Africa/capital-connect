@@ -47,33 +47,16 @@
               <div class="card__item__details" details>
                 <div class="card__item__detail_info">
                   <div>
-                    <label>Total Capital Raised:</label>
-                    <!-- <p>{{getLocalized(partnerProfile.totalCapitalRaised)}} $(USD)</p> -->
+                    <label>Category:</label>
+                    <p>{{partnerProfile.category}}</p>
                   </div>
                   <div>
-                    <label>Total Team Members:</label>
-                    <!-- <p>{{partnerProfile.totalTeamMembers}}</p> -->
+                    <label>Website:</label>
+                    <p>{{partnerProfile.website}}</p>
                   </div>
                   <div>
-                    <label>Total Years Of Experience</label>
-                    <!-- <p>{{partnerProfile.totalYearsExperience}}</p> -->
-                  </div>
-                </div>
-              </div>
-
-              <div class="card__item__details" details>
-                <div class="card__item__detail_info">
-                  <div>
-                    <label>Industry Of Focus:</label>
-                    <!-- <p *ngFor="let industry of parseJsonArray(partnerProfile.industryFocus)">{{industry.name}}</p> -->
-                  </div>
-                  <div>
-                    <label>Countries Of Focus:</label>
-                    <!-- <p *ngFor="let country of parseJsonArray(partnerProfile.countryFocus)">{{country.name}}</p> -->
-                  </div>
-                  <div>
-                    <label>Services Offered</label>
-                    <!-- <p *ngFor="let service of partnerProfile.servicesOffered">{{service}}</p> -->
+                    <label>Description</label>
+                    <p>{{partnerProfile.description}}</p>
                   </div>
                 </div>
               </div>
@@ -81,38 +64,28 @@
               <div class="card__item__details" details>
                 <div class="card__item__detail_info">
                   <div>
-                    <label>Capital Raising strategies:</label>
-                    <!-- <p *ngFor="let strategy of parseJsonArray(partnerProfile.capitalRaisingStrategies)">{{strategy.title}}</p> -->
+                    <label>Key Expertise:</label>
+                    <p *ngFor="let expertee of partnerProfile.keyExpertise">{{expertee}}</p>
                   </div>
                   <div>
-                    <label>Fee Structure:</label>
-                    <!-- <p *ngFor="let fee of partnerProfile.feeStructure">{{fee}}</p> -->
+                    <label>Services:</label>
+                    <p *ngFor="let service of partnerProfile.services">{{service}}</p>
                   </div>
                   <div>
-                    <label>Roles</label>
-                    <!-- <p *ngFor="let role of partnerProfile.roles">{{role}}</p> -->
+                    <label>Engagement Type</label>
+                    <p *ngFor="let engagement of partnerProfile.engagementType">{{engagement}}</p>
                   </div>
                 </div>
               </div>
 
-              <div class="card__item__details" details>
-                <div class="card__item__detail_info">
-                  <div>
-                    <label>Case Studies:</label>
-                    <!-- <p>{{partnerProfile.caseStudies}}</p> -->
-                  </div>  
-                  <div>
-                    <label>Past projects:</label>
-                    <!-- <p>{{partnerProfile.pastProjects}}</p> -->
-                  </div>  
-                </div>
-              </div>
+         
+
 
               <div class="card__item__details" details>
                 <div class="card__item__detail_info">
                   <div>
-                    <label>Key Team Members:</label>
-                    <!-- <p>{{partnerProfile.keyTeamMembers}}</p> -->
+                    <label>Internal Notes:</label>
+                    <p>{{partnerProfile.internalNotes}}</p>
                   </div>
                 </div>
               </div>
