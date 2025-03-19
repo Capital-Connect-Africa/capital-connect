@@ -9,29 +9,24 @@ import { Router, RouterModule } from '@angular/router';
 import { InvestorProfile } from '../../../../shared/interfaces/Investor';
 import { Profile } from '../../../../shared/interfaces/profile.interface';
 import { Observable } from 'rxjs';
-import { AdvisorProfile } from '../../../../shared/interfaces/advisor.profile';
-import { AdvisorService } from '../../services/advisor-profile.service';
-import { AdvisorUiContainerComponent } from "../admin-ui-container/advisor-ui-container.component";
+import { PartnerProfile } from '../../../../shared/interfaces/partner';
+import { PartnerService } from '../../partner.service';
+
+
 
 @Component({
   standalone: true,
-  selector: 'app-advisor-profile',
-  templateUrl: './advisor-profile.component.html',
-  styleUrls: ['./advisor-profile.component.scss'],
-  imports: [
-    MatIcon,
-    CommonModule,
-    AlertComponent,
-    AdvisorUiContainerComponent,
-    RouterModule
-  ]
+  selector: 'app-partner-profile',
+  templateUrl: './partner-profile.component.html',
+  styleUrls: ['./partner-profile.component.scss'],
+  imports: [MatIcon, CommonModule,AlertComponent,RouterModule]
 })
-export class AdvisorProfileComponent implements OnInit {
+export class PartnerProfileComponent implements OnInit {
   @Input() showBanner = false;
 
   // services
   private _profileService = inject(ProfileService);
-  private _advisorService = inject(AdvisorService);
+  private _partnerService = inject(PartnerService);
   private _router = inject(Router);
 
   // vars
@@ -43,7 +38,7 @@ export class AdvisorProfileComponent implements OnInit {
   investorProfileExists: boolean = false;
 
   // streams
-  advisorProfile$ = new Observable<AdvisorProfile>();
+  partnerProfile$ = new Observable<PartnerProfile>();
 
   constructor() {}
 
@@ -52,11 +47,12 @@ export class AdvisorProfileComponent implements OnInit {
     if (userId) {
       this.userId = parseInt(userId);
 
-      this.advisorProfile$ = this._advisorService.getAdvisorProfileByUserId(this.userId).pipe(
+      this.partnerProfile$ = this._partnerService.getPartnerProfileByUserId(this.userId).pipe(
         tap(res => {
-          localStorage.setItem('advisorProfileId',res.id.toString());
+          console.log("The partner profile response is ",res);
+          localStorage.setItem('partnerProfileId',res.id.toString());
           if (!res.id) {
-            this._router.navigate(['advisor/create-profile']);
+            this._router.navigate(['partner/create-profile']);
           }
         })
       );
@@ -97,6 +93,11 @@ export class AdvisorProfileComponent implements OnInit {
         .join(', '); // Join with commas
     }
     return '';
+  }
+
+
+  goToCreate(){
+    this._router.navigate(['partner/create-profile']);
   }
 
 

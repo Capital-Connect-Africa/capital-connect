@@ -10,6 +10,9 @@ const routes: Routes = [
   { path: 'analytics', loadComponent: () => import('./pages/analytics/analytics.component').then(c => c.AnalyticsComponent)},
   { path: 'special-criteria', loadComponent: () => import('./pages/special-criteria/special-criteria.component').then(c => c.SpecialCriteriaComponent)},
   { path: 'special-criteria/:id', loadComponent: () => import('./pages/single-special-criteria/single-special-criteria.component').then(c => c.SingleSpecialCriteriaComponent)},
+
+  { path: 'create-profile', loadComponent: () => import('./components/createProfile/createProfile.component').then(c => c.createPartnerProfileComponent)},
+  { path: 'profile', loadComponent: () => import('./pages/partnerProfilePage/partnerProfilePage.component').then(c => c.PartnerProfilePage)},
   
 ];
 

@@ -24,15 +24,9 @@
     </div>
   </div>
   <div class="flex justify-between items-center">
-    <h3 class="capitalize h3" *ngIf="voucherRules.length">
-      Custom Constraints
-    </h3>
-    <button
-      class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer"
-      (click)="showModal()"
-    >
-      Add a custom constraint
-    </button>
+    <h3 class="capitalize h3" *ngIf="voucherRules.length">Custom Constraints</h3>
+    <button class="bg-blue-500 text-white py-3 px-6 rounded text-sm hover:bg-blue-700 transition-all cursor-pointer"
+      (click)="showModal()">Add a custom constraint</button>
   </div>
   <ng-container *ngIf="voucherRules.length">
     <ul class="card__item__details" *ngFor="let rule of voucher.rules">
@@ -59,7 +53,7 @@
 </div>
 
 <app-modal [(visible)]="visible" [title]="heading" [helperText]="helperText">
-  <form
+  <form 
     class="flex flex-col gap-4"
     [formGroup]="ruleForm"
     (ngSubmit)="saveRule()"

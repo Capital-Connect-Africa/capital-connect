@@ -5,7 +5,6 @@ import { Link } from '../../../../shared/interfaces/link.interface';
 import { UiSharedComponent } from '../../../../shared/components/ui/ui.component';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { SidenavComponent } from '../../../../core/components/sidenav/sidenav.component';
-import { AuthStateService } from '../../../auth/services/auth-state.service';
 
 @Component({
   selector: 'partner-layout',
@@ -58,6 +57,13 @@ export class PartnerLayoutComponent implements OnInit {
         href: '/partner/special-criteria',
         exact: false,
         icon: 'filter_alt',
+        display: true,
+      },
+      {
+        label: 'Profile',
+        href: '/partner/profile',
+        exact: false,
+        icon: 'person',
         display: true,
       },
     ];

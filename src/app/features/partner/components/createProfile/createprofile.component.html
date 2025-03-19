@@ -1,0 +1,191 @@
+<ng-container *ngIf="submit$ | async"></ng-container>
+ <ng-container *ngIf="engagements$ | async"></ng-container>
+<ng-container *ngIf="keyExpertise$ | async"></ng-container>
+<ng-container *ngIf="profileServices$ | async"></ng-container>
+<ng-container *ngIf="countries$ | async"></ng-container>
+
+<app-layout >
+  <div class="main__content">
+    <div class="content__container">
+
+<div class="container">
+  <div class="content">
+    <p class="brand__details">{{  partnerProfileExists ? "Update Your Partner Profile":"Create Your Partner Profile"}}</p>
+    
+    <ng-container>
+      <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+        <div class="form_content__container">
+          <div class="header">
+            <div class="steps__bar">
+              <p>Step {{current_details}} of 3</p>
+              <ul class="indicators">
+                <li *ngFor="let step of cur_det; let i = index" [class.active]="(i + 1) <= current_details"></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="w-full">
+            <!-- STEP 1: Basic Information -->
+            <div *ngIf="current_details==1" class="section1 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Name -->
+              <div class="input__wrapper">
+                <label class="input__label">Name<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="name" type="text" placeholder="Enter Name" />
+                <div *ngIf="formGroup.controls['name']?.touched && formGroup.controls['name']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['name']?.errors?.['required']">Name is required</small>
+                </div>
+              </div>
+
+              <!-- Website -->
+              <div class="input__wrapper">
+                <label class="input__label">Website<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="website" type="text" placeholder="Enter Website Url" />
+                <div *ngIf="formGroup.controls['website']?.touched && formGroup.controls['website']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['website']?.errors?.['required']">Website is required</small>
+                </div>
+              </div>
+
+
+
+
+              <!-- Country Focus -->
+              <div class="input__wrapper">
+                <label class="input__label">Country<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <p-dropdown class="input__field" styleClass="w-full gap-4"
+                  formControlName="country" [options]="countryOptions" optionLabel="name"
+                  optionValue="name"
+                  placeholder="Select country"></p-dropdown>
+                <div *ngIf="formGroup.controls['country']?.touched && formGroup.controls['country']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['country']?.errors?.['required']">At least one country must be selected</small>
+                </div>
+              </div>
+
+
+                <!--region Focus -->
+                <div class="input__wrapper">
+                  <label class="input__label">Region<sup>*</sup></label>
+                  <a [title]="">Why do we ask this?</a>
+  
+                  <input class="input__field" formControlName="region" type="text" placeholder="Enter Region" />
+                  <div *ngIf="formGroup.controls['region']?.touched && formGroup.controls['region']?.invalid" class="validation-message">
+                    <small *ngIf="formGroup.controls['region']?.errors?.['required']">Region is required</small>
+                  </div>
+                </div>
+ 
+            </div>
+
+            <!-- STEP 2: Capital & Industry -->
+            <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                             <!-- key Expertise -->
+                      <div class="input__wrapper">
+                      <label class="input__label">Key Expertise<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+      
+                      <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                        formControlName="keyExpertise" [options]="keyExpertise"
+                        placeholder="Select Key Expertise"></p-multiSelect>
+                      <div *ngIf="formGroup.controls['keyExpertise']?.touched && formGroup.controls['keyExpertise']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['keyExpertise']?.errors?.['required']">At least one key expertise is required</small>
+                      </div>
+                    </div>
+              
+    
+    
+                      <!-- Services -->
+                      <div class="input__wrapper">
+                        <label class="input__label">Services<sup>*</sup></label>
+                        <a [title]="">Why do we ask this?</a>
+        
+                        <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                          formControlName="services" [options]="profileServices"
+                          placeholder="Select Services"></p-multiSelect>
+                        <div *ngIf="formGroup.controls['services']?.touched && formGroup.controls['services']?.invalid" class="validation-message">
+                          <small *ngIf="formGroup.controls['services']?.errors?.['required']">At least one services is required</small>
+                        </div>
+                      </div>
+    
+    
+                      <!-- engagement type -->
+                      <div class="input__wrapper">
+                        <label class="input__label">Engagement Type<sup>*</sup></label>
+                        <a [title]="">Why do we ask this?</a>
+        
+                        <p-multiSelect class="input__field" styleClass="w-full gap-4"
+                          formControlName="engagementType" [options]="engagements"
+                          placeholder="Select Engagement Type"></p-multiSelect>
+                        <div *ngIf="formGroup.controls['engagementType']?.touched && formGroup.controls['engagementType']?.invalid" class="validation-message">
+                          <small *ngIf="formGroup.controls['engagementType']?.errors?.['required']">At least one engagement type is required</small>
+                        </div>
+                      </div>
+      
+     
+
+
+            </div>
+
+
+            <div *ngIf="current_details==3" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+               <!-- dexcription Summary -->
+               <div class="input__wrapper">
+                <label class="input__label">Description<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+
+                <textarea class="input__field" formControlName="description" placeholder="Enter description" rows="3"></textarea>
+                <div *ngIf="formGroup.controls['description']?.touched && formGroup.controls['description']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['description']?.errors?.['required']">Description is required</small>
+                </div>
+              </div>
+
+
+              <!-- Internal Notes Summary -->
+              <div class="input__wrapper">
+              <label class="input__label">Internal Notes<sup>*</sup></label>
+              <a [title]="">Why do we ask this?</a>
+
+              <textarea class="input__field" formControlName="internalNotes" placeholder="Add Internal notes" rows="3"></textarea>
+              <div *ngIf="formGroup.controls['internalNotes']?.touched && formGroup.controls['internalNotes']?.invalid" class="validation-message">
+                <small *ngIf="formGroup.controls['internalNotes']?.errors?.['required']">Internal notes is required</small>
+              </div>
+            </div>
+
+
+              <!-- Website -->
+              <div class="input__wrapper">
+                <label class="input__label">Category<sup>*</sup></label>
+                <a [title]="">Why do we ask this?</a>
+                <input class="input__field" formControlName="category" type="text" placeholder="Enter Category" />
+                <div *ngIf="formGroup.controls['category']?.touched && formGroup.controls['category']?.invalid" class="validation-message">
+                  <small *ngIf="formGroup.controls['category']?.errors?.['required']">Website is required</small>
+                </div>
+              </div>
+
+
+
+            </div>
+
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-4 mt-6">
+          <div class="cta__group">
+            <button class="btn btn-primary outline" type="button" [disabled]="current_details==1" (click)="setPrevDetails()">Back</button>
+          </div>
+          <div *ngIf="current_details!=3">
+            <button class="btn btn-primary" type="button" (click)="setNextDetails()">Next</button>
+          </div>
+          <button type="submit" *ngIf="current_details==3" [disabled]="!formGroup.valid" class="btn">{{ partnerProfileExists ? "Update" : "Submit" }}</button>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>
+
+</div>
+</div>
+</app-layout>
