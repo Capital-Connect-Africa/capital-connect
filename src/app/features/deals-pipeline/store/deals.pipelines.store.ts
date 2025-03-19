@@ -23,6 +23,7 @@ type DealsPipelinesState ={
     payload: DealPipeline[],
     currentView: PipelineViews,
     stats: DealStats,
+    currentlySelectedDeal: Deal | undefined,
     activePipeline: DealPipeline | undefined,
 }
 
@@ -30,8 +31,9 @@ type DealsPipelinesState ={
 const initialState: DealsPipelinesState ={
     payload: [],
     stats: {paidAmount: 0, pendingAmount: 0, totalStages: 0, totalDeals: 0, stageDealsCount: []},
-    currentView: PipelineViews.ANALYTICAL_VIEW,
-    activePipeline: undefined
+    currentView: PipelineViews.KANBAN_VIEW,
+    activePipeline: undefined,
+    currentlySelectedDeal: undefined
 }
 
 export const DealsPipelinesStore =signalStore(
@@ -43,7 +45,8 @@ export const DealsPipelinesStore =signalStore(
             async loadAll(){
                 const pipelines =(await pipelineService.getUserPipelines()).sort((a, b) =>a.id - b.id);
                 const activePipeline =pipelines.at(0) as DealPipeline;
-                patchState(store, {payload: pipelines, activePipeline})
+                const selectedDeal =activePipeline.stages.at(0)?.deals.at(0)
+                patchState(store, {payload: pipelines, activePipeline, currentlySelectedDeal: selectedDeal})
                 this.updateStats();
             },
 
@@ -207,8 +210,13 @@ export const DealsPipelinesStore =signalStore(
                     feedbackService.error(error.message)
                 }
 
-            }
+            },
 
+            setCurrentlySelectedDeal(deal: Deal | undefined){
+                patchState(store, {
+                    currentlySelectedDeal: deal
+                })
+            }
         })
     )
 )
