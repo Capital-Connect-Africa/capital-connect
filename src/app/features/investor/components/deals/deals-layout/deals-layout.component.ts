@@ -12,6 +12,8 @@ import { DealCustomerDto } from '../../../../deals-pipeline/interfaces/deal.cust
 import { DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
 import { ChildEventsService } from '../../../../deals-pipeline/services/child.events.service';
 import { tap } from 'rxjs';
+import { DealStatus } from '../../../../deals-pipeline/enums/deal.status.enum';
+import { formatCurrency } from '../../../../../core/utils/format.currency';
 
 interface Field {
   id: string, progress: string, name:string, stageId?:number, deals: number, action: 'edit' | 'create', selected:boolean
@@ -39,7 +41,7 @@ export class DealsLayoutComponent {
   
   isContactFormVisible =false;
   isPipelineFormVisible =false;
-  isDealFormModalVisible =false;
+  isDealFormModalVisible =true;
   isPipelineConfigModalVisible =false;
 
   onDealDragAndDrop$ =this._childEventsService.dealStageChange$.pipe(tap(() =>{
@@ -215,6 +217,7 @@ export class DealsLayoutComponent {
   }
 
   showDealForm(){
+    this.store.setCurrentlySelectedDeal(undefined);
     this.isDealFormModalVisible =true;
   }
 
@@ -222,4 +225,15 @@ export class DealsLayoutComponent {
     this.isContactFormVisible =true;
   }
 
+  dealStatus =[DealStatus.ACTIVE, DealStatus.WON, DealStatus.LOST, DealStatus.CANCELLED]
+
+  formatNumberValue(value: number){
+    return formatCurrency(value)
+  }
+
+  parseFloatingValues(value: number){
+    const [whole, float] =`${value}`.split('.')
+    if(Number(float) >0) return value
+    return Number(whole)
+  }
 }

@@ -62,30 +62,35 @@
 </app-modal>
 
 
-<app-modal [(visible)]="isDealFormModalVisible" [title]="'New Deal'" helperText="Add a new deal to your pipeline">
+<app-modal 
+[(visible)]="isDealFormModalVisible" [title]="store.currentlySelectedDeal()?.name?? 'New Deal'"
+ [helperText]="store.currentlySelectedDeal()? 'Details of a $'+formatNumberValue(store.currentlySelectedDeal()?.value ?? 0) + ' worth of deal with '+store.currentlySelectedDeal()?.customer?.name  :'Add a new deal to your pipeline'">
     <div class="h-full w-full grid grid-cols-2 gap-4">
-        <section class="w-full h-full flex flex-col !pt-3">
-            <h3 class="!text-base !font-semibold">Client Details</h3>
-            <p class="description font-family-serif !max-w-[90%]">Register the contact details of your deal cutomer for streamlined communication and tracking.</p>
-            <div class="!pt-4" *ngIf="!isContactFormVisible">
+        <section class="w-full h-full flex flex-col " [ngClass]="{'!pt-2': store.currentlySelectedDeal(), '!pt-3': !store.currentlySelectedDeal()}">
+            <h3 *ngIf="!store.currentlySelectedDeal()" class="!text-base !font-semibold">{{store.currentlySelectedDeal()? 'Deal Details' :'Client Details'}}</h3>
+            <p *ngIf="!store.currentlySelectedDeal()" class="description font-family-serif !max-w-[90%]">Register the contact details of your deal cutomer for streamlined communication and tracking.</p>
+            <div class="!pt-4" *ngIf="!isContactFormVisible && !store.currentlySelectedDeal()">
                 <button (click)="showContactForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" ><i class="pi pi-plus text-xs"></i>Add Contact</button>
             </div>
-            <form class="flex flex-col !gap-4 !pt-3" *ngIf="isContactFormVisible" [formGroup]="dealCustomerForm" (ngSubmit)="submitDealCustomer()">
+            <form class="flex flex-col !gap-4 !pt-3" *ngIf="isContactFormVisible || store.currentlySelectedDeal()" [formGroup]="dealCustomerForm" (ngSubmit)="submitDealCustomer()">
                 <div class="flex flex-col !gap-[2px]">
                     <p class="description font-family-serif">Contact Name</p>
-                    <input formControlName ="name" placeholder="Add contact" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                    <input [value]="store.currentlySelectedDeal()?.customer?.name??''" formControlName ="name" placeholder="Enter contact name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
                 </div>
-                <div class="grid grid-cols-2 !gap-2">
+                <div class="grid !gap-2"  [ngClass]="{'grid-cols-2': !store.currentlySelectedDeal(), '!gap-4': store.currentlySelectedDeal()}">
                     <div class="flex flex-col !gap-[2px] w-full">
                         <p class="description font-family-serif">Contact Email</p>
-                        <input formControlName ="email" type="email" placeholder="Add contact email" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                        <input [value]="store.currentlySelectedDeal()?.customer?.email??''" formControlName ="email" type="email" placeholder="Enter contact email" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
                     </div>
                     <div class="flex flex-col w-full">
                         <p class="description font-family-serif">Contact Number</p>
-                        <input formControlName ="phone" type="tel" placeholder="Add contact phone number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                        <input [value]="store.currentlySelectedDeal()?.customer?.phone??''" formControlName ="phone" type="tel" placeholder="Enter contact phone number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
                     </div>
                 </div>
-                <div class="!pt-2">
+                <div class="!pt-2" *ngIf="store.currentlySelectedDeal()">
+                    <button type="button" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all">Switch To Edit Mode</button>
+                </div>
+                <div class="!pt-2" *ngIf="!store.currentlySelectedDeal()">
                     <button [disabled]="dealCustomerForm.invalid" type="submit" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': dealCustomerForm.invalid}"><i class="pi pi-plus text-xs"></i>Add Contact</button>
                 </div>
             </form>
@@ -94,21 +99,29 @@
         <form class="flex flex-col !gap-4 w-full h-full !pt-5" [formGroup]="dealForm" (submit)="submitDeal()">
             <div class="flex flex-col !gap-[2px]">
                 <p class="description font-family-serif">Deal name</p>
-                <input formControlName ="name" placeholder="Enter deal name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                <input [value]="store.currentlySelectedDeal()?.name?? ''" formControlName ="name" placeholder="Enter deal name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
             </div>
             <div class="flex flex-col !gap-[1px]">
                 <p class="description font-family-serif">Deal value</p>
-                <input formControlName ="value" placeholder="Enter deal value (USD)" type="number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                <input [value]="parseFloatingValues(store.currentlySelectedDeal()?.value ??0 ) || ''" formControlName ="value" placeholder="Enter deal value (USD)" type="number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
             </div>
-            <div class="flex flex-col !gap-[1px]">
+            <div class="flex flex-col !gap-[1px]" *ngIf="store.currentlySelectedDeal()">
+                <p class="description font-family-serif">Deal status</p>
+                <select class="capitalize block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all">
+                    <option *ngFor="let status of dealStatus" selected ="status === store.currentlySelectedDeal()?.status" [value]="status" class="capitalize">{{status}}</option>
+                </select>
+            </div>
+            <div class="flex flex-col !gap-[1px]" *ngIf="!store.currentlySelectedDeal()">
                 <p class="description font-family-serif">Contact</p>
                 <input formControlName ="contactName" readonly placeholder="contact name - field is read-only" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif cursor-not-allowed transition-all"/>
             </div>
-            <div class="!pt-2">
+            <div class="!pt-2" *ngIf="!store.currentlySelectedDeal()">
                 <button [disabled]="dealForm.invalid" type="submit" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': dealForm.invalid}"><i class="pi pi-plus text-xs"></i>Add Deal</button>
             </div>
         </form>
     </div>
 </app-modal>
+
+
 
 <ng-container *ngIf="onDealDragAndDrop$ | async"></ng-container>
