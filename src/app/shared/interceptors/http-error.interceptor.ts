@@ -100,7 +100,8 @@ function isFinancialReportsPage(path: string): boolean {
     path.includes('revenues') ||
     path.includes('cost-of-sales') ||
     path.includes('finances') ||
-    path.includes('balance-sheet')
+    path.includes('balance-sheet') ||
+    path.includes('profile')
   );
 }
 

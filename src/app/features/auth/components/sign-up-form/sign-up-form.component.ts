@@ -28,7 +28,7 @@ export class SignUpFormComponent {
   ngOnChanges(changes: SimpleChanges): void {
       if(changes['userRole']){
         this.userRole =changes['userRole'].currentValue;
-        if([USER_ROLES.PARTNER, USER_ROLES.ADVISOR].includes(this.userRole)){
+        if([USER_ROLES.PARTNER, USER_ROLES.ADVISOR, USER_ROLES.STAFF].includes(this.userRole)){
           this.signUpForm.patchValue({
             accountType: this.userRole
           })

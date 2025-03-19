@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VoucherRulesComponent } from './voucher-rules.component';
+import { KanbanViewComponent } from './kanban-view.component';
 
-describe('VoucherRulesComponent', () => {
-  let component: VoucherRulesComponent;
-  let fixture: ComponentFixture<VoucherRulesComponent>;
+describe('KanbanViewComponent', () => {
+  let component: KanbanViewComponent;
+  let fixture: ComponentFixture<KanbanViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VoucherRulesComponent]
+      imports: [KanbanViewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(VoucherRulesComponent);
+    fixture = TestBed.createComponent(KanbanViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

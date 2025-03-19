@@ -16,8 +16,8 @@ import { Router } from '@angular/router';
   styleUrl: './search-engine.component.scss'
 })
 export class SearchEngineComponent {
-  private _fb =inject(FormBuilder)
   currentStep =1;
+  private _fb =inject(FormBuilder)
   private _router =inject(Router);
   private _searchEngineService =inject(SearchEngineService);
 
@@ -48,7 +48,7 @@ export class SearchEngineComponent {
   submit(){
     const formData =this.searchForm.value as Partial<UserSearch>;
     this.save$ =this._searchEngineService.searchInvestors(formData).pipe(tap(res =>{
-      this._router.navigateByUrl(`/funders/${res.q}`);
+      this._router.navigateByUrl(`/search-investors/${res.q}`);
     }))
   }
 

@@ -1,5 +1,4 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { NavbarComponent } from "../../../../core/components/navbar/navbar.component";
 import { MatIcon } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from '../../../../shared/components/alert/alert.component';
@@ -20,9 +19,7 @@ import { AdvisorUiContainerComponent } from "../admin-ui-container/advisor-ui-co
   templateUrl: './advisor-profile.component.html',
   styleUrls: ['./advisor-profile.component.scss'],
   imports: [
-    NavbarComponent,
     MatIcon,
-    NavbarComponent,
     CommonModule,
     AlertComponent,
     AdvisorUiContainerComponent,
