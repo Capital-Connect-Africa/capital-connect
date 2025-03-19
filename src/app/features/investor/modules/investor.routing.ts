@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DealsLayoutComponent } from '../components/deals-layout/deals-layout.component';
+import { DealsLayoutComponent } from '../components/deals/deals-layout/deals-layout.component';
 
 
 const routes: Routes = [

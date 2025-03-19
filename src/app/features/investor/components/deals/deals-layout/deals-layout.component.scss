@@ -1,4 +1,4 @@
-@import '../../../../styles/main.scss';
+@import '../../../../../styles/main.scss';
 
 .main__content{
   display: grid;
@@ -10,4 +10,15 @@
     grid-template-rows: max-content auto;
     background-color: #F9FAFB;
   }
+}
+
+.font-family-serif{
+  font-family: $font-family-sans-serif!important;
+}
+
+.description{
+  padding: 0;
+  margin: 0;
+  font-size: .85rem;
+  line-height: 1.5rem;
 }

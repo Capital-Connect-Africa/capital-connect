@@ -105,6 +105,6 @@ export interface CustomBooking {
     duration: number, 
     client: string, 
     advisor: string,
-    formatedStart: string,
-    formatedStop: string,
+    formatedStart: string;
+    formatedStop: string;
 }
