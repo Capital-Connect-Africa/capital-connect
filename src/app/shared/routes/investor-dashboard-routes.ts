@@ -2,7 +2,7 @@ export const INVESTOR_DASHBOARD_LINKS = [
     { label: 'Dashboard', href: '/investor', exact: true, icon: 'grid_view' ,display:true},
     { label: 'Global Search', href: '/investor/global-search', exact: false, icon: 'public' ,display:true},
     { label: 'Special Criteria', href: '/investor/special-criteria', exact: false, icon: 'tune' ,display:true},
-    // { label: 'Deals Pipeline', href: '/investor/deals-pipeline', exact: true, icon: 'bookmark' ,display:true},
+    { label: 'Deals Pipeline', href: '/investor/deals-pipeline', exact: true, icon: 'bookmark' ,display:true},
     { label: 'Manage Access', href: '/investor/manage-access', exact: false, icon: 'admin_panel_settings' ,display:true},
     { label: 'Scoring Criteria', href: '/investor/business-questions', exact: false, icon: 'quiz' ,display:true},
     { label: 'Profile', href: '/investor/investor-page', exact: false, icon: 'settings' ,display:true},
