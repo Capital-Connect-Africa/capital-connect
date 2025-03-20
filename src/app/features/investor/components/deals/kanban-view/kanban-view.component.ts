@@ -40,4 +40,13 @@ export class KanbanViewComponent {
     this.src =stage;
     this.target =deal
   }
+
+  selectDeal(deal:Deal){
+    this.store.setCurrentlySelectedDeal(deal);
+    this._childEventsService.emitDealSelectedEvent('Read')
+  }
+
+  openSettings(){
+    this._childEventsService.emitPipelineModalOpenedEvent();
+  }
 }

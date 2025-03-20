@@ -31,6 +31,18 @@ export class DealsPipelineService extends BaseHttpService{
     })))
   }
 
+  async updateUserPipeline(payload:Partial<DealPipelineDto>, pipelineId:number): Promise<DealPipeline>{
+    return lastValueFrom(this.update(`${this.BASE_LINK}`, pipelineId, payload).pipe(map(res =>{
+      return res as DealPipeline;
+    })))
+  }
+
+  async removeUserPipeline(pipelineId:number){
+    return lastValueFrom(this.delete(`${this.BASE_LINK}`, pipelineId).pipe(map(() =>{
+      return EMPTY;
+    })))
+  }
+
   async createNewStage(payload: DealStageDto){
     return lastValueFrom(this.create(`${this.BASE_LINK}/stages`, payload).pipe(map(res =>{
       return res as DealStage;

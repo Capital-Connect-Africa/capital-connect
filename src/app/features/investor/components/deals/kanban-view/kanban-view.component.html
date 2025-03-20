@@ -1,4 +1,4 @@
-<ul class="grid !gap-[2px] font-family-serif" [ngClass]="{ 
+<ul *ngIf="store.activePipeline()?.stages?.length" class="grid !gap-[2px] font-family-serif" [ngClass]="{ 
     '!grid-cols-1': (store.activePipeline()?.stages?.length || 1) === 1, 
     '!grid-cols-2': store.activePipeline()?.stages?.length === 2, 
     '!grid-cols-3': store.activePipeline()?.stages?.length === 3, 
@@ -13,14 +13,34 @@
             <p class="description truncate">${{getTotalDealsValue(stage.deals)}} - ({{stage.deals.length}} deals)</p>
         </section>
         <ul class="flex flex-col !gap-[2px] !h-full" (drop)="handleDrop($event, stage)" (dragover)="handleDragOver($event)">
-            <li *ngFor="let deal of stage.deals" draggable="true" (dragstart) ="handleDragStart($event, deal, stage)" class="cursor-default bg-white !border !border-solid !border-gray-200 !p-3 flex flex-col !gap-3">
+            <li *ngFor="let deal of stage.deals" [draggable]="!['lost', 'cancelled'].includes(deal.status)" (dragstart) ="handleDragStart($event, deal, stage)" (click) ="selectDeal(deal)" class="cursor-default bg-white !border !border-solid !border-gray-200 !p-3 flex flex-col !gap-3">
                 <p class="description !font-bold !text-xs !text-gray-700 !uppercase truncate">{{deal.name}}</p>
                 <p class="description !text-gray-600 truncate">{{deal.customer.name}}</p>
-                <div class="flex items-center !gap-2 !text-gray-500">
-                    <p class="description !text-[10px] truncate">${{deal.value | numberabbreviation}}</p>
-                    <p class="description !text-[10px] truncate">on {{deal.createdAt | format_date}}</p>
+                <div class ="flex items-center justify-between">
+                    <div class="flex items-center !gap-2 !text-gray-500">
+                        <p class="description !text-[10px] truncate">${{deal.value | numberabbreviation}}</p>
+                        <p class="description !text-[10px] truncate">on {{deal.createdAt | format_date}}</p>
+                    </div>
+                    <i class="pi pi-bookmark-fill text-xs -rotate-90" [ngClass]="{
+                        'text-green-400': deal.status === 'won',
+                        'text-rose-400': deal.status === 'lost' || deal.status === 'cancelled',
+                        'text-blue-400': deal.status === 'active'
+                    }"></i>
                 </div>
             </li>
         </ul>
     </li>
 </ul>
+
+<div class="h-[72vh] w-full flex items-center justify-center" *ngIf="!store.activePipeline()?.stages?.length">
+    <div class="description flex flex-col items-center !gap-2 !max-w-[60%] !mx-auto text-center">
+        <h3 class="description !text-base !font-semibold">Get Started</h3>
+            <p class="font-family-serif !text-sm !leading-6">Easily and efficiently manage your investment processes here. Click on settings to start defining deal stages for this pipeline</p>
+            <div class="w-max">
+                <button (click)="openSettings()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" >
+                    <i class="pi pi-cog text-xs"></i>
+                    Settings
+                </button>
+            </div>
+    </div>
+</div>
