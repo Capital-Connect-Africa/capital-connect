@@ -280,7 +280,7 @@
           formControlName="otherNonCurrentLiabilities" />
       </div>
 
-      <div class="input__wrapper">
+      <div class="input__wrapper" *ngIf="!edit_mode">
         <label for="year" class="input__label">Net Profit</label>
         <p class="input__field">{{netProfit}}</p>
       </div>
