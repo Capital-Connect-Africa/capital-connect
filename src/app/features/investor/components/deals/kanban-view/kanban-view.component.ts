@@ -45,4 +45,8 @@ export class KanbanViewComponent {
     this.store.setCurrentlySelectedDeal(deal);
     this._childEventsService.emitDealSelectedEvent('Read')
   }
+
+  openSettings(){
+    this._childEventsService.emitPipelineModalOpenedEvent();
+  }
 }
