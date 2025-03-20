@@ -1,8 +1,10 @@
 <ng-container *ngIf="createBalanceSheetRecord$ | async"></ng-container>
-<!-- <ng-container *ngIf="getAllBalanceSheetRecords$ | async"></ng-container> -->
 <ng-container *ngIf="getBalanceSheetRecordById$ | async"></ng-container>
 <ng-container *ngIf="getBalanceSheetRecordByCompanyId$ | async"></ng-container>
 <ng-container *ngIf="updateBalanceSheetRecord$ | async"></ng-container>
+<ng-container *ngIf="financialInfoRecords$  | async"></ng-container>
+
+
 
 <div class="main">
   <div class="navbar">
@@ -180,7 +182,13 @@
     <div class="form_row">
       <div class="input__wrapper">
         <label for="year" class="input__label">Financial Year</label>
-        <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"/>
+        <p-dropdown  formControlName ="year"
+            [options]="years"
+            class ="input__field"
+            styleClass ="w-full gap-4"
+            (onChange)="onYearChange($event)"           
+            placeholder="2025" />
+        <!-- <input id="year" type="number" class="input__field" placeholder="2025" formControlName="year"   (input)="onYearInput()" /> -->
       </div>
 
 
@@ -270,6 +278,11 @@
         <label for="year" class="input__label">Other Non Current Liabilities</label>
         <input id="taxes" type="number" class="input__field" placeholder="0"
           formControlName="otherNonCurrentLiabilities" />
+      </div>
+
+      <div class="input__wrapper">
+        <label for="year" class="input__label">Net Profit</label>
+        <p class="input__field">{{netProfit}}</p>
       </div>
     </div>
 
