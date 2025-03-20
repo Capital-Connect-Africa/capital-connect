@@ -13,12 +13,13 @@ import {
 } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { formatCurrency } from '../../../../../core/utils/format.currency';
-import { DealAsItem } from '../../../../deals-pipeline/interfaces/deal.interface';
+import { Deal, DealAsItem } from '../../../../deals-pipeline/interfaces/deal.interface';
 import { DealStage } from '../../../../deals-pipeline/interfaces/deal.stage.interface';
 import { DealStatus } from '../../../../deals-pipeline/enums/deal.status.enum';
 import { CommonModule } from '@angular/common';
 import { NumberAbbriviationPipe } from "../../../../../core/pipes/number-abbreviation.pipe";
 import { AppexColumnChartComponent } from "../../../../../shared/components/charts/appex-column-chart/appex-column-chart.component";
+import { ChildEventsService } from '../../../../deals-pipeline/services/child.events.service';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -33,6 +34,7 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 export class ListViewComponent {
   
   store =inject(DealsPipelinesStore);
+  private _childEventsService =inject(ChildEventsService)
 
  private gridApi!: GridApi<DealAsItem>;
    selectedColumns: string[] = [];
@@ -98,25 +100,25 @@ export class ListViewComponent {
          cellRenderer: (params: any) => {
            const div =document.createElement('div');
            const editButton = document.createElement('button');
-           const deleteButton = document.createElement('button');
+           const viewButton = document.createElement('button');
            div.classList.add(
              'flex',
              'items-center',
              'h-full'
            );
-           deleteButton.innerHTML = `
-             <i class="pi pi-trash text-xs"></i>
+           viewButton.innerHTML = `
+             <i class="pi pi-info-circle text-xs"></i>
            `;
-           deleteButton.classList.add(
+           viewButton.classList.add(
              'flex',
              'items-center',
              'justify-center',
              '!h-[30px]',
              '!w-[30px]',
-             'text-rose-300',
+             'text-blue-300',
              'rounded-lg',
-             'hover:text-rose-800',
-             'hover:bg-rose-100',
+             'hover:text-blue-800',
+             'hover:bg-blue-100',
              'transition-all'
            );
            editButton.innerHTML = `
@@ -135,15 +137,15 @@ export class ListViewComponent {
              'transition-all'
            );
            editButton.addEventListener('click', () => 
-             params.context.componentParent.selectInvestor(params)
+             params.context.componentParent.selectDeal(params.data as Deal, 'Write')
            );
  
-           deleteButton.addEventListener('click', () =>
-             params.context.componentParent.deleteRow(params)
+           viewButton.addEventListener('click', () =>
+             params.context.componentParent.selectDeal(params.data as Deal, 'Read')
            );
  
            div.appendChild(editButton)
-           div.appendChild(deleteButton)
+           div.appendChild(viewButton)
            return div;
          },
          width: 150,
@@ -169,7 +171,11 @@ export class ListViewComponent {
     }
 
     ngOnInit(){
-      const data =this.store.stats().stageDealsCount.sort((a, b) =>a.value - b.value)
-    
+      this.store.stats().stageDealsCount.sort((a, b) =>a.value - b.value)
+    }
+
+    selectDeal(deal:Deal, mode: 'Write' | 'Read'){
+      this.store.setCurrentlySelectedDeal(deal);
+      this._childEventsService.emitDealSelectedEvent(mode);
     }
 }
