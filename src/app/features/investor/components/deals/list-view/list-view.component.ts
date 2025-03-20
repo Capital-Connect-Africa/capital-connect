@@ -84,7 +84,7 @@ export class ListViewComponent {
           cellRenderer: (params: any) => {
             const value =params.value as DealStatus
             const div =document.createElement('div');
-            const color = `${value === DealStatus.ACTIVE? '!bg-[#2195f337] !text-[#2196f3]': ''}`
+            const color = `${value === DealStatus.ACTIVE? '!bg-[#2195f337] !text-[#2196f3]': value === DealStatus.WON? '!bg-green-200 !text-green-700': '!bg-rose-200 !text-rose-700'}`
             div.innerHTML =`<span class ="capitalize  !px-2 !py-[2px] rounded-full !text-xs  !h-max !w-max ${color}">${params.value}</span>`;
             div.classList.add(
               'flex',
