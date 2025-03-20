@@ -6,14 +6,15 @@ import { DealsPipelinesStore, PipelineViews } from '../../../../deals-pipeline/s
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from "../../../../../shared/components/modal/modal.component";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DealPipelineDto } from '../../../../deals-pipeline/interfaces/deal.pipeline.interface';
+import { DealPipeline, DealPipelineDto } from '../../../../deals-pipeline/interfaces/deal.pipeline.interface';
 import { generateCryptCode } from '../../../../../core/utils/crypto.code.generator';
 import { DealCustomerDto } from '../../../../deals-pipeline/interfaces/deal.customer.interface';
-import { DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
+import { Deal, DealDto, DealFormData } from '../../../../deals-pipeline/interfaces/deal.interface';
 import { ChildEventsService } from '../../../../deals-pipeline/services/child.events.service';
 import { tap } from 'rxjs';
 import { DealStatus } from '../../../../deals-pipeline/enums/deal.status.enum';
 import { formatCurrency } from '../../../../../core/utils/format.currency';
+import { fixNumber } from '../../../../../core/utils/fix-number.util';
 
 interface Field {
   id: string, progress: string, name:string, stageId?:number, deals: number, action: 'edit' | 'create', selected:boolean
@@ -39,14 +40,27 @@ export class DealsLayoutComponent {
   store =inject(DealsPipelinesStore);
   private _childEventsService =inject(ChildEventsService);
   
+  isInReadOnlyMode =false;
   isContactFormVisible =false;
   isPipelineFormVisible =false;
-  isDealFormModalVisible =true;
+  isDealFormModalVisible =false;
+  isPipelineInEditMode =false;
   isPipelineConfigModalVisible =false;
 
   onDealDragAndDrop$ =this._childEventsService.dealStageChange$.pipe(tap(() =>{
     this.updateStageFields();
   }))
+
+  onNewDealSelected$ =this._childEventsService.dealSelected$.pipe(tap(mode =>{
+    this.isInReadOnlyMode = mode == 'Read';
+    this.isDealFormModalVisible =true
+    this.updateDealFormsValues(this.store.currentlySelectedDeal() as Deal);
+  }))
+
+  onPipelineOpened$ =this._childEventsService.pipelineModalOpened$.pipe(tap(() =>{
+    this.openPipelineSettingsModal();
+  }))
+
 
   ngOnInit(){
     this.loadPipelines()
@@ -103,6 +117,7 @@ export class DealsLayoutComponent {
   dealForm =this._fb.group({
     name: ['', [Validators.required]],
     value: ['', [Validators.required]],
+    status: [DealStatus.ACTIVE],
     contactName: ['', [Validators.required]],
     contactEmail: ['', [Validators.required]],
     contactPhone: ['', [Validators.required]] 
@@ -111,12 +126,14 @@ export class DealsLayoutComponent {
   async createNewPipeline(){
     const values =this.pipelineForm.value as Partial<DealPipelineDto>
     if(this.pipelineForm.invalid) return
-    await this.store.addNewPipeline(values);
+    if(this.isPipelineInEditMode) await this.store.editPipeline(values);
+    else await this.store.addNewPipeline(values);
     this.closePipelineForm();
   }
 
   closePipelineForm(){
     this.pipelineForm.reset();
+    this.isPipelineInEditMode =false;
     this.isPipelineFormVisible =false;
   }
 
@@ -225,7 +242,7 @@ export class DealsLayoutComponent {
     this.isContactFormVisible =true;
   }
 
-  dealStatus =[DealStatus.ACTIVE, DealStatus.WON, DealStatus.LOST, DealStatus.CANCELLED]
+  dealStatus:DealStatus[] =[]
 
   formatNumberValue(value: number){
     return formatCurrency(value)
@@ -235,5 +252,72 @@ export class DealsLayoutComponent {
     const [whole, float] =`${value}`.split('.')
     if(Number(float) >0) return value
     return Number(whole)
+  }
+
+  updateDealFormsValues(deal:Deal){
+    if(!deal) return
+    this.dealForm.patchValue({
+      name: deal.name,
+      value: `${fixNumber(Number(deal.value))}`,
+      status: deal.status,
+      contactName: deal.customer.name,
+      contactEmail: deal.customer.email,
+      contactPhone: deal.customer.phone,
+    })
+    this.dealCustomerForm.patchValue({
+      name: deal.customer.name,
+      email: deal.customer.email,
+      phone: deal.customer.phone,
+    })
+    this.setOptions(deal.status === DealStatus.WON)
+  }
+
+  async resetSelectedDeal(){
+    this.dealForm.reset();
+    this.dealCustomerForm.reset();
+    this.isContactFormVisible =false;
+    this.store.setCurrentlySelectedDeal(undefined)
+    this.setOptions()
+  }
+
+  switchToEditMode(){
+    this.isInReadOnlyMode =false;
+  }
+
+  editPipelineName(){
+    this.isPipelineFormVisible =true;
+    this.isPipelineInEditMode =true;
+    const pipeline =this.store.activePipeline() as DealPipeline;
+    this.pipelineForm.patchValue({
+      name: pipeline.name,
+      maxNumberOfStages: pipeline.maxNumberOfStages
+    })
+  }
+
+  async removePipeline(){
+    const pipeline =this.store.activePipeline() as DealPipeline;
+    if(!pipeline) return;
+    if(confirm(`Do you want to remove ${pipeline.name}? This action cannot be undone`)){
+      await this.store.removePipeline(pipeline.id);
+      this.closePipelineForm();
+      this.isPipelineConfigModalVisible =false;
+    }
+  }
+
+  setOptions(isWon =false){
+    if(!isWon) this.dealStatus =[DealStatus.ACTIVE, DealStatus.WON, DealStatus.LOST, DealStatus.CANCELLED]
+    else this.dealStatus =[DealStatus.WON]
+  }
+
+  async updateDealStatus(event: Event, dealId:number){
+    const target =event.target as HTMLSelectElement;
+    const value =target.value as DealStatus;
+    let payload:Partial<DealDto> ={status: value}
+    if(value === DealStatus.WON) {
+      const stages =this.store.activePipeline()?.stages ?? [];
+      const wonStage =stages.find(stage =>stage.progress >=100);
+      payload ={...payload, stageId: wonStage?.id}
+    }
+    await this.store.updateDeal(payload, dealId);
   }
 }
