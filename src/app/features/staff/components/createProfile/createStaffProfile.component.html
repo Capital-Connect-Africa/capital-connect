@@ -1,0 +1,167 @@
+<ng-container *ngIf="submit$ | async"></ng-container>
+<ng-container *ngIf="keyExpertise$ | async"></ng-container>
+<ng-container *ngIf="countries$ | async"></ng-container>
+<ng-container *ngIf="StaffProfileById$ | async"></ng-container> 
+
+
+<app-layout>
+  <div class="main__content">
+    <div class="content__container">
+
+      <div class="container">
+        <div class="content">
+          <p class="brand__details">{{  StaffProfileExists ? "Update Your Staff Profile":"Create Your Staff Profile"}}</p>
+
+          <ng-container>
+            <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+              <div class="form_content__container">
+                <div class="header">
+                  <div class="steps__bar">
+                    <p>Step {{current_details}} of 3</p>
+                    <ul class="indicators">
+                      <li *ngFor="let step of cur_det; let i = index" [class.active]="(i + 1) <= current_details"></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="w-full">
+                  <!-- STEP 1: Basic Information -->
+                  <div *ngIf="current_details==1" class="section1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Name -->
+                    <div class="input__wrapper">
+                      <label class="input__label">Full Name<sup>*</sup></label>  <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="fullName" type="text" placeholder="Enter Full Name" />
+                      <div *ngIf="formGroup.controls['fullName']?.touched && formGroup.controls['fulName']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['fullName']?.errors?.['required']">Full Name is required</small>
+                      </div>
+                    </div>
+
+                    <!-- Website -->
+                    <div class="input__wrapper">
+                      <label class="input__label">Job Title<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="jobTitle" type="text" placeholder="Enter Job Title" />
+                      <div *ngIf="formGroup.controls['jobTitle']?.touched && formGroup.controls['jobTitle']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['jobTitle']?.errors?.['required']">Job Title is required</small>
+                      </div>
+                    </div>
+
+
+
+                    <!--region Focus -->
+                    <div class="input__wrapper">
+                      <label class="input__label">Department<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+
+                      <input class="input__field" formControlName="department" type="text" placeholder="Enter Department" />
+                      <div *ngIf="formGroup.controls['department']?.touched && formGroup.controls['department']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['department']?.errors?.['required']">Department is required</small>
+                      </div>
+                    </div>
+
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Head Shot Url<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+
+                      <input class="input__field" formControlName="headshotUrl" type="text" placeholder="Enter Head Shot url" />
+                      <div *ngIf="formGroup.controls['headshotUrl']?.touched && formGroup.controls['headshotUrl']?.invalid"
+                        class="validation-message">
+                        <small *ngIf="formGroup.controls['headshotUrl']?.errors?.['required']"> is required</small>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- STEP 2: Capital & Industry -->
+                  <div *ngIf="current_details==2" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Location<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+
+                      <input class="input__field" formControlName="location" type="text" placeholder="Enter Location" />
+                      <div *ngIf="formGroup.controls['location']?.touched && formGroup.controls['location']?.invalid"
+                        class="validation-message">
+                        <small *ngIf="formGroup.controls['location']?.errors?.['required']">Location is required</small>
+                      </div>
+                    </div>
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Languages<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+
+                      <input class="input__field" formControlName="languages" type="text" placeholder="Enter languages" />
+                      <div *ngIf="formGroup.controls['languages']?.touched && formGroup.controls['region']?.invalid"
+                        class="validation-message">
+                        <small *ngIf="formGroup.controls['languages']?.errors?.['required']">Languages is required</small>
+                      </div>
+                    </div>
+
+
+                    <!-- Expertise -->
+                    <div class="input__wrapper">
+                      <label class="input__label">Expertise<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <p-multiSelect class="input__field" styleClass="w-full gap-4" formControlName="expertise"
+                        [options]="keyExpertise" placeholder="Select Key Expertise"></p-multiSelect>
+                      <div  *ngIf="formGroup.controls['expertise']?.touched && formGroup.controls['expertise']?.invalid"  class="validation-message">
+                        <small *ngIf="formGroup.controls['expertise']?.errors?.['required']">At least one key  expertise is required</small>
+                      </div>
+                    </div>
+
+
+
+
+
+
+
+                  </div>
+
+
+                  <div *ngIf="current_details==3" class="section2 grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <!-- Persona Quote -->
+                    <div class="input__wrapper">
+                      <label class="input__label">personalQuote<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <textarea class="input__field" formControlName="personalQuote" placeholder="Enter personal quote" rows="3"></textarea>
+                      <div *ngIf="formGroup.controls['personalQuote']?.touched && formGroup.controls['personalQuote']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['personalQuote']?.errors?.['required']">personal quote is required</small>
+                      </div>
+                    </div>
+
+
+                    <!-- Internal Notes Summary -->
+                    <div class="input__wrapper">
+                      <label class="input__label">Internal Notes<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <textarea class="input__field" formControlName="internalNotes" placeholder="Add Internal notes" rows="3"></textarea>
+                      <div  *ngIf="formGroup.controls['internalNotes']?.touched && formGroup.controls['internalNotes']?.invalid" class="validation-message">
+                        <small *ngIf="formGroup.controls['internalNotes']?.errors?.['required']">Internal notes is required</small>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="flex justify-end space-x-4 mt-6">
+                <div class="cta__group">
+                  <button class="btn btn-primary outline" type="button" [disabled]="current_details==1"
+                    (click)="setPrevDetails()">Back</button>
+                </div>
+                <div *ngIf="current_details!=3">
+                  <button class="btn btn-primary" type="button" (click)="setNextDetails()">Next</button>
+                </div>
+                <button type="submit" *ngIf="current_details==3" [disabled]="!formGroup.valid" class="btn">{{ StaffProfileExists ? "Update" : "Submit" }}</button>
+              </div>
+            </form>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</app-layout>

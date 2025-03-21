@@ -12,3 +12,20 @@ export interface PartnerProfile {
     engagementType: string[],
     internalNotes: string
 }
+
+
+export interface StaffProfile {
+    id:number,
+    userId:number,
+    fullName: string,
+    jobTitle: string,
+    department: string,
+    headshotUrl: string,
+    location: string,
+    languages: string,
+    expertise: string[],
+    personalQuote: string,
+    internalNotes: string
+}
+
+

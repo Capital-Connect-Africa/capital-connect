@@ -25,10 +25,7 @@ import { USER_ROLES } from '../../../../shared';
 })
 export class StaffUsersComponent {
   private _usersService = inject(UsersHttpService);
-  private _router = inject(Router);
   private _confirmationService = inject(ConfirmationService);
-  private _companyService = inject(CompanyHttpService);
-  private _feedbackService = inject(FeedbackService);
 
   updateUser$ =new Observable();
   users$ = new Observable<any>();
