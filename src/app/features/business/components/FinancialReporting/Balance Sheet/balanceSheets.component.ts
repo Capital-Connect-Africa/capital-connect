@@ -16,7 +16,7 @@ import { ModalComponent } from "../../../../../shared/components/modal/modal.com
 import { FinancialReportingService } from '../FinancialReporting.service';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ViewFinancialReporting } from "../viewFinanciallReport/viewFinancials.component";
+import { DropdownModule } from 'primeng/dropdown';
 
 interface BalanceSheetRecord {
   id: number;
@@ -35,6 +35,7 @@ interface BalanceSheetRecord {
   capital: number;
   otherNonCurrentLiabilities: number;
   totalLiabilities: number;
+  netProfit:number;
   companyId: number;
 }
 
@@ -55,13 +56,14 @@ interface BalanceSheetRecord {
     MultiSelectModule,
     ModalComponent,
     ReactiveFormsModule,
-    ViewFinancialReporting
+    DropdownModule
   ],
   templateUrl: './balanceSheets.component.html',
   styleUrl: './balanceSheets.component.scss',
   providers: [PaginationService]
 })
 export class BalanceSheets {
+
   @ViewChild('financials_content', { static: false }) financials_content!: ElementRef;
   balanceSheetForm!: FormGroup;
 
@@ -70,6 +72,7 @@ export class BalanceSheets {
   companyId!: number;
   createBalanceSheetModal = false;
   edit_mode = false;
+  netProfit:number = 0
 
   private _fr = inject(FinancialReportingService);
   private _fs = inject(FeedbackService);
@@ -82,6 +85,7 @@ export class BalanceSheets {
   getBalanceSheetRecordById$ = new Observable<unknown>()
   getBalanceSheetRecordByCompanyId$ = new Observable<unknown>()
   updateBalanceSheetRecord$ = new Observable<unknown>()
+  financialInfoRecords$ = new Observable<unknown>()
 
 
   ngOnInit() {
@@ -97,6 +101,24 @@ export class BalanceSheets {
       this.loadBalanceSheets();
     }
   }
+
+  onYearChange(event:any) {
+    this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
+      this.netProfit = this.getNetProfitByYear(res, event.value)
+      if(this.netProfit === null){
+        this.netProfit = 0
+      }
+    }))
+  }
+
+  getNetProfitByYear(data:any, year:string) {    
+    const record = data.find((item: { year: string; }) => item.year === year);
+    return record ? record.netProfit : null;
+  }
+
+  extractYears(data:any) {
+      return data.map((item: { year: any; }) => item.year).sort()
+  }
   
   loadBalanceSheets() {
     this.getBalanceSheetRecordByCompanyId$ = this._fr.getAllBalanceSheetRecordByCompanyId(this.companyId).pipe(
@@ -104,7 +126,6 @@ export class BalanceSheets {
         this.sortedYears = res.map(r => r.year).sort((a, b) => a - b);
         this.balanceSheetData = {};
         res.forEach(record => {
-          console.log("Record : ", record);
           this.balanceSheetData[record.year] = { ...record, companyId: this.companyId };
         });
   
@@ -147,30 +168,6 @@ export class BalanceSheets {
 
 
 
-
-
-
-
-  // loadBalanceSheets() {
-  //   console.log("Loading sheets ...")
-
-  //   this.getBalanceSheetRecordByCompanyId$ = this._fr.getAllBalanceSheetRecordById(this.companyId).pipe(tap(res=>{
-  //     this.sortedYears = res.map(r => r.year).sort((a, b) => a - b);
-  //       this.balanceSheetData = {};
-  //       res.forEach(record => {
-  //         console.log("Record : ", record)
-  //         // this.balanceSheetData[record.year] = record;
-  //       });
-
-  //       if (this.sortedYears.length > 0) {
-  //         const latestYear = Math.max(...this.sortedYears);
-  //         this.patchFormWithYearData(latestYear);
-  //       }
-
-  //   }))
-
-  // }
-
   patchFormWithYearData(year: number) {
     const record = this.balanceSheetData[year];
     if (record) {
@@ -178,12 +175,13 @@ export class BalanceSheets {
     }
   }
 
-  // addBalanceSheetRecord(year? : number) {
-  //   this.balanceSheetForm.reset({ companyId: this.companyId });
-  //   this.createBalanceSheetModal = true;
-  // }
-
+  years:string[] = []
   addBalanceSheetRecord(year?: number) {
+    this.financialInfoRecords$ = this._fr.getAllCompanyFinancialRecords(this.companyId).pipe(tap(res => {
+      this.years = this.extractYears(res)
+      console.log("The years are: ",this.extractYears(res))
+    }))
+
     if (year) {
       const record = this.balanceSheetData[year];
       if (record) {
@@ -200,9 +198,26 @@ export class BalanceSheets {
   createBalanceSheet() {
     if (this.balanceSheetForm.invalid) return;
 
+    const formValue = {
+      ...this.balanceSheetForm.value,
+      year: parseInt(this.balanceSheetForm.value.year, 10),
+      landProperty: parseInt(this.balanceSheetForm.value.landProperty, 10),
+      plantEquipment: parseInt(this.balanceSheetForm.value.plantEquipment, 10),
+      otherNonCurrentAssets: parseInt(this.balanceSheetForm.value.otherNonCurrentAssets, 10),
+      tradeReceivables: parseInt(this.balanceSheetForm.value.tradeReceivables, 10),
+      cash: parseInt(this.balanceSheetForm.value.cash, 10),
+      inventory: parseInt(this.balanceSheetForm.value.inventory, 10),
+      otherCurrentAssets: parseInt(this.balanceSheetForm.value.otherCurrentAssets, 10),
+      tradePayables: parseInt(this.balanceSheetForm.value.tradePayables, 10),
+      otherCurrentLiabilities: parseInt(this.balanceSheetForm.value.otherCurrentLiabilities, 10),
+      loans: parseInt(this.balanceSheetForm.value.loans, 10),
+      capital: parseInt(this.balanceSheetForm.value.capital, 10),
+      otherNonCurrentLiabilities: parseInt(this.balanceSheetForm.value.otherNonCurrentLiabilities, 10)
+    };
+
     const operation = this.edit_mode 
-      ? this._fr.updateBalanceSheetRecord(this.balanceSheetForm.value)
-      : this._fr.createBalanceSheetRecord(this.balanceSheetForm.value);
+      ? this._fr.updateBalanceSheetRecord(formValue, formValue.id)
+      : this._fr.createBalanceSheetRecord(formValue);
 
     operation.subscribe({
       next: () => {

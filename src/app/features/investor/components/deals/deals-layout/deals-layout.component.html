@@ -1,0 +1,145 @@
+<div class="main__content">
+    <app-sidenav [links]="links"/>
+    <main class="bg-neutral-100 flex flex-col gap-4">
+        <div class="bg-white !py-4 !px-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button *ngIf="(store.activePipeline()?.stages??[]).length" (click)="showDealForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all"><i class="pi pi-plus text-xs"></i>New Deal</button>
+                <select (change)="handlePipelineChange($event)" class=" !text-gray-600 !pl-2 !pr-8 !py-2 rounded cursor-pointer !bg-neutral-100 text-sm hover:!bg-neutral-200 hover:!text-gray-800">
+                    <option *ngFor="let pipeline of store.payload()" [value] ="pipeline.id" [selected] ="store.activePipeline()?.id ==pipeline.id">{{pipeline.name}}</option>
+                </select>
+            </div>
+            <div class="flex items-center gap-4">
+                <button (click)="openPipelineSettingsModal()" class="flex items-center gap-2 !px-2 !py-2 text-gray-600 hover:text-gray-900 hover:bg-neutral-200 rounded transition-all">
+                    <i class="pi pi-cog text-sm"></i>
+                    <span class="text-sm">Settings</span>
+                </button>
+                <div class="flex items-center rounded-full !px-4 !gap-2 !py-2">
+                    <button (click) ="setView(VIEWS.KANBAN_VIEW)" class="group flex h-8 w-8 items-center justify-center hover:bg-blue-500 hover:rounded transition-all" title="Kanban View" [ngClass]="{'bg-blue-500 rounded': store.currentView() === VIEWS.KANBAN_VIEW}"><i class="pi pi-th-large text-xs text-gray-500 group-hover:text-white transition-all" [ngClass]="{'!text-white': store.currentView() === VIEWS.KANBAN_VIEW}"></i></button>
+                    <button (click) ="setView(VIEWS.ANALYTICAL_VIEW)" class="group flex h-8 w-8 items-center justify-center hover:bg-blue-500 hover:rounded transition-all" title="Analytical View" [ngClass]="{'bg-blue-500 rounded': store.currentView() === VIEWS.ANALYTICAL_VIEW}"><i class="pi pi-chart-line text-sm text-gray-500 group-hover:text-white transition-all" [ngClass]="{'!text-white': store.currentView() === VIEWS.ANALYTICAL_VIEW}"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="!px-8">
+            <router-outlet />
+        </div>
+    </main>
+</div>
+
+<app-modal [(visible)]="isPipelineConfigModalVisible" [title]="(store.activePipeline() && store.activePipeline()?.name)??''" [helperText]="'For this pipeline you can have upto '+ store.activePipeline()?.maxNumberOfStages+' deal stages'">
+    <div class="h-full w-full grid grid-cols-2 gap-4">
+        <section class="w-full h-full flex flex-col !pt-5">
+            <div class="flex items-center justify-between">
+                <h3 class="!text-base !font-semibold !pb-1 font-family-seri">Configure pipeline</h3>
+                <div class="flex items-center">
+                    <button (click)="editPipelineName()" class="group flex h-8 w-8 items-center justify-center hover:bg-teal-100 text-teal-600 hover:rounded transition-all" title="Edit" ><i class="pi pi-pencil text-xs" ></i></button>
+                    <button (click)="removePipeline()" *ngIf="!store.activePipeline()?.stages?.length" class="group flex h-8 w-8 items-center justify-center hover:bg-red-100 text-red-600 hover:rounded transition-all" title="Delete"><i class="pi pi-trash text-sm"></i></button>
+                </div>
+            </div>
+            <p class="description font-family-serif !max-w-[90%]">Having multiple investment processes? You can create additional pipelines to manage your processes. We allow upto 3 pipelines.</p>
+            <div class="!pt-4" *ngIf="!isPipelineFormVisible">
+                <button [disabled]="store.payload().length >=3" (click)="openPipelineForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': store.payload().length >=3}"><i class="pi pi-plus text-xs"></i>New Pipeline</button>
+            </div>
+            <form *ngIf="isPipelineFormVisible && (isPipelineInEditMode || store.payload().length <3)" class="flex flex-col gap-4 !py-4" [formGroup]="pipelineForm" (submit)="createNewPipeline()">
+                <div class=""><button (click)="closePipelineForm()" type="button" class="flex items-center justify-center rounded-full w-7 h-7 hover:bg-rose-50 hover:text-rose-500 transition-all"><i class="pi pi-times text-xs"></i></button></div>
+                <input formControlName ="name" placeholder="Enter your pipeline name" class="block !font-light placeholder:!text-sm !border !border-solid !border-gray-400 rounded !px-4 !py-2 description font-family-serif" />
+                <button [disabled]="pipelineForm.invalid" type="submit" class="bg-blue-500 w-max text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': pipelineForm.invalid}">{{isPipelineInEditMode? 'Update' :'Submit'}}</button>
+            </form>
+        </section>
+        <section class="w-full h-full flex flex-col !pt-8">
+            <ul class="flex flex-col gap-2">
+                <li class="grid w-full grid-cols-[20%_auto] gap-4 items-center">
+                    <div><p class="description font-family-serif">% Progress</p></div>
+                    <div class="grid grid-cols-[auto_10%] !gap-4 items-center">
+                        <p class="description font-family-serif">Stage Name</p>
+                        <div *ngIf="stageFields.length <=(store.activePipeline()?.maxNumberOfStages ?? MAX_STAGES_COUNT)"><button (click)="submit()" title="add field" type="button" class="flex items-center justify-center rounded-lg w-7 h-7 hover:bg-blue-100 hover:text-blue-500 transition-all"><i class="pi pi-plus text-xs"></i></button></div>
+                    </div>
+                </li>
+                <li class="grid grid-cols-[20%_auto] gap-4" *ngFor="let field of stageFields">
+                    <input [(ngModel)]="field.progress" placeholder="%" (change) ="handleFieldValueChange(field)" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-2 font-family-serif"/>
+                    <div class="grid grid-cols-[auto_10%] !gap-4 items-center">
+                        <input [(ngModel)]="field.name" (change) ="handleFieldValueChange(field)" placeholder="Enter stage name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-2 font-family-serif"/>
+                        <div *ngIf="stageFields.length >1 && field.deals <=0"><button (click)="removeField(field)" title="Remove" type="button" class="flex items-center justify-center rounded  text-white !px-1 bg-rose-500 hover:bg-rose-700 transition-all !w-7"><i class="pi pi-minus text-xs"></i></button></div>
+                    </div>
+                </li>
+            </ul>
+        </section>
+    </div>
+</app-modal>
+
+
+<app-modal 
+[(visible)]="isDealFormModalVisible" [title]="store.currentlySelectedDeal()?.name?? 'New Deal'"
+(visibleChange)="resetSelectedDeal()"
+ [helperText]="store.currentlySelectedDeal()? 'Details of a $'+formatNumberValue(store.currentlySelectedDeal()?.value ?? 0) + ' worth of deal with '+store.currentlySelectedDeal()?.customer?.name  :'Add a new deal to your pipeline'">
+    <div class="h-full w-full grid grid-cols-2 gap-4">
+        <section class="w-full h-full flex flex-col " [ngClass]="{'!pt-2': store.currentlySelectedDeal(), '!pt-3': !store.currentlySelectedDeal()}">
+            <h3 *ngIf="!isInReadOnlyMode" class="!text-base !font-semibold">{{isInReadOnlyMode? 'Deal Details' :'Client Details'}}</h3>
+            <p *ngIf="!isInReadOnlyMode" class="description font-family-serif !max-w-[90%]">Register the contact details of your deal cutomer for streamlined communication and tracking.</p>
+            <div class="!pt-4" *ngIf="!isContactFormVisible && !isInReadOnlyMode">
+                <button (click)="showContactForm()" class="bg-blue-500 text-white !p-2 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" >
+                    <i *ngIf="store.currentlySelectedDeal()" class="pi pi-refresh text-xs"></i>
+                    <i *ngIf="!store.currentlySelectedDeal()" class="pi pi-plus text-xs"></i>
+                    {{store.currentlySelectedDeal()? 'Update Contact' :'Add Contact'}}
+                </button>
+            </div>
+            <form class="flex flex-col !gap-4 !pt-3" *ngIf="isContactFormVisible || isInReadOnlyMode" [formGroup]="dealCustomerForm" (ngSubmit)="submitDealCustomer()">
+                <div class="flex flex-col !gap-[2px]">
+                    <p class="description font-family-serif">Contact Name</p>
+                    <input [readOnly]="isInReadOnlyMode" formControlName ="name" placeholder="Enter contact name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                </div>
+                <div class="grid !gap-2"  [ngClass]="{'grid-cols-2': !isInReadOnlyMode, '!gap-4': store.currentlySelectedDeal()}">
+                    <div class="flex flex-col !gap-[2px] w-full">
+                        <p class="description font-family-serif">Contact Email</p>
+                        <input [readOnly]="isInReadOnlyMode" formControlName ="email" type="email" placeholder="Enter contact email" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                    </div>
+                    <div class="flex flex-col !gap-[2px] w-full">
+                        <p class="description font-family-serif">Contact Number</p>
+                        <input [readOnly]="isInReadOnlyMode" formControlName ="phone" type="tel" placeholder="Enter contact phone number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+                    </div>
+                </div>
+                <div class="!pt-2 flex items-center gap-4 justify-between">
+                    <button (click) ="switchToEditMode()" *ngIf="isInReadOnlyMode" type="button" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all">Switch To Edit Mode</button>
+                    <button *ngIf="!isInReadOnlyMode" [disabled]="dealCustomerForm.invalid" type="submit" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': dealCustomerForm.invalid}">
+                        <i *ngIf="store.currentlySelectedDeal()" class="pi pi-refresh text-xs"></i>
+                        <i *ngIf="!store.currentlySelectedDeal()" class="pi pi-plus text-xs"></i>
+                        {{store.currentlySelectedDeal()? 'Update Contact' :'Add Contact'}}
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <form class="flex flex-col !gap-4 w-full h-full !pt-5" [formGroup]="dealForm" (submit)="submitDeal()">
+            <div class="flex flex-col !gap-[1px]">
+                <p class="description font-family-serif">Deal name</p>
+                <input [readOnly]="isInReadOnlyMode" formControlName ="name" placeholder="Enter deal name" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+            </div>
+            <div class="flex flex-col !gap-[1px]">
+                <p class="description font-family-serif">Deal value</p>
+                <input [readOnly]="isInReadOnlyMode" formControlName ="value" placeholder="Enter deal value (USD)" type="number" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif focus:!border-blue-500 transition-all"/>
+            </div>
+            <div class="flex flex-col !gap-[1px]" *ngIf="isInReadOnlyMode">
+                <p class="description font-family-serif">Deal status</p>
+                <select (change)="updateDealStatus($event, store.currentlySelectedDeal()?.id??0)" [disabled]="true" formControlName ="status" class="capitalize block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-[11px] font-family-serif focus:!border-blue-500 transition-all">
+                    <option *ngFor="let status of dealStatus" [value]="status" class="capitalize">{{status}}</option>
+                </select>
+            </div>
+            <div class="flex flex-col !gap-[1px]" *ngIf="!isInReadOnlyMode">
+                <p class="description font-family-serif">Contact</p>
+                <input formControlName ="contactName" readonly placeholder="contact name - field is read-only" class="block !font-light !text-xs !border !border-solid !border-gray-400 rounded !px-4 !py-3 font-family-serif cursor-not-allowed transition-all"/>
+            </div>
+            <div class="!pt-2" *ngIf="!isInReadOnlyMode">
+                <button [disabled]="dealForm.invalid" type="submit" class="bg-blue-500 text-white !py-2 !px-4 flex items-center gap-2 rounded cursor-pointer text-sm hover:!bg-blue-700 transition-all" [ngClass]="{'!bg-gray-300 hover:!bg-gray-300 !cursor-not-allowed': dealForm.invalid}">
+                    <i *ngIf="store.currentlySelectedDeal()" class="pi pi-refresh text-xs"></i>
+                    <i *ngIf="!store.currentlySelectedDeal()" class="pi pi-plus text-xs"></i>
+                    {{store.currentlySelectedDeal()? 'Update Deal' :'Add Deal'}}
+                </button>
+            </div>
+        </form>
+    </div>
+</app-modal>
+
+
+
+<ng-container *ngIf="onDealDragAndDrop$ | async"></ng-container>
+<ng-container *ngIf="onNewDealSelected$ | async"></ng-container>
+<ng-container *ngIf="onPipelineOpened$ | async"></ng-container>

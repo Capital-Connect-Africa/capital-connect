@@ -16,8 +16,8 @@
                 <ng-template pTemplate="header">
                   <tr>
                     <th>#</th>
-                    <th>Meeting Time</th>
-                    <th>End Time</th>
+                    <th>Meting Start Time</th>
+                    <th>Meeting End Time</th>
                     <th>Client</th>
                     <th>Action</th>
                   </tr>
@@ -26,8 +26,8 @@
                 <ng-template pTemplate="body" let-booking let-i="rowIndex">
                   <tr>
                     <td><strong>{{i+1}}</strong></td>
-                    <td>{{ booking.meetingStartTime | date: 'EEEE, d MMMM y' }}</td>
-                    <td>{{ booking.meetingEndTime | date: 'EEEE, d MMMM y' }}</td>
+                    <td>{{ booking.meetingStartTime ? (booking.meetingStartTime | date: 'EEEE, d MMMM y, h:mm a') : "Not Set"  }}</td>
+                    <td>{{ booking.meetingEndTime ? (booking.meetingEndTime | date: 'EEEE, d MMMM y, h:mm a') : "Not Set" }}</td>
 
 
                     <td>
@@ -38,7 +38,9 @@
                     </td>
 
                     <td class="flex space-x-1 items-center gap-2">
-                      <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button>
+                      <!-- <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button> -->
+                      <button class="btn btn-sm text-xs"  [disabled]="!booking.meetingLink" (click)="getMeeting(booking)">Go To Meeting</button>
+
                       <button class="pi pi-pencil btn btn-tertiary btn-sm text-xs" (click)="takeMeetingNotes(booking)">Remarks</button>
                     </td>
                   </tr>

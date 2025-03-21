@@ -275,6 +275,10 @@
   }
 
 }
+
+.phone__container{
+  padding: 1cm 0 1cm 0;
+}
 @include when-screen-is-atleast(large){
     .header{
         gap: 3rem;

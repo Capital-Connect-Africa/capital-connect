@@ -1,0 +1,45 @@
+@import "../../../../styles/forms.scss";
+@import "../../../../styles/select-fields.scss";
+
+textarea {
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #c9ddcc;
+}
+
+
+
+.title__bar {
+  gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+
+  p {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: #404040;
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+}
+
+.h2 {
+  line-height: 0;
+  font-weight: 500;
+  color: #404040;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+
+:host ::ng-deep .p-inputswitch {
+  .p-inputswitch-slider{
+    &::before{
+      top: 15%!important;
+      background-color: red!important;
+
+    }
+    
+  }
+}

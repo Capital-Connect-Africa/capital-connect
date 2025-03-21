@@ -14,12 +14,14 @@ export class ColumnChartComponent {
 
   @Input() ylabel!:string;
   @Input() xlabel!:string;
+  @Input() height:string ='h-[500px]'
   @Input() data!:Record<string, number>;
   @Input() colors: string[] =['#1b9e77'];
   @Output() onSelect = new EventEmitter<ChartEvent>()
   chartData: (string | number)[][] = [];
   chartType: ChartType = ChartType.ColumnChart;
   options: any = {};
+  
 
   ngOnInit(): void {
     this.initializeChart()

@@ -5,7 +5,7 @@ import { Link } from '../../../../shared/interfaces/link.interface';
 import { UiSharedComponent } from '../../../../shared/components/ui/ui.component';
 import { SignalsService } from '../../../../core/services/signals/signals.service';
 import { SidenavComponent } from "../../../../core/components/sidenav/sidenav.component";
-import { INVESTOR_DASHBOARD_LINKS } from '../../../../shared/routes/investor-dashboard-routes';
+
 
 @Component({
   selector: 'app-admin-ui-container',
@@ -25,6 +25,10 @@ export class AdvisorUiContainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.signalService.pageTitle.set(this.title);
-    this.links = [ { label: 'Sessions', href: '/advisor', exact: false, icon: 'grid_view' ,display:true } ]
+    this.links = [ 
+      { label: 'Sessions', href: '/advisor/sessions', exact: false, icon: 'grid_view' ,display:true } ,
+      { label: 'Profile', href: '/advisor/profile', exact: false, icon: 'person' ,display:true } 
+
+    ]
   }
 }

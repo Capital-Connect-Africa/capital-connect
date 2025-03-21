@@ -19,6 +19,7 @@ import { ModalComponent } from "../../../../../shared/components/modal/modal.com
 import { EditorModule } from 'primeng/editor';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../../../users/models';
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 
 @Component({
@@ -44,6 +45,7 @@ export class BookingComponent {
   //services
   private _webExService = inject(WebExService)
   private _sanitizer = inject(DomSanitizer); 
+  private _fs = inject(FeedbackService)
 
 
   //vars
@@ -65,13 +67,14 @@ export class BookingComponent {
   notes_modal:boolean = false
   meeting_details:boolean = false
   advisor_details:boolean = false
+  showMessage:boolean = false;
+  hoveredBookingId: number | null = null;
 
 
   showNewBookingForm: boolean = false;
   private _paymentService = inject(PaymentService)
   private _feedbackService = inject(FeedbackService)
   private _router = inject(Router)
-
   private _bookingService = inject(BookingService)
 
   //observables
@@ -91,8 +94,8 @@ export class BookingComponent {
 
   bookings$ = this._bookingService.getBookings(1, 10).pipe(
     tap(res => {
-      // this.bookings = res;
-      this.bookings = res.filter(item => item.calendlyEventId !== "ueiuwiiwu");
+      this.bookings = res;
+      // this.bookings = res.filter(item => item.calendlyEventId !== "ueiuwiiwu");
       this.totalItems = res.length;
     }),
     catchError((error: any) => {
@@ -145,12 +148,26 @@ export class BookingComponent {
     this.pageChange(this.currentPage);
   }
 
-   getMeeting(booking:Booking) {
-      this.meeting_details = true
-      this.getSingleMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
-        this.meetingDetails = res
-      }))
+  getMeeting(booking: Booking) {
+    const currentTime = new Date();
+    const meetingTime = new Date(booking.meetingStartTime); 
+    if (meetingTime > currentTime) {
+      const timeDiff = meetingTime.getTime() - currentTime.getTime();
+      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  
+      this._fs.info(`Meeting starts in ${hours}h ${minutes}m`);
+    } else {
+      window.open(booking.meetingLink, '_blank');
     }
+  }
+
+  rebookMeeting(booking: Booking) {
+    const bookingId = booking.id;
+    const url = `/calendly-booking?bookingId=${bookingId}`;
+    this._router.navigateByUrl(url);
+  }
+  
 
 
    takeMeetingNotes(booking:Booking){

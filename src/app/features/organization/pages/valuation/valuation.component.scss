@@ -1,0 +1,295 @@
+@import "../../../../styles/main.scss";
+@import '../../organization.styles.scss';
+
+
+.main {
+  gap: 1rem;
+  display: grid;
+//   padding: 1rem;
+  grid-template-rows: max-content auto;
+  .logo {
+    display: flex;
+    padding: 1rem 0 0 0;
+    justify-content: center;
+    img {
+      height: 80px;
+      display: block;
+    }
+  }
+
+  .title__bar {
+    gap: 0.35rem;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+    font-family: $font-family-sans-serif;
+    margin-top: -2cm;
+
+    > h2 {
+      font-size: 1.25rem;
+      font-weight: 500;
+    }
+    > p {
+      color: $gray-550;
+      font-weight: 400;
+      font-size: 1.1rem;
+    }
+  }
+  .main__content__section {
+    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+
+    .content {
+      gap: 3rem;
+      display: flex;
+    //   padding: 3rem 1rem;
+      border-radius: 1rem;
+      flex-direction: column;
+      border: 1px solid #eff0f6;
+      box-shadow: 0 5px 1rem #080f3409;
+      .steps {
+        gap: 3rem;
+        display: flex;
+        justify-content: center;
+        .step {
+          width: 34px;
+          height: 34px;
+          display: flex;
+          font-size: 1rem;
+          font-weight: 400;
+          border-radius: 50%;
+          position: relative;
+          align-items: center;
+          line-height: 1.485rem;
+          color: $primary-color;
+          justify-content: center;
+          background-color: #eef4ee;
+          font-family: "DM Sans", sans-serif;
+
+          &.active::before,
+          &.done::after,
+          &::after {
+            content: "";
+            height: 6px;
+            left: 2.3rem;
+            width: 2.6rem;
+            display: block;
+            position: absolute;
+            border-radius: 2.5rem;
+            background-color: #eef4ee;
+          }
+          &.done::after {
+            background-color: $primary-color;
+          }
+          &:last-child::before,
+          &:last-child::after {
+            display: none;
+          }
+
+          &.active,
+          &.done {
+            color: #ffffff;
+            background-color: $primary-color;
+
+            &::before {
+              z-index: 2;
+              width: 1.8rem;
+              background-color: $primary-color;
+            }
+          }
+        }
+      }
+      .hr {
+        height: 1px;
+        width: 100%;
+        background-color: #b2b2b2;
+      }
+    }
+    .buttons__group {
+      gap: 1rem;
+      display: flex;
+      flex-direction: column-reverse;
+
+      button {
+        display: block;
+        font-size: 0.8rem;
+        cursor: pointer;
+        font-weight: 500;
+        background: none;
+        border-radius: 6px;
+        line-height: 19.54px;
+        padding: 0.75rem 2.2rem;
+        border: 1px solid transparent;
+        font-family: $font-family-sans-serif;
+        &.outline {
+          color: $primary-color;
+          border-color: $primary-color;
+        }
+        &.fill {
+          color: white;
+          background-color: $primary-color;
+        }
+      }
+
+      .disabled-btn, .disabled-btn:hover {
+        color: $white;
+        border: none;
+        outline: none;
+        cursor: not-allowed;
+        background-color: $gray-550 ;
+      }
+      
+      .form__controls {
+        flex: 1;
+        gap: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        > * {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+@include when-screen-is-atleast(large) {
+  .main {
+    // padding: 2rem 3rem;
+    .logo {
+      padding: 0 4rem;
+      justify-content: flex-start;
+      img {
+        height: 91px;
+      }
+    }
+    .main__content__section {
+      width: 80%;
+      margin: 0 auto;
+      .title__bar {
+        gap: 1.5rem;
+        h2 {
+          font-size: 2rem;
+          line-height: 2.5rem;
+        }
+        p {
+          font-size: 1.5rem;
+          line-height: 1.75rem;
+        }
+      }
+      .content {
+        gap: 3rem;
+        padding: 3rem 4rem;
+        .steps {
+          gap: 7rem;
+          .step {
+            &.active::before,
+            &.done::after,
+            &::after {
+              content: "";
+              left: 2.7rem;
+              width: 6rem;
+            }
+            &.active,
+            &.done {
+              &::before {
+                width: 3rem;
+              }
+            }
+          }
+        }
+      }
+      .buttons__group {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+
+        button {
+          font-size: 1rem;
+          padding: 0.9rem 4rem;
+        }
+        .form__controls {
+          align-self: flex-end;
+          justify-content: flex-end;
+          > * {
+            width: max-content !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.loading-state, .error-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 1rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-state {
+  color: #dc3545;
+}
+
+.error-state button {
+  margin-top: 1rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+
+
+
+.input__field{
+  min-width: 100%;
+}
+
+.currency-group {
+    .p-inputgroup {
+      gap: 0.5rem;
+      
+      .p-inputnumber {
+        flex: 1;
+      }
+      
+      .p-dropdown {
+        width: 120px;
+        .p-dropdown-label {
+          padding: 0.75rem;
+        }
+      }
+    }
+    
+    .validation-row {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+  }
+
+  .disabled-btn, .disabled-btn:hover {
+    color: $white;
+    border: none;
+    outline: none;
+    cursor: not-allowed !important;
+    background-color: $gray-550  !important;
+  }

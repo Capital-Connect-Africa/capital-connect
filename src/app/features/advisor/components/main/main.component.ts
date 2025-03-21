@@ -42,6 +42,7 @@ export class MainComponent {
   private _bookingService = inject(BookingsService);
   private _feedbackService = inject(FeedbackService);
   private _webExService = inject(WebExService);
+  private _fs = inject(FeedbackService)
   
 
 
@@ -67,8 +68,8 @@ export class MainComponent {
 
   getBookings(page: number = 1, limit: number = 10) {
     this.bookings$ = this._bookingService.getBookings(page, limit).pipe(tap(bookings => {
-      // this.bookings = bookings.data;
-      this.bookings = bookings.data.filter(item => item.calendlyEventId !== "ueiuwiiwu");
+      this.bookings = bookings.data;
+      // this.bookings = bookings.data.filter(item => item.calendlyEventId !== "ueiuwiiwu");
       // this.updateDisplayedData();
       // this.rowsCount = bookings.total;
     }))
@@ -77,14 +78,29 @@ export class MainComponent {
 
 
   ngOnInit(): void {
+
     this.getBookings();
   }
 
-  getMeeting(booking:Booking) {
-    this.meeting_details = true
-    this.getMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
-      this.meetingDetails = res
-    }))
+  // getMeeting(booking:Booking) {
+  //   this.meeting_details = true
+  //   this.getMeeting$ = this._webExService.getMeeting(booking.calendlyEventId).pipe(tap(res=>{
+  //     this.meetingDetails = res
+  //   }))
+  // }
+
+  getMeeting(booking: Booking) {
+    const currentTime = new Date();
+    const meetingTime = new Date(booking.meetingStartTime); 
+    if (meetingTime > currentTime) {
+      const timeDiff = meetingTime.getTime() - currentTime.getTime();
+      const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  
+      this._fs.info(`Meeting starts in ${hours}h ${minutes}m`);
+    } else {
+      window.open(booking.meetingLink, '_blank');
+    }
   }
 
 

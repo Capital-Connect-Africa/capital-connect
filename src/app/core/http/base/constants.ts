@@ -5,3 +5,4 @@ export const CALENDLYEVENTID = "ueiuwiiwu"
 export const LAUNCH_DARKLY_PROD_CLIENT_ID = "671094e62eeceb0829ce8eb3"
 export const LAUNCH_DARKLY_TEST_CLIENT_ID = "671094e62eeceb0829ce8eb2"
 
+export const DEV_BASE_URL = "dev.api.capitalconnect.africa"

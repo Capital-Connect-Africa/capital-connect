@@ -19,7 +19,7 @@ export class ProfileComponent {
   investorId = Number(this._activateRoute.snapshot.paramMap.get('id'));
 
   private _investorService =inject(InvestorService)
-  investor$: Observable<MatchedInvestor> = this._investorService.getInvestorProfile(this.investorId).pipe(tap(res => {
+  investor$: Observable<MatchedInvestor> = this._investorService.getInvestorProfileIdByUserId(this.investorId).pipe(tap(res => {
     this.investor = res
   }))
 

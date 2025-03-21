@@ -1,4 +1,7 @@
-<!-- <ng-container *ngIf="getCriteria$ | async"></ng-container> -->
+<ng-container *ngIf="getCriteria$ | async"></ng-container>
+<ng-container *ngIf="saveCriteria$ | async"></ng-container>
+<ng-container *ngIf="editCriteria$ | async"></ng-container>
+<ng-container *ngIf="removeCriteria$ | async"></ng-container>
 <partner-layout title="Special Criteria">
   <section class="flex flex-col gap-8">
     <div class="flex flex-col gap-2 title__bar">
@@ -65,9 +68,8 @@
   </section>
   <h2 class="text-sm h2">Special Criteria</h2>
   <div class="grid__container rounded-xl">
-    <!-- <ng-container *ngIf="users$ | async"></ng-container> -->
 
-    <p-table [value]="[]" [paginator]="false">
+    <p-table [value]="specialCriteria" [paginator]="false">
       <ng-template pTemplate="header">
         <tr>
           <th *ngFor="let col of cols" [pSortableColumn]="col.field">
@@ -84,13 +86,13 @@
           <td> {{ criteria.title | titlecase }} </td>
           <td>{{ (criteria.globalVisible ? 'Global': 'Private') | titlecase }}</td>
           <td>{{ (criteria.questions && criteria.questions.length ) || 'None'}}</td>
-          <td>{{ (criteria.questions && criteria.questions.length) || 'None' }}</td>
+          <td>{{ (criteria.responses && criteria.responses.length) || 'None' }}</td>
           <td>{{ criteria.description | slice_text}}</td>
           <td>
-            <div>
-                <button (click)="editCriteria(criteria.id)">Edit</button>
-                <button (click)="viewCriteria(criteria.id)">View</button>
-                <button (click)="removeCriteria(criteria.id)">Delete</button>
+            <div class="flex gap-3">
+                <button class="text-blue-500 hover:text-blue-800 hover:underline" (click)="editCriteria(criteria.id)">Edit</button>
+                <button class="text-green-500 hover:text-green-800 hover:underline" (click)="viewCriteria(criteria.id)">View</button>
+                <button class="text-orange-500 hover:text-orange-800 hover:underline" (click)="removeCriteria(criteria.id)">Delete</button>
             </div>
           </td>
         </tr>

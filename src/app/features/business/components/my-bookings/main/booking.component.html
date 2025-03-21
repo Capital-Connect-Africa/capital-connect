@@ -8,17 +8,17 @@
 
 <div class="main">
   <div class="navbar">
-    <app-navbar onDashboard="true"></app-navbar>
+    <app-navbar onDashboard="true" title="Booked Sessions"></app-navbar>
   </div>
   <main>
     <div class="left__col"> 
-        <div class="flex flex-col gap-4" *ngIf="!iframe">
-          <p>Booked Sessions</p>
+        <div class="flex flex-col gap-4">
           <p-table [value]="bookings" [tableStyle]="{ 'width': '100%' }" [paginator]="true" [rows]="10">
             <ng-template pTemplate="header">
               <tr>
-                <th>#</th>
-                <th>Meeting Time</th>
+                <th>Booking Id</th>
+                <th>Meeting Start Time</th>
+                <th>Meeting End Time</th>
                 <th>Advisor</th>
                 <th>Action</th>
               </tr>
@@ -26,8 +26,10 @@
 
             <ng-template pTemplate="body" let-booking let-i="rowIndex">
               <tr>
-                <td><strong>{{i+1}}</strong></td>
-                <td >{{ booking.createdAt | date :  'EEEE, d MMMM y' }}</td>
+                <!-- <td><strong>{{i+1}}</strong></td> -->
+                <td><strong>{{booking.id}}</strong></td>
+                <td>{{ booking.meetingStartTime ? (booking.meetingStartTime | date: 'EEEE, d MMMM y, h:mm a') : "Not Set"  }}</td>
+                <td>{{ booking.meetingEndTime ? (booking.meetingEndTime | date: 'EEEE, d MMMM y, h:mm a') : "Not Set" }}</td>
                 <td (click)="showAdvisor(booking)">
                   <a class="user-link">
                     {{ booking?.advisor?.firstName ?  booking?.advisor?.firstName : "No advisor assigned " }} {{ booking?.advisor?.lastName }}
@@ -35,11 +37,15 @@
                 </td>
                 
                 <td class="flex space-x-1 items-center gap-2">
-                  <!-- <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button> -->
-                  <button class="btn btn-sm text-xs pi pi-info-circle" (click)="getMeeting(booking)">Meeting Details</button>
+                  <button class="btn btn-sm text-xs"  *ngIf="booking.meetingLink" (click)="getMeeting(booking)">Go To Meeting</button>
 
-                  <button class="pi pi-pencil btn btn-tertiary btn-sm text-xs"
-                    (click)="takeMeetingNotes(booking)">Remarks</button>
+                  <button class="btn btn-sm text-xs btn-success-alt"   *ngIf="!booking.meetingLink" (click)="rebookMeeting(booking)">Book Meeting</button>
+
+                  <p *ngIf="hoveredBookingId === booking.id && !booking.meetingLink" class="text-red-500 absolute  top-full text-xs right-0 ">
+                    The meeting has not been set.
+                  </p>
+
+                  <button class="btn btn-tertiary btn-sm text-xs"    (click)="takeMeetingNotes(booking)">Add Remarks</button>
                 </td>
               </tr>
   

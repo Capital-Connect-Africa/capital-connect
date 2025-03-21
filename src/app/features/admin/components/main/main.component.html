@@ -9,9 +9,9 @@
       <ng-container *ngIf="stats$ | async">
         <div>
           <h3>Users</h3>
-          <div class="grid grid-cols-2 gap-8">
+          <div class="grid grid-cols-2 gap-4 xl:gap-8">
             <div class="grid__container">
-              <ul class="grid grid-cols-2 gap-7 w-full">
+              <ul class="grid grid-cols-2 gap-4 w-full">
                 <li
                   *ngFor="let item of stats"
                   class="rounded-md flex justify-between items-center gap-8 stat__card"
@@ -39,12 +39,12 @@
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-user>
-                  <tr class="text-sm">
-                    <td>{{ user.name | titlecase }}</td>
-                    <td>{{ user.username | lowercase }}</td>
-                    <td>{{ user.roles | roleformat | titlecase }}</td>
-                    <td>{{ user.createdAt | time_ago | titlecase }}</td>
-                  </tr>
+                  <tr class="text-xs xl:text-sm">
+                    <td class="truncate max-w-[150px] overflow-hidden text-ellipsis">{{ user.name | titlecase }}</td>
+                    <td class="truncate max-w-[150px] overflow-hidden text-ellipsis">{{ user.username | lowercase }}</td>
+                    <td class="truncate max-w-[150px] overflow-hidden text-ellipsis">{{ user.roles | roleformat | titlecase }}</td>
+                    <td class="truncate max-w-[100px] overflow-hidden text-ellipsis">{{ user.createdAt | time_ago | titlecase }}</td>
+                  </tr>                  
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                   <tr>

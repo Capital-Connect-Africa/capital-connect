@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BASE_URL, BaseHttpService } from '../../../../core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, map, mergeMap, Observable, switchMap } from 'rxjs';
-import { AddNotesToFinancialecords, BalanceSheetRecord, BalanceSheetRecordPayload, FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
+import { AddNotesToFinancialecords, BalanceSheetRecord, BalanceSheetRecordPayload, CashFlowRecords, CashFlowRecordsPayload, FinancialInfoRecords, FinancialInfoRecordsPayload, OpexRecords, OpexRecordsPayload, RevenueRecords, UpdateFinancialRecords } from '../../../questions/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +30,8 @@ export class FinancialReportingService extends BaseHttpService {
     return this.read(`${BASE_URL}/balance-sheet/company/${id}`) as Observable<BalanceSheetRecord[]>
   }
 
-  updateBalanceSheetRecord(payload: BalanceSheetRecord) {
-    return this.create(`${BASE_URL}/balance-sheet`, payload) as Observable<unknown>
+  updateBalanceSheetRecord(payload: BalanceSheetRecord, id:number) {
+    return this.putPost(`${BASE_URL}/balance-sheet/${id}`, payload) as Observable<unknown>
   }
 
 
@@ -101,6 +101,26 @@ export class FinancialReportingService extends BaseHttpService {
     return this.update(`${BASE_URL}/opex`, payload.id, payload) as Observable<unknown>
   }
 
+  //Cash Flow
+  generateCashFlow(payload: CashFlowRecordsPayload) {
+    return this.read(`${BASE_URL}/cashflow/${payload.companyId}/${payload.year}`) as Observable<unknown>;
+  }  
+
+  getAllCashFlowRecords() :Observable<CashFlowRecords[]>{
+    return this.read(`${BASE_URL}/cashflow`) as Observable<CashFlowRecords[]>
+  }
+
+  getCashFlowRecord(id: number):Observable<CashFlowRecords>{
+    return this.readById(`${BASE_URL}/cashflow`, id) as Observable<CashFlowRecords>
+  }
+
+  getCashFlowRecordByCompanyId(companyId:number) :Observable<CashFlowRecords[]>{
+    return this.read(`${BASE_URL}/cashflow/company/${companyId}`).pipe(map((res:any)=>{
+      return res.sort((a:CashFlowRecords,b:CashFlowRecords)=>{
+        return a.year - b.year
+      })
+    }))
+  }
 
 
   //Financial records
