@@ -6,3 +6,5 @@ export interface Profile{
     mobileNumber: string,
     company: Company,
 }
+
+

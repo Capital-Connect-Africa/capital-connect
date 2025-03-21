@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'upcoming-sessions', loadComponent: () => import('./pages/upcoming-sessions/upcoming-sessions.component').then(c => c.UpcomingSessionsComponent)},
   { path: 'previous-sessions', loadComponent: () => import('./pages/previous-sessions/previous-sessions.component').then(c => c.PreviousSessionsComponent)},
 
+
 ];
 
 @NgModule({

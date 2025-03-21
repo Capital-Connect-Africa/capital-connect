@@ -78,6 +78,9 @@ export const routes: Routes = [
         './features/auth/pages/reset-password/reset-password.component'
       ).then((c) => c.ResetPasswordComponent),
   },
+
+  { path: 'create-staff-profile', loadComponent: () => import('./features/staff/components/createProfile/createStaffProfile.component').then(c => c.createStaffProfileComponent)},
+
   {
     path: 'organization',
     loadChildren: () =>
