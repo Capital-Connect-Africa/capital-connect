@@ -119,13 +119,24 @@ export class ViewSpecialCriteriaComponent implements OnInit {
         this._feedBackService.success('Company marked as interesting successfully.');
 
         this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-          this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
+          this.SpecialCriteriaCompanies = this.sortByStatus(res.companies.filter(business => business.isHidden === false));
+          // console.log("The special criteria companies are",this.SpecialCriteriaCompanies)
         }))
       })
     );
   }
 
 
+  sortByStatus(data:any) {
+    return data.sort((a: { status: string; }, b: { status: string; }) => {
+        if (a.status === "interesting" && b.status !== "interesting") {
+            return 1; // Move 'interesting' to the end
+        } else if (a.status !== "interesting" && b.status === "interesting") {
+            return -1; // Keep non-'interesting' at the start
+        }
+        return 0; // Maintain order otherwise
+    });
+}
 
   constructor(private route: ActivatedRoute,private fb: FormBuilder) {
     this.declineForm = this.fb.group({
@@ -138,7 +149,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
       tap(id => {
         this.specialCriteriaId = id;
         this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-          this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
+          this.SpecialCriteriaCompanies = this.sortByStatus(res.companies.filter(business => business.isHidden === false));
         }))
         this.getSpecialCriteria$ = this.sc.getSpecialCriteriaById(this.specialCriteriaId).pipe(tap(res => {
           this.specialCriteria = res
@@ -385,7 +396,7 @@ export class ViewSpecialCriteriaComponent implements OnInit {
             this.declineForm.reset();
             this.declineForm.updateValueAndValidity();
             this.getSpecialCriteriaCompanies$ = this.sc.getSpecialCriteriaCompanies(this.specialCriteriaId).pipe(tap(res=>{
-              this.SpecialCriteriaCompanies = res.companies.filter(business => business.isHidden === false);
+              this.SpecialCriteriaCompanies = this.sortByStatus(res.companies.filter(business => business.isHidden === false));
             }))
 
             this.decline = false;

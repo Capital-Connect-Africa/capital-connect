@@ -138,7 +138,7 @@
               <td>{{ business.businessSector ? business.businessSector : "N/A" }}</td>
               <td>{{ business.businessSubsector ? business.businessSubsector : "N/A"  }}</td>
               <td>{{ business.growthStage ? business.growthStage : "N/A" }}</td>
-              <td>{{ business.percentageScore }} %</td>
+              <td>{{ business.percentageScore }}%</td>
               <td class="flex space-x-1 items-center gap-2">
                 <button class="btn btn-sm text-xs" (click)="showInterest(business.id)" [disabled]="business.status === 'interesting'">Interested</button>
                 <button class="btn btn-danger btn-sm text-xs" [disabled]="business.status === 'declined'" (click)="openModal(business.id)">Decline</button>
@@ -289,8 +289,8 @@
     <form [formGroup]="questionsForm" (ngSubmit)="onQuestionsSubmit()">
       <div class="">
         <div class="input__wrapper">
-          <label class="input__label">Add Questions To Special Criteria</label>
-          <p-multiSelect class="input__field" formControlName="questionIds" [options]="questions"
+          <!-- <label class="input__label">Add Questions To Special Criteria</label> -->
+          <p-multiSelect class="input__field" formControlName="questionIds" [options]="specialCriteria.questions"
            optionValue="id"
            styleClass="w-full gap-4"
             optionLabel="text" placeholder="Select questions"></p-multiSelect>
