@@ -13,6 +13,7 @@ const routes: Routes = [
 
   { path: 'create-profile', loadComponent: () => import('./components/createProfile/createProfile.component').then(c => c.createPartnerProfileComponent)},
   { path: 'profile', loadComponent: () => import('./pages/partnerProfilePage/partnerProfilePage.component').then(c => c.PartnerProfilePage)},
+
   
 ];
 
