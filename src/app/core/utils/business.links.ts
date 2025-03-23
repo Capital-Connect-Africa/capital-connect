@@ -23,7 +23,7 @@ export class BusinessLinkService {
 
 export const BusinessLinks = [
     { label: 'Dashboard', href: '/business', exact: true, icon: 'grid_view', display: true },
-    // { label: 'Investors', href: '/business/investors-db', exact: true, icon: 'storage', display: true },
+    { label: 'Investors', href: '/business/investors-db', exact: true, icon: 'storage', display: true },
     { label: 'Plans', href: '/business/plans', exact: false, icon: 'paid', display: false},
     { label: 'My Business', href: '/business/my-business', exact: false, icon: 'business_center', display: true },
     { label: 'Special Criteria', href: '/business/special-criteria', exact: false, icon: 'contact_support', display: true },
