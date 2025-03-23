@@ -20,5 +20,10 @@ import { AppexColumnChartComponent } from "../../../../shared/components/charts/
 export class InvestorsDbComponent {
   links =BusinessLinks
 
+  inHouseInvestors:{matches: number, connects: number} ={matches: 0, connects: 0}
+
+  syncInhouseInvestors(event: {matches: number, connects: number}){
+    this.inHouseInvestors =event
+  }
   
 }

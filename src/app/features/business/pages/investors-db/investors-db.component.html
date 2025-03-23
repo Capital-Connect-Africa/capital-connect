@@ -41,7 +41,7 @@
         </div>
         <h3 class="!text-base font-light uppercase !pt-3">CC funders</h3>
         <div class="bg-white">
-          <app-in-house-investors />
+          <app-in-house-investors (onDataChange)="syncInhouseInvestors($event)"/>
         </div>
       </section>
       <section class="flex flex-col !gap-2">
@@ -53,9 +53,9 @@
             [distributed]="false"
             name="Investors"
             [data]="[
-              {label: 'Global', value: 200,},
-              {label: 'In-house', value: 100,},
-              {label: 'Connected', value: 50,},
+              {label: 'Global', value: 6,},
+              {label: 'In-house', value: inHouseInvestors.matches},
+              {label: 'Connected', value: inHouseInvestors.connects},
             ]" 
           />
         </div>
