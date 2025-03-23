@@ -10,7 +10,10 @@ import { NgApexchartsModule } from 'ng-apexcharts'
   styleUrl: './appex-column-chart.component.scss'
 })
 export class AppexColumnChartComponent {
-  @Input() height: number =350
+  @Input() height: number =300;
+  @Input() name: string ='Deals';
+  @Input() showYAxis:boolean =true
+  @Input() distributed:boolean =false;
   @Input() data: {label: string, value: number}[] =[]
   @ViewChild("chart") chart!: ChartComponent;
   chartOptions:any;
@@ -27,7 +30,7 @@ export class AppexColumnChartComponent {
     this.chartOptions = {
       series: [
         {
-          name: "Deals",
+          name: this.name,
           data: data.map(item => item.value)
         }
       ],
@@ -49,14 +52,15 @@ export class AppexColumnChartComponent {
         ]
       },
       chart: {
-        height: 300,
+        height: this.height,
         type: "bar",
-        toolbar: false
+        toolbar: false,
       },
       plotOptions: {
         bar: {
           columnWidth: "50%",
           endingShape: "rounded",
+          distributed: this.distributed,
         }
       },
       dataLabels: {
@@ -75,6 +79,9 @@ export class AppexColumnChartComponent {
         },
         tickPlacement: "on",
         categories: data.map(item => item.label),
+      },
+      yaxis: {
+        show: this.showYAxis
       },
       fill: {
         type: "gradient",
@@ -95,7 +102,7 @@ export class AppexColumnChartComponent {
 updateSeries(data: {value: number, label:string}[]) {
   if(!this.chartOptions) return;
   this.chartOptions.series =[{
-    name: "Deals",
+    name: this.name,
     data: data.map(item => item.value)
   }]
   this.chartOptions.xaxis = {
