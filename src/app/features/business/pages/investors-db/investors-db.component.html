@@ -1,15 +1,50 @@
-<ng-container *ngIf="publicInvestors$ | async"></ng-container>
-<ng-container *ngIf="searchedResults$ | async"></ng-container>
 <div class="main__content">
   <app-sidenav [links]="links"/>
   <div class="main">
     <div class="navbar"><app-navbar onDashboard="true" [showBanner]="false" /></div>
-    <ag-grid-angular
-        style="min-width: 100%; height: 75%;"
-        [context]="{ componentParent: this }"
-        [rowData] ="publicInvestors"
-        [gridOptions]="gridOptions"
-    />
+    <div class="grid grid-cols-[auto_20%] !gap-8 !py-4 !px-8">
+      <section class="flex flex-col !gap-2">
+        <h3 class="!text-base font-light uppercase">Overview</h3>
+        <div class="grid grid-cols-3 !gap-8">
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">Global Funders</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">422</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-orange-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-globe text-xs text-orange-600"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">Available Funding</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">${{50000000 | numberabbreviation}}</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-green-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-wallet text-xs text-green-600"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">Matched Funders</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">138</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-blue-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-wave-pulse text-xs text-blue-600"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <h3 class="!text-base font-light uppercase !pt-3">Global funders</h3>
+        <div class="bg-white">
+          <app-global-investors />
+        </div>
+        <h3 class="!text-base font-light uppercase !pt-3">CC funders</h3>
+        <div class="bg-white">
+          <app-global-investors />
+        </div>
+      </section>
+    </div>
     </div>
 </div>
       
