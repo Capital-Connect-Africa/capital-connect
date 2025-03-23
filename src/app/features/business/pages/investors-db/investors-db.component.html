@@ -2,10 +2,10 @@
   <app-sidenav [links]="links"/>
   <div class="main">
     <div class="navbar"><app-navbar onDashboard="true" [showBanner]="false" /></div>
-    <div class="grid grid-cols-[auto_20%] !gap-8 !py-4 !px-8">
+    <div class="grid grid-cols-[auto_30%] !gap-8 !py-4 !px-8">
       <section class="flex flex-col !gap-2">
         <h3 class="!text-base font-light uppercase">Overview</h3>
-        <div class="grid grid-cols-3 !gap-8">
+        <div class="grid grid-cols-3 !gap-4">
           <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
             <p class="font-light !text-sm">Global Funders</p>
             <div class="flex items-center justify-between">
@@ -41,7 +41,80 @@
         </div>
         <h3 class="!text-base font-light uppercase !pt-3">CC funders</h3>
         <div class="bg-white">
-          <app-global-investors />
+          <app-in-house-investors />
+        </div>
+      </section>
+      <section class="flex flex-col !gap-2">
+        <h3 class="!text-base font-light uppercase">Insights</h3>
+        <div class="bg-white rounded">
+          <app-appex-column-chart 
+            [showYAxis]="false"
+            [height]="150"
+            [distributed]="false"
+            name="Investors"
+            [data]="[
+              {label: 'Global', value: 200,},
+              {label: 'In-house', value: 100,},
+              {label: 'Connected', value: 50,},
+            ]" 
+          />
+        </div>
+        <div class="!pt-2">
+          <h3 class="!text-base font-light uppercase">Matching Criteria</h3>
+          <div class="bg-white rounded !p-3 flex flex-col !gap-3">
+            <div class="grid grid-cols-[10%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">200 - </p>
+              <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
+                <div class="bg-orange-300 !w-[90%] !h-full"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-[10%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">160 - </p>
+              <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
+                <div class="bg-blue-300 !w-[75%] !h-full"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-[10%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">120 - </p>
+              <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
+                <div class="bg-green-300 !w-[60%] !h-full"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-[10%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">100 - </p>
+              <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
+                <div class="bg-rose-300 !w-[50%] !h-full"></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-[10%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">50 - </p>
+              <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
+                <div class="bg-teal-300 !w-[40%] !h-full"></div>
+              </div>
+            </div>
+            <div class="flex items-center flex-wrap !gap-x-3">
+              <div class="flex items-center !gap-2">
+                <div class="bg-orange-300 !w-[10px] !h-[10px] rounded-full"></div>
+                <p class="!text-[8px] font-light !m-0">Sector </p>
+              </div>
+              <div class="flex items-center !gap-2">
+                <div class="bg-blue-300 !w-[10px] !h-[10px] rounded-full"></div>
+                <p class="!text-[8px] font-light !m-0">Sub-sector</p>
+              </div>
+              <div class="flex items-center !gap-2">
+                <div class="bg-green-300 !w-[10px] !h-[10px] rounded-full"></div>
+                <p class="!text-[8px] font-light !m-0">Use of funds </p>
+              </div>
+              <div class="flex items-center !gap-2">
+                <div class="bg-rose-300 !w-[10px] !h-[10px] rounded-full"></div>
+                <p class="!text-[8px] font-light !m-0">Country</p>
+              </div>
+              <div class="flex items-center !gap-2">
+                <div class="bg-teal-300 !w-[10px] !h-[10px] rounded-full"></div>
+                <p class="!text-[8px] font-light !m-0">Your Matches</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>

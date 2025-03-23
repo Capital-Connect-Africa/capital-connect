@@ -6,12 +6,14 @@ import { BusinessLinks } from '../../../../core/utils/business.links';
 import { formatCurrency } from '../../../../core/utils/format.currency';
 import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviation.pipe";
 import { GlobalInvestorsComponent } from "../../components/investors-db/global-investors/global-investors.component";
+import { InHouseInvestorsComponent } from "../../components/investors-db/in-house-investors/in-house-investors.component";
+import { AppexColumnChartComponent } from "../../../../shared/components/charts/appex-column-chart/appex-column-chart.component";
 
 
 @Component({
   selector: 'app-investors-db',
   standalone: true,
-  imports: [SidenavComponent, CommonModule, NavbarComponent, NumberAbbriviationPipe, GlobalInvestorsComponent],
+  imports: [SidenavComponent, CommonModule, NavbarComponent, NumberAbbriviationPipe, GlobalInvestorsComponent, InHouseInvestorsComponent, AppexColumnChartComponent],
   templateUrl: './investors-db.component.html',
   styleUrl: './investors-db.component.scss'
 })
