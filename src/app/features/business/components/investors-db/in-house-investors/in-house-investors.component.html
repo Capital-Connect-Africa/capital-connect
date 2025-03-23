@@ -1,1 +1,7 @@
-<p>in-house-investors works!</p>
+<ng-container *ngIf="investorBusinessRelations$ | async"></ng-container>
+<ag-grid-angular
+    style="min-width: 100%; height: 60vh;"
+    [context]="{ componentParent: this }"
+    [rowData] ="investors"
+    [gridOptions]="gridOptions"
+/>
