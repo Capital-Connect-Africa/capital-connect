@@ -176,7 +176,7 @@ export class createPartnerProfileComponent implements OnInit {
         this.submit$ = this._partnerService.updatePartnerProfile(this.partnerProfileId, formData).pipe(
           tap(res => {
             this._feedbackService.success("Partner Profile Updated Sucessfully")
-            this._router.navigate(['/partner/profile']);
+            this._router.navigate(['/partner/contact-persons']);
           }),
         )
       }
@@ -189,7 +189,7 @@ export class createPartnerProfileComponent implements OnInit {
         this.submit$ = this._partnerService.createPartnerProfile(formData).pipe(
           tap(res => {
             this._feedbackService.success("Partner Profile Created Sucessfully")
-            this._router.navigate(['/partner/profile']);
+            this._router.navigate(['/partner/contact-persons']);
           })
         )
 
