@@ -4,44 +4,45 @@
 
 
 <app-layout>
-
-
   <div class="main__content">
     <div class="content__container">
-      
-    <div class="container">
-      <div class="content">
-        <ng-container>
+      <div class="container">
+        <div class="content">
+          <ng-container>
 
-        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-          <div class="form_content__container">
-            <div class="w-full">
-              <h2>Contact Person Details</h2>
+            <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+              <div class="form_content__container">
+                <div class="w-full">
+                  <h2>Contact Person Details</h2>
 
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div class="input__wrapper w-full">
-                    <label class="input__label">First Name<sup>*</sup></label>
-                    <a [title]="">Why do we ask this?</a>
-                    <input class="input__field" formControlName="firstName" type="text" placeholder="Enter first name" />
-                  </div>
-        
-                  <div class="input__wrapper">
-                    <label class="input__label">Last Name<sup>*</sup></label>
-                    <a [title]="">Why do we ask this?</a>
-                    <input class="input__field" formControlName="lastName" type="text" placeholder="Enter last name" />
-                  </div>
-        
-                  <div class="input__wrapper">
-                    <label class="input__label">Designation<sup>*</sup></label>
-                    <a [title]="">Why do we ask this?</a>
-                    <input class="input__field" formControlName="designation" type="text" placeholder="Enter designation" />
-                  </div>
-        
-                  <div class="input__wrapper">
-                    <label class="input__label">Email Address<sup>*</sup></label>
-                    <a [title]="">Why do we ask this?</a>
-                    <input class="input__field" formControlName="emailAddress" type="email" placeholder="Enter email address" />
-                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="input__wrapper w-full">
+                      <label class="input__label">First Name<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="firstName" type="text"
+                        placeholder="Enter first name" />
+                    </div>
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Last Name<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="lastName" type="text"
+                        placeholder="Enter last name" />
+                    </div>
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Designation<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="designation" type="text"
+                        placeholder="Enter designation" />
+                    </div>
+
+                    <div class="input__wrapper">
+                      <label class="input__label">Email Address<sup>*</sup></label>
+                      <a [title]="">Why do we ask this?</a>
+                      <input class="input__field" formControlName="emailAddress" type="email"
+                        placeholder="Enter email address" />
+                    </div>
 
                   </div>
 
@@ -49,60 +50,38 @@
                     <label class="input__label">Phone Number<sup>*</sup></label>
                     <a [title]="">Why do we ask this?</a>
                     <div class="flex items-center">
-                      <input class="country-code-input input__field" formControlName="countryCode" type="text" placeholder="+1" />
+                      <input class="country-code-input input__field" formControlName="countryCode" type="text"
+                        placeholder="+1" />
 
-                      <input class="input__field ml-2" formControlName="phoneNumber" type="number" placeholder="Enter phone number" />
+                      <input class="input__field ml-2" formControlName="phoneNumber" type="number"
+                        placeholder="Enter phone number" />
                     </div>
                   </div>
-        
+
                   <div class="input__wrapper">
                     <p>
-                    <label class="input__label">Primary Contact<sup>*</sup></label>
-                    <input class="input__field" formControlName="primaryContact" type="checkbox" />
+                      <label class="input__label">Primary Contact<sup>*</sup></label>
+                      <input class="input__field" formControlName="primaryContact" type="checkbox" />
                     </p>
 
                     <a [title]="">Why do we ask this?</a>
                   </div>
-        
-
                 </div>
-            
-
-          </div>
-        
-          <div class="flex justify-end space-x-4 mt-6">
-            <div class="cta__group">
-              <button type="submit" [disabled]="!formGroup.valid" class="btn">Submit And Add Another</button>
-            </div>
-
-            <div class="cta__group">
-              <button type="button" class="btn" (click)="goDashboard()">Proceed To Dashboard</button>
-            </div>
-          </div>
-        </form>
-
-        </ng-container>
-        
-
-
-
-
-
-
-
-  
-
+              </div>
+              <div class="flex justify-end space-x-4 mt-6">
+                <div class="cta__group">
+                  <button type="submit" [disabled]="!formGroup.valid" class="btn">Submit And Add Another</button>
+                </div>
+                <div class="cta__group">
+                  <button type="button" class="btn" (click)="goDashboard()">Proceed To Dashboard</button>
+                </div>
+              </div>
+            </form>
+          </ng-container>
+        </div>
       </div>
     </div>
-
-
-
-
-
-
-
-</div>
-</div>
+  </div>
 
 
 

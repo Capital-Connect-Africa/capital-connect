@@ -1,10 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthStateService } from '../../../../auth/services/auth-state.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LayoutComponent } from '../../../../../shared/business/layout/layout.component';
-import { FormsLayoutComponent } from '../../../../../shared/business/components/forms-layout/forms-layout.component';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup,Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { catchError, Observable, tap } from 'rxjs';
 import { InvestorScreensService } from '../../../services/investor.screens.service';
@@ -18,16 +16,12 @@ import { CountriesService } from '../../../../../shared/services/countries.servi
 @Component({
   selector: 'app-success-screen',
   standalone: true,
-  imports: [CommonModule, LayoutComponent, FormsLayoutComponent,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, LayoutComponent,ReactiveFormsModule],
   templateUrl: './success-screen.component.html',
   styleUrls: ['./success-screen.component.scss']
 })
 export class SuccessScreenComponent implements OnInit {
-
   private _router = inject(Router);
-  private _authStateService = inject(AuthStateService);
   private _formBuilder = inject(FormBuilder);
   private _screenService = inject(InvestorScreensService)
   private _feedbackService = inject(FeedbackService)
@@ -35,57 +29,85 @@ export class SuccessScreenComponent implements OnInit {
   countryOptions: Country[] = []
   private _countries = inject(CountriesService)
 
-
-
   userId: number = 0
   submit$ = new Observable<unknown>()
-  message$ = new Observable<{ title: string, message: string, type: 'info' | 'success' | 'warning' | 'error' } | null>;
+  userRole: string = ''
+  partnerProfileId: number = 0
+
+  //streams
+  investorProfile$ = new Observable<InvestorProfile>()
 
   formGroup!: FormGroup;
-
   ngOnInit(): void {
-    this.message$ = this._feedbackService.message$;
+    this.userRole = "partner"
+    this.partnerProfileId = parseInt(localStorage.getItem('partnerProfileId') as string)
 
-    this.formGroup = this._formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      designation: ['', Validators.required],
-      emailAddress: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      primaryContact: [false],
-      countryCode: '',
-      investorProfileId:this.investorProfile.id
-    });
+    if(localStorage.getItem('partnerProfileId')){
+      this.formGroup = this._formBuilder.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        designation: ['', Validators.required],
+        emailAddress: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', Validators.required],
+        primaryContact: [false],
+        countryCode: '',
+        profileId:this.partnerProfileId,
+        profileType: 'partnerProfile'
+      });
+     
+    }else{   
+      this.formGroup = this._formBuilder.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        designation: ['', Validators.required],
+        emailAddress: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', Validators.required],
+        primaryContact: [false],
+        countryCode: '',
+        profileId:this.investorProfile.id,
+        profileType: 'investorProfile'
+
+      });
+
+
+      this.investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile =>{
+        this.investorProfile = investorProfile
+      }))
+     }
+
   }
 
-  investorProfile$ = this._screenService.getInvestorProfileById().pipe(tap(investorProfile =>{
-    this.investorProfile = investorProfile
 
-  }))
 
 
   // Submit the form
   onSubmit(): void {
-    this.formGroup.value.investorProfileId = this.investorProfile.id
-    
+    this.formGroup.value.investorProfileId = this.investorProfile.id    
     const countryCode = this.formGroup.value.countryCode;
     const phoneNumber = this.formGroup.value.phoneNumber;
 
-    this.formGroup.patchValue({
-      phoneNumber: `${countryCode}${phoneNumber}`,
-      investorProfileId:  this.investorProfile.id   
-
-    });
+    if(this.userRole === 'partner'){
+      this.formGroup.patchValue({
+        phoneNumber: `${countryCode}${phoneNumber}`,
+        partnerProfileId:  Number(this.partnerProfileId) 
+      });
+    }else{
+      this.formGroup.patchValue({
+        phoneNumber: `${countryCode}${phoneNumber}`,
+        investorProfileId:  this.investorProfile.id  
+      });
+    }
+  
 
     if (this.formGroup.valid) {
       const formData = this.formGroup.value;
-
       this.submit$ = this._screenService.createContactPerson(formData).pipe(
-        tap(res => {
+        tap(res => { 
+          this._feedbackService.success('Contact Person Created Successfully');
           this.formGroup.reset();
-        }),
+         }),
         catchError((error: any) => {
-          this._feedbackService.error('Error Creating A Contact Person.', error);
+          this._feedbackService.error('Error Creating contact Person.', error);
           return of(null);
         }),
       )
@@ -99,6 +121,10 @@ export class SuccessScreenComponent implements OnInit {
 
   // Navigate to the dashboard
   goDashboard(): void {
-    this._router.navigateByUrl('/investor');
+    if(this.userRole === 'partner'){
+      this._router.navigateByUrl('/partner/profile');
+    }else{
+      this._router.navigateByUrl('/investor');
+    }
   }
 }
