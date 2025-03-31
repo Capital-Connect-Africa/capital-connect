@@ -1,0 +1,93 @@
+<div class="main">
+  <div class="navbar">
+    <app-navbar [showBanner]="false" title="Advisory Sessions Booking" [isAdmin]="false" onDashboard="true" />
+  </div>
+  <main>
+    <div class="left__col">
+      <div class="advisory-page">
+        <div class="form_content__container add-session-form">
+          <div class="advisors-container">
+            <div class="advisors-header">
+              <!-- <h4>Our Financial Advisors</h4> -->
+              <p>Connect with certified professionals to guide your financial journey</p>
+            </div>
+
+            <div class="advisor-list">
+              <div *ngFor="let advisor of paginatedAdvisors" class="advisor-card">
+                <div class="card-content">
+                  <div class="advisor-image-container">
+                    <img [src]="'data:image/png;base64,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'" 
+                       alt="{{advisor.name}}" 
+                       class="advisor-image"
+                       style="filter: hue-rotate(120deg);">
+                    <span class="availability-badge" 
+                          [class.online]="advisor.availability === 'Online'"
+                          [class.in-person]="advisor.availability === 'In-person'"
+                          [class.both]="advisor.availability === 'Both'">
+                      {{advisor.availability}}
+                    </span>
+                  </div>
+
+                  <div class="advisor-details">
+                    <h3 class="advisor-name">{{advisor.name}}</h3>
+                    <p class="advisor-title">{{advisor.title}} • {{advisor.specialty}}</p>
+                    
+                    <div class="meta-info">
+                      <span class="experience">
+                        <i class="pi pi-briefcase"></i> {{advisor.experienceYears}} years experience
+                      </span>
+                      <span class="rating">
+                        <i class="pi pi-star"></i> {{advisor.rating}}/5
+                      </span>
+                    </div>
+
+                    <p class="summary">{{advisor.summary}}</p>
+                    
+                    <div class="personal-pitch">
+                      <i class="pi pi-quote-left"></i>
+                      <span>"{{advisor.personalPitch}}"</span>
+                    </div>
+
+                    <!-- <div class="actions">
+                      <button class="view-calendar-btn" (click)="viewAvailability(advisor)">
+                        <i class="pi pi-calendar"></i> View Availability
+                      </button>
+                      <button class="book-btn">
+                        <i class="pi pi-check"></i> Book Session
+                      </button>
+                    </div> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pagination-controls" *ngIf="advisors.length > pageSize">
+              <button (click)="previousPage()" [disabled]="currentPage === 1">
+                <i class="pi pi-chevron-left"></i> Previous
+              </button>
+              <span>Page {{currentPage}} of {{totalPages}}</span>
+              <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+                Next <i class="pi pi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right__col" *ngIf="!showCalendar">
+      <app-advertisement-space [title]="'Advertise Here'"
+        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    </div>
+
+    <div class="right__col calendar-col" *ngIf="showCalendar">
+      <div class="calendar-header">
+        <h3>{{selectedAdvisor?.name}}'s Availability</h3>
+        <button class="close-calendar" (click)="closeCalendar()">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </main>
+</div>

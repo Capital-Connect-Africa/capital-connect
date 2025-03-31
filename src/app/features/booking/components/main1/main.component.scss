@@ -1,0 +1,299 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  display: flex;
+  flex: 1;
+}
+
+.left__col {
+  flex: 1;
+  padding: 1rem;
+  background: #f8faf7;
+}
+
+.right__col {
+  width: 400px;
+  padding: 1rem;
+  background: white;
+  border-left: 1px solid #e0e0e0;
+  
+  &.calendar-col {
+    padding: 0;
+    background: #f8faf7;
+  }
+}
+
+.advisors-container {
+  padding: 1rem;
+}
+
+.advisors-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  
+  h2 {
+    color: #2b5e20;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #4a7c3a;
+    font-size: 1rem;
+  }
+}
+
+.advisor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.advisor-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e0e9dd;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: #c1d8b5;
+  }
+
+  .card-content {
+    display: flex;
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .advisor-image-container {
+    position: relative;
+    width: 120px;
+    min-width: 120px;
+    height: 120px;
+    
+    .advisor-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .availability-badge {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      
+      &.online {
+        background: #81c784;
+        color: #2e7d32;
+      }
+
+      &.in-person {
+        background: #a5d6a7;
+        color: #1b5e20;
+      }
+
+      &.both {
+        background: #c8e6c9;
+        color: #33691e;
+      }
+    }
+  }
+
+  .advisor-details {
+    flex: 1;
+    
+    .advisor-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      color: #1b5e20;
+    }
+
+    .advisor-title {
+      font-size: 0.9rem;
+      color: #689f38;
+      margin-bottom: 0.75rem;
+    }
+
+    .meta-info {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.85rem;
+
+      .experience, .rating {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #4a7c3a;
+      }
+    }
+
+    .summary {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #455a44;
+      margin-bottom: 1rem;
+    }
+
+    .personal-pitch {
+      font-size: 0.85rem;
+      color: #5a6d59;
+      font-style: italic;
+      padding: 0.75rem;
+      background: #f1f8e9;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+
+      i {
+        color: #81c784;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 1rem;
+
+      button {
+        flex: 1;
+        padding: 0.6rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.view-calendar-btn {
+          background: white;
+          color: #2e7d32;
+          border: 1px solid #c8e6c9;
+
+          &:hover {
+            background: #e8f5e9;
+          }
+        }
+
+        &.book-btn {
+          background: #4caf50;
+          color: white;
+          border: none;
+
+          &:hover {
+            background: #388e3c;
+          }
+        }
+      }
+    }
+  }
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding: 1rem 0;
+
+  button {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not([disabled]) {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    color: #4a7c3a;
+    font-size: 0.9rem;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+
+  h3 {
+    color: #1b5e20;
+    margin: 0;
+  }
+
+  .close-calendar {
+    background: none;
+    border: none;
+    color: #757575;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.25rem;
+
+    &:hover {
+      color: #2e7d32;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .fc {
+    padding: 1rem;
+    background: white;
+    
+    .fc-toolbar-title {
+      color: #1b5e20;
+      font-size: 1.1rem;
+    }
+    
+    .fc-col-header-cell {
+      background: #e8f5e9;
+      color: #2e7d32;
+      padding: 0.5rem 0;
+    }
+    
+    .fc-daygrid-day-number, 
+    .fc-timegrid-slot-label-cushion {
+      color: #455a44;
+    }
+    
+    .fc-event {
+      background-color: #81c784;
+      border-color: #81c784;
+    }
+  }
+}
