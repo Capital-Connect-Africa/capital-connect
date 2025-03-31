@@ -16,7 +16,7 @@ export const HttpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.error.statusCode === 401) {
-        feedbackService.info('Your session expired.');
+        feedbackService.info('Invalid User.');
         _authStateService.logout(true);
         return EMPTY;
       }

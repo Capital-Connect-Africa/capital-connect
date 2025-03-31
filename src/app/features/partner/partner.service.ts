@@ -26,7 +26,7 @@ export class PartnerService extends BaseHttpService{
                 return res as PartnerProfile;
             }),
             catchError((error) => {
-                console.error('Error fetching partner profile by user ID:', error);
+                console.log('Error fetching partner profile by user ID:', error);
                 throw error;
             })
         );
@@ -66,6 +66,33 @@ export class PartnerService extends BaseHttpService{
     getProfilesEngagementType():Observable<string[]>{
         return this.read(`${BASE_URL}/partner-profile/list/engagement-type`).pipe(map((res:any) =>{
             return res as string[]
+        }))
+    }
+
+
+    //Total number of SME's engaged
+    updateNumberOfSMES(id:number):Observable<unknown>{
+        return this.put(`${BASE_URL}/partner-profile/${id}/smes-engaged`).pipe(map((res:any) =>{
+            return res as unknown
+        }))
+    }
+
+    //Total number of transactions
+    updateTotalNumberOfTransactions(id:number):Observable<unknown>{
+        return this.put(`${BASE_URL}/partner-profile/${id}/total-transactions`).pipe(map((res:any) =>{
+            return res as unknown
+        }))
+    }
+    //Total number of training sessions
+    updateNumberOfTrainingSessions(id:number):Observable<unknown>{
+        return this.put(`${BASE_URL}/partner-profile/${id}/training-sessions`).pipe(map((res:any) =>{
+            return res as unknown
+        }))
+    }
+    //Total Capital deployed
+    updateTotalCapitalDeployed(id:number,data:any):Observable<unknown>{
+        return this.putPost(`${BASE_URL}/partner-profile/${id}/capital-deployed`,data).pipe(map((res:any) =>{
+            return res as unknown
         }))
     }
 }

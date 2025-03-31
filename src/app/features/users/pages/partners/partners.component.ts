@@ -15,26 +15,50 @@ import { ConfirmationService, FeedbackService } from '../../../../core';
 import { CompanyHttpService } from '../../../organization/services/company.service';
 import { TimeAgoPipe } from "../../../../core/pipes/time-ago.pipe";
 import { USER_ROLES } from '../../../../shared';
+import { ModalComponent } from "../../../../shared/components/modal/modal.component";
+import { PartnerService } from '../../../partner/partner.service';
 
 @Component({
   selector: 'partner-users',
   standalone: true,
-  imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule, TimeAgoPipe],
+  imports: [CommonModule, AdminUiContainerComponent, TableModule, FormsModule, ButtonModule, InputTextModule, TooltipModule, TimeAgoPipe, ModalComponent],
   templateUrl: './partners.component.html',
   styleUrl: './partners.component.scss'
 })
 
 export class PartnerUsersComponent {
+  // services
+  private _partnerService = inject(PartnerService)
   private _usersService = inject(UsersHttpService);
   private _confirmationService = inject(ConfirmationService);
+  private _fs = inject(FeedbackService)
+
+  //vars
+  partnerId:number = 1; // Set this dynamically as needed
+  smesEngaged:number = 0;
+  totalTransactions:number = 0;
+  trainingSessions:number = 0;
+  capitalDeployed:number = 0;
+  capitalAmount:number = 0;
+
+  //streams
+  smesEngaged$ = new Observable<unknown>()
+  totalTransactions$ = new Observable<unknown>()
+  trainingSessions$ = new Observable<unknown>()
+  capitalDeployed$ = new Observable<unknown>()
 
   updateUser$ =new Observable();
   users$ = new Observable<any>();
   delete$ = new Observable();
+  partnerProfile$ = new Observable();
+
   usersCount:number =0;
   usersShowingCount =0;
   start =0;
   end =0;
+
+  //booleans
+  showEditModal:boolean = false
 
   users: User[] = [];
   cols: any[] = [
@@ -84,6 +108,25 @@ export class PartnerUsersComponent {
     this.updateDisplayedData()
   }
 
+  close(){
+    this.showEditModal = false
+  }
+
+  
+  async editPartner(user:any){
+    this.partnerProfile$ =  this._partnerService.getPartnerProfileByUserId(user.id).pipe(tap(res=>{
+      console.log("The response is", res)
+      this.partnerId = res.id
+      this.showEditModal = true
+      return;
+    }))
+
+
+    // await this._fs.info("Partner Profile Does Not Exist For This Partner")
+  }
+
+  
+
   updateDisplayedData() {
     const data = this.table.filteredValue || this.users;
     const start = this.table.first??10;
@@ -91,6 +134,38 @@ export class PartnerUsersComponent {
     this.usersShowingCount = start + 1;
     this.end = end;
   }
+
+  updateMetric(metricType: string) {
+    switch(metricType){
+      case 'smes-engaged':
+        this.smesEngaged$ = this._partnerService.updateNumberOfSMES(this.partnerId).pipe(tap(res=>{
+          this._fs.success("SME's Engaged Updated Successfully")
+        }));
+        break;
+      case 'total-transactions':
+        this.smesEngaged$ = this._partnerService.updateTotalNumberOfTransactions(this.partnerId).pipe(tap(res=>{
+          this._fs.success("Total Number of Transactions Updated Successfully")
+        }));
+        break
+      case 'training-sessions':
+        this.smesEngaged$ = this._partnerService.updateNumberOfTrainingSessions(this.partnerId).pipe(tap(res=>{
+          this._fs.success("Total Number Of Training Sessions Updated Successfully")
+        }));
+        break
+      default:
+        return
+
+    }
+
+  }
+
+  updateCapitalDeployed() {
+    const body = { amount: this.capitalAmount };
+    this.capitalDeployed$ = this._partnerService.updateTotalCapitalDeployed(this.partnerId, body).pipe(tap(res=>{
+      this._fs.success("Total Capital Deployed Updated Sucessfully")
+    }))
+  }
+
 
   toggleUserActiveStatus(user:User){
     

@@ -1,6 +1,18 @@
 <ng-container *ngIf="users$ | async"></ng-container>
-<ng-container *ngIf="delete$ |async"></ng-container>
-<ng-container *ngIf="updateUser$ |async"></ng-container>
+<ng-container *ngIf="delete$ | async"></ng-container>
+<ng-container *ngIf="updateUser$ | async"></ng-container>
+
+<ng-container *ngIf="smesEngaged$ | async"></ng-container>
+<ng-container *ngIf="totalTransactions$ | async"></ng-container>
+<ng-container *ngIf="trainingSessions$ | async"></ng-container>
+<ng-container *ngIf="capitalDeployed$ | async"></ng-container>
+
+<ng-container *ngIf="partnerProfile$ | async"></ng-container>
+
+
+
+
+
 
 <app-admin-ui-container [title]="'Partners'">
   <div>
@@ -41,6 +53,10 @@
                   <i *ngIf="user.isActive" class="pi pi-lock text-sm text-orange-600"></i>
                   <i *ngIf="!user.isActive" class="pi pi-lock-open text-sm text-orange-600"></i>
                 </button>
+                <button type="button" class="p-button-text"  (click)="editPartner(user)"
+                title="remove">
+                <i class="pi pi-pencil text-sm text-rose-600"></i>
+              </button>
             </div>
           </td>
         </tr>
@@ -53,3 +69,67 @@
     </p-table>
   </div>
 </app-admin-ui-container>
+
+
+<app-modal [(visible)]="showEditModal" title="Partner Metrics" helperText="Update she metrics of this partner">
+  <!-- partner-metrics.component.html -->
+<div class="metrics-container">
+
+  <div class="metrics-grid">
+    <!-- SMEs Engaged -->
+    <div class="metric-card">
+      <h3 class="">SMEs Engaged</h3>
+      <!-- <div class="metric-value">{{ smesEngaged }}</div> -->
+      <div class="metric-controls">
+        <button mat-raised-button color="primary"  class="btn btn-sm pi pi-plus" (click)="updateMetric('smes-engaged')">
+          Update SMEs Engaged
+        </button>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <div class="metric-card">
+      <h3>Total Transactions</h3>
+      <!-- <div class="metric-value">{{ totalTransactions }}</div> -->
+      <div class="metric-controls">
+        <button mat-raised-button color="primary" class="btn btn-sm pi pi-plus" (click)="updateMetric('total-transactions')">
+          Update Transactions
+        </button>
+      </div>
+    </div>
+
+    <!-- Training Sessions -->
+    <div class="metric-card">
+      <h3>Training Sessions</h3>
+      <!-- <div class="metric-value">{{ trainingSessions }}</div> -->
+      <div class="metric-controls">
+        <button mat-raised-button color="primary" class="btn btn-sm pi pi-plus" (click)="updateMetric('training-sessions')">
+          Update Training Sessions
+        </button>
+      </div>
+    </div>
+
+    <!-- Capital Deployed -->
+    <div class="metric-card">
+      <h3>Capital Deployed</h3>
+      <!-- <div class="metric-value">${{ capitalDeployed | number }}</div> -->
+      <div class="metric-controls">
+        <!-- <mat-form-field appearance="fill">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" [(ngModel)]="capitalAmount">
+        </mat-form-field> -->
+
+        <div class="input__wrapper ">
+          <input class="input__field" placeholder="$0" [(ngModel)]="capitalAmount">
+        </div>
+        <button mat-raised-button color="primary" class="btn btn-sm pi pi-plus" (click)="updateCapitalDeployed()">
+          Update Capital Deployed
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+ <button class="btn btn-sm pi pi-close" (click)="close()">close</button>
+
+</app-modal>
