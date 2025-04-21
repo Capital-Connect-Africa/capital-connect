@@ -220,23 +220,16 @@ export class LandingComponent implements OnInit {
     }
   }
 
-
   removeAssociatedSubSectors(sectorId: number): void {
     const subSectorIdsToRemove = this.sectorSubSectorsMap[sectorId] || [];
     this.selectedSubSectors = this.selectedSubSectors.filter(id => !subSectorIdsToRemove.includes(id));
     delete this.sectorSubSectorsMap[sectorId];
   }
 
-
-
   getSubSectorNameById(id: number): string | undefined {
     const subSector = this.all_subsectors.find(sub => sub.id === id);
     return subSector ? subSector.name : undefined;
   }
-
-
-
-
 
   removeSector(sectorId: number, event: MouseEvent): void {
     event.stopPropagation();
@@ -269,7 +262,6 @@ export class LandingComponent implements OnInit {
     event.stopPropagation();
     this.toggleSubSectorSelection(subSectorId);
   }
-
 
   toggleSubSectorSelection(subSectorId: number): void {
     const index = this.selectedSubSectors.indexOf(subSectorId);
