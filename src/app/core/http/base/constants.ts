@@ -4,6 +4,9 @@ import { environment as environmentProd } from "../../../../environments/environ
 
 export const BASE_URL = getEnvironmentName() === 'prod' ? environmentProd.apiUrl : environmentDev.apiUrl;
 
+// export const BASE_URL =  environmentProd.apiUrl;
+
+
 export const CALENDLYEVENTID = "ueiuwiiwu";
 
 export const LAUNCH_DARKLY_PROD_CLIENT_ID = "671094e62eeceb0829ce8eb3";
