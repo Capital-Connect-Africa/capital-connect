@@ -1,6 +1,3 @@
-<ng-container *ngIf="createMeeting$ | async" />
-
-
 <div class="main">
   <div class="navbar">
     <app-navbar [showBanner]="false" title="Advisory Sessions Booking" [isAdmin]="false" onDashboard="true" />
@@ -9,22 +6,133 @@
     <div class="left__col">
       <div class="advisory-page">
         <div class="form_content__container add-session-form">
-          <div class="iframe-container">
-            <!-- <iframe [src]="'https://calendly.com/investor-eligibility/advisory-sessions?month=2025-02&utm_content=' + bookingId"></iframe> -->
+          <div class="advisors-container">
+            <div class="advisors-header">
+              <p class="text-green-900">Our Financial Advisors</p>
+              <p><small>Connect with certified professionals to guide your financial journey</small></p>
+            </div>
 
-            <iframe [src]="safeUrl"></iframe>
+            <div class="advisor-list">
+              <div *ngFor="let advisor of displayedAdvisors" 
+                   class="advisor-card" 
+                   [class.selected]="selectedAdvisor?.id === advisor.id"
+                   (click)="selectAdvisor(advisor)">
+                <div class="card-content">
+                  <div class="advisor-image-container">
+                    <img [src]="advisor.imageUrl || 'assets/images/advisors/default.jpg'" 
+                         class="advisor-image">
+                    <span class="availability-badge" 
+                          [class.online]="advisor.availability === 'Online'"
+                          [class.in-person]="advisor.availability === 'In-person'"
+                          [class.both]="advisor.availability === 'Both'">
+                      {{advisor.availability}}
+                    </span>
+                  </div>
 
+                  <div class="advisor-main-info">
+                    <div class="name-title">
+                      <h3 class="advisor-name">{{advisor.name}}</h3>
+                      <p class="advisor-title">{{advisor.title}}</p>
+                    </div>
+                    
+                    <div class="meta-info">
+                      <span class="specialty-badge">{{advisor.specialty}}</span>
+                      <div class="stats">
+                        <span class="experience">
+                          <i class="pi pi-briefcase"></i> {{advisor.experienceYears}}yrs
+                        </span>
+                        <span class="rating">
+                          <i class="pi pi-star"></i> {{advisor.rating}}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="quick-actions">
+                    <button class="quick-book-btn">
+                      <i class="pi pi-calendar"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="loading-spinner" *ngIf="loading">
+              <i class="pi pi-spinner pi-spin"></i> Loading more advisors...
+            </div>
           </div>
         </div>
       </div>
-
     </div>
- 
 
-    <div class="right__col">
-      <app-advertisement-space [title]="'Advertise Here'"
-        [body]="'This space is available for your advertising needs to reach more businesses. Contact us to learn more!'" />
+    <div class="right__col" *ngIf="selectedAdvisor">
+      <div class="advisor-detail-panel">
+        <div class="detail-header">
+          <div class="header-image">
+            <img [src]="selectedAdvisor.imageUrl || 'assets/images/advisors/default.jpg'">
+            <span class="availability-badge">{{selectedAdvisor.availability}}</span>
+          </div>
+          <div class="header-info">
+            <h3>{{selectedAdvisor.name}}</h3>
+            <p class="title-specialty">
+              <span>{{selectedAdvisor.title}}</span> • 
+              <span class="specialty">{{selectedAdvisor.specialty}}</span>
+            </p>
+            <div class="header-stats">
+              <span class="stat">
+                <i class="pi pi-briefcase"></i> {{selectedAdvisor.experienceYears}} years
+              </span>
+              <span class="stat">
+                <i class="pi pi-star"></i> {{selectedAdvisor.rating}}/5 (45 reviews)
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-tabs">
+          <button class="tab active">Overview</button>
+          <!-- <button class="tab">Availability</button>
+          <button class="tab">Reviews</button> -->
+        </div>
+
+        <div class="detail-content">
+          <div class="content-section">
+            <h4>Professional Summary</h4>
+            <p>{{selectedAdvisor.summary}}</p>
+          </div>
+
+          <div class="content-section">
+            <h4>Approach & Philosophy</h4>
+            <div class="philosophy-card">
+              <i class="pi pi-quote-left"></i>
+              <p>"{{selectedAdvisor.personalPitch}}"</p>
+            </div>
+          </div>
+<!-- 
+          <div class="content-section">
+            <h4>Next Available Slots</h4>
+            <iframe src="https://calendly.com/juliana-143/1-1-chat-with-juliana" style="width: 100%;"></iframe>
+            <div class="availability-grid">
+              <div class="time-slot" *ngFor="let slot of selectedAdvisor.availableSlots">
+                <div class="slot-day">{{slot.day}}</div>
+                <div class="slot-time">{{slot.time}}</div>
+              </div>
+            </div>
+          </div> -->
+
+          <button class="book-now-btn">
+            <i class="pi pi-calendar"></i> Book Consultation
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right__col placeholder" *ngIf="!selectedAdvisor">
+      <div class="placeholder-content">
+        <i class="pi pi-info-circle"></i>
+        <h3>Select an Advisor</h3>
+        <p>Click on any advisor card to view detailed profile and availability</p>
+      </div>
     </div>
   </main>
-
 </div>

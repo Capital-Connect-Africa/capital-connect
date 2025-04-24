@@ -1,530 +1,497 @@
+/* Main Layout */
 @import "../../../../styles/main.scss";
 @import "../../../../styles/card.scss";
 
+.main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
 
-.advisory-page {
-    padding: 2rem;
-      
-    .header {
-      margin-bottom: 1rem;
-      h1 {
-        font-size: 24px;
-        color: $primary-color;
-      }
-    }
+main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
 
-    .iframe-container {
-      // position: fixed; /* Fixes the container to the viewport */
-      // width: 100vw; /* Full viewport width */
-      height: 70vh; /* Full viewport height */
-      // overflow: hidden; /* Prevents scrolling */
+.left__col {
+  flex: 1;
+  padding: 1rem;
+  background: #f8faf7;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.right__col {
+  width: 45%;
+  min-width: 400px;
+  padding: 0;
+  background: white;
+  border-left: 1px solid #e0e9dd;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  
+  &.placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8faf7;
     
-      iframe {
-        width: 100%; /* Full width of the container */
-        height: 100%; /* Full height of the container */
-        border: none; /* Removes the default iframe border */
-      }
-    }
-
-    .main{
-      height: 100%;
-      display: grid;
-      background-color: #F9FAFB;
-      .navbar{
-        display: flex;
-        padding-left: 1rem;
-        align-items: center;
-        background-color: white;
-        justify-content: space-between;
-        button{
-          display: flex;
-          background: none;
-        }
-      }
-      main{
-        gap: 2rem;
-        display: grid;
-        padding: 1rem;
-        .brand__name{
-          color: #031D16;
-          font-weight: 700;
-          line-height: 2rem;
-          font-size: 1.35rem;
-          font-family: $font-family-sans-serif;
-        }
-        .left__col,
-        .right__col{
-          width: 100%;
-          gap: 1rem;
-          display: flex;
-          flex-direction: column;
-        }
-        .right__col{
-          gap: 2rem;
-        }
-      }
-    }
-
-    .sessions-list {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  
-      .session-card {
-        @extend .card;
-        background-color: $gray-200;
-        color: $text-color;
-  
-        .session-details {
-          display: flex;
-          flex-direction: column;
-          gap: 0.5rem;
-  
-          h3 {
-            font-size: 18px;
-            color: $secondary-color;
-          }
-  
-          p {
-            font-size: 14px;
-            color: $gray-600;
-          }
-  
-          .countdown-timer {
-            font-size: 16px;
-            color: $danger-color;
-            font-weight: 500;
-          }
-        }
-      }
-    }
-
-    .form_content__container{
-      border-radius: 10px !important;
-    }
-  
-    .add-session-form {
-      font-family: $font-family-inter;
-      font-size: small;
-      border-radius: 10px !important;
-
-
-      .input__label{
-        font-family: $font-family-inter !important;
-        font-weight: 400;
-        color: black;
-      }
-  
-      h6 {
-        color: $primary-color;
-        font-size: 17px;
-        font-weight: 600;
+    .placeholder-content {
+      text-align: center;
+      color: #5a6d59;
+      padding: 2rem;
+      max-width: 300px;
+      
+      i {
+        font-size: 2.5rem;
+        color: #a5d6a7;
         margin-bottom: 1rem;
       }
-
-    
-  
-      form {
-        // display: grid;
-        gap: 1rem;
-        grid-template-columns: 1fr 1fr;
-
-        .time{
-            display: grid;
-            gap: 1rem;
-            grid-template-columns: 1fr 1fr;
-        }
-  
-        .input__wrapper {
-          .input__label {
-            color: $gray-700;
-          }
-  
-          .input__field {
-            @extend .input__field;
-            border: 1px solid $gray-400;
-            &:focus {
-              border-color: $primary-color;
-            }
-          }
-        }
-
-        .cta__group{
-            margin-top: .5cm;
-            width: 100%;
-        }
-
-        .attendee__save{
-            margin-top: .5cm;
-        }
-  
-        .btn-primary {
-          grid-column: span 2;
-          justify-self: end;
-        }
+      
+      h3 {
+        margin: 0.5rem 0;
+        color: #2b5e20;
       }
-    }
-
-  }
-  
-
-  .input__wrapper {
-    margin-bottom: 1.5rem;
-  
-    .input__label {
-      font-size: 16px;
-      font-weight: 600;
-      color: $gray-800;
-      margin-bottom: 0.5rem;
-      display: inline-block;
-    }
-  
-    [formArrayName="invitees"] {
-      .invitee-group {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
-  
-        input[type="email"],
-        input[type="text"] {
-          flex: 1;
-          padding: 0.5rem 1rem;
-          font-size: 14px;
-          color: $gray-800;
-          border: 1px solid $gray-400;
-          border-radius: 4px;
-          background-color: $white;
-          transition: border-color 0.2s ease-in-out;
-  
-          &:focus {
-            border-color: $primary-color;
-            outline: none;
-          }
-        }
-  
-        button {
-          background-color: $danger-color;
-          color: $white;
-          border: none;
-          padding: 0.5rem 0.75rem;
-          border-radius: 4px;
-          font-size: 14px;
-          cursor: pointer;
-          transition: background-color 0.2s ease-in-out;
-  
-          &:hover {
-            background-color: darken($danger-color, 10%);
-          }
-        }
-      }
-    }
-  
-    .add-invitee-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      font-size: 14px;
-      font-weight: 600;
-      color: $white;
-      background-color: $primary-color;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
-  
-      &:hover {
-        background-color: darken($primary-color, 10%);
+      
+      p {
+        font-size: 0.9rem;
+        line-height: 1.5;
       }
     }
   }
-  
+}
 
+/* Compact Advisor Cards */
+.advisor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 0.5rem;
+}
 
-  .input__wrapper {
-    margin-bottom: 1.5rem;
+.advisor-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  border: .7px solid #e0e9dd;
+  height: 100px;
+  cursor: pointer;
+  padding: 0.75rem;
   
-    .input__label {
-      font-size: 16px;
-      font-weight: 600;
-      color: $gray-800;
-      margin-bottom: 0.5rem;
-      display: inline-block;
-    }
-  
-    .attendees-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px; // Space between pills
-      margin-top: 0.5rem;
-    }
-  
-    .attendee-pill {
-      display: flex;
-      align-items: center;
-      padding: 6px 12px;
-      background-color: $primary-color;
-      color: white;
-      border-radius: 16px;
-      font-size: 14px;
-  
-      span {
-        margin-right: 8px;
-      }
-  
-      .remove-pill-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-        padding: 0;
-        margin-left: 8px;
-  
-        &:hover {
-          color: #ff0000; // Red color on hover
-        }
-      }
-    }
-  
-    .add-invitee-form {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-  
-      input {
-        padding: 0.5rem;
-        border: 1px solid $gray-400;
-        border-radius: 4px;
-        &:focus {
-          border-color: $primary-color;
-        }
-      }
-
-      .validation__error{
-        color: #ff0000;
-      }
-  
-      .btn-primary {
-        padding: 0.5rem 1rem;
-        font-size: 14px;
-        font-weight: 600;
-        background-color: $primary-color;
-        color: $white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-  
-        &:hover {
-          background-color: darken($primary-color, 10%);
-        }
-      }
-    }
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    border-color: #c1d8b5;
   }
-  
 
-  
-.main{
-  height: 100%;
-  display: grid;
-  background-color: #F9FAFB;
-  .navbar{
+  &.selected {
+    border: 1px solid #4caf50;
+    background: #f1f8e9;
+  }
+
+  .card-content {
     display: flex;
-    padding-left: 1rem;
-    align-items: center;
-    background-color: white;
-    justify-content: space-between;
-    button{
-      display: flex;
-      background: none;
+    height: 100%;
+    gap: 0.75rem;
+  }
+
+  .advisor-image-container {
+    position: relative;
+    width: 70px;
+    min-width: 70px;
+    height: 70px;
+    
+    .advisor-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #e0e9dd;
+    }
+
+    .availability-badge {
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      
+      &.online {
+        background: #81c784;
+        color: #2e7d32;
+      }
+
+      &.in-person {
+        background: #a5d6a7;
+        color: #1b5e20;
+      }
+
+      &.both {
+        background: #c8e6c9;
+        color: #33691e;
+      }
     }
   }
-  main{
-    gap: 2rem;
-    display: grid;
-    padding: 1rem;
-    .brand__name{
-      color: #031D16;
-      font-weight: 700;
-      line-height: 2rem;
-      font-size: 1.35rem;
-      font-family: $font-family-sans-serif;
+
+  .advisor-main-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    
+    .name-title {
+      .advisor-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0;
+        color: #1b5e20;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .advisor-title {
+        font-size: 0.75rem;
+        color: #689f38;
+        margin: 0.1rem 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
-    .left__col,
-    .right__col{
-      width: 100%;
-      gap: 1rem;
+
+    .meta-info {
       display: flex;
       flex-direction: column;
-    }
-    .right__col{
-      gap: 2rem;
-    }
-  }
-}
-
-
-
-
-@include when-screen-is-atleast(medium){
-  .main{
-
-    .navbar{
-      padding: 0;
-      display: block;
-      button{
-        display: none;
+      gap: 0.3rem;
+      
+      .specialty-badge {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        width: fit-content;
       }
-    }
-    main{
-      .brand__name{
-        display: none;
-      }
-      .right__col{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  }
-}
-
-@include when-screen-is-atleast(large){
-  .main{
-    grid-template-rows: max-content auto;
-
-    main{
-      grid-template-columns: auto 360px;
-      padding: 1rem 2rem;
-      .right__col{
+      
+      .stats {
         display: flex;
+        gap: 0.8rem;
+        font-size: 0.7rem;
+
+        .experience, .rating {
+          display: flex;
+          align-items: center;
+          gap: 0.2rem;
+          color: #4a7c3a;
+        }
+      }
+    }
+  }
+
+  .quick-actions {
+    display: flex;
+    align-items: center;
+    
+    .quick-book-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #4caf50;
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: #388e3c;
+        transform: scale(1.05);
+      }
+      
+      i {
+        font-size: 0.9rem;
       }
     }
   }
 }
 
-
-
-@include when-screen-is-atleast(medium){
-  .main{
-
-    .navbar{
-      padding: 0;
-      display: block;
-      button{
-        display: none;
+/* Detailed Advisor Panel */
+.advisor-detail-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  .detail-header {
+    padding: 1.5rem;
+    background: #f1f8e9;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    
+    .header-image {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 3px solid white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      .availability-badge {
+        position: absolute;
+        bottom: -8px;
+        right: -8px;
+        padding: 0.25rem 0.75rem;
+        border-radius: 16px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: #81c784;
+        color: #2e7d32;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     }
-    main{
-      .brand__name{
-        display: none;
+    
+    .header-info {
+      flex: 1;
+      
+      h3 {
+        margin: 0 0 0.25rem;
+        color: #1b5e20;
+        font-size: 1.25rem;
       }
-      .right__col{
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
+      
+      .title-specialty {
+        margin: 0 0 0.75rem;
+        font-size: 0.85rem;
+        color: #689f38;
+        
+        .specialty {
+          font-weight: 500;
+          color: #2e7d32;
+        }
       }
-    }
-  }
-}
-
-@include when-screen-is-atleast(large){
-  .main{
-    grid-template-rows: max-content auto;
-
-    main{
-      grid-template-columns: auto 360px;
-      padding: 1rem 2rem;
-      .right__col{
+      
+      .header-stats {
         display: flex;
+        gap: 1rem;
+        font-size: 0.8rem;
+        
+        .stat {
+          display: flex;
+          align-items: center;
+          gap: 0.3rem;
+          color: #4a7c3a;
+          
+          i {
+            color: #81c784;
+          }
+        }
+      }
+    }
+  }
+  
+  .detail-tabs {
+    display: flex;
+    border-bottom: 1px solid #e0e9dd;
+    padding: 0 1.5rem;
+    
+    .tab {
+      padding: 0.75rem 1rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 0.85rem;
+      color: #5a6d59;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.active {
+        color: #2e7d32;
+        border-bottom-color: #4caf50;
+        font-weight: 500;
+      }
+      
+      &:hover:not(.active) {
+        color: #2e7d32;
+      }
+    }
+  }
+  
+  .detail-content {
+    padding: 1.5rem;
+    flex: 1;
+    overflow-y: auto;
+    
+    .content-section {
+      margin-bottom: 1.5rem;
+      
+      h4 {
+        color: #2b5e20;
+        margin: 0 0 0.75rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+      
+      p {
+        color: #455a44;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+    }
+    
+    .philosophy-card {
+      background: #f8faf7;
+      border-left: 3px solid #a5d6a7;
+      padding: 1rem;
+      border-radius: 0 6px 6px 0;
+      position: relative;
+      
+      i {
+        position: absolute;
+        top: 0.5rem;
+        left: 0.5rem;
+        color: #c8e6c9;
+        font-size: 1.2rem;
+      }
+      
+      p {
+        padding-left: 1.5rem;
+        font-style: italic;
+        color: #5a6d59;
+      }
+    }
+    
+    .availability-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+      
+      .time-slot {
+        background: #f1f8e9;
+        border-radius: 6px;
+        padding: 0.75rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background: #c8e6c9;
+        }
+        
+        .slot-day {
+          font-weight: 600;
+          color: #2e7d32;
+          font-size: 0.8rem;
+          margin-bottom: 0.25rem;
+        }
+        
+        .slot-time {
+          color: #4a7c3a;
+          font-size: 0.75rem;
+        }
+      }
+    }
+    
+    .book-now-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 1.5rem;
+      
+      &:hover {
+        background: #388e3c;
       }
     }
   }
 }
 
-
-
-.input__wrapper {
-  margin-bottom: 1rem;
-}
-
-.input__label {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-  display: block;
-}
-
-.input__field {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
-}
-
-.validation__error {
-  color: #d9534f;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-
-.invitee-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  border-radius: 4px;
-}
-
-.btn-danger {
-  background-color: #d9534f;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-danger:hover {
-  background-color: #c9302c;
-}
-
-
-
-.btn-success-alt:hover {
-  background-color: #4cae4c;
-}
-
-.cta__group {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-}
-
-
-
-
-
-
-
- 
+/* Loading Spinner */
+.loading-spinner {
+  text-align: center;
+  padding: 1rem;
+  color: #4a7c3a;
+  font-size: 0.85rem;
   
+  i {
+    margin-right: 0.5rem;
+  }
+}
 
-
-
-
-
-
-
+/* Responsive Design */
+@media (max-width: 992px) {
+  main {
+    flex-direction: column;
+  }
   
+  .right__col {
+    width: 100%;
+    min-width: 100%;
+    border-left: none;
+    border-top: 1px solid #e0e9dd;
+  }
+}
+
+@media (max-width: 576px) {
+  .advisor-card {
+    height: auto;
+    padding: 0.5rem;
+    
+    .card-content {
+      gap: 0.5rem;
+    }
+    
+    .advisor-image-container {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .quick-actions {
+      align-self: center;
+    }
+  }
   
- 
-
-
- 
-
-
-
+  .detail-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    
+    .header-info {
+      .header-stats {
+        justify-content: center;
+      }
+    }
+  }
+  
+  .availability-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}

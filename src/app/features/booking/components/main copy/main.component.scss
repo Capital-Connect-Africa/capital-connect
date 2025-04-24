@@ -13,6 +13,18 @@
       }
     }
 
+    .iframe-container {
+      // position: fixed; /* Fixes the container to the viewport */
+      // width: 100vw; /* Full viewport width */
+      height: 70vh; /* Full viewport height */
+      // overflow: hidden; /* Prevents scrolling */
+    
+      iframe {
+        width: 100%; /* Full width of the container */
+        height: 100%; /* Full height of the container */
+        border: none; /* Removes the default iframe border */
+      }
+    }
 
     .main{
       height: 100%;
