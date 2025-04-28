@@ -52,6 +52,12 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
     }))
   }
 
+  filterInvestorsByProfile(){
+    return this.read(`${BASE_URL}/investors-repository/filter-by-business-profile`).pipe(map(res =>{
+      return res
+    }))
+  }
+
   uploadInvestors(payload:FormData){
     const headers = new HttpHeaders({ 'enctype': 'multipart/form-data'});
     return this.create(`${BASE_URL}/investors-repository/upload`, payload, headers).pipe(map(res =>{
