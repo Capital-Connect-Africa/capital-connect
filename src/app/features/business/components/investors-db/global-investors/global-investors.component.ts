@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { AllCommunityModule, ColDef, colorSchemeDarkBlue, GridApi, GridOptions, iconSetMaterial, ModuleRegistry, themeMaterial, ValueFormatterParams } from 'ag-grid-community';
 import { formatCurrency } from '../../../../../core/utils/format.currency';
-import { PublicInvestor } from '../../../../../shared/interfaces/public.investor.interface';
+import { PublicInvestor, PublicInvestorDashboard } from '../../../../../shared/interfaces/public.investor.interface';
 import { AgGridAngular } from 'ag-grid-angular';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { PublicInvestorsRepositoryService } from '../../../../../core/services/investors/public-investors-repository.service';
 import { SearchEngineService } from '../../../../public/services/search-engine.service';
@@ -22,27 +22,28 @@ export class GlobalInvestorsComponent {
   private _activatedRoute =inject(ActivatedRoute);
   private _searchEngineService =inject(SearchEngineService);
   private _publicInvestorService = inject(PublicInvestorsRepositoryService);
+  @Output() onDataChange =new EventEmitter<Partial<PublicInvestorDashboard>>()
   
     
 q =this._activatedRoute.snapshot.params['q']
 searchedResults$ = new Observable();
-
-// this._searchEngineService.results$.pipe(tap(res =>{
-//   if(res.investors){
-//     this.publicInvestors =res.investors
-//   }else{
-//     this.getPublicInvestors();
-//   }
-// }))
   publicInvestors: PublicInvestor[] = [];
-  publicInvestors$ =new Observable()
-
-getPublicInvestors(){
-  // this.publicInvestors$ =this._publicInvestorService.searchInvestors({query: this.q}).pipe(tap(res =>{
-  //   this.publicInvestors =res.investors
-  //   this.q =res.q
-  // }))
-}
+  publicInvestorsDb:PublicInvestorDashboard ={
+    total: 0,
+    matches: 0,
+    investors: [],
+    matchesBySector: 0,
+    availableFunding: 0,
+    matchByUseOfFunds: 0,
+    matchesByCountries: 0,
+    matchesBySubSector: 0,
+  };
+  publicInvestors$ =this._publicInvestorService.filterInvestorsByProfile().pipe(tap(res =>{
+    const investorsData =res as unknown as PublicInvestorDashboard;
+    this.publicInvestorsDb ={...investorsData};
+    delete (investorsData as any).investors;
+    this.onDataChange.emit( investorsData  );
+  }))
   gridApi!: GridApi<Partial<PublicInvestor>>;
   selectedColumns: string[] = [];
   theme = themeMaterial
@@ -83,15 +84,15 @@ getPublicInvestors(){
             'gap-3',
           );
           viewButton.innerHTML = `
-            <i class="pi pi-pencil text-xs font-light"></i>
-            <span class="font-light">Details</span>
+              <i class="pi pi-info-circle text-xs font-light"></i>
+              <span class="font-light">Details</span>
           `;
           viewButton.classList.add(
             'flex',
             'items-center',
             'gap-2',
-            'text-green-300',
-            'hover:text-green-500',
+            'text-blue-500',
+            'hover:text-blue-800',
             'transition-all'
           );
           viewButton.addEventListener('click', () => 

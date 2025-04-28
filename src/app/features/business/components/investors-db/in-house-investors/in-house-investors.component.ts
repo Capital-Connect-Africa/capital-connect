@@ -29,10 +29,14 @@ interface InvestorSummary{
 })
 
 export class InHouseInvestorsComponent {
-  @Output() onDataChange =new EventEmitter<{matches: number, connects: number}>()
+  @Output() onDataChange =new EventEmitter<{matches: number, connects: number, total: number}>()
 
     investors: InvestorSummary[] = [];
+    totalInvestors =0;
     private _scoringService = inject(BusinessOnboardingScoringService);
+    totalInvestors$ =this._scoringService.getTotalInvesors().pipe(tap(r =>{
+      this.totalInvestors =r.totalInvestors;
+    }));
 
     investorBusinessRelations$ =this._scoringService.getBusinessInvestorRelations().pipe(tap(res =>{
       const matchedInvestors =res.matches as any;
@@ -41,8 +45,8 @@ export class InHouseInvestorsComponent {
         ...matchedInvestors.map((investor: MatchedInvestor) =>({
           id: investor.id,
           type: investor.investorType,
-          name: 'Hidden',
-          email: 'Hidden',
+          name: '-',
+          email: '-',
           country: investor.headOfficeLocation,
           minFunding: investor.minimumFunding,
           maxFunding: investor.maximumFunding,
@@ -59,7 +63,7 @@ export class InHouseInvestorsComponent {
           status: 'Connected'
         }))
       ]
-      this.onDataChange.emit({matches: matchedInvestors.length, connects: connectedInvestors.length})
+      this.onDataChange.emit({matches: matchedInvestors.length, connects: connectedInvestors.length, total: this.totalInvestors})
     }))
 
     gridApi!: GridApi<Partial<InvestorSummary>>;
@@ -143,7 +147,6 @@ export class InHouseInvestorsComponent {
             div.appendChild(viewButton)
             return div;
           },
-          width: 100,
           editable: false,
           sortable: false,
           filter: false,
@@ -151,6 +154,7 @@ export class InHouseInvestorsComponent {
         
       ] as ColDef[],
       defaultColDef: {
+        flex: 1,
         filter: false,
       } as ColDef,
     };
