@@ -10,7 +10,7 @@ import { BASE_URL, BaseHttpService } from '../../../core';
 @Injectable({ providedIn: 'root' })
 export class SearchEngineService extends BaseHttpService{
 
-    private results$$ =new BehaviorSubject<{query?: string, investors?: PublicInvestor[]}>({})
+    private results$$ =new BehaviorSubject<{q?: string, investors?: PublicInvestor[], total?: number, matches?: number}>({})
     results$ =this.results$$.asObservable();
     private _publicInvestorService = inject(PublicInvestorsRepositoryService);
 

@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
 import { PublicInvestor } from '../../../../shared/interfaces/public.investor.interface';
 import { Observable, tap } from 'rxjs';
 import { PublicInvestorsRepositoryService } from '../../../../core/services/investors/public-investors-repository.service';
@@ -24,9 +23,13 @@ export class FundersComponent {
 
   
   q =this._activatedRoute.snapshot.params['search-key']
+  total =0
+  matches =0;
   searchedResults$ =this._searchEngineService.results$.pipe(tap(res =>{
     if(res.investors){
       this.publicInvestors =res.investors
+      this.total =res.total ?? 0;
+      this.matches =res.matches ?? 0;
     }else{
       this.getPublicInvestors()
     }
@@ -43,12 +46,17 @@ export class FundersComponent {
   getPublicInvestors(){
     this.publicInvestors$ =this._publicInvestorService.searchInvestors({query: this.q}).pipe(tap(res =>{
       this.publicInvestors =res.investors
+      this.total =res.total
+      this.matches =res.matches
       this.q =res.q;
     }))
   }
 
   signup(){
     this._route.navigateByUrl('/signup');
+  }
+  signin(){
+    this._route.navigateByUrl('/auth');
   }
   
 }
