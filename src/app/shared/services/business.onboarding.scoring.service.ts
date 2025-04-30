@@ -88,6 +88,10 @@ export class BusinessOnboardingScoringService {
     }))
   }
 
+  getTotalInvesors(){
+    return this._scoringService.getTotalInvestors()
+  }
+
   getGeneralSummary(score: number, type: string) {
     return this._scoringService.getGeneralSummary(score, type).pipe(map(generalSummary => {
       return generalSummary
