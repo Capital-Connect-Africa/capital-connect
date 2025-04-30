@@ -8,6 +8,7 @@ import { NumberAbbriviationPipe } from "../../../../core/pipes/number-abbreviati
 import { GlobalInvestorsComponent } from "../../components/investors-db/global-investors/global-investors.component";
 import { InHouseInvestorsComponent } from "../../components/investors-db/in-house-investors/in-house-investors.component";
 import { AppexColumnChartComponent } from "../../../../shared/components/charts/appex-column-chart/appex-column-chart.component";
+import { PublicInvestorDashboard } from '../../../../shared/interfaces/public.investor.interface';
 
 
 @Component({
@@ -20,10 +21,23 @@ import { AppexColumnChartComponent } from "../../../../shared/components/charts/
 export class InvestorsDbComponent {
   links =BusinessLinks
 
-  inHouseInvestors:{matches: number, connects: number} ={matches: 0, connects: 0}
+  inHouseInvestors:{matches: number, connects: number, total: number} ={matches: 0, connects: 0, total: 0}
+  publicInvestors:  Partial<PublicInvestorDashboard> ={
+    matches: 0, 
+    availableFunding: 0,
+    total: 0,
+    matchByUseOfFunds: 0,
+    matchesByCountries: 0,
+    matchesBySector: 0,
+    matchesBySubSector: 0
+  }
 
-  syncInhouseInvestors(event: {matches: number, connects: number}){
+  syncInhouseInvestors(event: {matches: number, connects: number, total: number, }){
     this.inHouseInvestors =event
+  }
+
+  syncGlobalInvestors(event: Partial<PublicInvestorDashboard>){
+    this.publicInvestors =event
   }
   
 }

@@ -7,9 +7,9 @@
         <h3 class="!text-base font-light uppercase">Overview</h3>
         <div class="grid grid-cols-3 !gap-4">
           <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
-            <p class="font-light !text-sm">Global Funders</p>
+            <p class="font-light !text-sm">Investors Database</p>
             <div class="flex items-center justify-between">
-              <h3 class="!text-3xl !font-light !leading-none !m-0">422</h3>
+              <h3 class="!text-3xl !font-light !leading-none !m-0">{{publicInvestors.total | numberabbreviation}}</h3>
               <button class="w-7 h-7 flex items-center justify-center bg-orange-100 rounded-full absolute right-2 top-2">
                 <i class="pi pi-globe text-xs text-orange-600"></i>
               </button>
@@ -18,30 +18,53 @@
           <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
             <p class="font-light !text-sm">Available Funding</p>
             <div class="flex items-center justify-between">
-              <h3 class="!text-3xl !font-light !leading-none !m-0">${{50000000 | numberabbreviation}}</h3>
+              <h3 class="!text-3xl !font-light !leading-none !m-0">${{publicInvestors.availableFunding | numberabbreviation}}</h3>
               <button class="w-7 h-7 flex items-center justify-center bg-green-100 rounded-full absolute right-2 top-2">
                 <i class="pi pi-wallet text-xs text-green-600"></i>
               </button>
             </div>
           </div>
           <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
-            <p class="font-light !text-sm">Matched Funders</p>
+            <p class="font-light !text-sm">Matched DB Investors</p>
             <div class="flex items-center justify-between">
-              <h3 class="!text-3xl !font-light !leading-none !m-0">138</h3>
+              <h3 class="!text-3xl !font-light !leading-none !m-0">{{publicInvestors.matches | numberabbreviation}}</h3>
               <button class="w-7 h-7 flex items-center justify-center bg-blue-100 rounded-full absolute right-2 top-2">
                 <i class="pi pi-wave-pulse text-xs text-blue-600"></i>
               </button>
             </div>
           </div>
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">CC Investors</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">{{inHouseInvestors.total | numberabbreviation}}</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-blue-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-database text-xs text-blue-600"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">Matched CC Investors</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">{{inHouseInvestors.matches | numberabbreviation}}</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-rose-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-wave-pulse text-xs text-rose-600"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
+            <p class="font-light !text-sm">Connected Investors</p>
+            <div class="flex items-center justify-between">
+              <h3 class="!text-3xl !font-light !leading-none !m-0">{{inHouseInvestors.connects | numberabbreviation}}</h3>
+              <button class="w-7 h-7 flex items-center justify-center bg-green-100 rounded-full absolute right-2 top-2">
+                <i class="pi pi-wifi text-xs text-green-900"></i>
+              </button>
+            </div>
+          </div>
 
         </div>
-        <h3 class="!text-base font-light uppercase !pt-3">Global funders</h3>
+        <h3 class="!text-base font-light uppercase !pt-3">Investors Database</h3>
         <div class="bg-white">
-          <app-global-investors />
-        </div>
-        <h3 class="!text-base font-light uppercase !pt-3">CC funders</h3>
-        <div class="bg-white">
-          <app-in-house-investors (onDataChange)="syncInhouseInvestors($event)"/>
+          <app-global-investors (onDataChange)="syncGlobalInvestors($event)" />
         </div>
       </section>
       <section class="flex flex-col !gap-2">
@@ -49,50 +72,50 @@
         <div class="bg-white rounded">
           <app-appex-column-chart 
             [showYAxis]="false"
-            [height]="150"
+            [height]="185"
             [distributed]="false"
             name="Investors"
             [data]="[
-              {label: 'Global', value: 6,},
-              {label: 'In-house', value: inHouseInvestors.matches},
+              {label: 'Database', value: publicInvestors.total || 0},
+              {label: 'CC', value: inHouseInvestors.matches},
               {label: 'Connected', value: inHouseInvestors.connects},
             ]" 
           />
         </div>
-        <div class="!pt-2">
-          <h3 class="!text-base font-light uppercase">Matching Criteria</h3>
-          <div class="bg-white rounded !p-3 flex flex-col !gap-3">
-            <div class="grid grid-cols-[10%_auto] items-center !w-full">
-              <p class="!text-[8px] font-light !m-0">200 - </p>
+        <div class="!pt-3" >
+          <h3 class="!text-base font-light uppercase !pb-3">Matching Criteria</h3>
+          <div class="bg-white !py-4 !px-3 flex flex-col !gap-4 !h-[50vh]">
+            <div class="grid grid-cols-[12%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">{{publicInvestors.matchesBySector | numberabbreviation}} - </p>
               <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
-                <div class="bg-orange-300 !w-[90%] !h-full"></div>
+                <div class="bg-orange-300 !h-full" [ngStyle]="{width: ((publicInvestors.matchesBySector || 0) / (publicInvestors.total || 1)) *100 + '%'}"></div>
               </div>
             </div>
-            <div class="grid grid-cols-[10%_auto] items-center !w-full">
-              <p class="!text-[8px] font-light !m-0">160 - </p>
+            <div class="grid grid-cols-[12%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">{{publicInvestors.matchesBySubSector | numberabbreviation}} - </p>
               <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
-                <div class="bg-blue-300 !w-[75%] !h-full"></div>
+                <div class="bg-blue-300 !h-full" [ngStyle]="{width: ((publicInvestors.matchesBySubSector || 0) / (publicInvestors.total || 1)) *100 + '%'}"></div>
               </div>
             </div>
-            <div class="grid grid-cols-[10%_auto] items-center !w-full">
-              <p class="!text-[8px] font-light !m-0">120 - </p>
+            <div class="grid grid-cols-[12%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">{{publicInvestors.matchByUseOfFunds | numberabbreviation}} - </p>
               <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
-                <div class="bg-green-300 !w-[60%] !h-full"></div>
+                <div class="bg-green-300 !h-full" [ngStyle]="{width: ((publicInvestors.matchByUseOfFunds || 0) / (publicInvestors.total || 1)) *100 + '%'}"></div>
               </div>
             </div>
-            <div class="grid grid-cols-[10%_auto] items-center !w-full">
-              <p class="!text-[8px] font-light !m-0">100 - </p>
+            <div class="grid grid-cols-[12%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">{{publicInvestors.matchesByCountries | numberabbreviation}} - </p>
               <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
-                <div class="bg-rose-300 !w-[50%] !h-full"></div>
+                <div class="bg-rose-300 !h-full" [ngStyle]="{width: ((publicInvestors.matchesByCountries || 0) / (publicInvestors.total || 1)) *100 + '%'}"></div>
               </div>
             </div>
-            <div class="grid grid-cols-[10%_auto] items-center !w-full">
-              <p class="!text-[8px] font-light !m-0">50 - </p>
+            <div class="grid grid-cols-[12%_auto] items-center !w-full">
+              <p class="!text-[8px] font-light !m-0">{{publicInvestors.matches | numberabbreviation}} - </p>
               <div class="!h-[20px] bg-gray-50 overflow-hidden w-full">
-                <div class="bg-teal-300 !w-[40%] !h-full"></div>
+                <div class="bg-teal-300 !h-full" [ngStyle]="{width: ((publicInvestors.matches || 0) / (publicInvestors.total || 1)) *100 + '%'}"></div>
               </div>
             </div>
-            <div class="flex items-center flex-wrap !gap-x-3">
+            <div class="flex items-center flex-wrap !gap-x-3 !pt-4">
               <div class="flex items-center !gap-2">
                 <div class="bg-orange-300 !w-[10px] !h-[10px] rounded-full"></div>
                 <p class="!text-[8px] font-light !m-0">Sector </p>
@@ -117,6 +140,12 @@
           </div>
         </div>
       </section>
+    </div>
+    <div class="flex flex-col !px-8 !pb-12">
+      <h3 class="!text-base font-light uppercase !pt-2 !pb-3">CC Investors</h3>
+        <div class="bg-white">
+          <app-in-house-investors (onDataChange)="syncInhouseInvestors($event)"/>
+        </div>
     </div>
     </div>
 </div>
