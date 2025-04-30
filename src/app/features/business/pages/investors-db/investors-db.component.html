@@ -4,7 +4,7 @@
     <div class="navbar"><app-navbar onDashboard="true" [showBanner]="false" /></div>
     <div class="grid grid-cols-[auto_30%] !gap-8 !py-4 !px-8">
       <section class="flex flex-col !gap-2">
-        <h3 class="!text-base font-light uppercase">Overview</h3>
+        <h3 class="!text-base font-light">Overview</h3>
         <div class="grid grid-cols-3 !gap-4">
           <div class="bg-white rounded !p-3 !gap-2 relative flex flex-col justify-between">
             <p class="font-light !text-sm">Investors Database</p>
@@ -62,13 +62,13 @@
           </div>
 
         </div>
-        <h3 class="!text-base font-light uppercase !pt-3">Investors Database</h3>
+        <h3 class="!text-base font-light !pt-3">Investors Database</h3>
         <div class="bg-white">
           <app-global-investors (onDataChange)="syncGlobalInvestors($event)" />
         </div>
       </section>
       <section class="flex flex-col !gap-2">
-        <h3 class="!text-base font-light uppercase">Insights</h3>
+        <h3 class="!text-base font-light">Insights</h3>
         <div class="bg-white rounded">
           <app-appex-column-chart 
             [showYAxis]="false"
@@ -83,7 +83,7 @@
           />
         </div>
         <div class="!pt-3" >
-          <h3 class="!text-base font-light uppercase !pb-3">Matching Criteria</h3>
+          <h3 class="!text-base font-light !pb-3">Matched Investors Per Criteria</h3>
           <div class="bg-white !py-4 !px-3 flex flex-col !gap-4 !h-[50vh]">
             <div class="grid grid-cols-[12%_auto] items-center !w-full">
               <p class="!text-[8px] font-light !m-0">{{publicInvestors.matchesBySector | numberabbreviation}} - </p>
@@ -142,7 +142,7 @@
       </section>
     </div>
     <div class="flex flex-col !px-8 !pb-12">
-      <h3 class="!text-base font-light uppercase !pt-2 !pb-3">CC Investors</h3>
+      <h3 class="!text-base font-light !pt-2 !pb-3">CC Investors</h3>
         <div class="bg-white">
           <app-in-house-investors (onDataChange)="syncInhouseInvestors($event)"/>
         </div>
