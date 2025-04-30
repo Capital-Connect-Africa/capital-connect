@@ -6,11 +6,15 @@
         [context]="{ componentParent: this }"
         [gridOptions]="gridOptions"
     />
-    <div class ="grid grid-cols-2">
+    <div class ="grid grid-cols-2 gap-8">
         <button (click) ="submit()" class="flex gap-2 items-center border justify-center p-4 bg-teal-500 text-white hover:bg-teal-800 transition-all rounded cta__btn">
             <i class="pi pi-upload text-sm"></i>
             <span class="text-xs font-normal">Upload</span>
         </button>
+        <div class="flex flex-col justify-between items-start pb-1">
+            <label>Overwrite existing?</label>
+            <input type="checkbox" [ngModel]="overwrite" (ngModelChange)="overwrite = $event" />
+        </div>
     </div>
     <section *ngIf ="logs.length">
         <div class ="flex items-center justify-between">

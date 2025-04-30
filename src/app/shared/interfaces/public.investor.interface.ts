@@ -46,3 +46,19 @@ export interface BulkCreateResponse {
   }[];
   savedInvestors: PublicInvestor[];
 }
+
+export interface PublicInvestorDashboard{
+  total: number,
+  matches: number,
+  matchesBySector: number,
+  availableFunding: number,
+  matchByUseOfFunds: number,
+  matchesBySubSector: number,
+  matchesByCountries: number,
+  investors:  Partial<PublicInvestor>[]
+}
+
+export interface SearchResults{
+  matches: number;
+  
+}

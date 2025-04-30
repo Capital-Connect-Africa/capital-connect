@@ -25,12 +25,13 @@ import { FeedbackService } from '../../../../core';
 import { PublicInvestorsRepositoryService } from '../../../../core/services/investors/public-investors-repository.service';
 import { Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 @Component({
   selector: 'data-file-preview',
   standalone: true,
-  imports: [ModalComponent, AgGridAngular, CommonModule],
+  imports: [ModalComponent, AgGridAngular, CommonModule, FormsModule],
   templateUrl: './data-file-preview.component.html',
   styleUrl: './data-file-preview.component.scss',
 })
@@ -45,7 +46,7 @@ export class DataFilePreviewComponent {
   totalRecords = 0;
   missingRecords = 0;
   logs:{label: string, error: string}[] =[]
-
+  overwrite:boolean =false;
   arrayCols =['countries',  'useOfFunds', 'esgFocusAreas', 
     'businessGrowthStages', 'investmentStructures', 'contactName', 
     'contactEmail', 'sectors', 'subSectors', 'investees' ]
@@ -320,8 +321,7 @@ convertToExcelFile(data: any[]): Blob {
   submit() {
     const data = this.getGridData();
     const [name, ext] =this.fileName.split('.')
-    
-    const payload =this.convertToJsonFile(data);;
+    const payload =this.convertToJsonFile(data);
     // switch(ext){
     //   case 'json':
     //     payload =this.convertToJsonFile(data)
@@ -336,6 +336,7 @@ convertToExcelFile(data: any[]): Blob {
     if(!payload) return this._feedbackService.warning('No file selected', 'Upload');
     
     const formData = new FormData();
+    formData.append('overwrite', `${this.overwrite}`)
     formData.append('file', payload as Blob, `${name}.json`);
     this.upload$ = this._publicInvestorService.uploadInvestors(formData).pipe(
       tap((res) => {
