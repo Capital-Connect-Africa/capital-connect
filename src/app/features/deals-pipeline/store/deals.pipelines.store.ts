@@ -33,7 +33,7 @@ type DealsPipelinesState ={
 
 const initialState: DealsPipelinesState ={
     payload: [],
-    stats: {paidAmount: 0, pendingAmount: 0, totalStages: 0, totalDeals: 0, lostAmount: 0, stageDealsCount: []},
+    stats: { paidAmount: 0, pendingAmount: 0, totalStages: 0, totalDeals: 0, lostAmount: 0, stageDealsCount: []},
     currentView: PipelineViews.KANBAN_VIEW,
     activePipeline: undefined,
     currentlySelectedDeal: undefined

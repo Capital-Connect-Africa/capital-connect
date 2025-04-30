@@ -48,7 +48,13 @@ export class PublicInvestorsRepositoryService extends BaseHttpService{
 
   searchInvestors(payload:Partial<UserSearch>){
     return this.create(`${BASE_URL}/investors-repository/search`, payload).pipe(map(res =>{
-      return res as {q: string, investors:PublicInvestor[]}
+      return res as {q: string, investors:PublicInvestor[], matches: number, total: number}
+    }))
+  }
+
+  filterInvestorsByProfile(){
+    return this.read(`${BASE_URL}/investors-repository/filter-by-business-profile`).pipe(map(res =>{
+      return res
     }))
   }
 
