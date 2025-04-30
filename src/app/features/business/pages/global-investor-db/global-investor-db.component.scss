@@ -1,0 +1,206 @@
+@import "../../../../styles/main.scss";
+
+.main__content{
+    display: grid;
+    grid-template-columns: max-content auto;
+    min-height: 72svh;
+    background: #f1f1f4;
+    main{
+        gap: 2rem;
+        display: flex;
+        flex-direction: column;
+        .sc__btn{
+            color: white;
+            padding: .75rem 1rem;
+            border-radius: .5rem;
+            background-color: $primary-color;
+        }
+        .card__item__details{
+            gap: 2rem;
+            display: flex;
+            padding-top: 1rem;
+            flex-direction: column;
+            padding: 0 2rem;
+            .card__item__detail,
+            .card__item__detail_info {
+                display: grid;
+                div {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: start;
+                    label {
+                    font-weight: bold;
+                    }
+                
+                    p {
+                        margin: 0.25rem 0;
+                        color: #555;
+                        font-size: 14px;
+                    }
+                }
+            }
+            .card__item__detail_info{
+                gap: 1rem 0;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #ddd;
+            }
+        }
+        .button-group{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chips{
+            gap: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2rem 0;
+            
+        }
+        .matched__investor__heading{
+            margin-bottom: -.5cm;
+            font-size: large;
+        }
+    }
+    .btn__cta{
+        gap: .5rem;
+        display: flex;
+        font-size: 1rem;
+        font-weight: 500;
+        align-items: center;
+        transition: .2s linear;
+        border-radius: .5rem;
+        padding: .75rem;
+        cursor: pointer;
+        &:hover{
+          background-color: #dddddd80;
+        }
+      }
+    
+}
+
+.no-data{
+    height: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@include when-screen-is-atleast(medium){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(2, 1fr);
+                }
+            }
+        }
+    }
+}
+
+@include when-screen-is-atleast(large){
+    .main__content{
+        main{
+            .card__item__details{
+                .card__item__detail_info {
+                 grid-template-columns: repeat(3, 1fr);
+                }
+            }
+        }
+    }
+}
+
+.chip{
+    padding: .5rem;
+    color: #3b3939;
+    cursor: pointer;
+    border-radius: .5rem;
+    transition: all .2s linear;
+    background-color: #dddddd44;
+    &:hover{
+        background-color: #ddddddd5;
+    }
+}
+.items__list{
+    gap: 2rem;
+    display: flex;
+    padding: 1rem 2rem;
+    flex-direction: column;
+    label{
+        font-weight: 600;
+        font-size: 1.2rem;
+    }
+    ul{
+        gap: 1rem;
+        display: flex;
+        flex-direction: column;
+
+        .chip{
+            padding: 1rem;
+        }
+    }
+}
+
+
+
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 0 0; 
+    border: .5px solid $gray-300; 
+    border-radius: 4px; 
+    background-color: $gray-100; 
+    margin-bottom: .7cm;
+}
+
+
+.label {
+    font-size: 1.2em; /* Slightly larger font for the title */
+    font-weight: bold; /* Make the title bold */
+    color: #333; /* Darker color for better readability */
+    display: flex;
+    justify-content: space-between; /* Space between title and question count */
+}
+
+.questions__count {
+    font-size: 0.9em; /* Smaller font for question count */
+    color: #555; /* Slightly lighter color */
+}
+
+.desc {
+    margin-top: 10px; /* Space between title and description */
+    font-size: 1em; /* Regular size for description */
+    color: #666; /* Color for the description */
+    display: flex;
+    align-items: center; /* Center vertically */
+}
+
+.sc__btn {
+    margin-left: auto; /* Push button to the right */
+    background-color: $primary-color; /* Primary color for the button */
+    color: white; /* Text color */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 15px; /* Padding for button */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+
+
+.no-data {
+    text-align: center; /* Center the no data message */
+    font-size: 1.2em; /* Larger font for visibility */
+    color: #999; /* Lighter color */
+    margin-top: 20px; /* Space above the message */
+}
+
+/* Full width style for parent container */
+.container {
+    width: 100%; /* Full width */
+    // padding: 20px; /* Padding for the container */
+    box-sizing: border-box; /* Include padding in width */
+}
