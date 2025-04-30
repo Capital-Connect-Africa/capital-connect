@@ -4,7 +4,7 @@ import { formatCurrency } from '../../../../../core/utils/format.currency';
 import { PublicInvestor, PublicInvestorDashboard } from '../../../../../shared/interfaces/public.investor.interface';
 import { AgGridAngular } from 'ag-grid-angular';
 import { Observable, tap } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PublicInvestorsRepositoryService } from '../../../../../core/services/investors/public-investors-repository.service';
 import { SearchEngineService } from '../../../../public/services/search-engine.service';
 import { CommonModule } from '@angular/common';
@@ -19,10 +19,10 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 })
 export class GlobalInvestorsComponent {
   
+  private _router =inject(Router);
   private _activatedRoute =inject(ActivatedRoute);
-  private _searchEngineService =inject(SearchEngineService);
   private _publicInvestorService = inject(PublicInvestorsRepositoryService);
-  @Output() onDataChange =new EventEmitter<Partial<PublicInvestorDashboard>>()
+  @Output() onDataChange =new EventEmitter<Partial<PublicInvestorDashboard>>();
   
     
 q =this._activatedRoute.snapshot.params['q']
@@ -96,7 +96,7 @@ searchedResults$ = new Observable();
             'transition-all'
           );
           viewButton.addEventListener('click', () => 
-            params.context.componentParent.selectInvestor(params)
+            params.context.componentParent.viewInvestor(params.data)
           );
 
           div.appendChild(viewButton)
@@ -107,29 +107,14 @@ searchedResults$ = new Observable();
         sortable: false,
         filter: false,
       },
-      // {
-      //   field: 'maxFunding',
-      //   valueFormatter: (params: ValueFormatterParams) => {
-      //     return '$' + formatCurrency(params.value);
-      //   },
-      // },
-      // { field: 'countries' },
-      // { field: 'fundingVehicle',},
-      // { field: 'useOfFunds' },
-      // { field: 'esgFocusAreas' },
-      // { field: 'businessGrowthStages' },
-      // { field: 'investmentStructures' },
-      // { field: 'contactName',  },
-      // { field: 'contactEmail' },
-      // { field: 'website', },
-      // { field: 'sectors' },
-      // { field: 'subSectors' },
-      // { field: 'investees' },
-      // { field: 'description' },
     ] as ColDef[],
     defaultColDef: {
       filter: false,
       flex: 1,
     } as ColDef,
   };
+
+  viewInvestor(data:Partial<PublicInvestor>){
+    this._router.navigateByUrl(`/business/investors-db/${data.id}`)
+  }
 }

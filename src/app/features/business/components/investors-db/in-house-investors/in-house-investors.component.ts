@@ -6,6 +6,7 @@ import { tap } from 'rxjs';
 import { formatCurrency } from '../../../../../core/utils/format.currency';
 import { MatchedInvestor } from '../../../../../shared/interfaces';
 import { BusinessOnboardingScoringService } from '../../../../../shared/services/business.onboarding.scoring.service';
+import { Router } from '@angular/router';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -29,8 +30,8 @@ interface InvestorSummary{
 })
 
 export class InHouseInvestorsComponent {
-  @Output() onDataChange =new EventEmitter<{matches: number, connects: number, total: number}>()
-
+    @Output() onDataChange =new EventEmitter<{matches: number, connects: number, total: number}>()
+    private _router =inject(Router);
     investors: InvestorSummary[] = [];
     totalInvestors =0;
     private _scoringService = inject(BusinessOnboardingScoringService);
@@ -141,12 +142,12 @@ export class InHouseInvestorsComponent {
               'transition-all'
             );
             viewButton.addEventListener('click', () => 
-              params.context.componentParent.selectInvestor(params)
+              params.context.componentParent.viewCCInvestorDetails(params.data)
             );
-  
             div.appendChild(viewButton)
             return div;
           },
+          width: 100,
           editable: false,
           sortable: false,
           filter: false,
@@ -158,4 +159,9 @@ export class InHouseInvestorsComponent {
         filter: false,
       } as ColDef,
     };
+
+  viewCCInvestorDetails(payload:InvestorSummary){
+    this._router.navigateByUrl(`/business/my-business/investors/${payload.status}-${payload.id}`.toLowerCase());
+  }
+
 }
