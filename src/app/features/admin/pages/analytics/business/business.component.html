@@ -93,6 +93,18 @@
                 />
               </div>
             </div>
+              <div class="grid__container">
+                <h3 class="padding__b">Businesses per SubSector</h3>
+                <div class="">
+                  <app-horizontal-barchart
+                    [colors]="['#f3b49f']"
+                    [data]="subSectors"
+                    xlabel="Businesses"
+                    *ngIf="subSectors"
+                    (onSelect)="filterStats($event, 'subSectors')"
+                  />
+                </div>
+            </div>
             <div class="grid__container">
               <h3 class="padding__b">Businesses per country</h3>
               <div class="">
@@ -114,6 +126,18 @@
                   (onSelect)="filterStats($event, 'growthStages')"
                 />
               </div>
+              </div>
+              <div class="grid__container">
+                <h3 class="padding__b">Businesses per Impact Area</h3>
+                <div class="">
+                  <app-horizontal-barchart
+                    [colors]="['#f3b49f']"
+                    [data]="impactAreas"
+                    xlabel="Businesses"
+                    *ngIf="impactAreas"
+                    (onSelect)="filterStats($event, 'impactAreas')"
+                  />
+                </div>
             </div>
             <div class="grid__container">
               <h3 class="padding__b">Businesses per Use of funds</h3>
@@ -127,6 +151,26 @@
                 />
               </div>
             </div>
+                <div class="grid__container">
+                  <h3 class="padding__b">Businesses per Number of Employees</h3>
+                  <div class="">
+                    <app-column-chart
+                      [colors]="['#13501B']"
+                      [data]="noOfEmployees"
+                      *ngIf="noOfEmployees"
+                    />
+                  </div>
+                </div>
+                  <div class="grid__container">
+                    <h3 class="padding__b">Businesses per Years of Operation</h3>
+                    <div class="">
+                      <app-column-chart
+                        [colors]="['#13501B']"
+                        [data]="yearsOfOperation"
+                        *ngIf="yearsOfOperation"
+                      />
+                    </div>
+              </div>
             <div class="grid__container">
               <h3 class="padding__b">Businesses per Fund Raise</h3>
               <div class="">
@@ -137,8 +181,8 @@
                 />
               </div>
             </div>
+            </div>
           </div>
-        </div>
       </ng-container>
     </main>
   </div>
