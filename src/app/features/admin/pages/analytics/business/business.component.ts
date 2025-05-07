@@ -37,6 +37,10 @@ export class BusinessComponent {
   private _cdr =inject(ChangeDetectorRef);
   private _statsService =inject(UserStatisticsService);
   sectorStats!:SharedStats;
+  subSectors!:Record<string, number>;
+  impactAreas!:Record<string, number>;
+  noOfEmployees!:Record<string, number>;
+  yearsOfOperation!:Record<string, number>;
   fundingStats!:SharedStats;
   matchedBusinesses:number =0;
   minFunding!:Record<string, number>;
@@ -58,6 +62,10 @@ export class BusinessComponent {
   stats$ =new Observable<any>();
   filterStats$ =new Observable();
   sectorStats$ =new Observable();
+  subSectorStats$ =new Observable();
+  impactAreaStats$ =new Observable();
+  noOfEmployeesStats$ =new Observable();
+  yearsOfOperationStats$ =new Observable();
   analytics$ =new Observable();
   countriesStats:{country: string, value: number}[] =[];
   entities:any;
@@ -71,6 +79,10 @@ export class BusinessComponent {
       this.fundRaise =analytics.fund_raise;
       this.maxFunding =analytics.max_funding;
       this.minFunding =analytics.min_funding;
+      this.subSectors =analytics.sub_sectors;
+      this.impactAreas =analytics.impact_areas;
+      this.noOfEmployees =analytics.no_of_employees;
+      this.yearsOfOperation =analytics.years_of_operation;
       this.businessCountriesStats =analytics.countries
       return analytics
     }));

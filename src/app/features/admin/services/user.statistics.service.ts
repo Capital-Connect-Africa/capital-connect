@@ -4,6 +4,7 @@ import { catchError, EMPTY, forkJoin, map, Observable, switchMap } from "rxjs";
 import { SharedStats, Stats } from "../interfaces/stats.interface";
 import { formatBand } from "../../../core/utils/band.formating";
 import { Booking, Payment, Plan } from "../../../shared/interfaces/Billing";
+import { sub } from "date-fns";
 
 @Injectable({providedIn: 'root'})
 
@@ -91,6 +92,38 @@ export class UserStatisticsService extends BaseHttpService{
         }))
     }
 
+    getSubSectorStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/business-subsector`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
+            return EMPTY
+        }))
+    }
+
+    getImpactAreasStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/impact-area`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
+            return EMPTY
+        }))
+    }
+
+    getNoOfEmployeesStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/no-of-employees`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
+            return EMPTY
+        }))
+    }
+
+    getYearsOfOperationStats():Observable<SharedStats> {
+        return this.read(`${BASE_URL}/statistics/years-of-operation`).pipe(map((stats: any) =>{
+            return stats
+        }), catchError(err =>{
+            return EMPTY
+        }))
+    }
+
     getBusinessFundRaiseStats():Observable<{min: Record<string, number>, max: Record<string, number>}> {
         return this.read(`${BASE_URL}/statistics/businesses-fund`).pipe(map((stats: any) =>{
             const result:any ={}
@@ -171,13 +204,20 @@ export class UserStatisticsService extends BaseHttpService{
     }
 
     getAnalytics(){
-        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), this.getBusinessFundRaiseStats()]
+        const requests =[this.getSectorStats(), this.getFundingStats(), this.getBusinessCountriesStats(), 
+            this.getStagesStats(), this.getInvestorMinFundingStats(), this.getInvestorMaxFundingStats(), 
+            this.getBusinessFundRaiseStats(), this.getSubSectorStats(), this.getImpactAreasStats(), 
+            this.getNoOfEmployeesStats(), this.getYearsOfOperationStats()]
         return forkJoin(requests).pipe(map(stats =>{
             return {
                 sectors: stats[0] as SharedStats,
+                sub_sectors: stats[7] as Record<string, number>,
                 funding: stats[1] as SharedStats,
                 countries: stats[2] as Record<string, number>,
                 stages: stats[3] as Record<string, number>,
+                impact_areas: stats[8] as Record<string, number>,
+                no_of_employees: stats[9] as Record<string, number>,
+                years_of_operation: stats[10] as Record<string, number>,
                 min_funding: stats[4] as Record<string, number>,
                 max_funding: stats[5] as Record<string, number>,
                 fund_raise: stats[6] as Record<string, number>,
